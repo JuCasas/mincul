@@ -1,24 +1,92 @@
-{% extends 'base/root.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
 
-{% block main_content %}
-  <div class="container-fluid">
-    <div class="row min-vh-100 flex-center no-gutters">
-      <div class="col-lg-8 col-xxl-5 py-3">
-        <img class="bg-auth-circle-shape" src="{% static 'img/illustrations/bg-shape.png' %}" alt="" width="250">
-        <img class="bg-auth-circle-shape-2" src="{% static 'img/illustrations/shape-1.png' %}" alt="" width="150">
-        <div class="card overflow-hidden z-index-1">
-          <div class="card-body p-0">
-            <div class="row no-gutters h-100">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-              {% block body %}{% endblock %}
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>Ministerio de Cultura</title>
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicons/apple-touch-icon.png' %}">
+{#    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicons/favicon-32x32.png' %}">#}
+{#    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicons/favicon-16x16.png' %}">#}
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/icons/escudo.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicons/favicon.png' %}">
+    <link rel="manifest" href="{% static 'img/favicons/manifest.json' %}">
+    <meta name="msapplication-TileImage" content="{% static 'img/favicons/mstile-150x150.png' %}">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <script src="{% static 'js/config.navbar-vertical.js' %}"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="{% static 'lib/perfect-scrollbar/perfect-scrollbar.css' %}" rel="stylesheet">
+    <link href="{% static 'css/theme.css' %}" rel="stylesheet"/>
+    <link href="{% static 'project/auth-custom.css' %}" rel="stylesheet"/>
+
+    {% block extrastyle %}{% endblock %}
+
+</head>
+<body>
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
 
 
-
+    <div class="container-fluid">
+        <div class="row min-vh-100 bg-100">
+            <div class="col-6 d-none d-lg-block">
+                <div class="bg-holder"
+                     style="background-image:url({% static 'img/generic/12.jpg' %});background-position: 50% 20%;">
+                </div>
             </div>
-          </div>
+            <div class="col-sm-10 col-md-6 px-sm-0 align-self-center mx-auto py-5">
+                <div class="row justify-content-center no-gutters">
+                    <div class="col-lg-9 col-xl-8 col-xxl-6">
+                        <div class="card">
+                            <div class="card-header bg-circle-shape text-center p-2"><a
+                                    class="text-white text-sans-serif font-weight-extra-bold fs-4 z-index-1 position-relative"
+                                    href="#">Inicio de Sesión</a></div>
+
+                            {% block body %}{% endblock %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-{% endblock %}
+</main>
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'lib/@fortawesome/all.min.js' %}"></script>
+<script src="{% static 'lib/stickyfilljs/stickyfill.min.js' %}"></script>
+<script src="{% static 'lib/sticky-kit/sticky-kit.min.js' %}"></script>
+<script src="{% static 'lib/is_js/is.min.js' %}"></script>
+<script src="{% static 'lib/lodash/lodash.min.js' %}"></script>
+<script src="{% static 'lib/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+<script src="{% static 'lib/jquery-mask/jquery.mask.min.js' %}"></script>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:100,200,300,400,500,600,700,800,900&amp;display=swap"
+      rel="stylesheet">
+<script src="{% static 'js/theme.js' %}"></script>
+
+
+{% block extrajs %}{% endblock %}
+</body>
+</html>

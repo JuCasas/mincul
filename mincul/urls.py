@@ -5,6 +5,6 @@ from mincul_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.template, name='template'),
-    path('login/', views.login, name='login'),
+    path('home', views.template, name='template'),
+    path('', views.login, name='login'),
 ]
