@@ -1,0 +1,49 @@
+{#{% load group_tags %}#}
+{% load static %}
+{#{% load has_group %}#}
+<nav class="navbar navbar-vertical navbar-expand-xl navbar-light pb-2">
+    {#    <div class="d-flex align-items-center" style="padding: 16px; height: 75px">#}
+    <div class="d-flex align-items-center pb-2" style="padding: 10px; height: 75px">
+        <div class="toggle-icon-wrapper">
+            <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-toggle="tooltip"
+                    data-placement="left" title="Opciones">
+                <span class="navbar-toggle-icon"><span class="toggle-line"></span></span>
+            </button>
+        </div>
+        <a class="navbar-brand">
+            <img src="{% static '/img/logos/mincul-small.jpg' %}" style="width: 40px;"/>
+        </a>
+    </div>
+    <hr style="">
+    <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+        <div class="navbar-vertical-content perfect-scrollbar scrollbar">
+            <ul class="navbar-nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link dropdown-indicator" href="#objeto" data-toggle="collapse"
+                       role="button"
+                       aria-expanded="false"
+                       aria-controls="objeto">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon"><span class="fas fa-bookmark"></span></span><span
+                                class="nav-link-text">Objeto</span>
+                        </div>
+                    </a>
+                    <ul class="nav collapse show"
+                        id="objeto"
+                        data-parent="#navbarVerticalCollapse">
+                        <li class="nav-item"><a
+                                class="nav-link"
+                                href="">Registrar</a>
+                        </li>
+                        <li class="nav-item"><a
+                                class="nav-link "
+                                href="">Listar</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+</nav>

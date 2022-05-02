@@ -1,0 +1,58 @@
+{% load static %}
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'lib/@fortawesome/all.min.js' %}"></script>
+<script src="{% static 'lib/stickyfilljs/stickyfill.min.js' %}"></script>
+<script src="{% static 'lib/sticky-kit/sticky-kit.min.js' %}"></script>
+<script src="{% static 'lib/is_js/is.min.js' %}"></script>
+<script src="{% static 'lib/lodash/lodash.min.js' %}"></script>
+<script src="{% static 'lib/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js'></script>
+<script src='https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js'></script>
+
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:100,200,300,400,500,600,700,800,900&amp;display=swap"
+      rel="stylesheet">
+<script src="{% static 'lib/select2/select2.min.js' %}"></script>
+<script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+<script src="{% static 'lib/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'lib/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static 'lib/leaflet/leaflet.js' %}"></script>
+<script src="{% static 'lib/leaflet.markercluster/leaflet.markercluster.js' %}"></script>
+<script src="{% static 'lib/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js' %}"></script>
+<script src="{% static 'lib/sweetalert2-9.10.0/sweetalert2.all.min.js' %}"></script>
+
+<script src="{% static 'js/theme.js' %}"></script>
+<script>
+    $.extend(true, $.fn.dataTable.defaults, {
+        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+            "<'table-responsive'tr>\n" +
+            "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+        language: {
+            processing: `<div class="d-flex justify-content-center align-items-center h-100">
+                      <div class="spinner-border text-dark" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                   </div>`,
+            lengthMenu: "Mostrar  _MENU_  registros",
+            zeroRecords: "No se encontraron registros", // luego de filtrado
+            emptyTable: "No hay registros",
+            info: "Mostrando desde _START_ a _END_ de _TOTAL_ registros",
+            infoEmpty: "No hay registros que mostrar",
+            infoFiltered: "(Total: _MAX_ registros)",
+            loadingRecords: "Cargando...",
+            search: "Buscar:",
+            paginate: {
+                previous: '<i class="fa  fa-angle-left mr-2"></i>Anterior',
+                next: 'Siguiente<i class="fa  fa-angle-right ml-2"></i>'
+            }
+        },
+    });
+</script>

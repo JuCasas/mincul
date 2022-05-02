@@ -1,0 +1,143 @@
+.bg-card-gradient {
+    /*background-image: linear-gradient(-45deg, #aeebde, #67d777, #105B78);*/
+    background-image: linear-gradient(142.77deg, #09121F -5.27%, #011E43 42.31%, #2569C3 100%)
+}
+.bg-card-gradientV2 {
+    background-image: linear-gradient(-45deg,  #67d777, #105B78);
+}
+.bg-card-solid {
+    background-image: linear-gradient(-45deg, #4dcf49, #4dcf49);
+}
+
+.btn-primary {
+    background-color: #105B78;
+    border-color: #105B78;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:disabled, .btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #73dc96;
+    border-color: #73dc96;
+}
+
+.btn-outline-primary {
+    color: #105B78;
+    border-color: #105B78;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:disabled, .btn-outline-primary:not(:disabled):not(.disabled):active {
+    background-color: #105B78;
+    border-color: #105B78;
+}
+
+p, h1, h2, h3, h4, h5, h6, legend, .select2, .select2-results {
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+     display: none; /*<- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+label.error {
+    color: #e63757;
+}
+
+abbr[title] {
+    border-bottom: none !important;
+    text-decoration: none !important;
+}
+
+.select2, .select2-results {
+    width: 100% !important;
+}
+
+.select2, .select2-results {
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    width: 100% !important;
+}
+
+.select2-container .select2-search--inline {
+    width: 100%;
+}
+
+.custom-file-input:lang(en) ~ .custom-file-label::after {
+    content: "Buscar";
+}
+
+span.step {
+    background: #4dcf49;
+    border-radius: 0.8em;
+    -moz-border-radius: 0.8em;
+    -webkit-border-radius: 0.8em;
+    color: #FFFFFF;
+    display: inline-block;
+    line-height: 1.6em;
+    margin-right: 5px;
+    text-align: center;
+    width: 1.6em;
+}
+
+.text-color-main {
+    color: #5e6e82;
+}
+.text-color-bcw{
+    color: #105B78;
+}
+h2 {
+    color: #5e6e82;
+}
+
+h4 {
+    color: #5e6e82;
+}
+
+.text-color-cabecera {
+    color: #FFFFFF;
+}
+
+.txt-boton {
+    color: #FFFFFF;
+}
+
+.cambio-left {
+    margin-left: 10rem;
+}
+
+@media only screen and (max-width: 1440px) {
+    .cambio-left {
+        margin-left: 0rem;
+    }
+}
+
+.cambio-right {
+    margin-right: 10rem;
+}
+
+@media only screen and (max-width: 1440px) {
+    .cambio-right {
+        margin-right: 0rem;
+    }
+}
+
+.margen{
+    margin-top: 28px;
+    margin-right: 30px;
+    margin-bottom: 12px;
+
+}
+.navbar-vertical {
+    position: -ms-device-fixed !important;
+    padding: 0;
+    z-index: 1019;
+    top: 0rem;
+    width: 100vw;
+}
+a:hover {
+    cursor: pointer;
+}
