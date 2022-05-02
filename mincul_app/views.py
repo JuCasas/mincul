@@ -8,3 +8,6 @@ def login(request):
 
 def template(request):
     return render(request, 'template.html')
+
+def material(request):
+    return render(request, 'materialKit.html')
