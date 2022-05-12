@@ -2,73 +2,142 @@
 {% load static %}
 
 {% block extrastyle %}
-<link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
-<style>
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <style>
 
-</style>
+    </style>
 {% endblock %}
 
 {% block body %}
 
-<div class="card mb-3 bg-card-gradient">
-    <div class="card-body ">
-        <div class="row justify-content-between align-items-center">
-            <div class="col-md">
-                <h5 class="mb-2 mb-md-0 text-white">Ministerio de Cultura</h5>
+    <div class="card mb-3 bg-card-gradient">
+        <div class="card-body ">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-md">
+                    <h5 class="mb-2 mb-md-0 text-white">Ministerio de Cultura</h5>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
- <!-- Gallery -->
-<div class="row">
-  <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
-    <img
-      src="../static/img/landmarks/huascaran.jpg"
-      class="w-100 shadow-1-strong rounded mb-4"
-      alt="Nevado Huascaran"
-    />
+    <div class="row">
 
-    <img
-      src="../static/img/landmarks/sleepingBeauty.jpg"
-      class="w-100 shadow-1-strong rounded mb-4"
-      alt="Sleeping Beauty"
-    />
-  </div>
+    </div>
 
-  <div class="col-lg-4 mb-4 mb-lg-0">
-    <img
-      src="../static/img/landmarks/rockForest.jpg"
-      class="w-100 shadow-1-strong rounded mb-4"
-      alt="Bosque de Rocas"
-    />
 
-    <img
-      src="../static/img/landmarks/macchuPicchujpg.jpg"
-      class="w-100 shadow-1-strong rounded mb-4"
-      alt="Macchu Picchu"
-    />
-  </div>
+    <!-- Gallery -->
+    <div class="row">
 
-  <div class="col-lg-4 mb-4 mb-lg-0">
-    <img
-      src="../static/img/landmarks/caral.jpg"
-      class="w-100 shadow-1-strong rounded mb-4"
-      alt="Caral"
-    />
+        <div class="col-12 col-lg-3 col-md-4 col-sm-6">
+            <div class="card mb-3">
+                <img src="../static/img/landmarks/huascaran.jpg"
+                     class="vh-10 overflow-hidden shadow-1-strong rounded mb-4"
+                     alt="Nevado Huascaran"/>
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="row justify-content-between">
+                            <h5>Nevado Huascarán</h5>
+                            <button class="btn btn-primary mr-1 mb-1" type="button">
+                                <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Ver Más
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <img
-      src="../static/img/landmarks/lake69.jpg"
-      class="w-100 shadow-1-strong rounded mb-4"
-      alt="Lago Sesenta y Nueve"
-    />
-  </div>
-</div>
-<!-- Gallery -->
+        <div class="col-12 col-lg-3 col-md-4 col-sm-6">
+            <div class="card mb-3">
+                <img src="../static/img/landmarks/sleepingBeauty.jpg"
+                     class="vh-10 overflow-hidden shadow-1-strong rounded mb-4"
+                     alt="Sleeping Beauty"/>
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="row justify-content-between">
+                            <h5>Sleeping Beauty</h5>
+                            <button class="btn btn-primary mr-1 mb-1" type="button">
+                                <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Ver Más
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-3 col-md-4 col-sm-6">
+            <div class="card mb-3">
+                <img src="../static/img/landmarks/rockForest.jpg" class="w-100 shadow-1-strong rounded mb-4"
+                     alt="Bosque de Rocas"/>
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="row justify-content-between">
+                            <h5>Bosque de Rocas</h5>
+                            <button class="btn btn-primary mr-1 mb-1" type="button">
+                                <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Ver Más
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-3 col-md-4 col-sm-6">
+            <div class="card mb-3">
+                <img src="../static/img/landmarks/caral.jpg" class="w-100 shadow-1-strong rounded mb-4" alt="Caral"/>
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="row justify-content-between">
+                            <h5>Caral</h5>
+                            <button class="btn btn-primary mr-1 mb-1" type="button">
+                                <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Ver Más
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-3 col-md-4 col-sm-6">
+            <div class="card mb-3">
+                <img src="../static/img/landmarks/macchuPicchujpg.jpg" class="w-100 shadow-1-strong rounded mb-4"
+                     alt="Macchu Picchu"/>
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="row justify-content-between">
+                            <h5>Macchu Picchu</h5>
+                            <button class="btn btn-primary mr-1 mb-1" type="button">
+                                <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Ver Más
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-3 col-md-4 col-sm-6">
+            <div class="card mb-3">
+                <img src="../static/img/landmarks/lake69.jpg"
+                     class="w-100 shadow-1-strong rounded mb-4"
+                     alt="Lago Sesenta y Nueve"/>
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="row justify-content-between">
+                            <h5>Lago Sesenta y Nueve</h5>
+                            <button class="btn btn-primary mr-1 mb-1" type="button">
+                                <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Ver Más
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Gallery -->
 
 {% endblock %}
 
 {% block extrajs %}
-<script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
 
 {% endblock %}

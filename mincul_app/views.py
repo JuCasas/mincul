@@ -9,7 +9,7 @@ def detalle(request):
     return render(request, 'templateDetail.html')
 
 def login(request):
-    return render(request, 'template.html')
+    return render(request, 'patrimony/patrimony_list.html')
 
 def material(request):
     return render(request, 'materialKit.html')
