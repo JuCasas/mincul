@@ -25,13 +25,9 @@
     <!-- ===============================================-->
     <!--    Stylesheets-->
     <!-- ===============================================-->
+    {% block extrastyle %}{% endblock %}
     {% include 'base/stylesheets.html' %}
 
-    {% block extrastyles %}
-        <style>
-
-        </style>
-    {% endblock %}
     {% block extrahead %}{% endblock %}
 
 
