@@ -5,6 +5,8 @@ from django.shortcuts import render
 def template(request):
     return render(request, 'template_auth.html')
 
+def detalle(request):
+    return render(request, 'templateDetail.html')
 
 def login(request):
     return render(request, 'template.html')
