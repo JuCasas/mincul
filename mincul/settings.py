@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mincul_app.apps.MinculAppConfig',
+    'patrimonios',
 ]
 
 MIDDLEWARE = [
