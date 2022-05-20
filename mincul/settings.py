@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mincul_app.apps.MinculAppConfig',
     'patrimonios',
+    'conservacion',
+    'incidente',
+    'reportes',
+    'traslado',
 ]
 
 MIDDLEWARE = [

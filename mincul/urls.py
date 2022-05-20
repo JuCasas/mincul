@@ -10,4 +10,8 @@ urlpatterns = [
     path('patrimonio/detalle', views.detalle, name='detalle'),
     path('', views.login, name='login'),
     path('patrimonios/', include('patrimonios.urls')),
+    path('conservacion/', include('conservacion.urls')),
+    path('incidente/', include('incidente.urls')),
+    path('reportes/', include('reportes.urls')),
+    path('traslado/', include('traslado.urls')),
 ]
