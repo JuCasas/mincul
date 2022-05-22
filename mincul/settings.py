@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'incidente',
     'reportes',
     'traslado',
+    'authentication',
+    'mapa',
 ]
 
 MIDDLEWARE = [

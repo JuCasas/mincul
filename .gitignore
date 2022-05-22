@@ -52,3 +52,4 @@ Thumbs.db
 *.wmv
 deploy/
 db.sqlite3
+mincul/db.py

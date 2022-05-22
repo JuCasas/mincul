@@ -14,4 +14,6 @@ urlpatterns = [
     path('incidente/', include('incidente.urls')),
     path('reportes/', include('reportes.urls')),
     path('traslado/', include('traslado.urls')),
+    path('auth/', include('authentication.urls')),
+    path('mapa/',include('mapa.urls')),
 ]
