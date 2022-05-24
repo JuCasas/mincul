@@ -23,7 +23,7 @@ class ProyectoConservacion(models.Model):
     tipoProyecto = models.CharField(max_length=2,choices=TIPOS,default='0',null=True,blank=True)
     estado = models.CharField(max_length=2,choices=ESTADOS,default='1',null=True,blank=True)
     patrimonios = models.ManyToManyField(Patrimonio)
-    responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
     # incidentes  = models.ManyToManyField(Incidente)
 
 class Documento(models.Model):
