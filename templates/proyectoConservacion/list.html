@@ -4,12 +4,8 @@
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
     <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+    <link rel="" href="https://cdn.datatables.net/fixedheader/3.1.6/css/fixedHeader.dataTables.min.css">
     <style>
-        .dataTables_wrapper .dataTables_filter {
-        float: right;
-        text-align: right;
-        visibility: hidden;
-        }
 
         table{
             min-width: 100%;
@@ -97,16 +93,19 @@
 {% block extrajs %}
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#tabla_autores').DataTable({
+                "searching": false,
                 "serverSide": true,
                 "processing": true,
                 "ajax": function (data, callback, settings) {
                     //var columna_filtro = data.columns[data.order[0].column].data.replace(/\./g,"__")
                     $.get('', {
                             limite: data.length,
-                            inicio: data.start
+                            inicio: data.start,
+                            filtro:  $('#name').val()
                         }, function (res) {
                             callback({
                                 recordsTotal: res.length,
@@ -122,6 +121,18 @@
                     {"data": "descripcion"},
                 ]
             });
-});
-    </script>
+        });
+        $('#name').keyup(function(){
+            $('#tabla_autores').DataTable().search($(this).val()).draw() ;
+        })
+        $('#exampleFormControlSelect1').change(function(){
+            $('#tabla_autores').DataTable().draw();
+        });
+        $('#exampleFormControlSelect2').change(function(){
+            $('#tabla_autores').DataTable().draw();
+        });
+        $('#exampleFormControlSelect3').change(function(){
+            $('#tabla_autores').DataTable().draw();
+        });
+</script>
 {% endblock %}
