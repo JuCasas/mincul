@@ -5,3 +5,4 @@ from django.db import models
 class User(AbstractUser):
     doi = models.CharField(max_length=12)
     celular = models.CharField(max_length=9)
+    

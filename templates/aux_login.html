@@ -1,0 +1,38 @@
+{% extends 'base/auth_base.html' %}
+{% load static %}
+
+{% block extrastyles %}
+
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block body %}
+</head>
+{% if messages%}
+    {% for message in messages%}
+    <div class="notification {{ message.tags}}">
+        {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
+<body>
+    <form class="form" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+
+        <button type="submit" id="submit">Registrarse </button>
+    </form>
+</body>
+
+{% endblock %}
+
+
+{#Bloque de extra JS -> JS#}
+
+{% block extrajs %}
+    <script>
+
+    </script>
+{% endblock %}
