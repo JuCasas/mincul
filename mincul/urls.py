@@ -1,11 +1,14 @@
 from django.contrib import admin
 from django.urls import path,include
+from django.contrib.auth.decorators import login_required
 
 from mincul_app import views
+from authentication import urls
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home', views.template, name='template'),
+    path('home', login_required(views.template), name='template'),
     path('kit/', views.material, name='material'),
     path('patrimonio/detalle', views.detalle, name='detalle'),
     path('', views.login, name='login'),

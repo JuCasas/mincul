@@ -1,8 +1,10 @@
 from email import message
 from multiprocessing import context
+from django.http import HttpResponseRedirect
 
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.contrib.auth import login,logout
 # Create your views here.
 
 import requests
@@ -34,3 +36,10 @@ def registe(request):
             
     context = { 'form':form }
     return render(request,"register.html",context)
+
+def logoutUsuario(request):
+    logout(request)
+    return redirect('login2')
+
+def EditarCuenta(request):
+    
