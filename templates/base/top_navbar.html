@@ -1,7 +1,7 @@
 {% load static %}
 {#{% load group_tags %}#}
 {#{% load has_group %}#}
-<nav class="navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand " style="height: 75px">
+<nav class="d-flex align-items-start navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand" style="height: 75px">
   <div class="d-flex align-items-center">
     <div class="toggle-icon-wrapper">
       <button class="btn navbar-toggler-humburger-icon navbar-toggler mr-1 mr-sm-3" type="button"
@@ -14,9 +14,20 @@
       <img src="{% static '/img/logos/mincult.png' %}" style="height: 50px;"/>
     </a>
   </div>
-  <ul class="navbar-nav navbar-nav-icons ml-auto flex-row ">
-    <li class="nav-item py-2 mr-3 mt-4">
-      <p class="mb-2">Admin</p>
+  <div class="d-flex flex-row">
+        <button class="btn btn-primary px-3 mr-2" type="button">
+            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Incidentes
+        </button>
+        <button class="btn btn-primary px-3 mr-2" type="button">
+            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Conservación
+        </button>
+        <button class="btn btn-primary px-3 mr-2" type="button">
+            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Reportes
+        </button>
+  </div>
+  <ul class="d-flex navbar-nav navbar-nav-icons ml-auto flex-row ">
+    <li class="d-flex flex-row nav-item mr-3">
+      <p class="mb-2 mr-2">Admin </p>
       <p>Administrador</p>
       {#=======#}
       {#            <p class = "m-2">Rodrigo Correa22</p>#}
@@ -35,7 +46,7 @@
         {#                        <img id="top_navbar_photo" src="" alt="" hidden/>#}
         {#                    </div>#}
         {#                </a>#}
-        <a class="nav-link pr-0" id="navbarDropdownUser" href="#"
+        <a class="d-flex align-items-start nav-link" id="navbarDropdownUser" href="#"
             {#<<<<<<< Updated upstream#}
            role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {#                    <div class="avatar avatar-xl mt-5 mr-4">#}
@@ -63,7 +74,7 @@
           {#=======#}
           {#  role="button" data-toggle="dropdown" aria-haspopup="true"#}
           {#  aria-expanded="false">#}
-          <div class="avatar avatar-xl margen">
+          <div class="avatar avatar-xl m-0">
             <img class="rounded-circle" src="{% static 'img/team/3-thumb.png' %}" alt="" style="width: 45px; height: 45px"/>
             {#                    {% if user.photo.name %}#}
             {#                        <img class="rounded-circle" src="{% get_media_prefix %}{{ request.user.photo }}" alt=""/>#}

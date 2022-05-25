@@ -1,66 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css"/>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.js"></script>
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <div class="card">
-        <div class="card_header">
-            <div class="row">
-                <div class="col-md-8">
-                    <strong class="card-title">
-                        Listado de autores
-                    </strong>
-                </div>
-                <div class="col-md-4">
-                    <button type="button" class="btn btn-primary">
-                        REGISTRAR AUTOR
-                    </button>
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card mb-3 bg-card-gradient">
+        <div class="card-body ">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-md">
+                    <h5 class="mb-2 mb-md-0 text-white">Conservación de patrimonios</h5>
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <table id="data" class="table">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Nombres</th>
-                        <th>IApellidos</th>
-                        <th>Nacionalidad</th>
-                        <th>Descripcion</th>
-                    </tr>
-                </thead>
-                <tbody>
+    </div>
 
-                </tbody>
-            </table>
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row filterBar">
+                <div class="form-group col-sm-3">
+                    <div class="position-relative">
+                        <input class="form-control" id="name" type="text" placeholder="Nombre del proyecto">
+                        <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-2">
+                    <select class="form-control" id="exampleFormControlSelect2">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-2">
+                    <select class="form-control" id="exampleFormControlSelect3">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary col-sm-3" type="button">
+                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Proyecto
+                </button>
+            </div>
         </div>
     </div>
-</body>
-<script type="application/javascript">
-        $(function () {
-            $('#data').DataTable({
-                responsive: true,
-                autoWidth: false
-            });
 
-            $('.btnTest').on('click', function () {
-                $.ajax({
-                    url: '{% url 'erp:category_list' %}',
-                    type: 'POST',
-                    data: {id: 1},
-                    dataType: 'json'
-                }).done(function (data) {
-                    console.log(data);
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus+': '+errorThrown);
-                }).always(function (data) {
+{% endblock %}
 
-                });
-            });
-        });
-</script>
-</html>
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+
+{% endblock %}

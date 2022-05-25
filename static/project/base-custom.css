@@ -10,23 +10,25 @@
 }
 
 .btn-primary {
-    background-color: #0055AA;
+    background-color: #2B2D42;
     border-radius: 12px;
+    height: 36px;
+    font-size: 12px;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:disabled, .btn-primary:not(:disabled):not(.disabled):active {
-    background-color: #0055AA;
+    background-color: #2B2D42;
 }
 
 .btn-outline-primary {
     color: white;
-    border-color: #0055AA;
+    border-color: #2B2D42;
     border-radius: 12px;
 }
 
 .btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:disabled, .btn-outline-primary:not(:disabled):not(.disabled):active {
-    background-color: #0055AA;
-    border-color: #0055AA;
+    background-color: #2B2D42;
+    border-color: #2B2D42;
 }
 
 .form-control {
@@ -34,16 +36,23 @@
     background-color: #ECEFF1;
     color: #26292E;
     border-color: black;
+    font-size: 12px;
+    height: 36px;
 }
 
 .inputIcon {
     position: absolute;
-    top: 50%;
-    right: 0px;
+    top: 30%;
+    right: 8px;
 }
 
 .form-control-range{
 
+}
+
+.filterBar {
+    height: 36px;
+    padding: 0px 20px;
 }
 
 
