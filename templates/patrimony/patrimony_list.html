@@ -4,8 +4,7 @@
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
     <style>
-        .okok {
-
+        .degradado {
             background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
             opacity: .8;
         }
@@ -13,54 +12,49 @@
 {% endblock %}
 
 {% block body %}
-
-    <div class="card mb-3 bg-card-gradient">
-        <div class="card-body ">
-            <div class="row justify-content-between align-items-center">
-                <div class="col-md">
-                    <h5 class="mb-2 mb-md-0 text-white">Patrimonios</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="card mb-3">
-        <div class="card-body">
-{#            <div class="row justify-content-around align-items-stretch">#}
+        <div class="card-body p-0">
             <div class="navbar">
                 <div class="col-sm-auto mb-2 mb-sm-0">
                     <h6 class="mb-0">Mostrando 1-24 de 205 Patrimonios</h6>
                 </div>
-                <div class="row justify-content-between align-items-stretch">
+                <div class="row d-flex align-items-center">
 
-                        <div class="form-group col-sm-auto">
-                            <div class="position-relative">
-                                <input class="form-control" id="name" type="text" placeholder="Nombre">
-                                <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
-                            </div>
+                    <div class="form-group col-sm-auto my-1">
+                        <div class="position-relative">
+                            <input class="form-control" id="name" type="text" placeholder="Nombre">
+                            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
                         </div>
+                    </div>
 
-                    <div class="form-group col-sm-auto mx-0">
+                    <div class="form-group col-sm-auto my-1">
                         <select class="form-control" id="exampleFormControlSelect1">
-                          <option selected>Clasificaciòn</option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
+                            <option selected>Clasificación</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
                         </select>
-                    </div><div class="form-group col-sm-auto mx-0">
+                    </div>
+                    <div class="form-group col-sm-auto my-1">
                         <select class="form-control" id="exampleFormControlSelect1">
-                          <option selected>Tipo de Bien</option>
-                          <option>Cultural</option>
-                          <option>Humano</option>
-                          <option>Kriptoniano</option>
+                            <option selected>Tipo de Bien</option>
+                            <option>Cultural</option>
+                            <option>Humano</option>
+                            <option>Kriptoniano</option>
                         </select>
-                    </div><div class="form-group col-sm-auto mx-0">
+                    </div>
+                    <div class="form-group col-sm-auto my-1">
                         <select class="form-control" id="exampleFormControlSelect1">
-                          <option selected>Departamento</option>
-                          <option>Lima</option>
-                          <option>Ica</option>
-                          <option>Cusco</option>
+                            <option selected>Departamento</option>
+                            <option>Lima</option>
+                            <option>Ica</option>
+                            <option>Cusco</option>
                         </select>
+                    </div>
+                    <div class="form-group col-sm-auto my-1">
+                        <button class="btn btn-primary col-sm-auto" type="button">
+                            <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
+                        </button>
                     </div>
                 </div>
             </div>
@@ -72,72 +66,37 @@
         <div class="card-body">
             <div class="row">
                 {% for pat in patrimonios %}
-                <div class="col-12 col-lg-4 col-md-4 col-sm-6">
-                    <div class="card">
-                        <div class="card-img-top" style="height: 13rem">
-                            <img class="h-100 w-100 rounded-top"
-                                 src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"
-                                 alt="Card image cap">
-                        </div>
-                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">
-                            <h5 class="card-text pt-9" style="color: white">{{ pat.tituloDemoninacion }}</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text font-italic mb-0">{{ pat.categoria}} - {{ pat.subcategoria }}</p>
-                            <p class="card-text font-weight-semi-bold">{{ pat.direccion }}</p>
-                            <div class="row">
-                                <div class="col-sm-5"></div>
-                                <div class="col-sm-7">
-                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
-                                       href="patrimonio/detalle">
-                                        Ver detalle
-                                    </a>
+                    <div class="col-12 col-lg-4 col-md-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-img-top" style="height: 13rem">
+                                <img class="h-100 w-100 rounded-top"
+                                     src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"
+                                     alt="Card image cap">
+                            </div>
+                            <div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">
+                                <h5 class="card-text pt-9" style="color: white">{{ pat.tituloDemoninacion }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text font-italic mb-0">{{ pat.categoria }} - {{ pat.subcategoria }}</p>
+                                <p class="card-text font-weight-semi-bold">{{ pat.direccion }}</p>
+                                <div class="row">
+                                    <div class="col-sm-5"></div>
+                                    <div class="col-sm-7">
+                                        <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
+                                           href="patrimonio/detalle">
+                                            Ver detalle
+                                        </a>
+                                    </div>
+
                                 </div>
-                                
                             </div>
-                        </div>                        
+                        </div>
+                        <div><p></p></div>
                     </div>
-                    <div><p></p></div>
-                </div>
                 {% endfor %}
-                <!-- <div class="mb-4 col-md-6 col-lg-4">
-                    <div class="border rounded h-100 d-flex flex-column justify-content-between pb-3">
-                        <div class="overflow-hidden">
-                            <div class="position-relative rounded-top overflow-hidden"><a class="d-block"
-                                                                                          href="../e-commerce/product-details.html"><img
-                                    class="img-fluid rounded-top" src="../assets/img/products/2.jpg" alt=""/></a><span
-                                    class="badge badge-pill badge-success position-absolute r-0 t-0 mt-2 mr-2 z-index-2">New</span>
-                            </div>
-                            <div class="p-3">
-                                <h5 class="fs-0"><a class="text-dark" href="../e-commerce/product-details.html">Apple
-                                    iMac Pro (27-inch with Retina 5K Display, 3.0GHz 10-core Intel Xeon W, 1TB SSD)</a>
-                                </h5>
-                                <p class="fs--1 mb-3"><a class="text-500" href="#!">Computer &amp; Accessories</a></p>
-                                <h5 class="fs-md-2 text-warning mb-0 d-flex align-items-center mb-3"> $1199.5
-                                    <del class="ml-2 fs--1 text-500">$2399</del>
-                                </h5>
-                                <p class="fs--1 mb-1">Shipping Cost: <strong>$50</strong></p>
-                                <p class="fs--1 mb-1">Stock: <strong class="text-success">Available</strong>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between px-3">
-                            <div><span class="fa fa-star text-warning"></span><span
-                                    class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span
-                                    class="fa fa-star text-warning"></span><span
-                                    class="fa fa-star text-300"></span><span class="ml-1">(8)</span>
-                            </div>
-                            <div><a class="btn btn-sm btn-falcon-default mr-2" href="#!" data-toggle="tooltip"
-                                    data-placement="top" title="Add to Wish List"><span class="far fa-heart"></span></a><a
-                                    class="btn btn-sm btn-falcon-default" href="#!" data-toggle="tooltip"
-                                    data-placement="top" title="Add to Cart"><span class="fas fa-cart-plus"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
-    
+
         <!--Paginacion-->
         <div class="card-footer bg-light d-flex justify-content-center">
             <div>
@@ -153,124 +112,8 @@
         </div>
     </div>
 
-
-    <!--Anterior-->
-
-{#    <div class="card">#}
-{#        <div class="card-body">#}
-{#            <div class="row">#}
-{##}
-{#                <div class="col-12 col-lg-3 col-md-4 col-sm-6">#}
-{#                    <div class="card">#}
-{#                        <div class="card-img-top" style="height: 13rem">#}
-{#                            <img class="h-100 w-100 rounded-top"#}
-{#                                 src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"#}
-{#                                 alt="Card image cap">#}
-{#                        </div>#}
-{#                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">#}
-{#                            <h5 class="card-text pt-9" style="color: white">Ciudad sagrada de Caral</h5>#}
-{#                        </div>#}
-{#                        <div class="card-body">#}
-{#                            <p class="card-text font-italic mb-0">Historico - Artístico</p>#}
-{#                            <p class="card-text font-weight-semi-bold">Tipo de bien: Escultura y talla</p>#}
-{#                            <div class="row">#}
-{#                                <div class="col-sm-5"></div>#}
-{#                                <div class="col-sm-7">#}
-{#                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"#}
-{#                                       href="patrimonio/detalle">#}
-{#                                        Ver detalle#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-12 col-lg-3 col-md-4 col-sm-6">#}
-{#                    <div class="card">#}
-{#                        <div class="card-img-top" style="height: 13rem">#}
-{#                            <img class="h-100 w-100 rounded-top"#}
-{#                                 src="https://www.zonacaral.gob.pe/wp-content/uploads/2018/04/ojos-de-dios.jpg"#}
-{#                                 alt="Card image cap">#}
-{#                        </div>#}
-{#                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">#}
-{#                            <h5 class="card-text pt-9" style="color: white">Ojo de Dios</h5>#}
-{#                        </div>#}
-{#                        <div class="card-body">#}
-{#                            <p class="card-text font-italic mb-0">Historico - Artístico</p>#}
-{#                            <p class="card-text font-weight-semi-bold">Tipo de bien: Textíl</p>#}
-{#                            <div class="row">#}
-{#                                <div class="col-sm-5"></div>#}
-{#                                <div class="col-sm-7">#}
-{#                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"#}
-{#                                       href="#">#}
-{#                                        Ver detalle#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-12 col-lg-3 col-md-4 col-sm-6">#}
-{#                    <div class="card">#}
-{#                        <div class="card-img-top" style="height: 13rem">#}
-{#                            <img class="h-100 w-100 rounded-top"#}
-{#                                 src="https://culturatradicionalgc.org/wp-content/uploads/2022/01/junco2.png"#}
-{#                                 alt="Card image cap">#}
-{#                        </div>#}
-{#                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">#}
-{#                            <h5 class="card-text pt-9" style="color: white">Bolsa de Junco</h5>#}
-{#                        </div>#}
-{#                        <div class="card-body">#}
-{#                            <p class="card-text font-italic mb-0">Historico - Artístico</p>#}
-{#                            <p class="card-text font-weight-semi-bold">Tipo de bien: Textíl</p>#}
-{#                            <div class="row">#}
-{#                                <div class="col-sm-5"></div>#}
-{#                                <div class="col-sm-7">#}
-{#                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"#}
-{#                                       href="#">#}
-{#                                        Ver detalle#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-12 col-lg-3 col-md-4 col-sm-6">#}
-{#                    <div class="card">#}
-{#                        <div class="card-img-top" style="height: 13rem">#}
-{#                            <img class="h-100 w-100 rounded-top"#}
-{#                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2bljAGi2kvBdEukox7MXLtFmdL4pgzryqww&usqp=CAU"#}
-{#                                 alt="Card image cap">#}
-{#                        </div>#}
-{#                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">#}
-{#                            <h5 class="card-text pt-9" style="color: white">Botella con pico de estribo</h5>#}
-{#                        </div>#}
-{#                        <div class="card-body">#}
-{#                            <p class="card-text font-italic mb-0">Historico - Artístico</p>#}
-{#                            <p class="card-text font-weight-semi-bold">Tipo de bien: Escultura y talla</p>#}
-{#                            <div class="row">#}
-{#                                <div class="col-sm-5"></div>#}
-{#                                <div class="col-sm-7">#}
-{#                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"#}
-{#                                       href="#">#}
-{#                                        Ver detalle#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-
 {% endblock %}
 
 {% block extrajs %}
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
-
 {% endblock %}
