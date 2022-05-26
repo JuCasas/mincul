@@ -26,16 +26,41 @@
 
     <div class="card mb-3">
         <div class="card-body">
-            <div class="row justify-content-between align-items-center">
+{#            <div class="row justify-content-around align-items-stretch">#}
+            <div class="navbar">
                 <div class="col-sm-auto mb-2 mb-sm-0">
                     <h6 class="mb-0">Mostrando 1-24 de 205 Patrimonios</h6>
                 </div>
-                <div class="col-sm-auto">
-                    <div class="form-group col-sm-3">
-                        <div class="position-relative">
-                            <input class="form-control" id="name" type="text" placeholder="Nombre del proyecto">
-                            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                <div class="row justify-content-between align-items-stretch">
+
+                        <div class="form-group col-sm-auto">
+                            <div class="position-relative">
+                                <input class="form-control" id="name" type="text" placeholder="Nombre">
+                                <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                            </div>
                         </div>
+
+                    <div class="form-group col-sm-auto mx-0">
+                        <select class="form-control" id="exampleFormControlSelect1">
+                          <option selected>Clasificaciòn</option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                        </select>
+                    </div><div class="form-group col-sm-auto mx-0">
+                        <select class="form-control" id="exampleFormControlSelect1">
+                          <option selected>Tipo de Bien</option>
+                          <option>Cultural</option>
+                          <option>Humano</option>
+                          <option>Kriptoniano</option>
+                        </select>
+                    </div><div class="form-group col-sm-auto mx-0">
+                        <select class="form-control" id="exampleFormControlSelect1">
+                          <option selected>Departamento</option>
+                          <option>Lima</option>
+                          <option>Ica</option>
+                          <option>Cusco</option>
+                        </select>
                     </div>
                 </div>
             </div>
