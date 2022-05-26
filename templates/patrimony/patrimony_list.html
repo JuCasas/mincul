@@ -37,17 +37,42 @@
                             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
     </div>
+
+
     <div class="card mb-3">
         <div class="card-body">
             <div class="row">
-
-
+                {% for pat in patrimonios %}
+                <div class="col-12 col-lg-4 col-md-4 col-sm-6">
+                    <div class="card">
+                        <div class="card-img-top" style="height: 13rem">
+                            <img class="h-100 w-100 rounded-top"
+                                 src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"
+                                 alt="Card image cap">
+                        </div>
+                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">
+                            <h5 class="card-text pt-9" style="color: white">{{ pat.tituloDemoninacion }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text font-italic mb-0">{{ pat.categoria}} - {{ pat.subcategoria }}</p>
+                            <p class="card-text font-weight-semi-bold">{{ pat.direccion }}</p>
+                            <div class="row">
+                                <div class="col-sm-5"></div>
+                                <div class="col-sm-7">
+                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
+                                       href="patrimonio/detalle">
+                                        Ver detalle
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
                 <div class="mb-4 col-md-6 col-lg-4">
                     <div class="border rounded h-100 d-flex flex-column justify-content-between pb-3">
                         <div class="overflow-hidden">
@@ -83,12 +108,9 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
-
+    
         <!--Paginacion-->
         <div class="card-footer bg-light d-flex justify-content-center">
             <div>
@@ -107,117 +129,117 @@
 
     <!--Anterior-->
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-
-                <div class="col-12 col-lg-3 col-md-4 col-sm-6">
-                    <div class="card">
-                        <div class="card-img-top" style="height: 13rem">
-                            <img class="h-100 w-100 rounded-top"
-                                 src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"
-                                 alt="Card image cap">
-                        </div>
-                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">
-                            <h5 class="card-text pt-9" style="color: white">Ciudad sagrada de Caral</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text font-italic mb-0">Historico - Artístico</p>
-                            <p class="card-text font-weight-semi-bold">Tipo de bien: Escultura y talla</p>
-                            <div class="row">
-                                <div class="col-sm-5"></div>
-                                <div class="col-sm-7">
-                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
-                                       href="patrimonio/detalle">
-                                        Ver detalle
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-lg-3 col-md-4 col-sm-6">
-                    <div class="card">
-                        <div class="card-img-top" style="height: 13rem">
-                            <img class="h-100 w-100 rounded-top"
-                                 src="https://www.zonacaral.gob.pe/wp-content/uploads/2018/04/ojos-de-dios.jpg"
-                                 alt="Card image cap">
-                        </div>
-                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">
-                            <h5 class="card-text pt-9" style="color: white">Ojo de Dios</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text font-italic mb-0">Historico - Artístico</p>
-                            <p class="card-text font-weight-semi-bold">Tipo de bien: Textíl</p>
-                            <div class="row">
-                                <div class="col-sm-5"></div>
-                                <div class="col-sm-7">
-                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
-                                       href="#">
-                                        Ver detalle
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-lg-3 col-md-4 col-sm-6">
-                    <div class="card">
-                        <div class="card-img-top" style="height: 13rem">
-                            <img class="h-100 w-100 rounded-top"
-                                 src="https://culturatradicionalgc.org/wp-content/uploads/2022/01/junco2.png"
-                                 alt="Card image cap">
-                        </div>
-                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">
-                            <h5 class="card-text pt-9" style="color: white">Bolsa de Junco</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text font-italic mb-0">Historico - Artístico</p>
-                            <p class="card-text font-weight-semi-bold">Tipo de bien: Textíl</p>
-                            <div class="row">
-                                <div class="col-sm-5"></div>
-                                <div class="col-sm-7">
-                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
-                                       href="#">
-                                        Ver detalle
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-lg-3 col-md-4 col-sm-6">
-                    <div class="card">
-                        <div class="card-img-top" style="height: 13rem">
-                            <img class="h-100 w-100 rounded-top"
-                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2bljAGi2kvBdEukox7MXLtFmdL4pgzryqww&usqp=CAU"
-                                 alt="Card image cap">
-                        </div>
-                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">
-                            <h5 class="card-text pt-9" style="color: white">Botella con pico de estribo</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text font-italic mb-0">Historico - Artístico</p>
-                            <p class="card-text font-weight-semi-bold">Tipo de bien: Escultura y talla</p>
-                            <div class="row">
-                                <div class="col-sm-5"></div>
-                                <div class="col-sm-7">
-                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
-                                       href="#">
-                                        Ver detalle
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
+{#    <div class="card">#}
+{#        <div class="card-body">#}
+{#            <div class="row">#}
+{##}
+{#                <div class="col-12 col-lg-3 col-md-4 col-sm-6">#}
+{#                    <div class="card">#}
+{#                        <div class="card-img-top" style="height: 13rem">#}
+{#                            <img class="h-100 w-100 rounded-top"#}
+{#                                 src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"#}
+{#                                 alt="Card image cap">#}
+{#                        </div>#}
+{#                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">#}
+{#                            <h5 class="card-text pt-9" style="color: white">Ciudad sagrada de Caral</h5>#}
+{#                        </div>#}
+{#                        <div class="card-body">#}
+{#                            <p class="card-text font-italic mb-0">Historico - Artístico</p>#}
+{#                            <p class="card-text font-weight-semi-bold">Tipo de bien: Escultura y talla</p>#}
+{#                            <div class="row">#}
+{#                                <div class="col-sm-5"></div>#}
+{#                                <div class="col-sm-7">#}
+{#                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"#}
+{#                                       href="patrimonio/detalle">#}
+{#                                        Ver detalle#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="col-12 col-lg-3 col-md-4 col-sm-6">#}
+{#                    <div class="card">#}
+{#                        <div class="card-img-top" style="height: 13rem">#}
+{#                            <img class="h-100 w-100 rounded-top"#}
+{#                                 src="https://www.zonacaral.gob.pe/wp-content/uploads/2018/04/ojos-de-dios.jpg"#}
+{#                                 alt="Card image cap">#}
+{#                        </div>#}
+{#                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">#}
+{#                            <h5 class="card-text pt-9" style="color: white">Ojo de Dios</h5>#}
+{#                        </div>#}
+{#                        <div class="card-body">#}
+{#                            <p class="card-text font-italic mb-0">Historico - Artístico</p>#}
+{#                            <p class="card-text font-weight-semi-bold">Tipo de bien: Textíl</p>#}
+{#                            <div class="row">#}
+{#                                <div class="col-sm-5"></div>#}
+{#                                <div class="col-sm-7">#}
+{#                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"#}
+{#                                       href="#">#}
+{#                                        Ver detalle#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="col-12 col-lg-3 col-md-4 col-sm-6">#}
+{#                    <div class="card">#}
+{#                        <div class="card-img-top" style="height: 13rem">#}
+{#                            <img class="h-100 w-100 rounded-top"#}
+{#                                 src="https://culturatradicionalgc.org/wp-content/uploads/2022/01/junco2.png"#}
+{#                                 alt="Card image cap">#}
+{#                        </div>#}
+{#                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">#}
+{#                            <h5 class="card-text pt-9" style="color: white">Bolsa de Junco</h5>#}
+{#                        </div>#}
+{#                        <div class="card-body">#}
+{#                            <p class="card-text font-italic mb-0">Historico - Artístico</p>#}
+{#                            <p class="card-text font-weight-semi-bold">Tipo de bien: Textíl</p>#}
+{#                            <div class="row">#}
+{#                                <div class="col-sm-5"></div>#}
+{#                                <div class="col-sm-7">#}
+{#                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"#}
+{#                                       href="#">#}
+{#                                        Ver detalle#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="col-12 col-lg-3 col-md-4 col-sm-6">#}
+{#                    <div class="card">#}
+{#                        <div class="card-img-top" style="height: 13rem">#}
+{#                            <img class="h-100 w-100 rounded-top"#}
+{#                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2bljAGi2kvBdEukox7MXLtFmdL4pgzryqww&usqp=CAU"#}
+{#                                 alt="Card image cap">#}
+{#                        </div>#}
+{#                        <div class="card-img-overlay align-text-bottom okok" style="height: 13rem">#}
+{#                            <h5 class="card-text pt-9" style="color: white">Botella con pico de estribo</h5>#}
+{#                        </div>#}
+{#                        <div class="card-body">#}
+{#                            <p class="card-text font-italic mb-0">Historico - Artístico</p>#}
+{#                            <p class="card-text font-weight-semi-bold">Tipo de bien: Escultura y talla</p>#}
+{#                            <div class="row">#}
+{#                                <div class="col-sm-5"></div>#}
+{#                                <div class="col-sm-7">#}
+{#                                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"#}
+{#                                       href="#">#}
+{#                                        Ver detalle#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
 {% endblock %}
 
