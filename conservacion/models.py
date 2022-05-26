@@ -26,6 +26,8 @@ class ProyectoConservacion(models.Model):
     responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
     # incidentes  = models.ManyToManyField(Incidente)
 
+
+
 class Documento(models.Model):
     ESTADOS = (
         ('1', 'Activo'),
