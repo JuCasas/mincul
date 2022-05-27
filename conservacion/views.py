@@ -57,5 +57,22 @@ def addProject(request):
         nombre=nombre,
         fechaInicio=fechaInicio,
         fechaFin=fechaFin)
-    #return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
-    return render(request, 'proyectoConservacion/project_list.html')
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+
+@api_view(('POST',))
+def editProject(request,pk):
+    project = ProyectoConservacion.objects.get(pk=pk)
+    codigo = request.POST['codigo']
+    nombre = request.POST['nombre']
+    project.codigo = codigo
+    project.nombre = nombre
+    project.save()
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('POST',))
+def deleteProject(request,pk):
+    project = ProyectoConservacion.objects.get(pk=pk)
+    project.estado='2'
+    project.save()
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
