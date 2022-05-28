@@ -1,0 +1,169 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <style>
+        .degradado {
+            background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
+            opacity: .8;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+<div class="card mb-3">
+    <div class="card-body p-0">
+        <div class="navbar">
+            <p>Entidades Solicitantes</p>            
+            <div class="row d-flex align-items-center ml-auto">                
+                
+                <div class="form-group col-sm-auto my-1">
+                    <row>
+                        <button class="btn btn-primary " type="button">
+                        Importar patrimonios
+                    </button>
+                    <button class="btn btn-primary " type="button">
+                        Importar patrimonios
+                    </button>
+                </row>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-3">
+    <div class="card-body p-0">
+        <div class="navbar">
+            <div class="col-sm-auto mb-2 mb-sm-0">
+                <h6 class="mb-0">Mostrando 1-24 de 205 Patrimonios</h6>
+            </div>
+            <div class="row d-flex align-items-center">
+
+                <div class="form-group col-sm-auto my-1">
+                    <div class="position-relative">
+                        <input class="form-control" id="name" type="text" placeholder="Nombre">
+                        <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-auto my-1">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option selected>Clasificación</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-auto my-1">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option selected>Tipo de Bien</option>
+                        <option>Cultural</option>
+                        <option>Humano</option>
+                        <option>Kriptoniano</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-auto my-1">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option selected>Departamento</option>
+                        <option>Lima</option>
+                        <option>Ica</option>
+                        <option>Cusco</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-auto my-1">
+                    <button class="btn btn-primary col-sm-auto" type="button">
+                        <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+      <h5 class="mb-0">Tabla de Entidades Solicitantes</h5>
+    </div>
+    <div class="card-body bg-light px-0">
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
+            <thead class="bg-200">
+              <tr>  
+                <th class="sort">DOI</th>
+                <th class="sort">Nombre</th>
+                <th class="sort">Dirección</th>
+                <th class="sort">Telefono</th>
+                <th class="sort">Correo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <tr>
+                <td>Tiger Nixon</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>61</td>
+                <td>2011/04/25</td>
+                <td><row><button class="btn btn-primary " type="button">
+                    p
+                </button>
+                <button class="btn btn-primary " type="button">
+                   o
+                </button>
+                <button class="btn btn-primary " type="button">
+                    I
+                </button></row></td>
+              </tr>
+              <tr>
+                <td>Garrett Winters</td>
+                <td>Accountant</td>
+                <td>Tokyo</td>
+                <td>63</td>
+                <td>2011/07/25</td>
+                <td>$170,750</td>
+              </tr>
+              <tr>
+                <td>Ashton Cox</td>
+                <td>Junior Technical Author</td>
+                <td>San Francisco</td>
+                <td>66</td>
+                <td>2009/01/12</td>
+                <td>$86,000</td>
+              </tr>
+              <tr>
+                <td>Cedric Kelly</td>
+                <td>Senior Javascript Developer</td>
+                <td>Edinburgh</td>
+                <td>22</td>
+                <td>2012/03/29</td>
+                <td>$433,060</td>
+              </tr>
+             
+            </tbody>
+            <tfoot class="bg-200">
+              <tr>
+                <th>DOI</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="col-12">
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+{% endblock %}

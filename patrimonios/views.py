@@ -12,3 +12,7 @@ def patrimonio_list(request):
 
 
     return render(request, 'patrimony/patrimony_list.html',context=context)
+
+def patrimonio_gestor(request):
+    
+    return render(request, 'patrimony/patrimony_gestor.html')
