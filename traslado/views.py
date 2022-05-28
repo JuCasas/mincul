@@ -1,3 +1,11 @@
+import datetime
+
 from django.shortcuts import render
 
-# Create your views here.
+
+
+def addTransfer(request):
+    if request.POST:
+        print("Hola")
+    else:
+        return render(request,'traslado/transfer_add.html')
