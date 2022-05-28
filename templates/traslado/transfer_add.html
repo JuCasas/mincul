@@ -19,7 +19,7 @@
 {% block body %}
 
     <div class="card p-5">
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="{% url 'addTransfer' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row d-flex justify-content-center ">
                 <div class="col-12">
@@ -31,10 +31,12 @@
 
             <div class="row">
                 <div class="form-group col-lg-6 col-sm-12">
-                    <label for="nameInstitucion">Entidad Solicitante</label>
-                    <select class="form-control" id="institución" name="nameInstitucion">
-                        <option>Sexta Actividad</option>
-                        <option>PUCP</option>
+                    <label for="nombreInstitucion">Entidad Solicitante</label>
+                    <select class="form-control selectpicker" id="nombreInstitucion" name="nombreInstitucion"
+                            data-placeholder='Seleccione entidad...'>
+                        {% for e in entidades %}
+                            <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group col-lg-6 col-sm-12">
@@ -49,27 +51,19 @@
 
             <div class="row">
                 <div class="form-group col-lg-6 col-sm-12">
-                    <label for="nameInstitucion">Nombre de la Exposición</label>
-                    <select class="form-control" id="institución" name="nameInstitucion">
-                        <option>PUCP</option>
-                        <option>Sexta Actividad</option>
-                    </select>
+                    <label for="nombreExposicion">Nombre de la Exposición</label>
+                    <input class="form-control" id="nombreExposicion" name="nombreExposicion" type="text"
+                           placeholder="Nombre de la Exposición">
                 </div>
                 <div class="form-group col-lg-3 col-sm-12">
                     <label for="pais">País</label>
-                    <select class="form-control" id="pais" name="pais">
-                        <option>Argentina</option>
-                        <option>Japan</option>
-                        <option>Madrid</option>
-                    </select>
+                    <input class="form-control" id="pais" name="pais" type="text"
+                           placeholder="Pais destino">
                 </div>
                 <div class="form-group col-lg-3 col-sm-12">
-                    <label for="tipoTraslado">Destino</label>
-                    <select class="form-control" id="tipoTraslado">
-                        <option>Exposición en el extranjero</option>
-                        <option>Exponsición nacional</option>
-                        <option>Misión Diplomática</option>
-                    </select>
+                    <label for="destino">Destino</label>
+                    <input class="form-control" id="destino" name="destino" type="text"
+                           placeholder="Destino">
                 </div>
             </div>
 
@@ -77,9 +71,11 @@
             <div class="row">
                 <div class="form-group col-lg-6 col-sm-12">
                     <label for="comisario">Comisario</label>
-                    <select class="form-control" id="comisario" name="comisario">
-                        <option>Gilmer Cabrera</option>
-                        <option>Raul Jeri</option>
+                    <select class="form-control selectpicker" id="comisario" name="comisario"
+                            data-placeholder='Seleccione comisario...'>
+                        {% for c in comisarios %}
+                            <option value="{{ c.pk }}">{{ c.username }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group col-lg-3 col-sm-12">
@@ -120,7 +116,8 @@
                     <div class="fallback">
                         <input type="file" name="file2" multiple>
                     </div>
-                    <div class="dz-message" data-dz-message><img class="mr-2" src="{% static 'img/icons/cloud-upload.svg' %}"
+                    <div class="dz-message" data-dz-message><img class="mr-2"
+                                                                 src="{% static 'img/icons/cloud-upload.svg' %}"
                                                                  width="25" alt="">Agregue archivos correspondientes
                     </div>
                     <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
