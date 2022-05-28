@@ -228,11 +228,28 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title text-black">Valora la ciudad sagrada de Caral:</h5>
 
+                            <form id="valor_form" method="post" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                                <label for="name">¿Cómo te llamas?:</label>
+                                <input name="name" class="form-control" placeholder="Nombre y Apellido...">
 
+                                <label for="email">¿Cual es tu correo electrónico?:</label>
+                                <input name="email" class="form-control" placeholder="Correo electrónico...">
+
+                                <label for="comment">Cuentanos tu experiencia:</label>
+                                <textarea name="comment" class="form-control" placeholder=""></textarea>
+
+                            </form>
+
+                            <button class="btn btn-dark mt-4 mr-1 mb-1 w-100" type="submit" form="valor_form">Guardar</button>
+                        </div>
+                    </div>
             </div>
         </div>
 

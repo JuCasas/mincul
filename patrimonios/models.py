@@ -169,3 +169,15 @@ class PatrimonioMaterialMueble(models.Model):
     largo = models.FloatField(default=0.0)
     ancho = models.FloatField(default=0.0)
     patrimonioMaterial = models.OneToOneField(PatrimonioMaterial, on_delete=models.CASCADE)
+
+class PatrimonioValoracion(models.Model):
+    ESTADO = (
+        ('1', 'Pendiente'),
+        ('2', 'Aceptado'),
+    )
+    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE, null=True)
+    nombre = models.CharField(default='', max_length=60)
+    correo = models.CharField(default='', max_length=60)
+    valoracion = models.IntegerField(default=0)
+    comentario = models.CharField(default='', max_length=250)
+    estado = models.CharField(max_length=2, choices=ESTADO, default='1')

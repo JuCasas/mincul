@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from mincul.db import PostgresDB
+from mincul.db import LOCAL,LOCAL_GAE
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -84,7 +84,10 @@ WSGI_APPLICATION = 'mincul.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = PostgresDB.local
+if os.getenv('LOCAL_GAE', None):
+    DATABASES = LOCAL_GAE
+else:
+    DATABASES = LOCAL
 
 
 # Password validation
