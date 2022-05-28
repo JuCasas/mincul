@@ -24,7 +24,7 @@ class ProyectoConservacion(models.Model):
     responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     documentos = models.ManyToManyField(Documento)
     patrimonios = models.ManyToManyField(Patrimonio)
-    incidentes  = models.ManyToManyField(Incidente)
+    incidentes = models.ManyToManyField(Incidente)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
 
 class Actividad(models.Model):

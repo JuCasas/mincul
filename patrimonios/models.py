@@ -140,7 +140,7 @@ class Patrimonio (models.Model):
 
     tituloDemoninacion = models.CharField(max_length=30)
     datacion = models.DateField(default=datetime.now, blank=True, null=True, verbose_name='datacion')
-    observaciones = models.CharField(max_length=200)
+    observacion = models.CharField(max_length=200)
     direccion = models.CharField(max_length=200)
     departamento = models.CharField(max_length=100)
     provincia = models.CharField(max_length=100)
