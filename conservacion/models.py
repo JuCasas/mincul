@@ -1,41 +1,31 @@
 from django.db import models
 
 # Create your models here.
-# from incidente.models import Incidente
 from mincul import settings
 from patrimonios.models import Patrimonio
-
+from mincul_app.models import Documento
+from incidente.models import Incidente
 
 class ProyectoConservacion(models.Model):
-    TIPOS = [
+    TIPOS = (
         ('0','Preventivo'),
         ('1','Correctivo'),
-    ]
-    ESTADOS = [
+    )
+    ESTADOS = (
         ('1','Activo'),
         ('2','Inactivo'),
-    ]
+    )
     codigo = models.CharField(max_length=8)
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=200)
     fechaInicio = models.DateField(blank=True, null=True, verbose_name='fechaInicio')
     fechaFin = models.DateField(blank=True, null=True, verbose_name='fechaFin')
     tipoProyecto = models.CharField(max_length=2,choices=TIPOS,default='0',null=True,blank=True)
-    estado = models.CharField(max_length=2,choices=ESTADOS,default='1',null=True,blank=True)
+    responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    documentos = models.ManyToManyField(Documento)
     patrimonios = models.ManyToManyField(Patrimonio)
-    responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
-    # incidentes  = models.ManyToManyField(Incidente)
-
-
-
-class Documento(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    url = models.CharField(max_length=300,null=True, blank=True)
+    incidentes  = models.ManyToManyField(Incidente)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
-
 
 class Actividad(models.Model):
     ESTADOS = (
@@ -48,12 +38,12 @@ class Actividad(models.Model):
     fechaFin = models.DateField(blank=True, null=True, verbose_name='fechaFin')
     presupuesto = models.FloatField()
     gastoTotal = models.FloatField()
-    patrimonio = models.ForeignKey(ProyectoConservacion, on_delete=models.CASCADE)
+    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
+    proyecto = models.ForeignKey(ProyectoConservacion, on_delete=models.CASCADE)
+    actividadPrecia = models.ManyToManyField("self", blank=True)
     documentos = models.ManyToManyField(Documento)
-    #TODO: Definir field actividadPrevia
-    estado = models.CharField(max_length=2,choices=ESTADOS,default='1',null=True,blank=True)
     conservadores = models.ManyToManyField(settings.AUTH_USER_MODEL)
-
+    estado = models.CharField(max_length=2,choices=ESTADOS,default='1',null=True,blank=True)
 
 class Tarea(models.Model):
     ESTADOS = (
@@ -69,21 +59,13 @@ class Tarea(models.Model):
     fechaRegistro = models.DateField(blank=True, null=True, verbose_name='fechaRegistro')
     conservador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE)
-    documentos = models.ManyToManyField(Documento)
+    documentos = models.ManyToManyField(Documento, through='DocumentoPorTarea', related_name='documentosTarea')
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
 
 class DocumentoPorTarea(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    tarea = models.ForeignKey(Tarea,on_delete=models.CASCADE )
-    documento = models.ForeignKey(Documento,on_delete=models.CASCADE )
-    campo = models.IntegerField(blank=True, null=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
-
-    # class Meta:
-    #     unique_together = [['tarea','documento']]
+    documento = models.ForeignKey(Documento, on_delete=models.CASCADE)
+    tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
+    campo = models.IntegerField(default=0)
 
 class CampoExtra(models.Model):
     ESTADOS = (
@@ -92,37 +74,6 @@ class CampoExtra(models.Model):
     )
     nombre = models.CharField(max_length=200)
     contenido = models.CharField(max_length=200, null=True, blank=True)
-    tarea = models.ForeignKey(Tarea,on_delete=models.CASCADE )
+    tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
     documento = models.ForeignKey(Documento, on_delete=models.CASCADE, null=True)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
-
-class DocumentoPorActividad(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    actvidad = models.ForeignKey(Actividad,on_delete=models.CASCADE )
-    documento = models.ForeignKey(Documento,on_delete=models.CASCADE )
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
-
-
-
-class ConservadorPorActividad(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    conservador = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE )
-    actividad = models.ForeignKey(Actividad,on_delete=models.CASCADE )
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
-
-class PatrimonioPorProyecto(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    patrimonio = models.ForeignKey(Patrimonio,on_delete=models.CASCADE )
-    proyecto = models.ForeignKey(ProyectoConservacion, on_delete=models.CASCADE)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
-
-

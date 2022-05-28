@@ -79,6 +79,38 @@ class Propietario(models.Model):
     correo = models.CharField(max_length=100, null=True, blank=True)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
+class Servicio(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=100, null=True, blank=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class ActividadTuristica(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    TIPO = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2 '),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+    descripcion = models.CharField(max_length=100, null=True, blank=True)
+    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class Entrada(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=100, null=True, blank=True)
+    precio = models.FloatField(blank=True, null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
 class Patrimonio (models.Model):
     ESTADOS = (
         ('1', 'Activo'),
@@ -91,12 +123,14 @@ class Patrimonio (models.Model):
         ('3', 'Estado 3'),
         ('4', 'Estado 4'),
     )
+
     CATEGORIA = (
         ('1', 'Estado 1'),
         ('2', 'Estado 2 '),
         ('3', 'Estado 3'),
         ('4', 'Estado 4'),
     )
+
     SUBCATEGORIA = (
         ('1', 'Estado 1'),
         ('2', 'Estado 2 '),
@@ -118,51 +152,9 @@ class Patrimonio (models.Model):
     categoria = models.CharField(max_length=2, choices=CATEGORIA, default='1')
     subcategoria = models.CharField(max_length=2, choices=SUBCATEGORIA, default='1')
     gestor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
     institucion = models.ForeignKey(Institucion,null=True, on_delete=models.CASCADE)
     propietarios = models.ManyToManyField(Propietario)
-
-
-class PropietarioPorPatrimonio(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    propietario = models.ForeignKey(Propietario, on_delete=models.CASCADE)
-    Patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class Servicio(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    descripcion = models.CharField(max_length=100, null=True, blank=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class ActividadTuristica(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    TIPO = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2 '),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
-    )
-    descripcion = models.CharField(max_length=100, null=True, blank=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
-
-class Entrada(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    descripcion = models.CharField(max_length=100, null=True, blank=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
 
 class PatrimonioMaterial(models.Model):
     horaApertura = models.TimeField(auto_now_add=True, blank=True)
@@ -172,36 +164,8 @@ class PatrimonioMaterial(models.Model):
     actividades = models.ManyToManyField(ActividadTuristica)
     entradas = models.ManyToManyField(Entrada)
 
-
-class EntradaPorPatrimonio(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    entrada = models.ForeignKey(Entrada, on_delete=models.CASCADE)
-    patrimonio = models.ForeignKey(PatrimonioMaterial, on_delete=models.CASCADE)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class ActividadTuristicaPorPatrimonio(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    actividadTuristica = models.ForeignKey(ActividadTuristica, on_delete=models.CASCADE)
-    patrimonio = models.ForeignKey(PatrimonioMaterial, on_delete=models.CASCADE)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class ServicioPorPatrimonio(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
-    patrimonio = models.ForeignKey(PatrimonioMaterial, on_delete=models.CASCADE)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
 class PatrimonioMaterialMueble(models.Model):
-    alto = models.DecimalField(null=True,blank=True,max_digits=10, decimal_places=2)
-    largo = models.DecimalField(null=True,blank=True,max_digits=10, decimal_places=2)
-    ancho = models.DecimalField(null=True,blank=True,max_digits=10, decimal_places=2)
-    patrimoniomaterial = models.ForeignKey(PatrimonioMaterial, on_delete=models.CASCADE)
+    alto = models.FloatField(default=0.0)
+    largo = models.FloatField(default=0.0)
+    ancho = models.FloatField(default=0.0)
+    patrimonioMaterial = models.OneToOneField(PatrimonioMaterial, on_delete=models.CASCADE)
