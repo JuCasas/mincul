@@ -26,7 +26,7 @@ def detalle(request):
     return render(request, 'templateDetail.html')
 
 def login(request):
-    return render(request, 'patrimony/patrimony_list.html')
+    return render(request, 'patrimonio/patrimony_list.html')
 
 def material(request):
     return render(request, 'materialKit.html')
@@ -42,7 +42,7 @@ def send_email(request):
             context = {
                 'url_val': 'hola'
             }
-            template = get_template('patrimony/patrimony_email.html')
+            template = get_template('patrimonio/patrimony_email.html')
             content = template.render(context)
 
             correos = [request.POST.get("email")]
