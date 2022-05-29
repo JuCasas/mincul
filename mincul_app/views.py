@@ -14,6 +14,7 @@ def detalle(request):
         valoracion.nombre = request.POST.get("name")
         valoracion.correo = request.POST.get("email")
         valoracion.comentario = request.POST.get("comment")
+        valoracion.valoracion = request.POST.get("score")
         valoracion.save()
         return HttpResponseRedirect(reverse(detalle))
     return render(request, 'templateDetail.html')
