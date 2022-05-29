@@ -38,7 +38,31 @@
                            style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">Ciudad
                             Sagrada de Caral</p>
                         <div class="col text-right">
-                            <div class="raty"></div>
+                            {% if puntacion >= 1 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 2 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 3 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 4 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 5 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

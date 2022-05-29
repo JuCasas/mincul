@@ -13,6 +13,8 @@ def template(request):
     return render(request, 'template_auth.html')
 
 def detalle(request):
+    context = {'puntacion':4}
+
     if request.POST:
         print(request.POST)
         valoracion = PatrimonioValoracion.objects.create()
@@ -24,7 +26,7 @@ def detalle(request):
         valoracion.save()
         send_email(request)
         return HttpResponseRedirect(reverse(detalle))
-    return render(request, 'templateDetail.html')
+    return render(request, 'templateDetail.html', context)
 
 def login(request):
     return render(request, 'patrimony/patrimony_list.html')
