@@ -23,7 +23,7 @@ def patrimonio_gestor(request):
 
 
 def registrarSolicitante(request):
-    message_error="Entidad Agregado"
+    message_error="Entidad Agregada"
     doiSolicitante = request.POST["doiSolicitante"]
     nombreSolicitante  = request.POST["nombreSolicitante"]
     correo = request.POST["correo"]
@@ -44,11 +44,11 @@ def registrarSolicitante(request):
     return JsonResponse({"message_error": message_error}, status=200)
     
 def listarSolicitantes(request):
-    patrimoniopk = request.POST["patrimoniopk"]    
-    registros = SolicitudTraslado.objects.filter(patrimonios_id=patrimoniopk)
-    solicitantes = []
-    for item in registros:
-        solicitantes.append(item.entidadSolicitante)
+    # patrimoniopk = request.POST["patrimoniopk"]    
+    # registros = SolicitudTraslado.objects.filter(patrimonios_id=patrimoniopk)
+    solicitantes = SolicitudTraslado.objects.all()
+    # for item in registros:
+    #     solicitantes.append(item.entidadSolicitante)
     sol_instance = serializers.serialize('json', solicitantes)
     return JsonResponse({"asistentes": sol_instance}, status=200)
 
