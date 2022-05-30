@@ -1,0 +1,173 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+  <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/jquery-ui-1.13.1/jquery-ui.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/jquery-ui-1.13.1/jquery-ui.structure.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/jquery-ui-1.13.1/jquery-ui.theme.css' %}" rel="stylesheet">
+
+
+  <style>
+
+      table {
+          min-width: 100%;
+          color: #2B2D42 !important;
+          background-color: #EDF2F9;
+      }
+  </style>
+{% endblock %}
+
+{% block body %}
+
+  <div class="card mb-3">
+    <div class="card-body ">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-md">
+          <h5 class="mb-2 mb-md-0 text-black">Actividades del Proyecto</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row filterBar">
+        <div class="form-group col-sm-3">
+          <div class="position-relative">
+            <input class="form-control" id="search" type="text" placeholder="Nombre del proyecto">
+            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+          </div>
+        </div>
+        <div class="form-group col-sm-2">
+          <select class="form-control" id="exampleFormControlSelect1">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-2">
+          <select class="form-control" id="exampleFormControlSelect2">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-2">
+          <select class="form-control" id="exampleFormControlSelect3">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+        <button class="btn btn-primary col-sm-3" type="button" data-dismiss="modal" id="new">
+          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Proyecto
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <table id="tabla_autores" class="table">
+        <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Tipo de Plan</th>
+          <th>Actividades Completadas</th>
+          <th>Fecha de Registro</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NEW and EDIT Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal_title"></h4>
+        </div>
+        <div class="modal-body">
+          <form role="form">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="codigo"><span class="glyphicon glyphicon-pencil"></span> Código</label>
+              <input type="text" class="form-control" id="codigo" name="codigo" placeholder=""
+                     required="true">
+            </div>
+            <div class="form-group">
+              <label for="nombre"><span class="glyphicon glyphicon-file"></span> Nombre</label>
+              <input type="text" class="form-control" id="nombre" name="nombre"
+                     placeholder="" required="true">
+            </div>
+            <div class="form-group">
+              <label for="patrimonio"><span class="glyphicon glyphicon-file"></span>Patrimonio</label>
+              <select id="patrimonio" style="width:300px;">
+                <!-- Dropdown List Option -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="txt1"><span class="glyphicon glyphicon-file"></span>Fecha Inicio</label>
+              <input type="text" id="txt1"/>
+            </div>
+            <input type="hidden" id="type" name="type" value="">
+            <button type="submit" class="btn btn-success btn-block"><span
+                class="glyphicon glyphicon-ok"></span> Guardar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal fade" id="confirm" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Estás seguro?</h4>
+        </div>
+        <div class="modal-body">
+          <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
+          <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block extrajs %}
+  <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+  <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'lib/lib/jquery-ui-1.13.1/jquery-ui.js' %}"></script>
+  <script src="{% static 'project/projects/activities.js' %}"></script>
+  <script>
+    $("#txt1").datepicker({
+    changeMonth: true,
+    changeYear: true,
+    yearRange: '1960:2003',
+    onClose: function (dateText, inst) {
+      var startDate = new Date(dateText);
+      var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+      var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+      $(this).datepicker('setDate', new Date(year, month, inst.selectedDay));
+    }
+  });
+  </script>
+{% endblock %}
+

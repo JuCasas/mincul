@@ -1,3 +1,13 @@
+
+  var country = ["Australia", "Bangladesh", "Denmark", "Hong Kong", "Indonesia", "Netherlands", "New Zealand", "South Africa"];
+  $("#patrimonio").select2({
+    data: country
+  });
+
+
+
+
+
 let table = $('#tabla_autores').DataTable({
   "searching": false,
   "serverSide": true,
@@ -69,7 +79,6 @@ $('#tabla_autores tbody').on('click', 'button', function () {
     $('#modal_title').text('DELETE');
     $("#confirm").modal();
   }
-
 
 
 });
