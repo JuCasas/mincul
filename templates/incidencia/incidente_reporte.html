@@ -1,0 +1,123 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <style>
+        .degradado {
+            background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
+            opacity: .8;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="card mb-3 rounded-3">
+            <div class="card" style="width: 100%;">
+                <div class="position-relative">
+                    <div>
+                        <img class="img-fluid w-100"
+                             style="height: 320px; object-fit: cover; border-radius: 3px"
+                                {#                                         src="../static/img/generic/4-caral.jpg"#}
+                             src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"
+                             alt="Card image"/>
+                    </div>
+                    <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                        <p class="card-text "
+                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">Ciudad
+                            Sagrada de Caral</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="col-sm-auto mb-2 mb-sm-0">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5 class="mb-0" style="font-weight: bold">Reporte de Incidente</h5>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row float-right">
+                            <button class="btn btn-primary px-3 mr-2" type="button" style="background-color: #FFFFFF; color: #2B2D42" onclick="location.href='{% url 'incidente_reporte_modificar' incidente.patrimonio.id incidente.id %}'">
+                                Modificar Reporte
+                            </button>
+                            <button class="btn btn-primary px-3 mr-2" type="button">
+                                Descargar Reporte
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            <div><p></p></div>
+
+            <div class="row">
+                <div class="col-5">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md">
+                                    <img class="img-fluid w-100"
+                                         style="height: 320px; object-fit: cover; border-radius: 3px"
+                                         src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"
+                                         alt="Card image"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-7">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h6 class="mb-2 mb-md-0 text-black">Detalle:</h6>
+                                            <p></p>
+                                            <input type="text" name="detalle" class="form-control" disabled value="{{ incidente.detalle }}">
+                                        </div>
+                                    </div>
+                                    <p></p>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h6 class="mb-2 mb-md-0 text-black">Fecha del reporte:</h6>
+                                            <p></p>
+                                            <input type="date" name="detalle" class="form-control" disabled value="{{ incidente.fechaRegistro|date:'Y-m-d' }}">
+                                        </div>
+                                        <div class="col-6">
+                                            <h6 class="mb-2 mb-md-0 text-black">Ubicacion:</h6>
+                                            <p></p>
+                                            <input type="text" name="detalle" class="form-control" disabled value="{{ incidente.patrimonio.direccion }}">
+                                        </div>
+                                    </div>
+                                    <p></p>
+                                    <h6 class="mb-2 mb-md-0 text-black">Descripción:</h6>
+                                    <p></p>
+                                    <textarea name="descripcion" class="form-control" disabled style="height: 8em">{{ incidente.descripcion }}</textarea>
+                                    <p></p>
+                                    <div class="row float-right">
+                                            <button class="btn btn-primary px-3 mr-2" type="button" style="background-color: #FFFFFF; color: #2B2D42">
+                                                Eliminar Incidente
+                                            </button>
+                                            <button class="btn btn-primary px-3 mr-2" type="button">
+                                                Asignar Conservador
+                                            </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+{% endblock %}
