@@ -12,66 +12,73 @@ def addTransfer(request):
     if request.POST:
         print(request.POST)
         solicitudTraslado = SolicitudTraslado.objects.create(entidadSolicitante_id=request.POST['nombreInstitucion'],
-                                                    nombreExposicion=request.POST['nombreExposicion'],
-                                                    pais=request.POST['pais'],
-                                                    ubigeoDestino=request.POST['ubigeo'],
-                                                    gestorConservacionTraslados_id=request.POST['comisario'],
-                                                    gestorPatrimonio_id=request.POST['comisario'],
-                                                    fechaSalidaProgramada=request.POST['fechaSalidaProgramada'],
-                                                    fechaRetornoProgramada=request.POST['fechaRetornoProgramada'],
-                                                    numeroResolucion=request.POST['nResolucion']
-                                                    )
-        return redirect('listTransfer')
+                                                             nombreExposicion=request.POST['nombreExposicion'],
+                                                             pais=request.POST['pais'],
+                                                             ubigeoDestino=request.POST['ubigeo'],
+                                                             gestorConservacionTraslados_id=request.POST['comisario'],
+                                                             gestorPatrimonio_id=request.POST['comisario'],
+                                                             fechaSalidaProgramada=request.POST[
+                                                                 'fechaSalidaProgramada'],
+                                                             fechaRetornoProgramada=request.POST[
+                                                                 'fechaRetornoProgramada'],
+                                                             numeroResolucion=request.POST['nResolucion']
+                                                             )
+        return redirect('list_transfers')
     else:
         entidades = EntidadSolicitante.objects.filter()
         comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
 
         context = {
             'entidades': entidades,
-            'comisarios':comisarios
+            'comisarios': comisarios
         }
-        return render(request,'traslado/transfer_add.html',context)
-    
-    
-def listEntidades(request):
-    
-    return render(request, 'traslado/list_entidades.html')
+        return render(request, 'traslado/transfer_add.html', context)
 
 
-def registrarSolicitante(request):
-    message_error="Entidad Agregada"
-    doiSolicitante = request.POST["doiSolicitante"]
-    nombreSolicitante  = request.POST["nombreSolicitante"]
-    correo = request.POST["correo"]
-    direccion = request.POST["direccion"]
-    pais = request.POST["pais"]
-    telefono = request.POST["telefono"]
+def listTranfers(request):
 
-    registro = EntidadSolicitante.objects.filter(doiSolicitante=doiSolicitante)
-    if (registro.__len__() == 0):
-        EntidadSolicitante.objects.create(doiSolicitante=doiSolicitante,
-                                          nombreSolicitante=nombreSolicitante,
-                                          correo=correo,
-                                          direccion=direccion,
-                                          pais=pais,
-                                          telefono=telefono)
-    else:
-        message_error = "La Entidad ya se encuentra registrado"
-    return JsonResponse({"message_error": message_error}, status=200)
-    
-def listarSolicitantes(request):
-    # patrimoniopk = request.POST["patrimoniopk"]    
-    # registros = SolicitudTraslado.objects.filter(patrimonios_id=patrimoniopk)
-    solicitantes = SolicitudTraslado.objects.all()
-    # for item in registros:
-    #     solicitantes.append(item.entidadSolicitante)
-    sol_instance = serializers.serialize('json', solicitantes)
-    return JsonResponse({"asistentes": sol_instance}, status=200)
+    traslados = SolicitudTraslado.objects.all()
+    context = {
+        'traslados': traslados
+    }
+
+    return render(request,'traslado/transfer_list.html', context)
 
 
-def eliminarSolicitantes(request):
-    solicitantepk = request.POST['solicitantepk']
-    solicitante = EntidadSolicitante.objects.get(pk=solicitantepk)
-   
-    solicitante.delete()
-    return JsonResponse({}, status=200)
+def viewTranfer(request,pk):
+
+    traslado = SolicitudTraslado.objects.get(pk=pk)
+    entidades = EntidadSolicitante.objects.filter()
+    comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
+
+    #Nota, se debe considerar los patrominos del traslado
+    patrimonios = {}
+
+    context = {
+        'traslado': traslado,
+        'entidades': entidades,
+        'comisarios': comisarios,
+        'patrimonios': patrimonios
+    }
+
+    return render(request,'traslado/transfer_view.html', context)
+
+
+
+def editTransfer(request,pk):
+
+    traslado = SolicitudTraslado.objects.get(pk=pk)
+    entidades = EntidadSolicitante.objects.filter()
+    comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
+
+    #Nota, se debe considerar los patrominos del traslado
+    patrimonios = {}
+
+    context = {
+        'traslado': traslado,
+        'entidades': entidades,
+        'comisarios': comisarios,
+        'patrimonios': patrimonios
+    }
+
+    return render(request,'traslado/transfer_edit.html', context)
