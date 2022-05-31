@@ -28,9 +28,9 @@ let table = $('#tabla_autores').DataTable({
     {"data": "nombre"},
     {
       "data": null,
-      "defaultContent": '<button type="button" class="btn btn-info"><i class="fas fa-power-off"></i></button>' + '&nbsp;&nbsp' +
-          '<button type="button" class="btn btn-warning"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-          '<button type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>'
+      "defaultContent": '<button type="button" class="btn"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+          '<button type="button" class="btn"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+          '<button type="button" class="btn"><i class="fas fa-trash-alt"></i></button>'
     }
   ],
 
