@@ -11,7 +11,6 @@ from django.http import JsonResponse
 
 def addTransfer(request):
     if request.POST:
-        print(request.POST)
         patrimoniosSolicitados = list(request.POST['lista'].split(","))
         solicitudTraslado = SolicitudTraslado.objects.create(entidadSolicitante_id=request.POST['nombreInstitucion'],
                                                              nombreExposicion=request.POST['nombreExposicion'],
@@ -43,8 +42,7 @@ def addTransfer(request):
 
 def listarPatrimoniosTraslado(request):
     filtro = request.GET['q']
-    print("//////////////////////////////////////////////////////////")
-    patrimonios = Patrimonio.objects.filter()
+    patrimonios = Patrimonio.objects.filter(tituloDemoninacion__icontains=filtro)
     ser_instance = serializers.serialize('json', list(patrimonios),
                                          fields=('id', 'tituloDemoninacion','categoria', 'tipoPatrimonio'))
     print(ser_instance)
