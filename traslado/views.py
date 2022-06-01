@@ -34,8 +34,13 @@ def addTransfer(request):
     
     
 def listEntidades(request):
+
+    entidades = EntidadSolicitante.objects.filter()
+    context = {
+        'entidades': entidades
+    }
     
-    return render(request, 'traslado/list_entidades.html')
+    return render(request, 'traslado/list_entidades.html',context=context)
 
 
 def registrarSolicitante(request):
@@ -69,9 +74,20 @@ def listarSolicitantes(request):
     return JsonResponse({"asistentes": sol_instance}, status=200)
 
 
-def eliminarSolicitantes(request):
-    solicitantepk = request.POST['solicitantepk']
-    solicitante = EntidadSolicitante.objects.get(pk=solicitantepk)
-   
-    solicitante.delete()
-    return JsonResponse({}, status=200)
+def eliminarSolicitantes(request, id):
+    entidad = EntidadSolicitante.objects.get(id=id)
+    print(entidad)
+    entidad.delete()
+    return redirect('/traslado/entidades')
+
+    # solicitantepk = request.POST['solicitantepk']
+    # solicitante = EntidadSolicitante.objects.get(pk=solicitantepk)
+    #
+    # solicitante.delete()
+    # return JsonResponse({}, status=200)
+
+def eliminarEntidad(request,id):
+    entidad = EntidadSolicitante.objects.get(id=id)
+    entidad.delete()
+
+    return redirect('/traslado/entidades')
