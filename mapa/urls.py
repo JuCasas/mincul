@@ -1,7 +1,7 @@
 from django.urls import path, include
 
-from reportes import views
+from mapa import views
 
 urlpatterns = [
-
+    path('mapaficha/', views.mapaficha, name='mapaficha'),
 ]
