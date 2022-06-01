@@ -71,7 +71,6 @@ $('#tabla_autores tbody').on('click', 'button', function () {
   }
 
 
-
 });
 
 $('form').on('submit', function (e) {

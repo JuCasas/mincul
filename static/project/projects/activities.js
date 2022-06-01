@@ -1,50 +1,51 @@
 
-  var country = ["Australia", "Bangladesh", "Denmark", "Hong Kong", "Indonesia", "Netherlands", "New Zealand", "South Africa"];
-  $("#patrimonio").select2({
-    data: country
-  });
 
 
+  let table = $('#tabla_autores').DataTable({
+    "searching": false,
+    "serverSide": true,
+    "processing": true,
+    "bDestroy": true,
+    "ajax": function (data, callback, settings) {
+      //var columna_filtro = data.columns[data.order[0].column].data.replace(/\./g,"__")
+      $.get('', {
+            length: data.length,
+            start: data.start,
+            search_value: $('#search').val(),
 
+          }, function (res) {
+            console.log(res)
+            callback({
+              recordsTotal: res.recordsTotal,
+              recordsFiltered: res.recordsFiltered,
+              data: res.data
+            });
+          },
+      );
+    },
+    "columns": [
+      {"data": "codigo"},
+      {"data": "nombre"},
+      {"data": "descripcion"},
+      {"data": "nombre"},
+      {"data": "fechaInicio"},
+      {"data": "nombre"},
+      {
+        "data": null,
+        "defaultContent": '<button type="button" class="btn btn-secondary"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+            '<button type="button" class="btn btn-secondary"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+            '<button type="button" class="btn btn-secondary"><i class="fas fa-trash-alt"></i></button>'
+      }
+    ],
 
-
-let table = $('#tabla_autores').DataTable({
-  "searching": false,
-  "serverSide": true,
-  "processing": true,
-  "ajax": function (data, callback, settings) {
-    //var columna_filtro = data.columns[data.order[0].column].data.replace(/\./g,"__")
-    $.get('', {
-          length: data.length,
-          start: data.start,
-          search_value: $('#search').val(),
-
-        }, function (res) {
-          console.log(res)
-          callback({
-            recordsTotal: res.recordsTotal,
-            recordsFiltered: res.recordsFiltered,
-            data: res.data
-          });
-        },
-    );
-  },
-  "columns": [
-    {"data": "codigo"},
-    {"data": "nombre"},
-    {"data": "descripcion"},
-    {"data": "nombre"},
-    {"data": "fechaInicio"},
-    {"data": "nombre"},
-    {
-      "data": null,
-      "defaultContent": '<button type="button" class="btn btn-secondary"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-          '<button type="button" class="btn btn-secondary"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-          '<button type="button" class="btn btn-secondary"><i class="fas fa-trash-alt"></i></button>'
-    }
-  ],
 
 });
+
+var country = ["Australia", "Bangladesh", "Denmark", "Hong Kong", "Indonesia", "Netherlands", "New Zealand", "South Africa"];
+$("#patrimonio").select2({
+  data: country
+});
+
 
 $('#search').keyup(function () {
   $('#tabla_autores').DataTable().search($(this).val()).draw();

@@ -6,10 +6,36 @@
   <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
   <style>
 
+
       table {
           min-width: 100%;
           color: #2B2D42 !important;
           background-color: #EDF2F9;
+      }
+
+      .btn-1 {
+          text-align: center;
+          float: left;
+          border: 1px solid #2B2D42;
+          background-color: #2B2D42;
+          color: white;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-2 {
+          text-align: center;
+          float: left;
+          border: 1px solid floralwhite;
+          background-color: white;
+          color:black;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-2:hover {
+          transform: scale(0.98);
+          /* Scaling button to 0.98 to its original size */
+          box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+          /* Lowering the shadow */
       }
   </style>
 {% endblock %}
@@ -19,8 +45,16 @@
   <div class="card mb-3">
     <div class="card-body ">
       <div class="row justify-content-between align-items-center">
-        <div class="col-md">
+        <div class="col-md-8">
           <h5 class="mb-2 mb-md-0 text-black">Conservación de patrimonios</h5>
+        </div>
+        <div class="col-md-4">
+          <div class="nav-bar nav-bar-right">
+            <div class="nav nav-pills">
+              <button class="nav-link col-md-6 btn-1 my-1" disabled>Proyectos</button>
+              <a class="nav-link col-md-6 btn-2 my-1" href="{% url 'list_transfers' %}">Patrimonios</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -70,8 +104,9 @@
 
   <div class="card mb-3">
     <div class="card-body">
-      <table id="tabla_autores" class="table">
-        <thead>
+      <div>
+      <table id="tabla_autores" class="nowrap mb-0 fs--1 w-100">
+        <thead class="bg-200">
         <tr>
           <th>Código</th>
           <th>Nombre</th>
@@ -82,10 +117,11 @@
           <th>Acciones</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="bg-white">
 
         </tbody>
       </table>
+    </div>
     </div>
   </div>
 
