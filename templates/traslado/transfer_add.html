@@ -111,6 +111,45 @@
                 </div>
             </div>
 
+
+            <div class="row">
+                <div class="form-group col-10">
+                    <label for="patrimonio">Patrimonios a Trasladar</label>
+                    <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
+                            data-placeholder='Seleccione patrimonio...'>
+                        {#                        {% for p in patrimonios %}#}
+                        {#                            <option data="hola{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>#}
+                        {#                        {% endfor %}#}
+                    </select>
+                </div>
+                <div class="form-group col-auto d-flex align-items-end">
+                    <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm" type="button"
+                            onclick="agregarPatrimonioTabla()">Agregar
+                    </button>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-center mt-3">
+                <div class="col-12">
+
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Patrimonio</th>
+                            <th scope="col">Clasificación</th>
+                            <th scope="col">Tipo de bien</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody id="patrimonioAgregar">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
             <div class="row">
                 <div class="dropzone dropzone-multiple col-12" data-dropzone data-options='{"url":"valid/url"}'>
                     <div class="fallback">
@@ -147,11 +186,12 @@
                 </div>
             </div>
 
+            <input id="lista" name="lista" type="hidden">
 
-            <div class="wrapper">
-                <a class="btn btn-outline-primary mr-3 mb-1" type="button"
-                   href=" ">Cancelar
-                </a>
+            <div class="wrapper row justify-content-end">
+                <div class="d-flex flex-row justify-content-end">
+                    <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Cancelar</a>
+                </div>
                 <button type="submit" class="btn btn-primary mr-3 mb-1" type="button">Agregar
                 </button>
             </div>
@@ -164,6 +204,63 @@
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'lib/dropzone/dropzone.min.js' %}"></script>
+
+    <script>
+
+        let patrimoniosLista = [];
+
+        $(document).ready(function () {
+            $('#patrimonio').select2({
+                ajax: {
+                    url: "{% url 'listPatrimoniosAjax'%}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data) {
+                        let patrimoniosResultado = JSON.parse(data["patrimoniosAjax"]);
+                        data = patrimoniosResultado.map(function (item) {
+                            console.log(item);
+                            return {
+                                id: item["pk"],
+                                text: item["fields"].tituloDemoninacion,
+                                tipoPatrimonio: item["fields"].tipoPatrimonio,
+                                categoria: item["fields"].categoria,
+                            };
+                        });
+                        return {results: data};
+                    },
+                    cache: true
+                },
+                minimumInputLength: 1,
+            });
+        });
+
+        function agregarPatrimonioTabla() {
+            let patrimonioAgregar = $("#patrimonio").select2('data');
+
+            if (!patrimoniosLista.includes(patrimonioAgregar[0].id)) {
+                patrimoniosLista.push(patrimonioAgregar[0].id);
+                $("#lista").val(patrimoniosLista);
+                data = '<tr>' +
+                    '<td>' + patrimonioAgregar[0].id + '</td>' +
+                    ' <td>' + patrimonioAgregar[0].text + '</td>' +
+                    '<td>' + patrimonioAgregar[0].categoria + '</td>' +
+                    '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
+                    '<td>' +
+                    '<button class="btn" href="#" type="button">' +
+                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
+                    '</button>' +
+                    '</td>' +
+                    '</tr>';
+                $("#patrimonioAgregar").append(data);
+            }
+
+        }
 
 
     </script>
