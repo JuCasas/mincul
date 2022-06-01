@@ -13,3 +13,10 @@ def patrimonio_list(request):
 
     return render(request, 'patrimonio/patrimony_list.html', context=context)
 
+def patrimonio_edit(request,pk):
+    patrimonio = -1
+    #patrimonio = Patrimonio.objects.get(pk=pk)
+    context = {
+        'patrimonio': patrimonio,
+    }
+    return render(request, 'patrimonio/patrimony_edit.html', context)
