@@ -8,17 +8,18 @@
 
 
       table {
-          min-width: 100%;
+          min-width: 100%!important;
           color: #2B2D42 !important;
           background-color: #EDF2F9;
+          overflow: auto!important;
       }
 
       .btn-1 {
           text-align: center;
           float: left;
-          border: 1px solid #2B2D42;
-          background-color: #2B2D42;
-          color: white;
+          border: 1px solid #2B2D42!important;
+          background-color: #2B2D42!important;
+          color: white!important;
           box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
       }
 
@@ -37,6 +38,16 @@
           box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
           /* Lowering the shadow */
       }
+
+      .filterBar {
+          height: 36px;
+          padding: 0px 15px!important;
+      }
+
+      .dialog1 {
+        /* FONT-VARIANT: JIS78; */
+        max-width: 1000px!important;
+    }
   </style>
 {% endblock %}
 
@@ -62,7 +73,7 @@
   <div class="card mb-3">
     <div class="card-body">
       <div class="row filterBar">
-        <div class="form-group col-sm-3">
+        <div class="form-group col-sm-3 pl-0">
           <div class="position-relative">
             <input class="form-control" id="search" type="text" placeholder="Nombre del proyecto">
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
@@ -104,17 +115,16 @@
 
   <div class="card mb-3">
     <div class="card-body">
-      <div>
-      <table id="tabla_autores" class="nowrap mb-0 fs--1 w-100">
+      <table id="tabla_autores" class="nowrap table table-responsive w-100">
         <thead class="bg-200">
         <tr>
-          <th>Código</th>
-          <th>Nombre</th>
-          <th>Tipo de Plan</th>
-          <th>Actividades Completadas</th>
-          <th>Fecha de Registro</th>
-          <th>Estado</th>
-          <th>Acciones</th>
+          <th class="sort">Código</th>
+          <th class="sort">Nombre</th>
+          <th class="sort">Tipo de Plan</th>
+          <th class="sort">Actividades Completadas</th>
+          <th class="sort">Fecha de Registro</th>
+          <th class="sort">Estado</th>
+          <th class="sort">Acciones</th>
         </tr>
         </thead>
         <tbody class="bg-white">
@@ -122,12 +132,11 @@
         </tbody>
       </table>
     </div>
-    </div>
   </div>
 
   <!-- NEW and EDIT Modal -->
   <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog dialog1">
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -136,20 +145,43 @@
         <div class="modal-body">
           <form role="form">
             {% csrf_token %}
-            <div class="form-group">
+            <div class="row">
+                <div class="form-group col-6">
               <label for="codigo"><span class="glyphicon glyphicon-eye-open"></span> Código</label>
               <input type="text" class="form-control" id="codigo" name="codigo" placeholder=""
                      required="true">
             </div>
-            <div class="form-group">
+
+            <div class="form-group col-6">
               <label for="nombre"><span class="glyphicon glyphicon-file"></span> Nombre</label>
               <input type="text" class="form-control" id="nombre" name="nombre"
                      placeholder="" required="true">
             </div>
-            <input type="hidden" id="type" name="type" value="">
-            <button type="submit" class="btn btn-success btn-block"><span
+            </div>
+
+            <div class="row">
+                <div class="form-group col-6">
+              <label for="codigo"><span class="glyphicon glyphicon-eye-open"></span> Tipo de Plan</label>
+              <input type="text" class="form-control" id="codigo" name="codigo" placeholder=""
+                     required="true">
+            </div>
+
+            <div class="form-group col-6">
+              <label for="codigo"><span class="glyphicon glyphicon-eye-open"></span> Fecha de Registro</label>
+              <input type="text" class="form-control" id="codigo" name="codigo" placeholder=""
+                     required="true">
+            </div>
+            </div>
+
+            <div class="row justify-content-end mt-2">
+                <div class="col-4">
+                    <input type="hidden" id="type" name="type" value="">
+            <button type="submit" class="btn btn-1 btn-block"><span
                 class="glyphicon glyphicon-ok"></span> Guardar
             </button>
+                </div>
+            </div>
+
           </form>
         </div>
       </div>
@@ -161,12 +193,14 @@
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">¿Estás seguro?</h4>
+        <div class="modal-header justify-content-center">
+          <h4 class="modal-title">¿Estás seguro de eliminar el proyecto?</h4>
         </div>
-        <div class="modal-body">
-          <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
-          <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+        <div class="modal-body px-9">
+          <div  class="row justify-content-between">
+              <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+              <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
+          </div>
         </div>
       </div>
     </div>
