@@ -5,13 +5,20 @@
   <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
   <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
   <style>
-
-
       table {
           min-width: 100%!important;
           color: #2B2D42 !important;
           background-color: #EDF2F9;
           overflow: auto!important;
+      }
+
+      th{
+          min-width: 120px!important;
+          padding: 8px 10px !important;
+      }
+
+      .even{
+          background-color: #EDF2F9!important;
       }
 
       .btn-1 {
@@ -48,6 +55,15 @@
         /* FONT-VARIANT: JIS78; */
         max-width: 1000px!important;
     }
+
+      .modal-body{
+          background-color: #F7F8FB!important;
+      }
+
+      .form-control{
+          background-color: white!important;
+      }
+
   </style>
 {% endblock %}
 
@@ -115,10 +131,10 @@
 
   <div class="card mb-3">
     <div class="card-body">
-      <table id="tabla_autores" class="nowrap table table-responsive w-100">
+      <table id="tabla_autores" class="nowrap table table-responsive w-100 mw-100">
         <thead class="bg-200">
         <tr>
-          <th class="sort">Código</th>
+          <th class="sort ">Código</th>
           <th class="sort">Nombre</th>
           <th class="sort">Tipo de Plan</th>
           <th class="sort">Actividades Completadas</th>

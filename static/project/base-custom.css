@@ -46,6 +46,12 @@
     right: 8px;
 }
 
+div.dataTables_scrollBody table thead .sorting:before,
+div.dataTables_scrollBody table thead .sorting_asc:before,
+div.dataTables_scrollBody table thead .sorting_desc:before {
+display: none;
+}
+
 
 
 
@@ -161,4 +167,8 @@ h4 {
 }
 a:hover {
     cursor: pointer;
+}
+
+.dataTables_wrapper .sort:after {
+    display: none !important;
 }
