@@ -4,6 +4,11 @@
 {% block extrastyle %}
   <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
   <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/jquery-ui-1.13.1/jquery-ui.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/jquery-ui-1.13.1/jquery-ui.structure.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/jquery-ui-1.13.1/jquery-ui.theme.css' %}" rel="stylesheet">
+
+
   <style>
 
       table {
@@ -20,11 +25,12 @@
     <div class="card-body ">
       <div class="row justify-content-between align-items-center">
         <div class="col-md">
-          <h5 class="mb-2 mb-md-0 text-black">Conservación de patrimonios</h5>
+          <h5 class="mb-2 mb-md-0 text-black">Actividades del Proyecto</h5>
         </div>
       </div>
     </div>
   </div>
+
   <div class="card mb-3">
     <div class="card-body">
       <div class="row filterBar">
@@ -66,9 +72,6 @@
         </button>
       </div>
     </div>
-  </div>
-
-  <div class="card mb-3">
     <div class="card-body">
       <table id="tabla_autores" class="table">
         <thead>
@@ -110,6 +113,16 @@
               <input type="text" class="form-control" id="nombre" name="nombre"
                      placeholder="" required="true">
             </div>
+            <div class="form-group">
+              <label for="patrimonio"><span class="glyphicon glyphicon-file"></span>Patrimonio</label>
+              <select id="patrimonio" style="width:300px;">
+                <!-- Dropdown List Option -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="txt1"><span class="glyphicon glyphicon-file"></span>Fecha Inicio</label>
+              <input type="text" id="txt1"/>
+            </div>
             <input type="hidden" id="type" name="type" value="">
             <button type="submit" class="btn btn-success btn-block"><span
                 class="glyphicon glyphicon-ok"></span> Guardar
@@ -141,5 +154,20 @@
 {% block extrajs %}
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'project/projects/projects.js' %}"></script>
+  <script src="{% static 'lib/lib/jquery-ui-1.13.1/jquery-ui.js' %}"></script>
+  <script src="{% static 'project/projects/activities.js' %}"></script>
+  <script>
+    $("#txt1").datepicker({
+    changeMonth: true,
+    changeYear: true,
+    yearRange: '1960:2003',
+    onClose: function (dateText, inst) {
+      var startDate = new Date(dateText);
+      var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+      var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+      $(this).datepicker('setDate', new Date(year, month, inst.selectedDay));
+    }
+  });
+  </script>
 {% endblock %}
+

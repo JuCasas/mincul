@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from conservacion.models import ProyectoConservacion
+from conservacion.models import ProyectoConservacion, Actividad
 from conservacion.serializers import ProyectoConservacionSerializer
 
 # def serialize(projects_query_set):
@@ -76,3 +76,20 @@ def deleteProject(request,pk):
     project.estado='2'
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('GET',))
+def listActivities(request,pk):
+    if request.is_ajax():
+        project = ProyectoConservacion.objects.get(pk=pk)
+        activities = Actividad.objects.filter(proyecto=project).filter(estado='1')
+        act = list(activities)
+        print(len(act))
+        # project = query_projects_by_args(**request.GET)
+        # serializer = ProyectoConservacionSerializer((project['items']),many = True)
+        # result = dict()
+        # result['data'] = serializer.data
+        # result['recordsTotal'] = project['total']
+        # result['recordsFiltered'] = project['count']
+        return Response({}, status=status.HTTP_200_OK,template_name=None, content_type=None)
+    else:
+        return render(request,'proyectoConservacion/activity_list.html')
