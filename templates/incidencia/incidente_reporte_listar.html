@@ -1,0 +1,104 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <style>
+        .degradado {
+            background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
+            opacity: .8;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="card mb-3 rounded-3">
+            <div class="card" style="width: 100%;">
+                <div class="position-relative">
+                    <div>
+                        <img class="img-fluid w-100"
+                             style="height: 320px; object-fit: cover; border-radius: 3px"
+                                {#                                         src="../static/img/generic/4-caral.jpg"#}
+                             src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"
+                             alt="Card image"/>
+                    </div>
+                    <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                        <p class="card-text "
+                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">Ciudad
+                            Sagrada de Caral</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="col-sm-auto mb-2 mb-sm-0">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h5 class="mb-0" style="font-weight: bold">Incidentes</h5>
+                    </div>
+                    <div class="col-sm-3">
+                        <a href="{% url 'incidente_reporte_agregar' patrimonio_pk %}">
+                            <button class="float-right btn btn-primary px-3 mr-2" type="button">
+                                Agregar Incidente
+                            </button>
+                        </a>
+                    </div>
+                </div>
+
+            <div><p></p></div>
+
+            <div class="row">
+                {% for inc in incidentes %}
+                    <div class="col-12 col-lg-4 col-md-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-img-top" style="height: 13rem">
+                                <img class="h-100 w-100 rounded-top"
+                                     src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"
+                                     alt="Card image cap">
+                            </div>
+                            <div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">
+                                <h5 class="card-text pt-9" style="color: white">{{ inc.detalle }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text font-italic mb-0" style="max-width: 50ch; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{ inc.descripcion }}</p>
+                                <p class="card-text font-weight-semi-bold">Reportado el {{ inc.fechaRegistro|date:'Y-m-d' }}</p>
+                                <div class="row">
+                                    <div class="col-sm-5"></div>
+                                    <div class="col-sm-7">
+                                        <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
+                                           href="{% url 'incidente_reporte' inc.patrimonio.id inc.id %}">
+                                            Ver reporte
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div><p></p></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!--Paginacion-->
+        <div class="card-footer bg-light d-flex justify-content-center">
+            <div>
+                <button class="btn btn-falcon-default btn-sm mr-2" type="button" disabled data-toggle="tooltip"
+                        data-placement="top" title="Prev"><span class="fas fa-chevron-left"></span></button>
+                <a class="btn btn-sm btn-falcon-default text-primary mr-2" href="#!">1</a>
+                <a class="btn btn-sm btn-falcon-default mr-2" href="#!">2</a>
+                <a class="btn btn-sm btn-falcon-default mr-2" href="#!"> <span class="fas fa-ellipsis-h"></span></a>
+                <a class="btn btn-sm btn-falcon-default mr-2" href="#!">35</a>
+                <button class="btn btn-falcon-default btn-sm" type="button" data-toggle="tooltip" data-placement="top"
+                        title="Next"><span class="fas fa-chevron-right"></span></button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+{% endblock %}
