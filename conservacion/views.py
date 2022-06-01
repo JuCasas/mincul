@@ -93,3 +93,6 @@ def listActivities(request,pk):
         return Response({}, status=status.HTTP_200_OK,template_name=None, content_type=None)
     else:
         return render(request,'proyectoConservacion/activity_list.html')
+
+def listPatrimonys(request,**kwargs):
+    return render(request, 'proyectoConservacion/patrimony_list.html')

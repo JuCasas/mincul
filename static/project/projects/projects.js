@@ -2,6 +2,7 @@ let table = $('#tabla_autores').DataTable({
   "searching": false,
   "serverSide": true,
   "processing": true,
+  "lengthChange": false,
   "ajax": function (data, callback, settings) {
     //var columna_filtro = data.columns[data.order[0].column].data.replace(/\./g,"__")
     $.get('', {

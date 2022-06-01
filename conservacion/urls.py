@@ -7,4 +7,5 @@ urlpatterns = [
     path('proyectos/edit/<pk>/',views.editProject, name='addProject'),
     path('proyectos/delete/<pk>/',views.deleteProject, name='deleteProject'),
     path('proyectos/<pk>/actvidades/',views.listActivities, name='listActivities'),
+    path('patrimonios/',views.listPatrimonys, name='listPatrimonys'),
 ]
