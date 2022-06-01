@@ -12,9 +12,9 @@ from patrimonios.models import PatrimonioMaterialMueble
 def mapaficha(request):
     patrimonies = Patrimonio.objects.filter(tituloDemoninacion='La Ciudad Sagrada Caral')
     patrimony = patrimonies.first()
-    patrimonySchedules = PatrimonioMaterial.objects.filter(patrimonio__tituloDemoninacion='La Ciudad Sagrada Caral')
-    patrimonySchedule = patrimonySchedules.first()
-    activities = ActividadTuristica.objects.filter(actividadturisticaporpatrimonio__patrimonio__patrimonio_id=patrimony.id)
+    materialPatrimonies = PatrimonioMaterial.objects.filter(patrimonio__tituloDemoninacion='La Ciudad Sagrada Caral')
+    materialPatrimony = materialPatrimonies.first()
+    activities = ActividadTuristica.objects.filter(patrimoniomaterial__patrimonio_id=patrimony.id)
     if len(activities) >1:
         activities1 = activities[:len(activities) // 2]
         activities2 = activities[len(activities) // 2:]
@@ -25,8 +25,8 @@ def mapaficha(request):
     else:
         activities1 = activities
         activities2 = []
-    tickets = Entrada.objects.filter(entradaporpatrimonio__patrimonio_id=patrimony.id)
-    services = Servicio.objects.filter(servicioporpatrimonio__patrimonio__patrimonio_id=patrimony.id)
+    tickets = Entrada.objects.filter(patrimoniomaterial__patrimonio_id=patrimony.id)
+    services = Servicio.objects.filter(patrimoniomaterial__patrimonio_id=patrimony.id)
     if len(services) >1:
         services1 = services[:len(services) // 2]
         services2 = services[len(services) // 2:]
@@ -39,7 +39,7 @@ def mapaficha(request):
         services2 = []
     context={
         'patrimony':patrimony,
-        'patrimony_schedule':patrimonySchedule,
+        'material_patrimony':materialPatrimony,
         'activities1':activities1,
         'activities2':activities2,
         'tickets':tickets,

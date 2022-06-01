@@ -208,7 +208,7 @@
                                         <div class="row">
                                             <div class="col-sm-5">
                                                 <p style="font-size: medium">
-                                                    🕐 {{ patrimony_schedule.horaApertura }} - {{ patrimony_schedule.horaCierre }}
+                                                    🕐 {{ material_patrimony.horaApertura }} - {{ material_patrimony.horaCierre }}
                                                 </p>
                                             </div>
                                             <div class="col-sm-7">
@@ -233,18 +233,16 @@
                                     <div class="card-body">
                                         {% for item in tickets %}
                                             <div class="row justify-content-center">
-                                                <div class="col">
+                                                <div class="col-7">
                                                     <p style="font-size: medium">
                                                         {{ item.descripcion }}
                                                     </p>
                                                 </div>
-                                                <!--
                                                 <div class="col-5 text-right">
                                                     <p style="font-size: medium">
-
+                                                        S/. {{ item.precio }}
                                                     </p>
                                                 </div>
-                                                -->
                                             </div>
                                         {% endfor %}
                                     </div>
