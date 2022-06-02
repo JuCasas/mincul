@@ -5,7 +5,7 @@ let table = $('#tabla_autores').DataTable({
   "lengthChange": false,
   "ajax": function (data, callback, settings) {
     //var columna_filtro = data.columns[data.order[0].column].data.replace(/\./g,"__")
-    $.get('', {
+    $.get('/conservacion/patrimonios/'+$('#pk').val()+'/proyectos', {
           length: data.length,
           start: data.start,
           search_value: $('#search').val(),

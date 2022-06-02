@@ -117,9 +117,9 @@
                     <label for="patrimonio">Patrimonios a Trasladar</label>
                     <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
                             data-placeholder='Seleccione patrimonio...'>
-                        {#                        {% for p in patrimonios %}#}
-                        {#                            <option data="hola{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>#}
-                        {#                        {% endfor %}#}
+                        {% for p in patrimonios %}
+                            <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group col-auto d-flex align-items-end">
