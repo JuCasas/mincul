@@ -95,3 +95,51 @@ def editTransfer(request,pk):
     }
 
     return render(request,'traslado/transfer_edit.html', context)
+
+
+def listEntidades(request):
+    entidades = EntidadSolicitante.objects.filter()
+    context = {
+        'entidades': entidades
+    }
+
+    return render(request, 'traslado/list_entidades.html', context=context)
+
+def eliminarSolicitantes(request, id):
+    entidad = EntidadSolicitante.objects.get(id=id)
+    print(entidad)
+    entidad.delete()
+    return redirect('/traslado/entidades')
+
+def registrarSolicitantes(request):
+
+    doiSolicitante = request.POST['inputDOI']
+    nombreSolicitante = request.POST['inputNombre']
+    correo = request.POST['inputCorreo']
+    direccion = request.POST['inputDireccion']
+    pais = request.POST['inputPais']
+    telefono = request.POST['inputTelefono']
+
+    solicitante = EntidadSolicitante.objects.create(doiSolicitante=doiSolicitante,nombreSolicitante=nombreSolicitante,correo=correo,direccion=direccion,pais=pais,telefono=telefono)
+
+    return redirect('/traslado/entidades')
+
+def editarSolicitante(request):
+
+    doiSolicitante = request.POST['inputDOI']
+    nombreSolicitante = request.POST['inputNombre']
+    correo = request.POST['inputCorreo']
+    direccion = request.POST['inputDireccion']
+    pais = request.POST['inputPais']
+    telefono = request.POST['inputTelefono']
+
+    solicitante = EntidadSolicitante.objects.get(doiSolicitante=doiSolicitante)
+
+    solicitante.nombreSolicitante = nombreSolicitante
+    solicitante.correo = correo
+    solicitante.direccion = direccion
+    solicitante.pais = pais
+    solicitante.telefono = telefono
+    solicitante.save()
+
+    return redirect('/traslado/entidades')

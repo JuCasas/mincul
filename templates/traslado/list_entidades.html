@@ -74,8 +74,11 @@
                     </select>
                 </div>
                 <div class="form-group col-sm-auto my-1">
-                    <button class="btn btn-primary col-sm-auto" type="button">
-                        <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
+{#                    <button class="btn btn-primary col-sm-auto" type="button">#}
+{#                        <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Agregar Entidad#}
+{#                    </button>#}
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAgregar">
+                      Agregar Entidad
                     </button>
                 </div>
             </div>
@@ -102,47 +105,23 @@
               </tr>
             </thead>
             <tbody class="bg-white">
+            {% for e in entidades %}
               <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>2011/04/25</td>
-                <td><row><button class="btn btn-primary " type="button">
-                    p
-                </button>
-                <button class="btn btn-primary " type="button">
-                   o
-                </button>
-                <button class="btn btn-primary " type="button">
-                    I
-                </button></row></td>
+                <td>{{ e.doiSolicitante }}</td>
+                <td>{{ e.nombreSolicitante }}</td>
+                <td>{{ e.direccion }}</td>
+                <td>{{ e.telefono }}</td>
+                <td>{{ e.correo }}</td>
+                <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalEditar">Editar</button>
+{#                    <a href="/edicionEntidad/{{ e.id }}" class="btn btn-info">Editar</a>#}
+                    <a href="/traslado/eliminarSolicitantes/{{ e.id }}" class="btn btn-danger">Eliminar</a>
+{#                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop"class="btn btn-danger">Eliminar</button>#}
+{#                    <a href="/eliminarEntidad/{{ e.id }}" class="btn btn-danger">Eliminar</a>#}
+                </td>
               </tr>
-              <tr>
-                <td>Garrett Winters</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>63</td>
-                <td>2011/07/25</td>
-                <td>$170,750</td>
-              </tr>
-              <tr>
-                <td>Ashton Cox</td>
-                <td>Junior Technical Author</td>
-                <td>San Francisco</td>
-                <td>66</td>
-                <td>2009/01/12</td>
-                <td>$86,000</td>
-              </tr>
-              <tr>
-                <td>Cedric Kelly</td>
-                <td>Senior Javascript Developer</td>
-                <td>Edinburgh</td>
-                <td>22</td>
-                <td>2012/03/29</td>
-                <td>$433,060</td>
-              </tr>
-             
+            {% endfor %}
+
             </tbody>
             <tfoot class="bg-200">
               <tr>
@@ -161,6 +140,128 @@
       </div>
     </div>
   </div>
+
+    #Modal eliminacion
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Esta seguro que desea eliminar la entidad?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <a href="/traslado/eliminarSolicitantes/{{ e.id }}" class="btn btn-primary">Eliminar</a>
+{#        <button type="button" class="btn btn-primary">Confirmar</button>#}
+      </div>
+    </div>
+  </div>
+</div>
+    #Modal Agregar Entidad
+
+    <div class="modal fade" id="ModalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Nueva Entidad Solicitante</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="/traslado/registrarSolicitantes/" method="POST">{% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputDOI">DOI Entidad</label>
+                  <input type="text" class="form-control" id="inputDOI" name="inputDOI" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputNombre">Nombre Entidad</label>
+                  <input type="text" class="form-control" id="inputNombre" name="inputNombre" required>
+                </div>
+              </div><div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputCorreo">Correo</label>
+                  <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputPassword4">Dirección</label>
+                  <input type="text" class="form-control" id="inputDireccion" name="inputDireccion" required>
+                </div>
+              </div><div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputPais">Pais</label>
+                  <input type="text" class="form-control" id="inputPais" name="inputPais" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputTelefono">Telefono</label>
+                  <input type="text" class="form-control" id="inputTelefono" name="inputTelefono" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Agregar Entidad</button>
+            </form>
+          </div>
+{#          <div class="modal-footer">#}
+{#            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
+{#            <button type="button" class="btn btn-primary">Save changes</button>#}
+{#          </div>#}
+        </div>
+      </div>
+</div>
+
+    #Modal Agregar Entidad
+
+    <div class="modal fade" id="ModalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Editar Entidad Solicitante</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="/traslado/editarSolicitante/" method="POST">{% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputDOI">DOI Entidad</label>
+                  <input type="text" class="form-control" id="inputDOI" name="inputDOI" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputNombre">Nombre Entidad</label>
+                  <input type="text" class="form-control" id="inputNombre" name="inputNombre" required>
+                </div>
+              </div><div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputCorreo">Correo</label>
+                  <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputPassword4">Dirección</label>
+                  <input type="text" class="form-control" id="inputDireccion" name="inputDireccion" required>
+                </div>
+              </div><div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputPais">Pais</label>
+                  <input type="text" class="form-control" id="inputPais" name="inputPais" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputTelefono">Telefono</label>
+                  <input type="text" class="form-control" id="inputTelefono" name="inputTelefono" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Editar Entidad</button>
+            </form>
+          </div>
+        </div>
+      </div>
+</div>
+
 
 {% endblock %}
 
