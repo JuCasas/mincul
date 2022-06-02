@@ -6,20 +6,20 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from conservacion.models import ProyectoConservacion, Actividad
 from conservacion.serializers import ProyectoConservacionSerializer
+from patrimonios.models import Patrimonio
 
-# def serialize(projects_query_set):
-#     return [{"id": projects_obj.id,
-#              "nombre": projects_obj.nombre,
-#              "descripcion": projects_obj.descripcion,
-#              "fechaInicio": projects_obj.fechaInicio.strftime("%d/%m/%Y")}
-#             for projects_obj in projects_query_set]
 
-def query_projects_by_args(**kwargs):
+def query_projects_by_args(pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
 
-    queryset = ProyectoConservacion.objects.filter(estado='1')
+    if(pk==-1):
+        queryset = ProyectoConservacion.objects.filter(estado='1')
+    else:
+        patrimonio = Patrimonio.objects.get(pk=pk)
+        queryset = patrimonio.proyectoconservacion_set.all()
+
     total = queryset.count()
 
     if search_value:
@@ -36,7 +36,7 @@ def query_projects_by_args(**kwargs):
 @api_view(('GET',))
 def listProjects(request,**kwargs):
     if request.is_ajax():
-        project = query_projects_by_args(**request.GET)
+        project = query_projects_by_args(-1,**request.GET)
         serializer = ProyectoConservacionSerializer((project['items']),many = True)
         result = dict()
         result['data'] = serializer.data
@@ -95,4 +95,23 @@ def listActivities(request,pk):
         return render(request,'proyectoConservacion/activity_list.html')
 
 def listPatrimonys(request,**kwargs):
-    return render(request, 'proyectoConservacion/patrimony_list.html')
+    context = {
+        'patrimonios': Patrimonio.objects.all()
+    }
+    return render(request, 'proyectoConservacion/patrimony_list.html',context)
+
+@api_view(('GET',))
+def listProjects_Patrimonys(request,pk):
+    context = {
+        'pat': Patrimonio.objects.get(pk=pk)
+    }
+    if request.is_ajax():
+        project = query_projects_by_args(pk,**request.GET)
+        serializer = ProyectoConservacionSerializer((project['items']),many = True)
+        result = dict()
+        result['data'] = serializer.data
+        result['recordsTotal'] = project['total']
+        result['recordsFiltered'] = project['count']
+        return Response(result, status=status.HTTP_200_OK,template_name=None, content_type=None)
+    else:
+        return render(request,'proyectoConservacion/projects_patrimony_list.html',context)
