@@ -10,10 +10,16 @@ class ProyectoConservacion(models.Model):
     TIPOS = (
         ('0','Preventivo'),
         ('1','Correctivo'),
+        ('2', 'Curativo'),
     )
     ESTADOS = (
         ('1','Activo'),
         ('2','Inactivo'),
+    )
+    STATUS = (
+        ('0', 'En Proceso'),
+        ('1','Pendiente'),
+        ('2','Completado'),
     )
     codigo = models.CharField(max_length=8)
     nombre = models.CharField(max_length=50)
@@ -22,10 +28,13 @@ class ProyectoConservacion(models.Model):
     fechaFin = models.DateField(blank=True, null=True, verbose_name='fechaFin')
     tipoProyecto = models.CharField(max_length=2,choices=TIPOS,default='0',null=True,blank=True)
     responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    cantidadAct = models.IntegerField(default=0,blank=True,null=True)
+    cantidadActR = models.IntegerField(default=0,blank=True,null=True)
     documentos = models.ManyToManyField(Documento)
     patrimonios = models.ManyToManyField(Patrimonio)
     incidentes = models.ManyToManyField(Incidente)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
+    status = models.CharField(max_length=2, choices=STATUS, default='0', null=True, blank=True)
 
 class Actividad(models.Model):
     ESTADOS = (
