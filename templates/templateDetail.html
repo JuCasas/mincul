@@ -3,6 +3,7 @@
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <link href="../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
     <style>
 
     </style>
@@ -36,6 +37,33 @@
                         <p class="card-text "
                            style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">Ciudad
                             Sagrada de Caral</p>
+                        <div class="col text-right">
+                            {% if puntacion >= 1 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 2 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 3 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 4 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 5 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -245,6 +273,12 @@
                                 <label for="comment">Cuentanos tu experiencia:</label>
                                 <textarea name="comment" class="form-control" placeholder=""></textarea>
 
+                                <div class="row pl-3 pt-lg-3">
+                                    <div class="pt-1 mr-3">
+                                        <label for="value">Puntuación</label>
+                                    </div>
+                                    <div class="raty"></div>
+                                </div>
                             </form>
 
                             <button class="btn btn-dark mt-4 mr-1 mb-1 w-100" type="submit" form="valor_form">Guardar</button>
@@ -260,5 +294,5 @@
 
 {% block extrajs %}
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
-
+    <script src="../static/lib/raty-js/jquery.raty.js"></script>
 {% endblock %}

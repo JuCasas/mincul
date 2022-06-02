@@ -1,0 +1,170 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/dropzone/dropzone.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+
+
+{% block body %}
+
+    <div class="card mb-3">
+        <div class="card-body p-0">
+            <div class="d-flex flex-row  justify-content-between my-1">
+                <div class="col-sm-auto mx-1 my-1">
+                    <h3>Traslados</h3>
+                </div>
+                <div class="col-sm-auto">
+                    <button class="btn btn-primary my-1 " type="button">
+                        Traslados
+                    </button>
+                    <button class="btn btn-secondary mr-1 my-1 " type="button">
+                        Entidad solicitante
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body p-0">
+            <div class="navbar">
+                <div class="col-sm-auto mb-2 mb-sm-0">
+                    <h6 class="mb-0">Mostrando 1-24 de 205 Traslados</h6>
+                </div>
+
+                <div class="row d-flex align-items-center">
+
+                    <div class="form-group col-sm-auto my-1">
+                        <a class="btn btn-primary" href="{% url 'addTransfer' %}" type="button">
+                            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar traslado
+                        </a>
+                    </div>
+
+                    <div class="form-group col-sm-auto my-1">
+                        <div class="position-relative">
+                            <input class="form-control" id="name" type="text" placeholder="Entidad solicitante">
+                            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-auto my-1">
+                        <div class="position-relative">
+                            <input class="form-control" id="fecha_llegada" type="date" placeholder="Fecha llegada">
+                            </imput>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-auto my-1">
+                        <div class="position-relative">
+                            <input class="form-control" id="fecha_salida" type="date" placeholder="Fecha Salida">
+                            </imput>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-sm-auto my-1">
+                        <select class="form-control" id="estado_traslado">
+                            <option selected>Estado</option>
+                            <option>Lima</option>
+                            <option>Ica</option>
+                            <option>Cusco</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="falcon-data-table">
+                <table class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100"
+                       data-options='{"searching":false,"responsive":false,"pageLength":15,"info":true,"lengthChange":false,"sWrapper":"falcon-data-table-wrapper","dom":"<&#39;row mx-1&#39;<&#39;col-sm-12 col-md-6&#39;l><&#39;col-sm-12 col-md-6&#39;f>><&#39;table-responsive&#39;tr><&#39;row no-gutters px-1 py-3 align-items-center justify-content-center&#39;<&#39;col-auto&#39; p>>","language":{"paginate":{"next":"<span class=\"fas fa-chevron-right\"></span>","previous":"<span class=\"fas fa-chevron-left\"></span>"}}}'>
+                    <thead class="bg-200">
+                    <tr>
+                        <th class="sort">Nro. Documento</th>
+                        <th class="sort">Comisario</th>
+                        <th class="sort">Entidad Solicitante</th>
+                        <th class="sort">Fecha llegada</th>
+                        <th class="sort">Fecha Salida</th>
+                        <th class="sort">Estado</th>
+                        <th class="sort">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white">
+
+                    {% for traslado in traslados %}
+                        <tr>
+                            <td>{{ traslado.pk }}</td>
+                            <td>{{ traslado.gestorConservacionTraslados }}</td>
+                            <td>{{ traslado.entidadSolicitante.nombreSolicitante }}</td>
+                            <td>{{ traslado.fechaRetornoProgramada }}</td>
+                            <td>{{ traslado.fechaSalidaProgramada }}</td>
+                            <td>
+                                {% if traslado.estado == '1' %}
+                                    <button class="btn btn-sm btn-info rounded-capsule">Registrado</button>
+                                {% elif traslado.estado == '2' %}
+                                    <button class="btn btn-secondary">Aprobado</button>
+                                {% elif traslado.estado == '3' %}
+                                    <button class="btn btn-secondary">Rechazado</button>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <a class="btn" href="{% url 'view_transfer' traslado.pk %}" type="button">
+                                    <i class="fa fa-eye" data-fa-transform="shrink-3"></i>
+                                </a>
+                                <a class="btn" href="{% url 'edit_transfer'  traslado.pk %}" type="button">
+                                    <i class="fa fa-edit" data-fa-transform="shrink-3"></i>
+                                </a>
+                                <a class="btn" href="#" type="button">
+                                    <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+
+                    <tfoot class="bg-200">
+                    <tr>
+                        <th class="sort">Nro. Documento</th>
+                        <th class="sort">Comisario</th>
+                        <th class="sort">Entidad Solicitante</th>
+                        <th class="sort">Fecha llegada</th>
+                        <th class="sort">Fecha Salida</th>
+                        <th class="sort">Estado</th>
+                        <th class="sort">Acciones</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'lib/dropzone/dropzone.min.js' %}"></script>
+
+
+    </script>
+{% endblock %}

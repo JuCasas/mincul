@@ -15,12 +15,16 @@
     </a>
   </div>
   <div class="d-flex flex-row">
-        <button class="btn btn-primary px-3 mr-2" type="button">
-            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Incidentes
-        </button>
-        <button class="btn btn-primary px-3 mr-2" type="button">
-            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Conservación
-        </button>
+        <a href="/incidente/listar">
+            <button class="btn btn-primary px-3 mr-2" type="button">
+                <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Incidentes
+            </button>
+        </a>
+        <a href="{% url 'listProjects' %}">
+            <button class="btn btn-primary px-3 mr-2" type="button">
+                <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Conservación
+            </button>
+        </a>
         <button class="btn btn-primary px-3 mr-2" type="button">
             <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Reportes
         </button>

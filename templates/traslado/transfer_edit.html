@@ -1,0 +1,190 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/dropzone/dropzone.min.css' %}" rel="stylesheet">
+
+    <style>
+
+        table {
+            min-width: 100%;
+            color: #2B2D42 !important;
+            background-color: #EDF2F9;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card p-5">
+        <form action="{% url 'addTransfer' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row d-flex justify-content-center ">
+                <div class="col-12">
+                    <h4>Editar datos de traslado</h4>
+                </div>
+            </div>
+            <hr>
+            <p></p>
+
+            <div class="row">
+                <div class="form-group col-lg-6 col-sm-12">
+                    <label for="nombreInstitucion">Entidad Solicitante</label>
+                    <select class="form-control selectpicker" id="nombreInstitucion" name="nombreInstitucion">
+                        {% for e in entidades %}
+                            <option value="{{ e.pk }}" {% if e.pk == traslado.pk %}
+                                    selected {% endif %} >{{ e.nombreSolicitante }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-lg-6 col-sm-12">
+                    <label for="tipoTraslado">Tipo de Traslado</label>
+                    <select class="form-control" id="tipoTraslado">
+                        <option {% if e.pk == '1' %} selected {% endif %}>Exposición en el extranjero</option>
+                        <option {% if e.pk == '2' %} selected {% endif %}>Exponsición nacional</option>
+                        <option {% if e.pk == '3' %} selected {% endif %}>Misión Diplomática</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-6 col-sm-12">
+                    <label for="nombreExposicion">Nombre de la Exposición</label>
+                    <input class="form-control" id="nombreExposicion" name="nombreExposicion" type="text"
+                           value="{{ traslado.nombreExposicion }}">
+                </div>
+                <div class="form-group col-lg-3 col-sm-12">
+                    <label for="pais">País</label>
+                    <input class="form-control" id="pais" name="pais" type="text"
+                           placeholder="{{ traslado.pais }}">
+                </div>
+                <div class="form-group col-lg-3 col-sm-12">
+                    <label for="ubigeo">Destino</label>
+                    <input class="form-control" id="ubigeo" name="ubigeo" type="text"
+                           value="Destino">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-group col-lg-6 col-sm-12">
+                    <label for="comisario">Comisario</label>
+                    <input class="form-control" id="comisario" name="comisario" type="text"
+                           value="{{ traslado.gestorConservacionTraslados }}" disabled>
+                </div>
+                <div class="form-group col-lg-3 col-sm-12">
+                    <label for="nResolucion">N° de Resolucion</label>
+                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                           value="{{ traslado.numeroResolucion }}">
+                </div>
+                <div class="form-group col-lg-3 col-sm-12">
+                    <label for="ubigeo">Ubigeo</label>
+                    <input class="form-control" id="ubigeo" name="ubigeo" type="text"
+                           value="{{ traslado.ubigeoDestino }}" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-6 col-sm-12">
+                    <label for="fechaSalidaProgramada">Fecha de salida
+                        Programada {{ traslado.fechaSalidaProgramada }}</label>
+                    <input class="form-control" id="fechaSalidaProgramada" name="fechaSalidaProgramada" type="date"
+                           value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}" disabled>
+                </div>
+                <div class="form-group col-lg-6 col-sm-12">
+                    <label for="fechaRetornoProgramada">Fecha de retorno Programada</label>
+                    <input class="form-control" id="fechaRetornoProgramada" name="fechaRetornoProgramada" type="date"
+                           value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-6 col-sm-12">
+                    <label for="fechaSalidaReal">Fecha de salida Real</label>
+                    <input class="form-control" id="fechaSalidaReal" name="fechaSalidaReal" type="date"
+                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
+                </div>
+                <div class="form-group col-lg-6 col-sm-12">
+                    <label for="fechaRetornoReal">Fecha de retorno Real</label>
+                    <input class="form-control" id="fechaRetornoReal" name="fechaRetornoReal" type="date"
+                           value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}" disabled>
+                </div>
+            </div>
+
+
+            <div class="row d-flex justify-content-between mt-3">
+                <div class="p-3">
+                    <h4>Patrimonio(s)</h4>
+                </div>
+                <div class="p-3">
+                    <a class="btn btn-primary" href="#" type="button">
+                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar patrimonio
+                    </a>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-center mt-3">
+                <div class="col-12">
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Patrimonio</th>
+                            <th scope="col">Clasificación</th>
+                            <th scope="col">Tipo de bien</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for patrimonio in patrimonios %}
+                            <tr>
+                                <td>{{ forloop }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <a class="btn" href="#" type="button">
+                                        <i class="fa fa-eye" data-fa-transform="shrink-3"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+            <div class="form-group row mt-5">
+                <label for="estado" class="col-sm-2 col-form-label">Estado:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="estado_traslado">
+                        <option {% if traslado.estado == '1' %} selected {% endif %}>Registrado</option>
+                        <option  {% if traslado.estado == '2' %} selected {% endif %}>Aprobado</option>
+                        <option  {% if traslado.estado == '3' %} selected {% endif %}>Rechazado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="d-flex flex-row justify-content-end">
+                <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'lib/dropzone/dropzone.min.js' %}"></script>
+
+
+
+{% endblock %}

@@ -2,6 +2,7 @@ let table = $('#tabla_autores').DataTable({
   "searching": false,
   "serverSide": true,
   "processing": true,
+  "lengthChange": false,
   "ajax": function (data, callback, settings) {
     //var columna_filtro = data.columns[data.order[0].column].data.replace(/\./g,"__")
     $.get('', {
@@ -28,11 +29,35 @@ let table = $('#tabla_autores').DataTable({
     {"data": "nombre"},
     {
       "data": null,
-      "defaultContent": '<button type="button" class="btn btn-info">Edit</button>' + '&nbsp;&nbsp' +
-          '<button type="button" class="btn btn-danger">Delete</button>'
+      "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+          '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+          '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
     }
   ],
-
+  "language": {
+        "sProcessing":    "Procesando...",
+        "sLengthMenu":    "Mostrar _MENU_ registros",
+        "sZeroRecords":   "No se encontraron resultados",
+        "sEmptyTable":    "Ningún dato disponible en esta tabla",
+        "sInfo":          "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty":     "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered":  "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix":   "",
+        "sSearch":        "Buscar:",
+        "sUrl":           "",
+        "sInfoThousands":  ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst":    "Primero",
+            "sLast":    "Último",
+            "sNext":    "Siguiente",
+            "sPrevious": "Anterior"
+        },
+        "oAria": {
+            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+    },
 });
 
 $('#search').keyup(function () {
@@ -51,20 +76,24 @@ $('#exampleFormControlSelect3').change(function () {
 $('#tabla_autores tbody').on('click', 'button', function () {
   let data = table.row($(this).parents('tr')).data();
   let class_name = $(this).attr('class');
-  if (class_name == 'btn btn-info') {
+
+  id = data['id'];
+
+  if (class_name == 'btn btn-edit') {
     // EDIT button
     $('#nombre').val(data['nombre']);
     $('#codigo').val(data['codigo']);
     $('#type').val('edit');
     $('#modal_title').text('Editar Proyecto');
     $("#myModal").modal();
+  } else if (class_name == 'btn btn-show') {
+    window.location.pathname = "/conservacion/proyectos/" + id + "/actvidades/";
   } else {
     // DELETE button
     $('#modal_title').text('DELETE');
     $("#confirm").modal();
   }
 
-  id = data['id'];
 
 });
 

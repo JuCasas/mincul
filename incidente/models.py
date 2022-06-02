@@ -17,9 +17,11 @@ class Incidente(models.Model):
     fechaRegistro = models.DateField(blank=True, null=True, verbose_name='fechaRegistro')
     fechaAprobacion = models.DateField(blank=True, null=True, verbose_name='fechaAprobacion')
     prioridad = models.CharField(max_length=2, choices=PRIORIDAD, default='1', null=True, blank=True)
-    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
-    documento =  models.ForeignKey(Documento, on_delete=models.CASCADE)
+    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE, null=True)
+    documento =  models.ForeignKey(Documento, on_delete=models.CASCADE, null=True)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
+    detalle = models.CharField(max_length=200, null=True)
+    descripcion = models.CharField(max_length=500, null=True)
 
 class Valoracion(models.Model):
     ESTADOS = [
