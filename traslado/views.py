@@ -65,7 +65,9 @@ def viewTranfer(request,pk):
     comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
 
     #Nota, se debe considerar los patrominos del traslado
-    patrimonios = {}
+    patrimonios = traslado.patrimonios.all()
+    for patrimonio in patrimonios:
+        print(patrimonio.tituloDemoninacion)
 
     context = {
         'traslado': traslado,
