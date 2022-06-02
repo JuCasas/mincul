@@ -107,7 +107,7 @@ def listEntidades(request):
 
 def eliminarSolicitantes(request, id):
     entidad = EntidadSolicitante.objects.get(id=id)
-    print(entidad)
+    # print(entidad)
     entidad.delete()
     return redirect('/traslado/entidades')
 
@@ -126,15 +126,17 @@ def registrarSolicitantes(request):
 
 def editarSolicitante(request):
 
-    doiSolicitante = request.POST['inputDOI']
-    nombreSolicitante = request.POST['inputNombre']
-    correo = request.POST['inputCorreo']
-    direccion = request.POST['inputDireccion']
-    pais = request.POST['inputPais']
-    telefono = request.POST['inputTelefono']
+    id = request.POST['inputID']
+    doiSolicitante = request.POST['inputDOI2']
+    nombreSolicitante = request.POST['inputNombre2']
+    correo = request.POST['inputCorreo2']
+    direccion = request.POST['inputDireccion2']
+    pais = request.POST['inputPais2']
+    telefono = request.POST['inputTelefono2']
 
-    solicitante = EntidadSolicitante.objects.get(doiSolicitante=doiSolicitante)
+    solicitante = EntidadSolicitante.objects.get(id=id)
 
+    solicitante.doiSolicitante = doiSolicitante
     solicitante.nombreSolicitante = nombreSolicitante
     solicitante.correo = correo
     solicitante.direccion = direccion
@@ -142,4 +144,10 @@ def editarSolicitante(request):
     solicitante.telefono = telefono
     solicitante.save()
 
+    return redirect('/traslado/entidades')
+
+def eliminacionSolicitante(request):
+    doi = request.POST['inputDOI3']
+    entidad = EntidadSolicitante.objects.get(doiSolicitante=doi)
+    entidad.delete()
     return redirect('/traslado/entidades')

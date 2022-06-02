@@ -14,5 +14,6 @@ urlpatterns = [
     path('entidades/', views.listEntidades, name='listEntidades'),
     path('eliminarSolicitantes/<id>',views.eliminarSolicitantes, name='eliminarSolicitantes'),
     path('registrarSolicitantes/',views.registrarSolicitantes,name='registrarSolicitantes'),
-    path('editarSolicitante/',views.editarSolicitante,name='editarSolicitante')
+    path('editarSolicitante/',views.editarSolicitante,name='editarSolicitante'),
+    path('eliminacionSolicitante/',views.eliminacionSolicitante,name='eliminacionSolicitante')
 ]

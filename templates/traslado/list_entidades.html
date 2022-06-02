@@ -3,6 +3,11 @@
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+{#    probando si va o no va esto jquery#}
+{#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">#}
+{#	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>#}
+{#<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>#}
+{#<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>#}
     <style>
         .degradado {
             background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
@@ -113,10 +118,21 @@
                 <td>{{ e.telefono }}</td>
                 <td>{{ e.correo }}</td>
                 <td>
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalEditar">Editar</button>
+{#                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalEditar">Editar</button>#}
+                    <button type="button" id ="btnEditar" class="btn btn btn-outline-light" data-toggle="modal" data-target="#ModalEditar" data-id = "{{ e.id }}" data-doi="{{ e.doiSolicitante }}" data-nombre="{{ e.nombreSolicitante }}" data-correo="{{ e.correo }}"
+                    data-pais="{{ e.pais }}" data-direccion="{{ e.direccion }}" data-telefono="{{ e.telefono }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="secondary" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                      <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                      <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg></button>
 {#                    <a href="/edicionEntidad/{{ e.id }}" class="btn btn-info">Editar</a>#}
-                    <a href="/traslado/eliminarSolicitantes/{{ e.id }}" class="btn btn-danger">Eliminar</a>
-{#                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop"class="btn btn-danger">Eliminar</button>#}
+{#                    Este es el boton eliminar#}
+{#                    <a href="/traslado/eliminarSolicitantes/{{ e.id }}" class="btn btn-danger">Eliminar</a>}#}
+{#                    Aca termina en caso no sirva el nuevo boton #}
+
+                    <button type="button" id="btnEliminar" class="btn btn btn-outline-light" data-toggle="modal" data-target="#staticBackdrop"class="btn btn-danger" data-doi="{{ e.doiSolicitante }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="secondary" class="bi bi-trash" viewBox="0 0 16 16">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg></button>
 {#                    <a href="/eliminarEntidad/{{ e.id }}" class="btn btn-danger">Eliminar</a>#}
                 </td>
               </tr>
@@ -141,12 +157,13 @@
     </div>
   </div>
 
+
     #Modal eliminacion
     <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Eliminar Entidad Solicitante</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -155,8 +172,18 @@
         ¿Esta seguro que desea eliminar la entidad?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <a href="/traslado/eliminarSolicitantes/{{ e.id }}" class="btn btn-primary">Eliminar</a>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <form action="/traslado/eliminacionSolicitante/" method="POST">{% csrf_token %}
+              <div class="form-group">
+                  <input type="text" id="inputDOI3" name="inputDOI3" class="form-control" style="display: none">
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary btn-block text-white">Eliminar
+                  </button>
+              </div>
+          </form>
+
+{#          <a href="/traslado/eliminarSolicitantes/{{ e.id }}" class="btn btn-primary">Eliminar</a>#}
 {#        <button type="button" class="btn btn-primary">Confirmar</button>#}
       </div>
     </div>
@@ -214,7 +241,7 @@
       </div>
 </div>
 
-    #Modal Agregar Entidad
+    #Modal Editar Entidad
 
     <div class="modal fade" id="ModalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -230,31 +257,32 @@
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="inputDOI">DOI Entidad</label>
-                  <input type="text" class="form-control" id="inputDOI" name="inputDOI" required>
+                  <input type="text" class="form-control" id="inputDOI2" name="inputDOI2" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="inputNombre">Nombre Entidad</label>
-                  <input type="text" class="form-control" id="inputNombre" name="inputNombre" required>
+                  <input type="text" class="form-control" id="inputNombre2" name="inputNombre2" required>
                 </div>
               </div><div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="inputCorreo">Correo</label>
-                  <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" required>
+                  <input type="email" class="form-control" id="inputCorreo2" name="inputCorreo2" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="inputPassword4">Dirección</label>
-                  <input type="text" class="form-control" id="inputDireccion" name="inputDireccion" required>
+                  <input type="text" class="form-control" id="inputDireccion2" name="inputDireccion2" required>
                 </div>
               </div><div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="inputPais">Pais</label>
-                  <input type="text" class="form-control" id="inputPais" name="inputPais" required>
+                  <input type="text" class="form-control" id="inputPais2" name="inputPais2" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="inputTelefono">Telefono</label>
-                  <input type="text" class="form-control" id="inputTelefono" name="inputTelefono" required>
+                  <input type="text" class="form-control" id="inputTelefono2" name="inputTelefono2" required>
                 </div>
               </div>
+                <input type="text" class="form-control" id="inputID" name="inputID" style="display: none">
               <button type="submit" class="btn btn-primary">Editar Entidad</button>
             </form>
           </div>
@@ -266,5 +294,33 @@
 {% endblock %}
 
 {% block extrajs %}
+    <script >
+	$(document).on("click", "#btnEditar",function () {
+
+           var id =$(this).data('id');
+           var doi =$(this).data('doi');
+           var nombre =$(this).data('nombre');
+           var direccion =$(this).data('direccion');
+           var telefono =$(this).data('telefono');
+           var pais =$(this).data('pais');
+           var correo =$(this).data('correo');
+
+		$("#inputID").val(id);
+		$("#inputDOI2").val(doi);
+		$("#inputNombre2").val(nombre);
+		$("#inputDireccion2").val(direccion);
+		$("#inputCorreo2").val(correo);
+		$("#inputPais2").val(pais);
+		$("#inputTelefono2").val(telefono);
+    })
+    </script>
+
+    <script >
+	$(document).on("click", "#btnEliminar",function () {
+        var doi =$(this).data('doi');
+		$("#inputDOI3").val(doi);
+    })
+    </script>
+
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
 {% endblock %}
