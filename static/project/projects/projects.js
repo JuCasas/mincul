@@ -23,10 +23,34 @@ let table = $('#tabla_autores').DataTable({
   "columns": [
     {"data": "codigo"},
     {"data": "nombre"},
-    {"data": "descripcion"},
+    {
+      "data": "tipoProyecto", render: function (data, type, row) {
+        console.log(data);
+        if (data == '0') {
+          resp = 'Preventivo'
+        } else if (data == '1') {
+          resp = 'Correctivo'
+        } else {
+          resp = 'Curativo'
+        }
+        return resp;
+      }
+    },
     {"data": "nombre"},
     {"data": "fechaInicio"},
-    {"data": "nombre"},
+    {
+      "data": "status", render: function (data, type, row) {
+        console.log(data);
+        if (data == '0') {
+          resp = 'En Proceso'
+        } else if (data == '1') {
+          resp = 'Pendiente'
+        } else {
+          resp = 'Completo'
+        }
+        return resp;
+      }
+    },
     {
       "data": null,
       "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
@@ -35,29 +59,29 @@ let table = $('#tabla_autores').DataTable({
     }
   ],
   "language": {
-        "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
-        "sLengthMenu":    "Mostrar _MENU_ registros",
-        "sZeroRecords":   "No se encontraron resultados",
-        "sEmptyTable":    "Ningún dato disponible en esta tabla",
-        "sInfo":          "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-        "sInfoEmpty":     "Mostrando registros del 0 al 0 de un total de 0 registros",
-        "sInfoFiltered":  "(filtrado de un total de _MAX_ registros)",
-        "sInfoPostFix":   "",
-        "sSearch":        "Buscar:",
-        "sUrl":           "",
-        "sInfoThousands":  ",",
-        "sLoadingRecords": "Cargando...",
-        "oPaginate": {
-            "sFirst":    "Primero",
-            "sLast":    "Último",
-            "sNext":    "Siguiente",
-            "sPrevious": "Anterior"
-        },
-        "oAria": {
-            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-        }
+    "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
+    "sLengthMenu": "Mostrar _MENU_ registros",
+    "sZeroRecords": "No se encontraron resultados",
+    "sEmptyTable": "Ningún dato disponible en esta tabla",
+    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+    "sInfoPostFix": "",
+    "sSearch": "Buscar:",
+    "sUrl": "",
+    "sInfoThousands": ",",
+    "sLoadingRecords": "Cargando...",
+    "oPaginate": {
+      "sFirst": "Primero",
+      "sLast": "Último",
+      "sNext": "Siguiente",
+      "sPrevious": "Anterior"
     },
+    "oAria": {
+      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    }
+  },
 });
 
 $('#search').keyup(function () {
