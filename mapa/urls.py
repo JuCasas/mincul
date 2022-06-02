@@ -3,5 +3,5 @@ from django.urls import path, include
 from mapa import views
 
 urlpatterns = [
-    path('mapaficha/', views.mapaficha, name='mapaficha'),
+    path('ficha/<my_id>/',views.ficha,name='ficha')
 ]
