@@ -55,7 +55,7 @@
       table {
           min-width: 100% !important;
           color: #2B2D42 !important;
-          background-color: #EDF2F9;
+          background-color: #EDF2F9 !important;
           overflow: auto !important;
       }
 
@@ -96,6 +96,7 @@
       .filterBar {
           height: 36px;
           padding: 0px 15px !important;
+          margin-bottom: 20px!important;
       }
 
       .dialog1 {
@@ -111,67 +112,98 @@
           background-color: white !important;
       }
 
+      .form-group {
+          margin-bottom: 0px!important;
+      }
+
+      .cardRed {
+          background-color: #B32323!important;
+      }
+
+      th {
+        background-color: #2B2D42 !important;
+        color: white;
+      }
+
+      .dataTables_wrapper .dataTables_paginate .current{
+        background: white !important;
+          border-color: #D7E1EE !important;
+          border-radius: 10px !important;
+      }
+
   </style>
 {% endblock %}
 
 {% block body %}
 
   <div class="card mb-3">
-    <div class="card-body ">
+    <div class="card-body cardRed">
       <div class="row justify-content-between align-items-center">
-        <div class="col-md-8">
-          <h5 class="mb-2 mb-md-0 text-black">Proyectos de Conservación</h5>
-        </div>
-        <div class="col-md-4">
-          <div class="nav-bar nav-bar-right">
-            <div class="nav nav-pills">
-              <button class="nav-link col-md-6 btn-1 my-1" disabled>Proyectos</button>
-              <a class="nav-link col-md-6 btn-2 my-1" href="{% url 'listPatrimonys' %}">Patrimonios</a>
-            </div>
-          </div>
+        <div class="col-md-12">
+          <h5 class="mb-2 mb-md-0 text-white">Proyectos de Conservación</h5>
         </div>
       </div>
     </div>
   </div>
   <div class="card mb-3">
     <div class="card-body">
-      <div class="row filterBar justify-content-between">
+      <div class="row filterBar">
         <div class="form-group col-sm-3 pl-0">
           <div class="position-relative">
             <input class="form-control" id="search" type="text" placeholder="Nombre del proyecto">
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
         </div>
-{#        <div class="form-group col-sm-2">#}
-{#          <select class="form-control" id="exampleFormControlSelect1">#}
-{#            <option>1</option>#}
-{#            <option>2</option>#}
-{#            <option>3</option>#}
-{#            <option>4</option>#}
-{#            <option>5</option>#}
-{#          </select>#}
-{#        </div>#}
-{#        <div class="form-group col-sm-2">#}
-{#          <select class="form-control" id="exampleFormControlSelect2">#}
-{#            <option>1</option>#}
-{#            <option>2</option>#}
-{#            <option>3</option>#}
-{#            <option>4</option>#}
-{#            <option>5</option>#}
-{#          </select>#}
-{#        </div>#}
-{#        <div class="form-group col-sm-2">#}
-{#          <select class="form-control" id="exampleFormControlSelect3">#}
-{#            <option>1</option>#}
-{#            <option>2</option>#}
-{#            <option>3</option>#}
-{#            <option>4</option>#}
-{#            <option>5</option>#}
-{#          </select>#}
-{#        </div>#}
+        <div class="form-group col-sm-2">
+          <select class="form-control" id="exampleFormControlSelect1">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-2">
+          <select class="form-control" id="exampleFormControlSelect2">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-2">
+          <select class="form-control" id="exampleFormControlSelect3">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
         <button class="btn btn-primary col-sm-3" type="button" data-dismiss="modal" id="new">
           <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Proyecto
         </button>
+      </div>
+      <div class="row justify-content-end">
+        <div class="form-group col-sm-2">
+          <select class="form-control" id="exampleFormControlSelect4">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-2">
+          <select class="form-control" id="exampleFormControlSelect5">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -184,7 +216,7 @@
           <th class="sort ">Código</th>
           <th class="sort">Nombre</th>
           <th class="sort">Tipo de Plan</th>
-          <th class="sort">Fecha de Registro</th>
+          <th class="sort">F. Registro </th>
           <th class="sort">Estado</th>
           <th class="sort">Acciones</th>
         </tr>
