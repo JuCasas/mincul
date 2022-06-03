@@ -36,7 +36,6 @@ let table = $('#tabla_autores').DataTable({
         return resp;
       }
     },
-    {"data": "nombre"},
     {"data": "fechaInicio"},
     {
       "data": "status", render: function (data, type, row) {
@@ -97,6 +96,12 @@ $('#exampleFormControlSelect3').change(function () {
   $('#tabla_autores').DataTable().draw();
 });
 
+Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+});
+
 $('#tabla_autores tbody').on('click', 'button', function () {
   let data = table.row($(this).parents('tr')).data();
   let class_name = $(this).attr('class');
@@ -107,6 +112,16 @@ $('#tabla_autores tbody').on('click', 'button', function () {
     // EDIT button
     $('#nombre').val(data['nombre']);
     $('#codigo').val(data['codigo']);
+    let opt = data['tipoProyecto']
+    console.log(opt)
+    $("#tipoPlan option[value=opt]").attr('selected','selected')
+    fecha = data['fechaInicio']
+    var parts = fecha.split("/");
+    var dt = new Date(parseInt(parts[2], 10),
+        parseInt(parts[1], 10) - 1,
+        parseInt(parts[0], 10));
+    console.log(dt)
+    $('#fechaRegistro').val(dt);
     $('#type').val('edit');
     $('#modal_title').text('Editar Proyecto');
     $("#myModal").modal();
@@ -171,6 +186,8 @@ $('#new').on('click', function (e) {
   $('#codigo').val('');
   $('#nombre').val('');
   $('#type').val('new');
+  $('#fechaRegistro').val(new Date().toDateInputValue());
+  $('#fechaRegistro').prop( "disabled", true );
   $('#modal_title').text('Nuevo Proyecto');
   $("#myModal").modal();
 });

@@ -52,9 +52,11 @@ def addProject(request):
     nombre = request.POST['nombre']
     fechaInicio = datetime.date.today()
     fechaFin = datetime.date.today()
+    tipo = int((request.POST['tipoPlan']))
     project = ProyectoConservacion.objects.create(
         codigo = codigo,
         nombre=nombre,
+        tipoProyecto=tipo,
         fechaInicio=fechaInicio,
         fechaFin=fechaFin)
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
@@ -65,8 +67,10 @@ def editProject(request,pk):
     project = ProyectoConservacion.objects.get(pk=pk)
     codigo = request.POST['codigo']
     nombre = request.POST['nombre']
+    tipo = int((request.POST['tipoPlan']))
     project.codigo = codigo
     project.nombre = nombre
+    project.tipoProyecto = tipo
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
