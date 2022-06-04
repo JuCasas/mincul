@@ -3,6 +3,7 @@ let table = $('#tabla_autores').DataTable({
   "serverSide": true,
   "processing": true,
   "lengthChange": false,
+  "scrollX": true,
   "ajax": function (data, callback, settings) {
     //var columna_filtro = data.columns[data.order[0].column].data.replace(/\./g,"__")
     $.get('', {
@@ -36,16 +37,23 @@ let table = $('#tabla_autores').DataTable({
         return resp;
       }
     },
+    {
+      "data": "cantidadAct",
+      "data": "cantidadActR", render: function (data, type, row) {
+
+        return   row.cantidadAct + '/' + row.cantidadActR
+      }
+
+    },
     {"data": "fechaInicio"},
     {
       "data": "status", render: function (data, type, row) {
-        console.log(data);
         if (data == '0') {
-          resp = 'En Proceso'
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso"+ '</span>'
         } else if (data == '1') {
-          resp = 'Pendiente'
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Pendiente"+ '</span>'
         } else {
-          resp = 'Completo'
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo"+ '</span>'
         }
         return resp;
       }
@@ -114,9 +122,9 @@ $('#tabla_autores tbody').on('click', 'button', function () {
     var dt = new Date(parseInt(parts[2], 10),
         parseInt(parts[1], 10) - 1,
         parseInt(parts[0], 10));
-    var currentDate = dt.toISOString().slice(0,10);
+    var currentDate = dt.toISOString().slice(0, 10);
     $('#fechaRegistro').val(currentDate);
-    $('#fechaRegistro').prop( "disabled", true );
+    $('#fechaRegistro').prop("disabled", true);
     $('#type').val('edit');
     $('#modal_title').text('Editar Proyecto');
     $("#myModal").modal();
@@ -183,9 +191,9 @@ $('#new').on('click', function (e) {
   $('#type').val('new');
   let today = new Date()
   today.setDate(today.getDate() - 1);
-  var currentDate = today.toISOString().slice(0,10);
+  var currentDate = today.toISOString().slice(0, 10);
   $('#fechaRegistro').val(currentDate);
-  $('#fechaRegistro').prop( "disabled", true );
+  $('#fechaRegistro').prop("disabled", true);
   $('#modal_title').text('Nuevo Proyecto');
   $("#myModal").modal();
 });
