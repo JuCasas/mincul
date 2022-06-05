@@ -9,10 +9,15 @@ from conservacion.serializers import ProyectoConservacionSerializer
 from patrimonios.models import Patrimonio
 
 
+
 def query_projects_by_args(pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
+    type_filter = kwargs.get('type_filter', None)[0]
+    status_filter = kwargs.get('status_filter', None)[0]
+    order_column = kwargs.get('order_column', None)[0]
+    order = kwargs.get('order', None)[0]
 
     if(pk==-1):
         queryset = ProyectoConservacion.objects.filter(estado='1')
@@ -22,11 +27,19 @@ def query_projects_by_args(pk, **kwargs):
 
     total = queryset.count()
 
+    order_column = ProyectoConservacion.ORDER_COLUMN_CHOICES[order_column]
+    if order == 'desc':
+        order_column = '-' + order_column
+
     if search_value:
         queryset = queryset.filter(nombre__icontains=search_value)
+    if type_filter:
+        queryset = queryset.filter(tipoProyecto=type_filter)
+    if status_filter:
+        queryset = queryset.filter(status=status_filter)
 
     count = queryset.count()
-    queryset = queryset[start:start + length]
+    queryset = queryset.order_by(order_column)[start:start + length]
     return {
         'items': queryset,
         'count': count,
@@ -44,7 +57,11 @@ def listProjects(request,**kwargs):
         result['recordsFiltered'] = project['count']
         return Response(result, status=status.HTTP_200_OK,template_name=None, content_type=None)
     else:
-        return render(request,'proyectoConservacion/project_list.html')
+        context ={
+            'status_choices' : ProyectoConservacion.STATUS,
+            'typeProjects' : ProyectoConservacion.TIPOS
+        }
+        return render(request,'proyectoConservacion/project_list.html',context)
 
 @api_view(('POST',))
 def addProject(request):

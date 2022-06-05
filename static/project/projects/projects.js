@@ -5,14 +5,20 @@ let table = $('#tabla_autores').DataTable({
   "lengthChange": false,
   "scrollX": true,
   "ajax": function (data, callback, settings) {
-    //var columna_filtro = data.columns[data.order[0].column].data.replace(/\./g,"__")
+    let order_column = data.order[0].column
+    let order = data.order[0].dir
+    console.log(order)
     $.get('', {
           length: data.length,
           start: data.start,
           search_value: $('#search').val(),
+          type_filter :$('#type_filter').val(),
+          status_filter :$('#status_filter').val(),
+          order_column: order_column,
+          order: order
 
         }, function (res) {
-          console.log(res)
+          // console.log(res)
           callback({
             recordsTotal: res.recordsTotal,
             recordsFiltered: res.recordsFiltered,
@@ -42,7 +48,7 @@ let table = $('#tabla_autores').DataTable({
       "data": "cantidadActR", render: function (data, type, row) {
 
         return   row.cantidadAct + '/' + row.cantidadActR
-      }
+      },
 
     },
     {"data": "fechaInicio"},
@@ -94,10 +100,10 @@ let table = $('#tabla_autores').DataTable({
 $('#search').keyup(function () {
   $('#tabla_autores').DataTable().search($(this).val()).draw();
 })
-$('#exampleFormControlSelect1').change(function () {
+$('#status_filter').change(function () {
   $('#tabla_autores').DataTable().draw();
 });
-$('#exampleFormControlSelect2').change(function () {
+$('#type_filter').change(function () {
   $('#tabla_autores').DataTable().draw();
 });
 $('#exampleFormControlSelect3').change(function () {

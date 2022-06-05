@@ -7,6 +7,15 @@ from mincul_app.models import Documento
 from incidente.models import Incidente
 
 class ProyectoConservacion(models.Model):
+    ORDER_COLUMN_CHOICES = {
+        '0': 'codigo',
+        '1': 'nombre',
+        '2': 'tipoProyecto',
+        '3': 'cantidadAct',
+        '4': 'fechaInicio',
+        '5': 'status'
+    }
+
     TIPOS = (
         ('0','Preventivo'),
         ('1','Correctivo'),
