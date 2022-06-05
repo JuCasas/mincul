@@ -3,29 +3,34 @@ let table = $('#tabla_autores').DataTable({
   "serverSide": true,
   "processing": true,
   "lengthChange": false,
+  "pageLength": 10,
   "scrollX": true,
   "ajax": function (data, callback, settings) {
     let order_column = data.order[0].column
     let order = data.order[0].dir
-    console.log(order)
-    $.get('', {
+
+    $.ajax({
+      url: '',
+      type: 'get',
+      data: {
           length: data.length,
           start: data.start,
           search_value: $('#search').val(),
-          type_filter :$('#type_filter').val(),
-          status_filter :$('#status_filter').val(),
+          type_filter: $('#type_filter').val(),
+          status_filter: $('#status_filter').val(),
           order_column: order_column,
           order: order
-
-        }, function (res) {
-          // console.log(res)
-          callback({
-            recordsTotal: res.recordsTotal,
-            recordsFiltered: res.recordsFiltered,
-            data: res.data
-          });
-        },
-    );
+      },
+      success: function (data, textStatus, jQxhr) {
+        callback({
+            recordsTotal: data.recordsTotal,
+            recordsFiltered: data.recordsFiltered,
+            data: data.data
+        });
+      },
+      error: function (jqXhr, textStatus, errorThrown) {
+      }
+    });
   },
   "columns": [
     {"data": "codigo"},
@@ -47,7 +52,7 @@ let table = $('#tabla_autores').DataTable({
       "data": "cantidadAct",
       "data": "cantidadActR", render: function (data, type, row) {
 
-        return   row.cantidadAct + '/' + row.cantidadActR
+        return row.cantidadAct + '/' + row.cantidadActR
       },
 
     },
@@ -55,11 +60,11 @@ let table = $('#tabla_autores').DataTable({
     {
       "data": "status", render: function (data, type, row) {
         if (data == '0') {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso"+ '</span>'
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
         } else if (data == '1') {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Pendiente"+ '</span>'
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Pendiente" + '</span>'
         } else {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo"+ '</span>'
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
         }
         return resp;
       }
@@ -160,31 +165,36 @@ $('form').on('submit', function (e) {
     url = url + 'edit/' + id + '/';
     method = 'POST';
   }
-
+  $('#cover-spin').show(0)
   $.ajax({
     url: url,
     method: method,
     data: $this.serialize(),
 
     success: function (response) {
+      $('#cover-spin').hide()
       $('#myModal').modal('hide')
       $("#tabla_autores").DataTable().draw();
     },
     error: function (error) {
+      $('#cover-spin').hide()
       console.log(error)
     }
   });
 });
 
 $('#confirm').on('click', '#delete', function (e) {
+  $('#cover-spin').show(0)
   $.ajax({
     url: '/conservacion/proyectos/delete/' + id + '/',
     method: 'POST',
     success: function (response) {
+      $('#cover-spin').hide()
       $('#confirm').modal('hide')
       $("#tabla_autores").DataTable().draw();
     },
     error: function (error) {
+      $('#cover-spin').hide()
       console.log(error)
     }
   });
