@@ -1,11 +1,6 @@
 from django.shortcuts import render
-
-from patrimonios.models import Servicio
-from patrimonios.models import Entrada
-from patrimonios.models import ActividadTuristica
 from patrimonios.models import Patrimonio
-from patrimonios.models import PatrimonioMaterial
-from patrimonios.models import PatrimonioMaterialMueble
+
 
 # Create your views here.
 
