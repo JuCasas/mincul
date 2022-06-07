@@ -69,23 +69,14 @@ class Tarea(models.Model):
         ('2', 'Inactivo'),
     )
     descripcion = models.CharField(max_length=200)
-    materiales = models.CharField(max_length=200, null=True, blank=True)
-    herramientas =models.CharField(max_length=200, null=True, blank=True)
-    indumentaria =models.CharField(max_length=200, null=True, blank=True)
     gasto = models.FloatField(blank=True, null=True)
     fecha = models.DateField(blank=True, null=True, verbose_name='fecha')
     fechaRegistro = models.DateField(blank=True, null=True, verbose_name='fechaRegistro')
     conservador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE)
-    documentos = models.ManyToManyField(Documento, through='DocumentoPorTarea', related_name='documentosTarea')
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
 
-class DocumentoPorTarea(models.Model):
-    documento = models.ForeignKey(Documento, on_delete=models.CASCADE)
-    tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
-    campo = models.IntegerField(default=0)
-
-class CampoExtra(models.Model):
+class Campo(models.Model):
     ESTADOS = (
         ('1', 'Activo'),
         ('2', 'Inactivo'),
@@ -93,5 +84,5 @@ class CampoExtra(models.Model):
     nombre = models.CharField(max_length=200)
     contenido = models.CharField(max_length=200, null=True, blank=True)
     tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
-    documento = models.ForeignKey(Documento, on_delete=models.CASCADE, null=True)
+    documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
