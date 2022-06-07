@@ -1,4 +1,4 @@
-{% extends 'proyectoConservacion/components/base.html' %}
+{% extends 'base/base.html' %}
 {% load static %}
 
 {% block extrastyle %}
@@ -52,104 +52,82 @@
           animation: spin .8s linear infinite;
       }
 
+      table {
+          min-width: 100% !important;
+          color: #2B2D42 !important;
+          background-color: #EDF2F9;
+          overflow: auto !important;
+      }
+
+      th {
+          min-width: 120px !important;
+          padding: 8px 10px !important;
+      }
+
+      .even {
+          background-color: #EDF2F9 !important;
+      }
+
+      .btn-1 {
+          text-align: center;
+          float: left;
+          border: 1px solid #2B2D42 !important;
+          background-color: #2B2D42 !important;
+          color: white !important;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-2 {
+          text-align: center;
+          float: left;
+          border: 1px solid floralwhite;
+          background-color: white;
+          color: black;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-2:hover {
+          transform: scale(0.98);
+          /* Scaling button to 0.98 to its original size */
+          box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+          /* Lowering the shadow */
+      }
+
+      .filterBar {
+          height: 36px;
+          padding: 0px 15px !important;
+      }
+
+      .dialog1 {
+          /* FONT-VARIANT: JIS78; */
+          max-width: 1000px !important;
+      }
+
+      .modal-body {
+          background-color: #F7F8FB !important;
+      }
+
+      .form-control {
+          background-color: white !important;
+      }
+
   </style>
-  {#  <style>#}
-  {#      table {#}
-  {#          min-width: 100% !important;#}
-  {#          color: #2B2D42 !important;#}
-  {#          background-color: #EDF2F9 !important;#}
-  {#          overflow: auto !important;#}
-  {#      }#}
-  {##}
-  {#      th {#}
-  {#          min-width: 120px !important;#}
-  {#          padding: 8px 10px !important;#}
-  {#      }#}
-  {##}
-  {#      .even {#}
-  {#          background-color: #EDF2F9 !important;#}
-  {#      }#}
-  {##}
-  {#      .btn-1 {#}
-  {#          text-align: center;#}
-  {#          float: left;#}
-  {#          border: 1px solid #2B2D42 !important;#}
-  {#          background-color: #2B2D42 !important;#}
-  {#          color: white !important;#}
-  {#          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);#}
-  {#      }#}
-  {##}
-  {#      .btn-2 {#}
-  {#          text-align: center;#}
-  {#          float: left;#}
-  {#          border: 1px solid floralwhite;#}
-  {#          background-color: white;#}
-  {#          color: black;#}
-  {#          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);#}
-  {#      }#}
-  {##}
-  {#      .btn-2:hover {#}
-  {#          transform: scale(0.98);#}
-  {#          /* Scaling button to 0.98 to its original size */#}
-  {#          box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);#}
-  {#          /* Lowering the shadow */#}
-  {#      }#}
-  {##}
-  {#      .filterBar {#}
-  {#          height: 36px;#}
-  {#          padding: 0px 15px !important;#}
-  {#          margin-bottom: 20px!important;#}
-  {#      }#}
-  {##}
-  {#      .dialog1 {#}
-  {#          /* FONT-VARIANT: JIS78; */#}
-  {#          max-width: 1000px !important;#}
-  {#      }#}
-  {##}
-  {#      .modal-body {#}
-  {#          background-color: #F7F8FB !important;#}
-  {#      }#}
-  {##}
-  {#      .form-control {#}
-  {#          background-color: white !important;#}
-  {#      }#}
-  {##}
-  {#      .form-group {#}
-  {#          margin-bottom: 0px!important;#}
-  {#      }#}
-  {##}
-  {#      .cardRed {#}
-  {#          background-color: #B32323!important;#}
-  {#      }#}
-  {##}
-  {#      th {#}
-  {#        background-color: #2B2D42 !important;#}
-  {#        color: white;#}
-  {#      }#}
-  {##}
-  {#      .dataTables_wrapper .dataTables_paginate .current{#}
-  {#        background: white !important;#}
-  {#          border-color: #D7E1EE !important;#}
-  {#          border-radius: 10px !important;#}
-  {#      }#}
-  {##}
-  {#  </style>#}
 {% endblock %}
 
 {% block body %}
 
   <div class="card mb-3">
-    <div class="card-body cardRed">
+    <div class="card-body ">
       <div class="row justify-content-between align-items-center">
-        <div class="col-md-12">
-          <h5 class="mb-2 mb-md-0 text-black">Proyectos de Conservación</h5>
+        <div class="col-md-8">
+          <h5 class="mb-2 mb-md-0 text-black">{{ pat.tituloDemoninacion }} - Proyectos de Conservación</h5>
         </div>
       </div>
     </div>
   </div>
   <div class="card mb-3">
     <div class="card-body">
-      <div class="row filterBar">
+      <div class="row filterBar ">
         <div class="form-group col-sm-3 pl-0">
           <div class="position-relative">
             <input class="form-control" id="search" type="text" placeholder="Nombre del proyecto">
@@ -157,19 +135,21 @@
           </div>
         </div>
         <div class="form-group col-sm-2">
-          <select class="form-control" id="status_filter">
-            <option value="" selected>Todos</option>
-            {% for mykey,myvalue in status_choices %}
-              <option value="{{ mykey }}">{{ myvalue }}</option>
-            {% endfor %}
+          <select class="form-control" id="exampleFormControlSelect1">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
           </select>
         </div>
         <div class="form-group col-sm-2">
-          <select class="form-control" id="type_filter">
-            <option value="" selected>Todos</option>
-            {% for mykey,myvalue in typeProjects %}
-              <option value="{{ mykey }}">{{ myvalue }}</option>
-            {% endfor %}
+          <select class="form-control" id="exampleFormControlSelect2">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
           </select>
         </div>
         <div class="form-group col-sm-2">
@@ -181,43 +161,20 @@
             <option>5</option>
           </select>
         </div>
-        <button class="btn btn-primary col-sm-3" type="button" data-dismiss="modal" id="new">
-          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Proyecto
-        </button>
-      </div>
-      <div class="row justify-content-end">
-        <div class="form-group col-sm-2">
-          <select class="form-control" id="exampleFormControlSelect4">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
-        </div>
-        <div class="form-group col-sm-2">
-          <select class="form-control" id="exampleFormControlSelect5">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
-        </div>
       </div>
     </div>
   </div>
 
   <div class="card mb-3">
     <div class="card-body">
-      <table id="tabla_autores" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
+      <table id="tabla_autores" class="nowrap table table-responsive w-100 mw-100">
         <thead class="bg-200">
         <tr>
           <th class="sort ">Código</th>
           <th class="sort">Nombre</th>
           <th class="sort">Tipo de Plan</th>
-          <th class="sort">Act. Completadas</th>
-          <th class="sort">F. Registro</th>
+          <th class="sort">Actividades Completadas</th>
+          <th class="sort">Fecha de Registro</th>
           <th class="sort">Estado</th>
           <th class="sort">Acciones</th>
         </tr>
@@ -256,17 +213,15 @@
 
             <div class="row">
               <div class="form-group col-6">
-                <label for="tipoPlan"><span class="glyphicon glyphicon-eye-open"></span> Tipo de Plan</label>
-                <select class="form-control" name="tipoPlan" id="tipoPlan">
-                  <option value=0>Preventivo</option>
-                  <option value=1>Correctivo</option>
-                  <option value=2>Curativo</option>
-                </select>
+                <label for="codigo"><span class="glyphicon glyphicon-eye-open"></span> Tipo de Plan</label>
+                <input type="text" class="form-control" id="codigo" name="codigo" placeholder=""
+                       required="true">
               </div>
 
               <div class="form-group col-6">
-                <label for="fechaRegistro"><span class="glyphicon glyphicon-eye-open"></span> Fecha de Registro</label>
-                <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date">
+                <label for="codigo"><span class="glyphicon glyphicon-eye-open"></span> Fecha de Registro</label>
+                <input type="text" class="form-control" id="codigo" name="codigo" placeholder=""
+                       required="true">
               </div>
             </div>
 
@@ -303,15 +258,12 @@
     </div>
   </div>
 
-  <div id="cover-spin"></div>
+  <input type="hidden" value="{{ pat.id }}" id="pk">
 
 {% endblock %}
 
 {% block extrajs %}
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'project/projects/projects.js' %}"></script>
-  <script>
-
-  </script>
+  <script src="{% static 'project/projects/projects_patrimony.js' %}"></script>
 {% endblock %}

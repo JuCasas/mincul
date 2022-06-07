@@ -1,62 +1,6 @@
 from datetime import datetime
 
 from django.db import models
-
-
-# class DatosProcedencia (models.Model):
-#     areaGeografica = models.CharField(max_length=30)
-#     denominacion = models.CharField(max_length=30)
-#     excavacion = models.IntegerField(null=True)
-#
-#
-# class DatosPropiedad (models.Model):
-#     formaAdquisicion = models.CharField(max_length=30)
-#     propietario = models.CharField(max_length=30)
-#     tipoDocumento = models.CharField(max_length=30)
-#     numeroDocumento = models.CharField(max_length=30)
-#
-#
-# class DatosLocalizacion (models.Model):
-#     #localizacion: latidud / longitud ¿?
-#     latitud = models.DecimalField(max_digits=8, decimal_places=3)
-#     longitud = models.DecimalField(max_digits=8, decimal_places=3)
-#     direccion = models.CharField(max_length=30)
-#
-#
-# class DatosConservacion (models.Model):
-#     estadoConservacion = models.CharField(max_length=30)
-#     estadoIntegridad = models.CharField(max_length=30)
-#     detalle = models.CharField(max_length=30)
-#     tratamiento = models.CharField(max_length=30)
-#
-#
-# class Dimensiones (models.Model):
-#     alto = models.DecimalField(max_digits=5, decimal_places=2)
-#     largo = models.DecimalField(max_digits=5, decimal_places=2)
-#     ancho = models.DecimalField(max_digits=5, decimal_places=2)
-#     espesor = models.DecimalField(max_digits=5, decimal_places=2)
-#     fondo = models.DecimalField(max_digits=5, decimal_places=2)
-#     diametro = models.DecimalField(max_digits=5, decimal_places=2)
-#     peso = models.DecimalField(max_digits=5, decimal_places=2)
-#
-#
-# class DatosTecnicos (models.Model):
-#     materialPrincipal = models.CharField(max_length=30)
-#     materialSecundario = models.CharField(max_length=30)
-#     tManufactura = models.CharField(max_length=30)
-#     tDecoracion = models.CharField(max_length=30)
-#     tAcabado = models.CharField(max_length=30)
-#     descripcion = models.CharField(max_length=30)
-#     dimensiones = models.OneToOneField(Dimensiones, null=True, on_delete=models.SET_NULL, verbose_name='Dimensiones Patrimonio Cultural')
-#
-#
-# class EstablecimientoCultural (models.Model):
-#     descripcion = models.CharField(max_length=30)
-#     # localizacion: latidud / longitud ¿?
-#     latitud = models.DecimalField(max_digits=8, decimal_places=3)
-#     longitud = models.DecimalField(max_digits=8, decimal_places=3)
-#     direccion = models.CharField(max_length=30)
-#     tipo = models.CharField(max_length=30)
 from mincul import settings
 
 class Institucion(models.Model):
@@ -72,43 +16,42 @@ class Propietario(models.Model):
         ('1', 'Activo'),
         ('2', 'Inactivo'),
     )
-    nombre = models.CharField(max_length=200)
-    doi = models.CharField(max_length=12, null=True, blank=True)
-    direccion = models.CharField(max_length=100, null=True, blank=True)
-    telefono = models.CharField(max_length=9, null=True, blank=True)
-    correo = models.CharField(max_length=100, null=True, blank=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class Servicio(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    descripcion = models.CharField(max_length=100, null=True, blank=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class ActividadTuristica(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
     TIPO = (
         ('1', 'Estado 1'),
         ('2', 'Estado 2 '),
         ('3', 'Estado 3'),
         ('4', 'Estado 4'),
     )
-    descripcion = models.CharField(max_length=100, null=True, blank=True)
+    nombre = models.CharField(max_length=200)
+    doi = models.CharField(max_length=12, null=True, blank=True)
+    direccion = models.CharField(max_length=100, null=True, blank=True)
+    departamento = models.CharField(max_length=100, null=True, blank=True)
+    provincia = models.CharField(max_length=100, null=True, blank=True)
+    distrito = models.CharField(max_length=100, null=True, blank=True)
+    telefono = models.CharField(max_length=9, null=True, blank=True)
+    correo = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.CharField(max_length=2, choices=TIPO, default='1')
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
-class Entrada(models.Model):
+class Autor(models.Model):
     ESTADOS = (
         ('1', 'Activo'),
         ('2', 'Inactivo'),
     )
-    descripcion = models.CharField(max_length=100, null=True, blank=True)
-    precio = models.FloatField(blank=True, null=True)
+    nombre = models.CharField(max_length=200)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class Responsable(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    institucion = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200)
+    cargo = models.CharField(max_length=100, null=True, blank=True)
+    correo = models.CharField(max_length=100, null=True, blank=True)
+    telefono = models.CharField(max_length=9, null=True, blank=True)
+    fecha = models.DateField(blank=True, null=True, verbose_name='fecha')
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
 class Patrimonio (models.Model):
@@ -131,16 +74,9 @@ class Patrimonio (models.Model):
         ('4', 'Estado 4'),
     )
 
-    SUBCATEGORIA = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2 '),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
-    )
-
-    tituloDemoninacion = models.CharField(max_length=30)
-    datacion = models.DateField(default=datetime.now, blank=True, null=True, verbose_name='datacion')
-    observacion = models.CharField(max_length=200)
+    nombreTituloDemoninacion = models.CharField(max_length=30)
+    # datacion = models.DateField(default=datetime.now, blank=True, null=True, verbose_name='datacion')
+    codigo = models.CharField(max_length=200)
     direccion = models.CharField(max_length=200)
     departamento = models.CharField(max_length=100)
     provincia = models.CharField(max_length=100)
@@ -148,30 +84,287 @@ class Patrimonio (models.Model):
     # ubicacion = models.PointField(geography=True, default=Point(0.0, 0.0))
     # https: // raphael - leger.medium.com / django - handle - latitude - and -longitude - 54
     # a4bb2f6e3b
+    descripcion = models.CharField(max_length=200)
+    observacion = models.CharField(max_length=200)
     tipoPatrimonio = models.CharField(max_length=2, choices=TIPO, default='1')
     categoria = models.CharField(max_length=2, choices=CATEGORIA, default='1')
-    subcategoria = models.CharField(max_length=2, choices=SUBCATEGORIA, default='1')
-    gestor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     institucion = models.ForeignKey(Institucion,null=True, on_delete=models.CASCADE)
+    gestor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     propietarios = models.ManyToManyField(Propietario)
+    responsables = models.ManyToManyField(Responsable)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
-class PatrimonioMaterial(models.Model):
-    horaApertura = models.TimeField(auto_now_add=True, blank=True)
-    horaCierre = models.TimeField(auto_now_add=True, blank=True)
-    patrimonio = models.OneToOneField(Patrimonio, on_delete=models.CASCADE)
-    servicios = models.ManyToManyField(Servicio)
-    actividades = models.ManyToManyField(ActividadTuristica)
-    entradas = models.ManyToManyField(Entrada)
+class Servicio(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    TIPO = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2 '),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+
+    CATEGORIA = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2 '),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+    categoria = models.CharField(max_length=2, choices=CATEGORIA, default='1')
+    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    observacion = models.CharField(max_length=200)
+    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class ActividadTuristica(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    TIPO = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2 '),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+
+    CATEGORIA = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2 '),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+    descripcion = models.CharField(max_length=100, null=True, blank=True)
+    categoria = models.CharField(max_length=2, choices=CATEGORIA, default='1')
+    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    observacion = models.CharField(max_length=200, null=True, blank=True)
+    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class Entrada(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=100, null=True, blank=True)
+    precio = models.FloatField(blank=True, null=True)
+    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class FuenteBibliografica(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    referencia = models.CharField(max_length=100, null=True, blank=True)
+    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
 class PatrimonioMaterialMueble(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    TIPO = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2'),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+    nroRegistro = models.CharField(max_length=20, null=True)
+    asociacion = models.CharField(max_length=200, null=True)
+    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    integridad = models.CharField(max_length=50, null=True)
+    conservacion = models.CharField(max_length=50, null=True)
+    detalleConservacion = models.CharField(max_length=200, null=True)
+    detalleTratamiento = models.CharField(max_length=200, null=True)
     alto = models.FloatField(default=0.0)
     largo = models.FloatField(default=0.0)
     ancho = models.FloatField(default=0.0)
-    patrimonioMaterial = models.OneToOneField(PatrimonioMaterial, on_delete=models.CASCADE)
+    espesor = models.FloatField(default=0.0)
+    formaAdquisicion = models.CharField(max_length=200, null=True)
+    ubicacionEspecifica = models.CharField(max_length=200, null=True)
+    situacion = models.CharField(max_length=50, null=True)
+    codigoPropietario = models.CharField(max_length=20, null=True)
+    codigoRegistroAnteriorINC = models.CharField(max_length=20, null=True)
+    codigoInventario = models.CharField(max_length=20, null=True)
+    otrosCodigos = models.CharField(max_length=200, null=True)
+    patrimonio = models.OneToOneField(Patrimonio, on_delete=models.CASCADE)
+
+class PatrimonioArqueologico(models.Model):
+    material = models.CharField(max_length=100, null=True)
+    tipoMaterial = models.CharField(max_length=100, null=True)
+    cultura = models.CharField(max_length=50, null=True)
+    estilo = models.CharField(max_length=100, null=True)
+    periodo = models.CharField(max_length=100, null=True)
+    diametroMax = models.FloatField(default=0.0, null=True)
+    diametroMin = models.FloatField(default=0.0, null=True)
+    diametroBase = models.FloatField(default=0.0, null=True)
+    patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble,on_delete=models.CASCADE)
+
+class PatrimonioHistoricoArtistico(models.Model):
+    material = models.CharField(max_length=100, null=True)
+    estilo = models.CharField(max_length=100, null=True)
+    procedencia = models.CharField(max_length=100, null=True)
+    datacion = models.CharField(max_length=100, null=True)
+    materialSoporte = models.CharField(max_length=100, null=True)
+    fondo = models.FloatField(default=0.0)
+    diametro = models.FloatField(default=0.0)
+    patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble, on_delete=models.CASCADE)
+
+class PatrimonioEtnografico(models.Model):
+    filacionCultural = models.CharField(max_length=50, null=True)
+    procedencia = models.CharField(max_length=50, null=True)
+    datacion = models.CharField(max_length=100, null=True)
+    materialSoporte = models.CharField(max_length=100, null=True)
+    fondo = models.FloatField(default=0.0)
+    diametro = models.FloatField(default=0.0)
+    patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble, on_delete=models.CASCADE)
+
+class PatrimonioPaleontologico(models.Model):
+    nombreCientifico = models.CharField(max_length=100, null=True)
+    reino = models.CharField(max_length=50, null=True)
+    phylumDivision = models.CharField(max_length=50, null=True)
+    clase = models.CharField(max_length=50, null=True)
+    eraGeologica = models.CharField(max_length=50, null=True)
+    epocaGeologica = models.CharField(max_length=50, null=True)
+    tipoFosilizacion = models.CharField(max_length=50, null=True)
+    tipoMuestra = models.CharField(max_length=50, null=True)
+    patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble, on_delete=models.CASCADE)
+
+class PatrimonioIndustrial(models.Model):
+    modeloMarca = models.CharField(max_length=50, null=True)
+    serie = models.CharField(max_length=50, null=True)
+    fabricante = models.CharField(max_length=200, null=True)
+    procedencia = models.CharField(max_length=50, null=True)
+    datacion = models.CharField(max_length=50, null=True)
+    materialSoporte = models.CharField(max_length=100, null=True)
+    fondo = models.FloatField(default=0.0)
+    diametro = models.FloatField(default=0.0)
+    patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble, on_delete=models.CASCADE)
+
+class Excavacion(models.Model):
+    areaGeografica = models.CharField(max_length=100, null=True)
+    clasificacionOrigen = models.CharField(max_length=100, null=True)
+    nombreClasificacion = models.CharField(max_length=100, null=True)
+    capa = models.CharField(max_length=100, null=True)
+    unidad = models.CharField(max_length=100, null=True)
+    sector = models.CharField(max_length=100, null=True)
+    patrimonioMueble = models.ForeignKey(PatrimonioMaterialMueble, on_delete=models.CASCADE)
+
+class ElementoAdicional(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=200, null=True)
+    material = models.CharField(max_length=100, null=True)
+    integridad = models.CharField(max_length=100, null=True)
+    conservacion = models.CharField(max_length=100, null=True)
+    alto = models.FloatField(default=0.0)
+    largo = models.FloatField(default=0.0)
+    ancho = models.FloatField(default=0.0)
+    espesor = models.FloatField(default=0.0)
+    fondo = models.FloatField(default=0.0)
+    diametro = models.FloatField(default=0.0)
+    patrimonioMueble = models.ForeignKey(PatrimonioMaterialMueble, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class TecnicaDecoracion(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=200,null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class TecnicaManufactura(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=200, null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class TecnicaAcabado(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=200, null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class MaterialSecundario(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=200, null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class PatrimonioMaterialInMueble(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    TIPO = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2'),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+    SUBTIPO = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2'),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+    TIPOINGRESO = (
+        ('1', 'Gratuito'),
+        ('2', 'Pagado'),
+        ('3', 'Estado 3'),
+        ('4', 'No información'),
+    )
+    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    subtipo = models.CharField(max_length=2, choices=SUBTIPO, default='1')
+    particularidades = models.CharField(max_length=200, null=True, blank=True)
+    tipoIngreso = models.CharField(max_length=2, choices=TIPOINGRESO, default='1')
+    estadoActual = models.CharField(max_length=200)
+    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
+
+class PatrimonioInMaterial(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    TIPO = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2'),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+    SUBTIPO = (
+        ('1', 'Estado 1'),
+        ('2', 'Estado 2'),
+        ('3', 'Estado 3'),
+        ('4', 'Estado 4'),
+    )
+    TIPOINGRESO = (
+        ('1', 'Gratuito'),
+        ('2', 'Pagado'),
+        ('3', 'Estado 3'),
+        ('4', 'No información'),
+    )
+    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    subtipo = models.CharField(max_length=2, choices=SUBTIPO, default='1')
+    particularidades = models.CharField(max_length=200, null=True, blank=True)
+    tipoIngreso = models.CharField(max_length=2, choices=TIPOINGRESO, default='1')
+    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
 
 class PatrimonioValoracion(models.Model):
-    ESTADO = (
+    ESTADOS = (
         ('1', 'Pendiente'),
         ('2', 'Aceptado'),
     )
@@ -180,4 +373,18 @@ class PatrimonioValoracion(models.Model):
     correo = models.CharField(default='', max_length=60)
     valoracion = models.IntegerField(default=0)
     comentario = models.CharField(default='', max_length=250)
-    estado = models.CharField(max_length=2, choices=ESTADO, default='1')
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class EpocaVisita(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    epocaPropicia = models.CharField(max_length=100, null=True, blank=True)
+    especificacion = models.CharField(max_length=100, null=True, blank=True)
+    horaVisita = models.TimeField(auto_now_add=True, blank=True)
+    observaciones = models.CharField(max_length=100, null=True, blank=True)
+    patrimonioMaterialInMueble = models.ForeignKey(PatrimonioMaterialInMueble, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+

@@ -53,3 +53,4 @@ Thumbs.db
 deploy/
 db.sqlite3
 mincul/db.py
+db.py

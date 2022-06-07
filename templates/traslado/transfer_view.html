@@ -136,9 +136,10 @@
                         <tbody>
                         {% for patrimonio in patrimonios %}
                             <tr>
-                                <td>{{ forloop }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ patrimonio.pk }}</td>
+                                <td>{{ patrimonio.tituloDemoninacion }}</td>
+                                <td>{{ patrimonio.categoria }}-{{ patrimonio.subcategoria }}</td>
+                                <td>{{ patrimonio.tipoPatrimonio }}</td>
                                 <td></td>
                                 <td>
                                     <a class="btn" href="#" type="button">
