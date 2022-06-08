@@ -162,6 +162,38 @@ class FuenteBibliografica(models.Model):
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
+class TecnicaDecoracion(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=200,null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class TecnicaManufactura(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=200, null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class TecnicaAcabado(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=200, null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
+class MaterialSecundario(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    descripcion = models.CharField(max_length=200, null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
 class PatrimonioMaterialMueble(models.Model):
     ESTADOS = (
         ('1', 'Activo'),
@@ -191,6 +223,10 @@ class PatrimonioMaterialMueble(models.Model):
     codigoRegistroAnteriorINC = models.CharField(max_length=20, null=True)
     codigoInventario = models.CharField(max_length=20, null=True)
     otrosCodigos = models.CharField(max_length=200, null=True)
+    tecnicasDecoracion = models.ManyToManyField(TecnicaDecoracion)
+    tecnicasManifactura = models.ManyToManyField(TecnicaManufactura)
+    tecnicasAcabado = models.ManyToManyField(TecnicaAcabado)
+    materialesSecundarios = models.ManyToManyField(MaterialSecundario)
     patrimonio = models.OneToOneField(Patrimonio, on_delete=models.CASCADE)
 
 class PatrimonioArqueologico(models.Model):
@@ -246,6 +282,10 @@ class PatrimonioIndustrial(models.Model):
     patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble, on_delete=models.CASCADE)
 
 class Excavacion(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
     areaGeografica = models.CharField(max_length=100, null=True)
     clasificacionOrigen = models.CharField(max_length=100, null=True)
     nombreClasificacion = models.CharField(max_length=100, null=True)
@@ -253,6 +293,7 @@ class Excavacion(models.Model):
     unidad = models.CharField(max_length=100, null=True)
     sector = models.CharField(max_length=100, null=True)
     patrimonioMueble = models.ForeignKey(PatrimonioMaterialMueble, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
 class ElementoAdicional(models.Model):
     ESTADOS = (
@@ -270,38 +311,6 @@ class ElementoAdicional(models.Model):
     fondo = models.FloatField(default=0.0)
     diametro = models.FloatField(default=0.0)
     patrimonioMueble = models.ForeignKey(PatrimonioMaterialMueble, on_delete=models.CASCADE)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class TecnicaDecoracion(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    descripcion = models.CharField(max_length=200,null=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class TecnicaManufactura(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    descripcion = models.CharField(max_length=200, null=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class TecnicaAcabado(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    descripcion = models.CharField(max_length=200, null=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
-class MaterialSecundario(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    descripcion = models.CharField(max_length=200, null=True)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
 class PatrimonioMaterialInMueble(models.Model):
