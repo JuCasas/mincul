@@ -124,17 +124,17 @@ class ActividadTuristica(models.Model):
         ('2', 'Inactivo'),
     )
     TIPO = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2 '),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
+        ('1', 'Tipo 1'),
+        ('2', 'Tipo 2'),
+        ('3', 'Tipo 3'),
+        ('4', 'Tipo 4'),
     )
 
     CATEGORIA = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2 '),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
+        ('1', 'Categoría 1'),
+        ('2', 'Categoría 2 '),
+        ('3', 'Categoría 3'),
+        ('4', 'Categoría 4'),
     )
     descripcion = models.CharField(max_length=100, null=True, blank=True)
     categoria = models.CharField(max_length=2, choices=CATEGORIA, default='1')
