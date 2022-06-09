@@ -18,160 +18,232 @@
 
 {% block body %}
 
-    <div class="card p-5">
-        <form action="{% url 'addTransfer' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="row d-flex justify-content-center ">
-                <div class="col-12">
-                    <h4>Detalle  de traslado</h4>
+    <div class="card">
+        <div class="card-header">
+            <h5>Ver Traslado</h5>
+        </div>
+
+        <div class="card-body bg-light">
+            <div class="row">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>General</h5>
+                        </div>
+                        <div class="card-body bg-light">
+                            <div class="form-group">
+                                <label for="tipoTraslado">Tipo de Traslado:</label>
+                                <select class="form-control" id="tipoTraslado" disabled>
+                                    <option {% if e.pk == '1' %} selected {% endif %}>Exposición en el extranjero
+                                    </option>
+                                    <option {% if e.pk == '2' %} selected {% endif %}>Exponsición nacional</option>
+                                    <option {% if e.pk == '3' %} selected {% endif %}>Misión Diplomática</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pais">País destino:</label>
+                                <input class="form-control" id="pais" name="pais" type="text"
+                                       placeholder="{{ traslado.pais }}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="ubigeo">Dirección de destino:</label>
+                                <input class="form-control" id="destino" name="destino" type="text"
+                                       value="Destino" disabled>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="nombreExposicion">Nombre de la Exposición:</label>
+                                <input class="form-control" id="nombreExposicion" name="nombreExposicion" type="text"
+                                       value="{{ traslado.nombreExposicion }}" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="comisario">Comisario:</label>
+                                <input class="form-control" id="comisario" name="comisario" type="text"
+                                       value="{{ traslado.gestorConservacionTraslados }}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="nResolucion">N° de Resolucion:</label>
+                                <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                       value="{{ traslado.numeroResolucion }}" disabled>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Entidad solicitante</h5>
+                                </div>
+                                <div class="card-body bg-light">
+                                    <div class="form-group">
+                                        <label for="nombreInstitucion">Nombre: </label>
+                                        <select class="form-control selectpicker" id="nombreInstitucion"
+                                                name="nombreInstitucion" disabled>
+                                            {% for e in entidades %}
+                                                <option value="{{ e.pk }}" {% if e.pk == traslado.pk %}
+                                                        selected {% endif %} >{{ e.nombreSolicitante }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group ">
+                                        <label for="nombreExposicion">Correo:</label>
+                                        <input class="form-control" id="correoEntidadSolicitante"
+                                               name="correoEntidadSolicitante"
+                                               type="text"
+                                               value="{{ traslado.entidadSolicitante.correo }}" disabled>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Fechas</h5>
+                                </div>
+                                <div class="card-body bg-light">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="fechaSalidaProgramada">Salida Programada: </label>
+                                                <input class="form-control" id="fechaSalidaProgramada"
+                                                       name="fechaSalidaProgramada" type="date"
+                                                       value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group ">
+                                                <label for="fechaRetornoProgramada">Retorno
+                                                    Programada: </label>
+                                                <input class="form-control" id="fechaRetornoProgramada"
+                                                       name="fechaRetornoProgramada" type="date"
+                                                       value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="fechaSalidaReal">Salida Real:</label>
+                                                <input class="form-control" id="fechaSalidaReal" name="fechaSalidaReal"
+                                                       type="date"
+                                                       value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
+                                            </div>
+
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="fechaRetornoReal">Retorno Real:</label>
+                                                <input class="form-control" id="fechaRetornoReal"
+                                                       name="fechaRetornoReal" type="date"
+                                                       value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Patrimonios a ser trasladados</h5>
+                                </div>
+                                <div class="card-body bg-light">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Código</th>
+                                            <th scope="col">Patrimonio</th>
+                                            <th scope="col">Clasificación</th>
+                                            <th scope="col">Tipo de bien</th>
+                                            <th scope="col">Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for patrimonio in patrimonios %}
+                                            <tr>
+                                                <td>{{ patrimonio.pk }}</td>
+                                                <td>{{ patrimonio.nombreTituloDemoninacion }}</td>
+                                                <td>{{ patrimonio.categoria }}-{{ patrimonio.subcategoria }}</td>
+                                                <td>{{ patrimonio.tipoPatrimonio }}</td>
+                                                <td></td>
+                                                <td>
+                                                    <a class="btn" href="#" type="button">
+                                                        <i class="fa fa-eye" data-fa-transform="shrink-3"></i>
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <hr>
-            <p></p>
 
-            <div class="row">
-                <div class="form-group col-lg-6 col-sm-12">
-                    <label for="nombreInstitucion">Entidad Solicitante</label>
-                    <select class="form-control selectpicker" id="nombreInstitucion" name="nombreInstitucion" disabled>
-                        {% for e in entidades %}
-                            <option value="{{ e.pk }}" {% if e.pk == traslado.pk %}
-                                    selected {% endif %} >{{ e.nombreSolicitante }}</option>
+            <div class="card my-3">
+                <div class="card-header">
+                    <h5>Documentos:</h5>
+                </div>
+                <div class="card-body bg-light">
+                    <div class="row">
+                        {% for documento in documentos %}
+                            <div class="card mx-1">
+                                <div class="card-body">
+
+{#                                    <a class="btn btn-falcon-info"#}
+{#                                       href="{% static 'files/AlumnosDelCursoINF245.xls' %} " download>#}
+{#                                        <i class="fa fa-download"></i> Formato Ejemplo</a>#}
+
+                                </div>
+                                <div class="card-footer">
+                                    <h6>{{ documento.documento.url }}</h6>
+                                </div>
+                            </div>
+
+
                         {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group col-lg-6 col-sm-12">
-                    <label for="tipoTraslado">Tipo de Traslado</label>
-                    <select class="form-control" id="tipoTraslado" disabled>
-                        <option {% if e.pk == '1' %} selected {% endif %}>Exposición en el extranjero</option>
-                        <option {% if e.pk == '2' %} selected {% endif %}>Exponsición nacional</option>
-                        <option {% if e.pk == '3' %} selected {% endif %}>Misión Diplomática</option>
-                    </select>
+                    </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="form-group col-lg-6 col-sm-12">
-                    <label for="nombreExposicion">Nombre de la Exposición</label>
-                    <input class="form-control" id="nombreExposicion" name="nombreExposicion" type="text"
-                           value="{{ traslado.nombreExposicion }}" disabled>
-                </div>
-                <div class="form-group col-lg-3 col-sm-12">
-                    <label for="pais">País</label>
-                    <input class="form-control" id="pais" name="pais" type="text"
-                           placeholder="{{ traslado.pais }}" disabled>
-                </div>
-                <div class="form-group col-lg-3 col-sm-12">
-                    <label for="ubigeo">Destino</label>
-                    <input class="form-control" id="ubigeo" name="ubigeo" type="text"
-                           value="Destino" disabled>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="form-group col-lg-6 col-sm-12">
-                    <label for="comisario">Comisario</label>
-                    <input class="form-control" id="comisario" name="comisario" type="text"
-                           value="{{ traslado.gestorConservacionTraslados }}" disabled>
-                </div>
-                <div class="form-group col-lg-3 col-sm-12">
-                    <label for="nResolucion">N° de Resolucion</label>
-                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                           value="{{ traslado.numeroResolucion }}" disabled>
-                </div>
-                <div class="form-group col-lg-3 col-sm-12">
-                    <label for="ubigeo">Ubigeo</label>
-                    <input class="form-control" id="ubigeo" name="ubigeo" type="text"
-                           value="{{ traslado.ubigeoDestino }}" disabled>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group col-lg-6 col-sm-12">
-                    <label for="fechaSalidaProgramada">Fecha de salida
-                        Programada {{ traslado.fechaSalidaProgramada }}</label>
-                    <input class="form-control" id="fechaSalidaProgramada" name="fechaSalidaProgramada" type="date"
-                           value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}" disabled>
-                </div>
-                <div class="form-group col-lg-6 col-sm-12">
-                    <label for="fechaRetornoProgramada">Fecha de retorno Programada</label>
-                    <input class="form-control" id="fechaRetornoProgramada" name="fechaRetornoProgramada" type="date"
-                           value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}" disabled>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group col-lg-6 col-sm-12">
-                    <label for="fechaSalidaReal">Fecha de salida Real</label>
-                    <input class="form-control" id="fechaSalidaReal" name="fechaSalidaReal" type="date"
-                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
-                </div>
-                <div class="form-group col-lg-6 col-sm-12">
-                    <label for="fechaRetornoReal">Fecha de retorno Real</label>
-                    <input class="form-control" id="fechaRetornoReal" name="fechaRetornoReal" type="date"
-                           value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}" disabled>
-                </div>
-            </div>
-
-
-            <div class="row d-flex justify-content-center mt-3">
-                <div class="col-12">
-                    <h4>Patrimonio(s)</h4>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-center mt-3">
-                <div class="col-12">
-
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Patrimonio</th>
-                            <th scope="col">Clasificación</th>
-                            <th scope="col">Tipo de bien</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for patrimonio in patrimonios %}
-                            <tr>
-                                <td>{{ patrimonio.pk }}</td>
-                                <td>{{ patrimonio.nombreTituloDemoninacion }}</td>
-                                <td>{{ patrimonio.categoria }}-{{ patrimonio.subcategoria }}</td>
-                                <td>{{ patrimonio.tipoPatrimonio }}</td>
-                                <td></td>
-                                <td>
-                                    <a class="btn" href="#" type="button">
-                                        <i class="fa fa-eye" data-fa-transform="shrink-3"></i>
-                                    </a>
-                                </td>
-
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-
+                <div class="col-11">
+                    <div class="row mx-3">
+                        <h5>Estado: </h5>
+                        {% if traslado.estado == '1' %}
+                            <button class="btn btn-sm btn-warning rounded-capsule mx-1" disabled>Sin aprobar</button>
+                        {% elif traslado.estado == '2' %}
+                            <button class="btn btn-secondary" disabled>Aprobado</button>
+                        {% endif %}
+                    </div>
 
                 </div>
-            </div>
-
-
-            <div class="d-flex justify-content-between mt-3">
-                <div class="p-2">
-                    <label for="estado">Estado:</label>
-                    {% if traslado.estado == '1' %}
-                        <button class="btn btn-sm btn-info rounded-capsule" disabled>Registrado</button>
-                    {% elif traslado.estado == '2' %}
-                        <button class="btn btn-secondary" disabled>Aprobado</button>
-                    {% endif %}
-                </div>
-                <div class="p-2">
+                <div class="col-1 align-items-end">
                     <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
+
+
+
+
+
 
 {% endblock %}
 

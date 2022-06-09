@@ -73,11 +73,15 @@ def viewTranfer(request,pk):
     for patrimonio in patrimonios:
         print(patrimonio.nombreTituloDemoninacion)
 
+    documentos =  DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
+
+
     context = {
         'traslado': traslado,
         'entidades': entidades,
         'comisarios': comisarios,
-        'patrimonios': patrimonios
+        'patrimonios': patrimonios,
+        'documentos': documentos
     }
 
     return render(request,'traslado/transfer_view.html', context)
