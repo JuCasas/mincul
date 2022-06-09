@@ -10,8 +10,8 @@
 
 {% block body %}
     <div class="container">
-        <!--Go back Buttton - TODO -->
         <div class="row">
+        <!--Go back Buttton - TODO -->
             <div class="col-md-3">
                 <div class="card mb-3 bg-card-gradient">
                     <button class="btn-primary text-white" onclick="location.href='/patrimonio/detalle'">
@@ -47,7 +47,9 @@
                         </h1>
                     </div>
                     <div class="card-body">
+						<!--Nombre y código de inscripción-->
                         <div class="row">
+							<!--Nombre-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -58,18 +60,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        {{ patrimony.nombreTituloDemoninacion}}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											{{ patrimony.nombreTituloDemoninacion}}
+										</p>
                                     </div>
                                 </div>
                             </div>
+							<!--Código de inscripción-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -80,20 +77,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        0000367079
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											0000367079
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Tipo de Bien y Lugar de Manufactura-->
+						<div class="row">
+							<!--Tipo de Bien-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -104,22 +97,17 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        {% if patrimony.tipoPatrimonio == 1 %}
-                                                            Mueble
-                                                        {% else %}
-                                                            Inmueble
-                                                        {% endif %}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											{% if patrimony.tipoPatrimonio == 1 %}
+												Mueble
+											{% else %}
+												Inmueble
+											{% endif %}
+										</p>
                                     </div>
                                 </div>
                             </div>
+							<!--Lugar de manufactura-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -130,20 +118,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        Perú
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Perú
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+						<!--Clasificación y Estilo-->
                         <div class="row">
+							<!--Clasificación-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -154,19 +138,14 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        Arcaico
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Arcaico
+										</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!--Estilo-->
+							<div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
                                         <h3 class="text-black" style="font-size: medium">
@@ -176,20 +155,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        No determinado
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											No determinado
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Titulo y Datacion-->
+						<div class="row">
+							<!--Titulo-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -200,18 +175,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        {{ patrimony.nombreTituloDemoninacion }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											{{ patrimony.nombreTituloDemoninacion }}
+										</p>
                                     </div>
                                 </div>
                             </div>
+							<!--Datacion-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -222,20 +192,15 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        3000 a.C
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											3000 a.C
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Autor-->
+						<div class="row">
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -246,15 +211,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        --
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											--
+										</p>
                                     </div>
                                 </div>
                             </div>
@@ -263,7 +222,7 @@
                 </div>
             </div>
         </div>
-        <!--Tehnical Data and dimensions-->
+		<!--Tehnical Data and dimensions-->
         <div class="row">
             <!--Technical Data-->
             <div class="col-md-8">
@@ -274,7 +233,9 @@
                         </h1>
                     </div>
                     <div class="card-body">
+						<!--Material principal y secundario-->
                         <div class="row">
+							<!--Material principal-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -285,18 +246,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        Molde
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Molde
+										</p>
                                     </div>
                                 </div>
                             </div>
+							<!--Material secundario-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -307,20 +263,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        Simple
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Simple
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Tecnica de Manufactura y Tecnica de acabado-->
+						<div class="row">
+							<!--Tecnica de manufactura-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -331,18 +283,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        Manufactura
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Manufactura
+										</p>
                                     </div>
                                 </div>
                             </div>
+							<!--Tecnica de acabado-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -353,20 +300,15 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        Acabado Simple
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Acabado Simple
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Tecnica de decoracion-->
+						<div class="row">
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -377,19 +319,14 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        Pincelado
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Pincelado
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+						<!--Descripción-->
                         <div class="row">
                             <div class="col">
                                 <div class="row">
@@ -401,17 +338,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black align-middle" style="font-size: small">
-                                                        Una escultura, es también, un sustantivo que indica el objeto creado por el artista
-                                                        escultor. Con dicho trabajo, el escultor consigue expresar sus ideas ya sean estas
-                                                        figurativas o abstractas, reflejando lo que alberga la mente del artista y su habilidad técnica.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Una escultura, es también, un sustantivo que indica el objeto creado por el artista
+											escultor. Con dicho trabajo, el escultor consigue expresar sus ideas ya sean estas
+											figurativas o abstractas, reflejando lo que alberga la mente del artista y su habilidad técnica.
+										</p>
                                     </div>
                                 </div>
                             </div>
@@ -428,7 +359,9 @@
                         </h1>
                     </div>
                     <div class="card-body">
+						<!--Alto y Fondo-->
                         <div class="row">
+							<!--Alto-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -439,18 +372,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        15.25
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											15.25
+										</p>
                                     </div>
                                 </div>
                             </div>
+							<!--Fondo-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -461,20 +389,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        --
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											--
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+						<!--Largo y Diametro-->
                         <div class="row">
+							<!--Largo-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -485,18 +409,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        28.5
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											28.5
+										</p>
                                     </div>
                                 </div>
                             </div>
+							<!--Diametro-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -507,20 +426,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        --
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											--
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Ancho y Peso-->
+						<div class="row">
+							<!--Ancho-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -531,18 +446,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        10.0
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											10.0
+										</p>
                                     </div>
                                 </div>
                             </div>
+							<!--Peso-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -553,20 +463,15 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        452
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											452
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Espesor-->
+						<div class="row">
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -577,15 +482,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        --
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											--
+										</p>
                                     </div>
                                 </div>
                             </div>
@@ -605,7 +504,9 @@
                         </h1>
                     </div>
                     <div class="card-body">
+					<!--Estado y Tratamiento-->
                         <div class="row">
+							<!--Estado-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -616,18 +517,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        --
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											--
+										</p>
                                     </div>
                                 </div>
                             </div>
+							<!--Tratamiento-->
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -638,20 +534,15 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        --
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											--
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Integridad-->
+						<div class="row">
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col">
@@ -662,19 +553,14 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        --
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											--
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+						<!--Detalle de conservación-->
                         <div class="row">
                             <div class="col">
                                 <div class="row">
@@ -686,17 +572,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        Para garantizar que los datos personales no se conservan más tiempo del necesario
-                                                        , el responsable del tratamiento ha de establecer plazos para su supresión o revisión
-                                                        periódica, en cada caso, para cada actividad de tratamiento.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Para garantizar que los datos personales no se conservan más tiempo del necesario
+											, el responsable del tratamiento ha de establecer plazos para su supresión o revisión
+											periódica, en cada caso, para cada actividad de tratamiento.
+										</p>
                                     </div>
                                 </div>
                             </div>
@@ -713,6 +593,7 @@
                         </h1>
                     </div>
                     <div class="card-body">
+						<!--Area geografica-->
                         <div class="row">
                             <div class="col">
                                 <div class="row">
@@ -724,20 +605,15 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        Costa Central
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											Costa Central
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Excavacion arqueologica-->
+						<div class="row">
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
@@ -748,20 +624,15 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        No presenta
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											No presenta
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Denominacion del inmueble-->
+						<div class="row">
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
@@ -772,20 +643,15 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        10.0
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											10.0
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Departamento-->
+						<div class="row">
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
@@ -796,20 +662,15 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        {{ patrimony.departamento }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											{{ patrimony.departamento }}
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Provincia-->
+						<div class="row">
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
@@ -820,20 +681,15 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        {{ patrimony.provincia }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											{{ patrimony.provincia }}
+										</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!--Distrito-->
+						<div class="row">
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
@@ -844,15 +700,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        {{ patrimony.distrito }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											{{ patrimony.distrito }}
+										</p>
                                     </div>
                                 </div>
                             </div>
@@ -883,24 +733,18 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-                                                        La definición de lo que son valores culturales no es sencilla de establecer, ya que
-                                                        varían de acuerdo a las distintas tradiciones que constituyen el acervo cultural
-                                                        de la humanidad. A grandes rasgos pueden definirse como el conjunto inmaterial
-                                                        de bienes ideas, consideraciones e ideales por los que un grupo humano considera
-                                                        digno esforzarse y luchar. Por ejemplo: tradición, empatía, libertad, educación.
-                                                        Esto no quiere decir que se traduzcan a rajatabla en conductas específicas, ya
-                                                        que a menudo pertenecen a la esfera de lo idealizado o la imaginación, razón por
-                                                        la cual el arte se hace portavoz de dichos valores. Entonces como lo que son
-                                                        valores culturales de una sociedad a menudo se contradicen con los de otra:
-                                                        entonces sobreviene el conflicto.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											La definición de lo que son valores culturales no es sencilla de establecer, ya que
+											varían de acuerdo a las distintas tradiciones que constituyen el acervo cultural
+											de la humanidad. A grandes rasgos pueden definirse como el conjunto inmaterial
+											de bienes ideas, consideraciones e ideales por los que un grupo humano considera
+											digno esforzarse y luchar. Por ejemplo: tradición, empatía, libertad, educación.
+											Esto no quiere decir que se traduzcan a rajatabla en conductas específicas, ya
+											que a menudo pertenecen a la esfera de lo idealizado o la imaginación, razón por
+											la cual el arte se hace portavoz de dichos valores. Entonces como lo que son
+											valores culturales de una sociedad a menudo se contradicen con los de otra:
+											entonces sobreviene el conflicto.
+										</p>
                                     </div>
                                 </div>
                             </div>
@@ -915,15 +759,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p class="text-black" style="font-size: small">
-
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p style="font-size: small">
+											--
+										</p>
                                     </div>
                                 </div>
                             </div>
