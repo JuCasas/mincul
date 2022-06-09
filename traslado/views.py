@@ -3,8 +3,9 @@ import datetime
 from django.shortcuts import render, redirect
 
 from authentication.models import User
+from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
-from traslado.models import SolicitudTraslado, EntidadSolicitante
+from traslado.models import SolicitudTraslado, EntidadSolicitante, DocumentoPorSolicitud
 
 from django.core import serializers
 from django.http import JsonResponse
@@ -26,6 +27,9 @@ def addTransfer(request):
                                                              )
         for idPatrimonio in patrimoniosSolicitados:
             solicitudTraslado.patrimonios.add(Patrimonio.objects.get(pk=idPatrimonio))
+        for f in request.FILES.getlist('file'):
+            doc = Documento.objects.create(url=f)
+            DocumentoPorSolicitud.objects.create(documento_id=doc.pk, solicitud_id=solicitudTraslado.pk)
 
         return redirect('list_transfers')
     else:
