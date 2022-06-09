@@ -72,7 +72,7 @@
                 <div class="form-group col-lg-6 col-sm-12">
                     <label for="comisario">Comisario</label>
                     <input class="form-control" id="comisario" name="comisario" type="text"
-                           value="{{ traslado.gestorConservacionTraslados }}" disabled>
+                           value="{{ traslado.gestorConservacionTraslados }}" >
                 </div>
                 <div class="form-group col-lg-3 col-sm-12">
                     <label for="nResolucion">N° de Resolucion</label>
@@ -82,7 +82,7 @@
                 <div class="form-group col-lg-3 col-sm-12">
                     <label for="ubigeo">Ubigeo</label>
                     <input class="form-control" id="ubigeo" name="ubigeo" type="text"
-                           value="{{ traslado.ubigeoDestino }}" disabled>
+                           value="{{ traslado.ubigeoDestino }}" >
                 </div>
             </div>
 
@@ -91,12 +91,12 @@
                     <label for="fechaSalidaProgramada">Fecha de salida
                         Programada {{ traslado.fechaSalidaProgramada }}</label>
                     <input class="form-control" id="fechaSalidaProgramada" name="fechaSalidaProgramada" type="date"
-                           value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}" disabled>
+                           value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}" >
                 </div>
                 <div class="form-group col-lg-6 col-sm-12">
                     <label for="fechaRetornoProgramada">Fecha de retorno Programada</label>
                     <input class="form-control" id="fechaRetornoProgramada" name="fechaRetornoProgramada" type="date"
-                           value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}" disabled>
+                           value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}" >
                 </div>
             </div>
 
@@ -104,12 +104,12 @@
                 <div class="form-group col-lg-6 col-sm-12">
                     <label for="fechaSalidaReal">Fecha de salida Real</label>
                     <input class="form-control" id="fechaSalidaReal" name="fechaSalidaReal" type="date"
-                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
+                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" >
                 </div>
                 <div class="form-group col-lg-6 col-sm-12">
                     <label for="fechaRetornoReal">Fecha de retorno Real</label>
                     <input class="form-control" id="fechaRetornoReal" name="fechaRetornoReal" type="date"
-                           value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}" disabled>
+                           value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}" >
                 </div>
             </div>
 
@@ -139,11 +139,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for patrimonio in patrimonios %}
+                       {% for patrimonio in patrimonios %}
                             <tr>
-                                <td>{{ forloop }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ patrimonio.pk }}</td>
+                                <td>{{ patrimonio.tituloDemoninacion }}</td>
+                                <td>{{ patrimonio.categoria }}-{{ patrimonio.subcategoria }}</td>
+                                <td>{{ patrimonio.tipoPatrimonio }}</td>
                                 <td></td>
                                 <td>
                                     <a class="btn" href="#" type="button">
