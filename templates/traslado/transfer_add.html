@@ -118,7 +118,7 @@
                     <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
                             data-placeholder='Seleccione patrimonio...'>
                         {% for p in patrimonios %}
-                            <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>
+                            <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.nombreTituloDemoninacion }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -227,7 +227,7 @@
                             console.log(item);
                             return {
                                 id: item["pk"],
-                                text: item["fields"].tituloDemoninacion,
+                                text: item["fields"].nombreTituloDemoninacion,
                                 tipoPatrimonio: item["fields"].tipoPatrimonio,
                                 categoria: item["fields"].categoria,
                             };

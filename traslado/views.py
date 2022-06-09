@@ -42,9 +42,9 @@ def addTransfer(request):
 
 def listarPatrimoniosTraslado(request):
     filtro = request.GET['q']
-    patrimonios = Patrimonio.objects.filter(tituloDemoninacion__icontains=filtro)
+    patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=filtro)
     ser_instance = serializers.serialize('json', list(patrimonios),
-                                         fields=('id', 'tituloDemoninacion','categoria', 'tipoPatrimonio'))
+                                         fields=('id', 'nombreTituloDemoninacion','categoria', 'tipoPatrimonio'))
     print(ser_instance)
     return JsonResponse({"patrimoniosAjax": ser_instance}, status=200)
 
