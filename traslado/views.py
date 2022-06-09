@@ -67,7 +67,7 @@ def viewTranfer(request,pk):
     #Nota, se debe considerar los patrominos del traslado
     patrimonios = traslado.patrimonios.all()
     for patrimonio in patrimonios:
-        print(patrimonio.tituloDemoninacion)
+        print(patrimonio.nombreTituloDemoninacion)
 
     context = {
         'traslado': traslado,
@@ -87,7 +87,7 @@ def editTransfer(request,pk):
     comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
 
     #Nota, se debe considerar los patrominos del traslado
-    patrimonios = {}
+    patrimonios = traslado.patrimonios.all()
 
     context = {
         'traslado': traslado,
