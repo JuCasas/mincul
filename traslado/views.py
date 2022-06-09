@@ -3,8 +3,9 @@ import datetime
 from django.shortcuts import render, redirect
 
 from authentication.models import User
+from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
-from traslado.models import SolicitudTraslado, EntidadSolicitante
+from traslado.models import SolicitudTraslado, EntidadSolicitante, DocumentoPorSolicitud
 
 from django.core import serializers
 from django.http import JsonResponse
@@ -26,6 +27,9 @@ def addTransfer(request):
                                                              )
         for idPatrimonio in patrimoniosSolicitados:
             solicitudTraslado.patrimonios.add(Patrimonio.objects.get(pk=idPatrimonio))
+        for f in request.FILES.getlist('file'):
+            doc = Documento.objects.create(url=f)
+            DocumentoPorSolicitud.objects.create(documento_id=doc.pk, solicitud_id=solicitudTraslado.pk)
 
         return redirect('list_transfers')
     else:
@@ -42,9 +46,9 @@ def addTransfer(request):
 
 def listarPatrimoniosTraslado(request):
     filtro = request.GET['q']
-    patrimonios = Patrimonio.objects.filter(tituloDemoninacion__icontains=filtro)
+    patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=filtro)
     ser_instance = serializers.serialize('json', list(patrimonios),
-                                         fields=('id', 'tituloDemoninacion','categoria', 'tipoPatrimonio'))
+                                         fields=('id', 'nombreTituloDemoninacion','categoria', 'tipoPatrimonio'))
     print(ser_instance)
     return JsonResponse({"patrimoniosAjax": ser_instance}, status=200)
 
@@ -67,7 +71,7 @@ def viewTranfer(request,pk):
     #Nota, se debe considerar los patrominos del traslado
     patrimonios = traslado.patrimonios.all()
     for patrimonio in patrimonios:
-        print(patrimonio.tituloDemoninacion)
+        print(patrimonio.nombreTituloDemoninacion)
 
     context = {
         'traslado': traslado,
@@ -87,7 +91,7 @@ def editTransfer(request,pk):
     comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
 
     #Nota, se debe considerar los patrominos del traslado
-    patrimonios = {}
+    patrimonios = traslado.patrimonios.all()
 
     context = {
         'traslado': traslado,

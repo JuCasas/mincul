@@ -30,7 +30,7 @@ class ProyectoConservacion(models.Model):
         ('1','Pendiente'),
         ('2','Completado'),
     )
-    codigo = models.CharField(max_length=8)
+    codigo = models.CharField(max_length=8,unique=True)
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=200)
     fechaInicio = models.DateField(blank=True, null=True, verbose_name='fechaInicio')
@@ -46,6 +46,11 @@ class ProyectoConservacion(models.Model):
     status = models.CharField(max_length=2, choices=STATUS, default='0', null=True, blank=True)
 
 class Actividad(models.Model):
+    STATUS = (
+        ('0', 'En Proceso'),
+        ('1','Pendiente'),
+        ('2','Completado'),
+    )
     ESTADOS = (
         ('1', 'Activo'),
         ('2', 'Inactivo'),
@@ -54,6 +59,7 @@ class Actividad(models.Model):
     nombre = models.CharField(max_length=50)
     fechaInicio = models.DateField(blank=True, null=True, verbose_name='fechaInicio')
     fechaFin = models.DateField(blank=True, null=True, verbose_name='fechaFin')
+    descripcion = models.CharField(max_length=200,blank=True, null=True)
     presupuesto = models.FloatField()
     gastoTotal = models.FloatField()
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
@@ -62,6 +68,8 @@ class Actividad(models.Model):
     documentos = models.ManyToManyField(Documento)
     conservadores = models.ManyToManyField(settings.AUTH_USER_MODEL)
     estado = models.CharField(max_length=2,choices=ESTADOS,default='1',null=True,blank=True)
+    status = models.CharField(max_length=2, choices=STATUS, default='0', null=True, blank=True)
+
 
 class Tarea(models.Model):
     ESTADOS = (

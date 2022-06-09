@@ -118,7 +118,7 @@
                     <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
                             data-placeholder='Seleccione patrimonio...'>
                         {% for p in patrimonios %}
-                            <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>
+                            <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.nombreTituloDemoninacion }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -150,41 +150,45 @@
             </div>
 
 
-            {#            <div class="row">#}
-            {#                <div class="dropzone dropzone-multiple col-12" data-dropzone data-options='{"url":"valid/url"}'>#}
-            {#                    <div class="fallback">#}
-            {#                        <input type="file" name="file2" multiple>#}
-            {#                    </div>#}
-            {#                    <div class="dz-message" data-dz-message><img class="mr-2"#}
-            {#                                                                 src="{% static 'img/icons/cloud-upload.svg' %}"#}
-            {#                                                                 width="25" alt="">Agregue archivos correspondientes#}
-            {#                    </div>#}
-            {#                    <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">#}
-            {#                        <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger"><img#}
-            {#                                class="dz-image" src="{% static 'img/icons/docs.png' %}" alt="..." data-dz-thumbnail>#}
-            {#                            <div class="media-body d-flex flex-between-center">#}
-            {#                                <div>#}
-            {#                                    <h6 data-dz-name></h6>#}
-            {#                                    <div class="d-flex align-items-center">#}
-            {#                                        <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>#}
-            {#                                        <div class="dz-progress"><span class="dz-upload"#}
-            {#                                                                       data-dz-uploadprogress=""></span></div>#}
-            {#                                    </div>#}
-            {#                                </div>#}
-            {#                                <div class="dropdown text-sans-serif">#}
-            {#                                    <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"#}
-            {#                                            type="button" data-toggle="dropdown" aria-haspopup="true"#}
-            {#                                            aria-expanded="false"><span class="fas fa-ellipsis-h"></span></button>#}
-            {#                                    <div class="dropdown-menu dropdown-menu-right border py-0">#}
-            {#                                        <div class="bg-white py-2"><a class="dropdown-item" href="#!" data-dz-remove>Remove#}
-            {#                                            File </a></div>#}
-            {#                                    </div>#}
-            {#                                </div>#}
-            {#                            </div>#}
-            {#                        </div>#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#            </div>#}
+
+
+            <div class="dropzone dropzone-multiple p-0" data-dropzone>
+                <div class="fallback">
+                    <input type="file" name="file" multiple>
+                </div>
+
+
+{#                <div class="dz-message" data-dz-message><img class="mr-2" src="{% static 'img/icons/cloud-upload.svg"' %}"#}
+{#                                                             width="25" alt="">Drop your files here#}
+{#                </div>#}
+{#                <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">#}
+{#                    <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger"><img#}
+{#                            class="dz-image" src="..." alt="..." data-dz-thumbnail>#}
+{#                        <div class="media-body d-flex flex-between-center">#}
+{#                            <div>#}
+{#                                <h6 data-dz-name></h6>#}
+{#                                <div class="d-flex align-items-center">#}
+{#                                    <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>#}
+{#                                    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="dropdown text-sans-serif">#}
+{#                                <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"#}
+{#                                        type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#                                    <span class="fas fa-ellipsis-h"></span></button>#}
+{#                                <div class="dropdown-menu dropdown-menu-right border py-0">#}
+{#                                    <div class="bg-white py-2"><a class="dropdown-item" href="#!" data-dz-remove>Remove#}
+{#                                        File </a></div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+
+
+
 
             <input id="lista" name="lista" type="hidden">
 
@@ -227,7 +231,7 @@
                             console.log(item);
                             return {
                                 id: item["pk"],
-                                text: item["fields"].tituloDemoninacion,
+                                text: item["fields"].nombreTituloDemoninacion,
                                 tipoPatrimonio: item["fields"].tipoPatrimonio,
                                 categoria: item["fields"].categoria,
                             };

@@ -22,9 +22,9 @@
                     <button class="btn btn-primary my-1 " type="button">
                         Traslados
                     </button>
-                    <button class="btn btn-secondary mr-1 my-1 " type="button">
+                    <a class="btn btn-secondary mr-1 my-1 " href="{%  url 'listEntidades' %}" type="button">
                         Entidad solicitante
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
         <div class="card-body p-0">
             <div class="navbar">
                 <div class="col-sm-auto mb-2 mb-sm-0">
-                    <h6 class="mb-0">Mostrando 1-24 de 205 Traslados</h6>
+                  {% comment %}  <h6 class="mb-0">Mostrando 1-24 de 205 Traslados</h6>{% endcomment %}
                 </div>
 
                 <div class="row d-flex align-items-center">
