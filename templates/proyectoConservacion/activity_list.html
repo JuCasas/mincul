@@ -52,6 +52,31 @@
           animation: spin .8s linear infinite;
       }
 
+      .btn-1 {
+          text-align: center;
+          float: left;
+          border: 1px solid #2B2D42 !important;
+          background-color: #2B2D42 !important;
+          color: white !important;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-2 {
+          text-align: center;
+          float: left;
+          border: 1px solid floralwhite;
+          background-color: white;
+          color: black;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-2:hover {
+          transform: scale(0.98);
+          /* Scaling button to 0.98 to its original size */
+          box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+          /* Lowering the shadow */
+      }
+
   </style>
 
 {% endblock %}
@@ -59,17 +84,27 @@
 {% block body %}
 
   <div class="card mb-3">
-    <div class="card-body cardRed">
+    <div class="card-body">
       <div class="row justify-content-between align-items-center">
-        <div class="col-md-12">
-          <span class="mb-2 mb-md-0 text-black">{{ project.nombre}}</span>
+        <div class="col-md-6">
+          <h5  class="mb-2 mb-md-0 text-black">{{ project.nombre }}</h5>
+        </div>
+        <div class="col-md-2">
           {% if project.status == '0' %}
             <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
-          {%  elif project.status == '1' %}
+          {% elif project.status == '1' %}
             <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
-          {%  else  %}
+          {% else %}
             <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
-          {%  endif  %}
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <div class="nav-bar nav-bar-right">
+            <div class="nav nav-pills">
+              <button class="nav-link col-md-6 btn-1 my-1" disabled>Actividades</button>
+              <a class="nav-link col-md-6 btn-2 my-1" href="{% url 'listPatrimonys' pk=project.id %}">Patrimonios</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -109,28 +144,8 @@
           </select>
         </div>
         <button class="btn btn-primary col-sm-3" type="button" data-dismiss="modal" id="new">
-          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Proyecto
+          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Actividad
         </button>
-      </div>
-      <div class="row justify-content-end">
-        <div class="form-group col-sm-2">
-          <select class="form-control" id="exampleFormControlSelect4">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
-        </div>
-        <div class="form-group col-sm-2">
-          <select class="form-control" id="exampleFormControlSelect5">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
-        </div>
       </div>
     </div>
   </div>

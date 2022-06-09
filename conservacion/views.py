@@ -119,24 +119,26 @@ def listActivities(request,pk):
         }
         return render(request,'proyectoConservacion/activity_list.html',context)
 
-def listPatrimonys(request,**kwargs):
+@api_view(('GET',))
+def listPatrimonys(request,pk):
     context = {
+        'project': ProyectoConservacion.objects.get(pk=pk),
         'patrimonios': Patrimonio.objects.all()
     }
-    return render(request, 'proyectoConservacion/patrimony_list.html',context)
+    return render(request, 'proyectoConservacion/patrimonys_list.html', context)
 
-@api_view(('GET',))
-def listProjects_Patrimonys(request,pk):
-    context = {
-        'pat': Patrimonio.objects.get(pk=pk)
-    }
-    if request.is_ajax():
-        project = query_projects_by_args(pk,**request.GET)
-        serializer = ProyectoConservacionSerializer((project['items']),many = True)
-        result = dict()
-        result['data'] = serializer.data
-        result['recordsTotal'] = project['total']
-        result['recordsFiltered'] = project['count']
-        return Response(result, status=status.HTTP_200_OK,template_name=None, content_type=None)
-    else:
-        return render(request,'proyectoConservacion/projects_patrimony_list.html',context)
+# @api_view(('GET',))
+# def listPatrimonys(request,pk):
+#     context = {
+#         'pat': Patrimonio.objects.get(pk=pk)
+#     }
+#     if request.is_ajax():
+#         project = query_projects_by_args(pk,**request.GET)
+#         serializer = ProyectoConservacionSerializer((project['items']),many = True)
+#         result = dict()
+#         result['data'] = serializer.data
+#         result['recordsTotal'] = project['total']
+#         result['recordsFiltered'] = project['count']
+#         return Response(result, status=status.HTTP_200_OK,template_name=None, content_type=None)
+#     else:
+#         return render(request,'proyectoConservacion/patrimonys_list.html',context)
