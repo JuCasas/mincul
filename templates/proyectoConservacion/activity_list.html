@@ -82,12 +82,12 @@
 {% endblock %}
 
 {% block body %}
-
+  <input type="hidden" value="{{ project.id }}" id="idProject">
   <div class="card mb-3">
     <div class="card-body">
       <div class="row justify-content-between align-items-center">
         <div class="col-md-6">
-          <h5  class="mb-2 mb-md-0 text-black">{{ project.nombre }}</h5>
+          <h5 class="mb-2 mb-md-0 text-black">{{ project.nombre }}</h5>
         </div>
         <div class="col-md-2">
           {% if project.status == '0' %}
@@ -157,9 +157,8 @@
         <tr>
           <th class="sort ">Código</th>
           <th class="sort">Nombre</th>
-          <th class="sort">Tipo de Plan</th>
-          <th class="sort">Act. Completadas</th>
-          <th class="sort">F. Registro</th>
+          <th class="sort">Fecha de Inicio</th>
+          <th class="sort">Fecha de Fin</th>
           <th class="sort">Estado</th>
           <th class="sort">Acciones</th>
         </tr>
@@ -172,43 +171,68 @@
   </div>
 
   <!-- NEW and EDIT Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog dialog1">
+  <div class="modal fade" id="modalActividad" role="dialog">
+    <div class="modal-dialog mw-100 w-50">
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title" id="modal_title"></h4>
         </div>
         <div class="modal-body">
-          <form role="form">
+          <form role="form" id="formActividad">
             {% csrf_token %}
-            <div class="row">
-              <div class="form-group col-6">
-                <label for="codigo"><span class="glyphicon glyphicon-eye-open"></span> Código</label>
-                <input type="text" class="form-control" id="codigo" name="codigo" placeholder=""
-                       required="true">
-              </div>
 
-              <div class="form-group col-6">
-                <label for="nombre"><span class="glyphicon glyphicon-file"></span> Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="nombre"
-                       placeholder="" required="true">
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="nombre">Nombre:</label>
+                <input class="form-control" id="nombre" name="nombre" type="text" required
+                       placeholder="Nombre de la Actividad">
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="descripcion">Descripcion:</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
+                          placeholder="Descripción de la Actividad"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-6 col-sm-12">
+                <label for="fechaInicio">Fecha de Inicio:</label>
+                <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required>
+              </div>
+              <div class="form-group col-lg-6 col-sm-12">
+                <label for="fechaFin">Fecha de Fin:</label>
+                <input class="form-control" id="fechaFin" name="fechaFin" type="date" required>
               </div>
             </div>
 
             <div class="row">
-              <div class="form-group col-6">
-                <label for="tipoPlan"><span class="glyphicon glyphicon-eye-open"></span> Tipo de Plan</label>
-                <select class="form-control" name="tipoPlan" id="tipoPlan">
-                  <option value=0>Preventivo</option>
-                  <option value=1>Correctivo</option>
-                  <option value=2>Curativo</option>
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="patrimonio">Patrimonio Asociado:</label>
+                <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
+                        data-placeholder='Seleccione patrimonio...'>
+                  {% for p in patrimonios %}
+                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.nombreTituloDemoninacion }}</option>
+                  {% endfor %}
                 </select>
               </div>
+            </div>
 
-              <div class="form-group col-6">
-                <label for="fechaRegistro"><span class="glyphicon glyphicon-eye-open"></span> Fecha de Registro</label>
-                <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date">
+            <div class="row">
+              <div class="form-group col-9">
+                <label for="conservadores">Conservador(es):</label>
+                <select class="form-control selectpicker" id="conservadores" name="conservadores"
+                        data-placeholder='Seleccione patrimonio...'>
+                  {% for p in patrimonios %}
+                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group col-auto d-flex align-items-end">
+                <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
+                        onclick="agregarPatrimonioTabla()">Agregar Conservador
+                </button>
               </div>
             </div>
 
@@ -252,8 +276,5 @@
 {% block extrajs %}
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'project/projects/projects.js' %}"></script>
-  <script>
-
-  </script>
+  <script src="{% static 'project/projects/activities.js' %}"></script>
 {% endblock %}

@@ -8,4 +8,6 @@ urlpatterns = [
     path('proyectos/delete/<pk>/',views.deleteProject, name='deleteProject'),
     path('proyectos/<pk>/actvidades/',views.listActivities, name='listActivities'),
     path('proyectos/<pk>/patrimonios/',views.listPatrimonys, name='listPatrimonys'),
+    path('proyectos/<pk>/actividades/add/',views.addActivity, name='addActivity'),
+
 ]

@@ -1,50 +1,129 @@
+    $('#new').on('click', function (e) {
+      $('#nombre').val('');
+      $('#descripcion').val("");
+      $('#fechaInicio').val("");
+      $('#fechaFin').val("");
+      $('#type').val('new');
+      $('#modal_title').text('Nueva Actvidad');
+      $("#modalActividad").modal();
+    });
 
-
-
-  let table = $('#tabla_autores').DataTable({
-    "searching": false,
-    "serverSide": true,
-    "processing": true,
-    "bDestroy": true,
-    "ajax": function (data, callback, settings) {
-      //var columna_filtro = data.columns[data.order[0].column].data.replace(/\./g,"__")
-      $.get('', {
-            length: data.length,
-            start: data.start,
-            search_value: $('#search').val(),
-
-          }, function (res) {
-            console.log(res)
-            callback({
-              recordsTotal: res.recordsTotal,
-              recordsFiltered: res.recordsFiltered,
-              data: res.data
-            });
-          },
-      );
-    },
-    "columns": [
-      {"data": "codigo"},
-      {"data": "nombre"},
-      {"data": "descripcion"},
-      {"data": "nombre"},
-      {"data": "fechaInicio"},
-      {"data": "nombre"},
-      {
-        "data": null,
-        "defaultContent": '<button type="button" class="btn btn-secondary"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-            '<button type="button" class="btn btn-secondary"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-            '<button type="button" class="btn btn-secondary"><i class="fas fa-trash-alt"></i></button>'
+    $('#formActividad').on('submit', function (e) {
+      e.preventDefault();
+      let $this = $(this);
+      let type = $('#type').val();
+      let method = '';
+      let url = '/conservacion/proyectos/';
+      if (type == 'new') {
+        // new
+        url = url + $('#idProject').val()+ '/actividades/add/';
+        method = 'POST';
+      } else {
+        // edit
+        url = url + 'edit/' + id + '/';
+        method = 'POST';
       }
-    ],
+
+      $.ajax({
+        url: url,
+        method: method,
+        data: $this.serialize(),
+
+        success: function (response) {
+          $('#modalActividad').modal('hide')
+          $("#tabla_autores").DataTable().draw();
+        },
+        error: function (error) {
+          console.log(error)
+        }
+      });
+    });
 
 
+let table = $('#tabla_autores').DataTable({
+  "searching": false,
+  "serverSide": true,
+  "processing": true,
+  "lengthChange": false,
+  "pageLength": 10,
+  "scrollX": true,
+  "ajax": function (data, callback, settings) {
+    let order_column = data.order[0].column
+    let order = data.order[0].dir
+
+    $.ajax({
+      url: '',
+      type: 'get',
+      data: {
+          length: data.length,
+          start: data.start,
+          // search_value: $('#search').val(),
+          // type_filter: $('#type_filter').val(),
+          // status_filter: $('#status_filter').val(),
+          // order_column: order_column,
+          // order: order
+      },
+      success: function (data, textStatus, jQxhr) {
+        callback({
+            recordsTotal: data.recordsTotal,
+            recordsFiltered: data.recordsFiltered,
+            data: data.data
+        });
+      },
+      error: function (jqXhr, textStatus, errorThrown) {
+      }
+    });
+  },
+  "columns": [
+    {"data": "codigo"},
+    {"data": "nombre"},
+    {"data": "fechaInicio"},
+    {"data": "fechaFin"},
+    {
+      "data": "status", render: function (data, type, row) {
+        if (data == '0') {
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
+        } else if (data == '1') {
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Pendiente" + '</span>'
+        } else {
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
+        }
+        return resp;
+      }
+    },
+    {
+      "data": null,
+      "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+          '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+          '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+    }
+  ],
+  "language": {
+    "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
+    "sLengthMenu": "Mostrar _MENU_ registros",
+    "sZeroRecords": "No se encontraron resultados",
+    "sEmptyTable": "Ningún dato disponible en esta tabla",
+    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+    "sInfoPostFix": "",
+    "sSearch": "Buscar:",
+    "sUrl": "",
+    "sInfoThousands": ",",
+    "sLoadingRecords": "Cargando...",
+    "oPaginate": {
+      "sFirst": "Primero",
+      "sLast": "Último",
+      "sNext": "Siguiente",
+      "sPrevious": "Anterior"
+    },
+    "oAria": {
+      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    }
+  },
 });
 
-var country = ["Australia", "Bangladesh", "Denmark", "Hong Kong", "Indonesia", "Netherlands", "New Zealand", "South Africa"];
-$("#patrimonio").select2({
-  data: country
-});
 
 
 $('#search').keyup(function () {
@@ -84,36 +163,7 @@ $('#tabla_autores tbody').on('click', 'button', function () {
 
 });
 
-$('form').on('submit', function (e) {
-  e.preventDefault();
-  let $this = $(this);
-  let type = $('#type').val();
-  let method = '';
-  let url = '/conservacion/proyectos/';
-  if (type == 'new') {
-    // new
-    url = url + 'add/';
-    method = 'POST';
-  } else {
-    // edit
-    url = url + 'edit/' + id + '/';
-    method = 'POST';
-  }
 
-  $.ajax({
-    url: url,
-    method: method,
-    data: $this.serialize(),
-
-    success: function (response) {
-      $('#myModal').modal('hide')
-      $("#tabla_autores").DataTable().draw();
-    },
-    error: function (error) {
-      console.log(error)
-    }
-  });
-});
 
 $('#confirm').on('click', '#delete', function (e) {
   $.ajax({
@@ -130,10 +180,3 @@ $('#confirm').on('click', '#delete', function (e) {
 });
 
 
-$('#new').on('click', function (e) {
-  $('#codigo').val('');
-  $('#nombre').val('');
-  $('#type').val('new');
-  $('#modal_title').text('Nuevo Proyecto');
-  $("#myModal").modal();
-});

@@ -52,7 +52,7 @@ let table = $('#tabla_autores').DataTable({
       "data": "cantidadAct",
       "data": "cantidadActR", render: function (data, type, row) {
 
-        return row.cantidadAct + '/' + row.cantidadActR
+        return row.cantidadActR + '/' + row.cantidadAct
       },
 
     },
