@@ -30,7 +30,7 @@ class ProyectoConservacion(models.Model):
         ('1','Pendiente'),
         ('2','Completado'),
     )
-    codigo = models.CharField(max_length=8)
+    codigo = models.CharField(max_length=8,unique=True)
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=200)
     fechaInicio = models.DateField(blank=True, null=True, verbose_name='fechaInicio')
