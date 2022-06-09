@@ -113,7 +113,11 @@ def listActivities(request,pk):
         # result['recordsFiltered'] = project['count']
         return Response({}, status=status.HTTP_200_OK,template_name=None, content_type=None)
     else:
-        return render(request,'proyectoConservacion/activity_list.html')
+        project = ProyectoConservacion.objects.get(pk=pk)
+        context = {
+            'project': project,
+        }
+        return render(request,'proyectoConservacion/activity_list.html',context)
 
 def listPatrimonys(request,**kwargs):
     context = {
