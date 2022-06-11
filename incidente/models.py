@@ -10,18 +10,21 @@ class Incidente(models.Model):
         ('1', 'Activo'),
         ('2', 'Inactivo'),
     ]
-    PRIORIDAD = [
+    AFECTACION = [
         ('0', 'Leve'),
         ('1', 'Urgente'),
     ]
+    tipoAfectacion = models.CharField(max_length=2, choices=AFECTACION, default='1', null=True, blank=True)
+    fechaOcurrencia = models.DateField(blank=True, null=True, verbose_name='fechaOcurrencia')
+    descripcion = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200)
+    correo = models.CharField(max_length=200)
+    telefono = models.CharField(max_length=20)
     fechaRegistro = models.DateField(blank=True, null=True, verbose_name='fechaRegistro')
     fechaAprobacion = models.DateField(blank=True, null=True, verbose_name='fechaAprobacion')
-    prioridad = models.CharField(max_length=2, choices=PRIORIDAD, default='1', null=True, blank=True)
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE, null=True)
-    documento =  models.ForeignKey(Documento, on_delete=models.CASCADE, null=True)
+    documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
-    detalle = models.CharField(max_length=200, null=True)
-    descripcion = models.CharField(max_length=500, null=True)
 
 class Valoracion(models.Model):
     ESTADOS = [

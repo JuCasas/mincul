@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django.db import models
 from mincul import settings
+from mincul_app.models import Documento
+
 
 class Institucion(models.Model):
     ESTADOS = (
@@ -31,6 +33,7 @@ class Propietario(models.Model):
     telefono = models.CharField(max_length=9, null=True, blank=True)
     correo = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
 class Autor(models.Model):
