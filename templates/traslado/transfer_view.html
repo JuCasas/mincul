@@ -43,7 +43,7 @@
                             <div class="form-group">
                                 <label for="pais">País destino:</label>
                                 <input class="form-control" id="pais" name="pais" type="text"
-                                       placeholder="{{ traslado.pais }}" disabled>
+                                       value="{{ traslado.pais }}" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="ubigeo">Dirección de destino:</label>
@@ -81,7 +81,7 @@
                                 <div class="card-body bg-light">
                                     <div class="form-group">
                                         <label for="nombreInstitucion">Nombre: </label>
-                                        <select class="form-control selectpicker" id="nombreInstitucion"
+                                        <select class="form-control" id="nombreInstitucion"
                                                 name="nombreInstitucion" disabled>
                                             {% for e in entidades %}
                                                 <option value="{{ e.pk }}" {% if e.pk == traslado.pk %}
@@ -177,7 +177,6 @@
                                                 <td>{{ patrimonio.nombreTituloDemoninacion }}</td>
                                                 <td>{{ patrimonio.get_categoria_display }}</td>
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
-                                                <td></td>
                                                 <td>
                                                     <a class="btn" href="#" type="button">
                                                         <i class="fa fa-eye" data-fa-transform="shrink-3"></i>
@@ -202,20 +201,21 @@
                 <div class="card-body bg-light">
                     <div class="row">
                         {% for documento in documentos %}
-                            <div class="card mx-1">
-                                <div class="card-body">
-
-{#                                    <a class="btn btn-falcon-info"#}
-{#                                       href="{% static 'files/AlumnosDelCursoINF245.xls' %} " download>#}
-{#                                        <i class="fa fa-download"></i> Formato Ejemplo</a>#}
-
-                                </div>
-                                <div class="card-footer">
-                                    <h6>{{ documento.documento.url }}</h6>
-                                </div>
+                            <div class="col-2">
+                                <a class="notification notification-flush bg-0 "
+                                    href="{{ media_path }}{{ documento.documento.url }}" download>
+                                    <div class="card mx-1">
+                                        <div class="card-body p-0">
+                                            <div>
+                                                <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
+                                            </div>
+                                        </div>
+                                        <div class="card-footer p-2">
+                                            <h6>{{ documento.documento.filename }}</h6>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
-
-
                         {% endfor %}
                     </div>
                 </div>

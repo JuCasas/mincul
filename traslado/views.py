@@ -3,6 +3,7 @@ import datetime
 from django.shortcuts import render, redirect
 
 from authentication.models import User
+from mincul.settings import MEDIA_URL
 from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
 from traslado.models import SolicitudTraslado, EntidadSolicitante, DocumentoPorSolicitud
@@ -63,7 +64,7 @@ def listTranfers(request):
 
 
 def viewTranfer(request,pk):
-
+    media_path = MEDIA_URL
     traslado = SolicitudTraslado.objects.get(pk=pk)
     entidades = EntidadSolicitante.objects.filter()
     comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
@@ -81,7 +82,8 @@ def viewTranfer(request,pk):
         'entidades': entidades,
         'comisarios': comisarios,
         'patrimonios': patrimonios,
-        'documentos': documentos
+        'documentos': documentos,
+        'media_path':media_path
     }
 
     return render(request,'traslado/transfer_view.html', context)
