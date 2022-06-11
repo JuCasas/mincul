@@ -21,6 +21,19 @@
     background-color: #2B2D42;
 }
 
+.btn-secondary {
+    background-color: white;
+    color: #2B2D42;
+    border-color: #2B2D42;
+    border-radius: 12px;
+    height: 36px;
+    font-size: 12px;
+}
+
+.btn-secondary:hover, .btn-secondary:focus, .btn-secondary:disabled, .btn-secondary:not(:disabled):not(.disabled):active {
+    background-color: white;
+}
+
 .btn-outline-primary {
     color: white;
     border-color: #2B2D42;

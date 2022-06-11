@@ -29,6 +29,29 @@
           box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
           /* Lowering the shadow */
       }
+
+
+
+      .table.dataTable tbody th, table.dataTable tbody td {
+          padding: 8px 10px 8px 18px !important;
+      }
+
+      .modal-body {
+          background-color: #F7F8FB !important;
+      }
+
+      .form-control {
+          background-color: white !important;
+      }
+
+      .second {
+    background-color: white!important;
+    color: #2B2D42!important;
+    border-color: #8d8e99 !important;
+    border-radius: 12px!important;
+    height: 36px!important;
+    font-size: 12px!important;
+}
   </style>
 {% endblock %}
 
@@ -36,6 +59,9 @@
 
   <div class="card mb-3">
     <div class="card-body ">
+    <div class="row justify-content-between align-items-center">
+        <a class="nav-link py-0" href="{% url 'listProjects'%}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Atrás</a>
+      </div>
       <div class="row justify-content-between align-items-center">
         <div class="col-md-6">
           <h5 class="mb-2 mb-md-0 text-black">{{ project.nombre }}</h5>
