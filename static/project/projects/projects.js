@@ -71,6 +71,7 @@ let table = $('#tabla_autores').DataTable({
     },
     {
       "data": null,
+      "orderable": false,
       "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
           '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
           '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
@@ -140,7 +141,7 @@ $('#tabla_autores tbody').on('click', 'button', function () {
     $('#modal_title').text('Editar Proyecto');
     $("#myModal").modal();
   } else if (class_name == 'btn btn-show') {
-    window.location.pathname = "/conservacion/proyectos/" + id + "/actvidades/";
+    window.location.pathname = "/conservacion/proyectos/" + id + "/actividades/";
   } else {
     // DELETE button
     $('#modal_title').text('DELETE');

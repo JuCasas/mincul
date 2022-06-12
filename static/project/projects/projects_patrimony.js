@@ -87,7 +87,7 @@ $('#tabla_autores tbody').on('click', 'button', function () {
     $('#modal_title').text('Editar Proyecto');
     $("#myModal").modal();
   } else if (class_name == 'btn btn-show') {
-    window.location.pathname = "/conservacion/proyectos/" + id + "/actvidades/";
+    window.location.pathname = "/conservacion/proyectos/" + id + "/actividades/";
   } else {
     // DELETE button
     $('#modal_title').text('DELETE');
