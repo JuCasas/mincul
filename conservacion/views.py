@@ -11,20 +11,20 @@ from patrimonios.models import Patrimonio
 
 
 
-def query_projects_by_args(pk, **kwargs):
+def query_projects_by_args(**kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
     type_filter = kwargs.get('type_filter', None)[0]
     status_filter = kwargs.get('status_filter', None)[0]
+    patrimony_filter = kwargs.get('patrimony_filter', None)[0]
     order_column = kwargs.get('order_column', None)[0]
     order = kwargs.get('order', None)[0]
-
-    if(pk==-1):
+    if(len(patrimony_filter)==0):
         queryset = ProyectoConservacion.objects.filter(estado='1')
     else:
-        patrimonio = Patrimonio.objects.get(pk=pk)
-        queryset = patrimonio.proyectoconservacion_set.all()
+        patrimonio = Patrimonio.objects.get(pk=int(patrimony_filter))
+        queryset = patrimonio.proyectoconservacion_set.all().filter(estado='1')
 
     total = queryset.count()
 
@@ -135,7 +135,7 @@ def listPatrimonys_Project(request):
 @api_view(('GET',))
 def listProjects(request,**kwargs):
     if request.is_ajax():
-        project = query_projects_by_args(-1,**request.GET)
+        project = query_projects_by_args(**request.GET)
         serializer = ProyectoConservacionSerializer((project['items']),many = True)
         result = dict()
         result['data'] = serializer.data

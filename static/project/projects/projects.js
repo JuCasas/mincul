@@ -18,6 +18,7 @@ let table = $('#tabla_autores').DataTable({
         search_value: $('#search').val(),
         type_filter: $('#type_filter').val(),
         status_filter: $('#status_filter').val(),
+        patrimony_filter: $('#patrimonio').val(),
         order_column: order_column,
         order: order
       },
@@ -112,7 +113,7 @@ $('#status_filter').change(function () {
 $('#type_filter').change(function () {
   $('#tabla_autores').DataTable().draw();
 });
-$('#exampleFormControlSelect3').change(function () {
+$('#patrimonio').change(function () {
   $('#tabla_autores').DataTable().draw();
 });
 
@@ -214,8 +215,10 @@ $('#new').on('click', function (e) {
   $('#codigo').val('');
   $('#nombre').val('');
   $('#type').val('new');
+  $("form[name='formProyecto']").validate().resetForm();
   let today = new Date()
-  today.setDate(today.getDate() - 1);
+  today = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+  console.log(today.toISOString())
   var currentDate = today.toISOString().slice(0, 10);
   $('#fechaRegistro').val(currentDate);
   $('#fechaRegistro').prop("disabled", true);

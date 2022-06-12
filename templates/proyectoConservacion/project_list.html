@@ -65,13 +65,13 @@
       }
 
       .second {
-    background-color: white!important;
-    color: #2B2D42!important;
-    border-color: #8d8e99 !important;
-    border-radius: 12px!important;
-    height: 36px!important;
-    font-size: 12px!important;
-}
+          background-color: white !important;
+          color: #2B2D42 !important;
+          border-color: #8d8e99 !important;
+          border-radius: 12px !important;
+          height: 36px !important;
+          font-size: 12px !important;
+      }
 
   </style>
 
@@ -91,11 +91,15 @@
   <div class="card mb-3">
     <div class="card-body">
       <div class="row filterBar mr-0">
-        <div class="form-group col-sm-5 mb-0">
+        <div class="form-group col-sm-2 mb-0">
           <div class="position-relative">
             <input class="form-control" id="search" type="text" placeholder="Nombre del proyecto">
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
+        </div>
+        <div class="form-group col-sm-3 mb-0">
+          <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
+          </select>
         </div>
         <div class="form-group col-sm-2 mb-0">
           <select class="form-control" id="status_filter">
@@ -113,15 +117,7 @@
             {% endfor %}
           </select>
         </div>
-        {#        <div class="form-group col-sm-2">#}
-        {#          <select class="form-control" id="exampleFormControlSelect3">#}
-        {#            <option>1</option>#}
-        {#            <option>2</option>#}
-        {#            <option>3</option>#}
-        {#            <option>4</option>#}
-        {#            <option>5</option>#}
-        {#          </select>#}
-        {#        </div>#}
+
         <button class="btn btn-primary col-sm-3 mb-0" type="button" data-dismiss="modal" id="new">
           <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Proyecto
         </button>
@@ -213,7 +209,7 @@
 
             <div class="row justify-content-end mt-2 mr-1">
 
-                <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+              <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
 
               <div>
                 <input type="hidden" id="type" name="type" value="">
@@ -280,13 +276,53 @@
         codigo: {
           required: "Debe ingresar el código del proyecto",
           maxlength: "El código no debe tener más de 8 caracteres",
-          alphanumeric:"El código solo debe contener carácteres alfanuméricos"
+          alphanumeric: "El código solo debe contener carácteres alfanuméricos"
         },
         nombre: {
           required: "Debe ingresar el nombre del proyecto",
           maxlength: "El nombre no debe tener más de 50 caracteres",
         }
       }
+    });
+    $(document).ready(function () {
+      $('#patrimonio').select2({
+        ajax: {
+          url: '/conservacion/proyectos/patrimonios',
+          datatype: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term || '',
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            console.log(data.items)
+            return {
+              results: $.map(data.items, function (obj, index) {
+                return {id: obj.id, text: obj.nombreTituloDemoninacion};
+              }),
+              pagination: {
+                more: (params.page * 10) < data.total_count
+              }
+            }
+          }
+        },
+        placeholder: "Seleccionar patrimonio",
+        allowClear: true,
+        cache: false
+      });
+
+      $('#patrimonio').on("select2:clear", function (evt) {
+        $(this).on("select2:opening.cancelOpen", function (evt) {
+          evt.preventDefault();
+
+          $(this).off("select2:opening.cancelOpen");
+        });
+      });
+
+
     });
   </script>
 {% endblock %}
