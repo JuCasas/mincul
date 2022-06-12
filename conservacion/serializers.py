@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from conservacion.models import ProyectoConservacion, Tarea
 from conservacion.models import Actividad
-
+from patrimonios.models import Patrimonio
 
 
 class ProyectoConservacionSerializer(serializers.ModelSerializer):
@@ -32,3 +32,9 @@ class TareaSerializer (serializers.ModelSerializer):
         model = Tarea
         fields = ['id','codigo','nombre','descripcion','fechaRegistro','fecha','presupuesto','gasto']
         #                                               fechaInicio   , fechaFin
+
+class PatrimonioSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Patrimonio
+        fields = ['id','nombreTituloDemoninacion']

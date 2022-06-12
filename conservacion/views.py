@@ -5,7 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from conservacion.models import ProyectoConservacion, Actividad, Tarea
-from conservacion.serializers import ProyectoConservacionSerializer, ActividadSerializer, TareaSerializer
+from conservacion.serializers import ProyectoConservacionSerializer, ActividadSerializer, TareaSerializer, \
+    PatrimonioSerializer
 from patrimonios.models import Patrimonio
 
 
@@ -113,6 +114,23 @@ def query_tasks_by_args(pk, **kwargs):
         'count': count,
         'total': total,
     }
+
+@api_view(('GET',))
+def listPatrimonys_Project(request):
+    length = 10
+    search = request.GET['search']
+    page = int(request.GET['page'][0])
+    start = (page-1)*length
+    end = start + length
+    queryset = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
+    count = queryset.count()
+    queryset = queryset[start:end]
+    serializer = PatrimonioSerializer(queryset,many=True)
+    result = dict()
+    result['items'] = serializer.data
+    result['total_count'] = count
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 
 @api_view(('GET',))
 def listProjects(request,**kwargs):

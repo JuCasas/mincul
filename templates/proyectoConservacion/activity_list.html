@@ -91,13 +91,13 @@
       }
 
       .second {
-    background-color: white!important;
-    color: #2B2D42!important;
-    border-color: #8d8e99 !important;
-    border-radius: 12px!important;
-    height: 36px!important;
-    font-size: 12px!important;
-}
+          background-color: white !important;
+          color: #2B2D42 !important;
+          border-color: #8d8e99 !important;
+          border-radius: 12px !important;
+          height: 36px !important;
+          font-size: 12px !important;
+      }
 
   </style>
 
@@ -107,8 +107,9 @@
   <input type="hidden" value="{{ project.id }}" id="idProject">
   <div class="card mb-3">
     <div class="card-body">
-        <div class="row justify-content-between align-items-center">
-        <a class="nav-link py-0" href="{% url 'listProjects'%}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Atrás</a>
+      <div class="row justify-content-between align-items-center">
+        <a class="nav-link py-0" href="{% url 'listProjects' %}"><span class="fas fa-angle-left mr-2"
+                                                                       data-fa-transform="shrink-3"></span>Atrás</a>
       </div>
 
       <div class="row justify-content-between align-items-center">
@@ -236,11 +237,8 @@
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="patrimonio">Patrimonio Asociado:</label>
-                <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                        data-placeholder='Seleccione patrimonio...'>
-                  {% for p in patrimonios %}
-                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.nombreTituloDemoninacion }}</option>
-                  {% endfor %}
+                <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
+                  <option value="" selected="selected">Todos</option>
                 </select>
               </div>
             </div>
@@ -250,9 +248,7 @@
                 <label for="conservadores">Conservador(es):</label>
                 <select class="form-control selectpicker" id="conservadores" name="conservadores"
                         data-placeholder='Seleccione patrimonio...'>
-                  {% for p in patrimonios %}
-                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>
-                  {% endfor %}
+
                 </select>
               </div>
               <div class="form-group col-auto d-flex align-items-end">
@@ -263,8 +259,8 @@
             </div>
 
             <div class="row justify-content-end mt-2 mr-1">
-                <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
-              <div >
+              <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+              <div>
                 <input type="hidden" id="type" name="type" value="">
                 <button type="submit" class="btn btn-primary btn-block"><span
                     class="glyphicon glyphicon-ok"></span> Guardar
@@ -304,4 +300,37 @@
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
   <script src="{% static 'project/projects/activities.js' %}"></script>
+  <script>
+    $(document).ready(function () {
+      $('#patrimonio').prepend('<option selected=""></option>').select2({
+        ajax: {
+          url: '/conservacion/proyectos/patrimonios',
+          datatype: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term || '',
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            console.log(data.items)
+            return {
+              results: $.map(data.items, function (obj, index) {
+                return {id: obj.id, text: obj.nombreTituloDemoninacion};
+              }),
+              pagination: {
+                more: (params.page * 10) < data.total_count
+              }
+            }
+          }
+        },
+        placeholder: "Seleccionar patrimonio",
+        allowClear: true,
+        cache: false
+      });
+
+    });
+  </script>
 {% endblock %}
