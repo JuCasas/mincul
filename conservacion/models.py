@@ -80,7 +80,6 @@ class Tarea(models.Model):
     gasto = models.FloatField(blank=True, null=True)
     fecha = models.DateField(blank=True, null=True, verbose_name='fecha')
     fechaRegistro = models.DateField(blank=True, null=True, verbose_name='fechaRegistro')
-    conservador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
 
@@ -92,5 +91,6 @@ class Campo(models.Model):
     nombre = models.CharField(max_length=200)
     contenido = models.CharField(max_length=200, null=True, blank=True)
     tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
+    conservador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)

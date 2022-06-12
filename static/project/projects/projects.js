@@ -13,19 +13,19 @@ let table = $('#tabla_autores').DataTable({
       url: '',
       type: 'get',
       data: {
-          length: data.length,
-          start: data.start,
-          search_value: $('#search').val(),
-          type_filter: $('#type_filter').val(),
-          status_filter: $('#status_filter').val(),
-          order_column: order_column,
-          order: order
+        length: data.length,
+        start: data.start,
+        search_value: $('#search').val(),
+        type_filter: $('#type_filter').val(),
+        status_filter: $('#status_filter').val(),
+        order_column: order_column,
+        order: order
       },
       success: function (data, textStatus, jQxhr) {
         callback({
-            recordsTotal: data.recordsTotal,
-            recordsFiltered: data.recordsFiltered,
-            data: data.data
+          recordsTotal: data.recordsTotal,
+          recordsFiltered: data.recordsFiltered,
+          data: data.data
         });
       },
       error: function (jqXhr, textStatus, errorThrown) {
@@ -150,37 +150,45 @@ $('#tabla_autores tbody').on('click', 'button', function () {
 
 });
 
-$('form').on('submit', function (e) {
-  e.preventDefault();
-  let $this = $(this);
-  let type = $('#type').val();
-  let method = '';
-  let url = '/conservacion/proyectos/';
-  if (type == 'new') {
-    // new
-    url = url + 'add/';
-    method = 'POST';
-  } else {
-    // edit
-    url = url + 'edit/' + id + '/';
-    method = 'POST';
+$("#btnEditarNivel").on('click', function () {
+  if ($("#formEditarNivel").valid()) {
+    editarNivel(pkEditarN);
+    $("#editarNivel").modal('hide');
   }
-  $('#cover-spin').show(0)
-  $.ajax({
-    url: url,
-    method: method,
-    data: $this.serialize(),
+});
 
-    success: function (response) {
-      $('#cover-spin').hide()
-      $('#myModal').modal('hide')
-      $("#tabla_autores").DataTable().draw();
-    },
-    error: function (error) {
-      $('#cover-spin').hide()
-      console.log(error)
+$("form[name='formProyecto']").on('submit', function (e) {
+  if ($("#formProyecto").valid()) {
+    let $this = $(this);
+    let type = $('#type').val();
+    let method = '';
+    let url = '/conservacion/proyectos/';
+    if (type == 'new') {
+      // new
+      url = url + 'add/';
+      method = 'POST';
+    } else {
+      // edit
+      url = url + 'edit/' + id + '/';
+      method = 'POST';
     }
-  });
+    $('#cover-spin').show(0)
+    $.ajax({
+      url: url,
+      method: method,
+      data: $this.serialize(),
+
+      success: function (response) {
+        $('#cover-spin').hide()
+        $('#myModal').modal('hide')
+        $("#tabla_autores").DataTable().draw();
+      },
+      error: function (error) {
+        $('#cover-spin').hide()
+        console.log(error)
+      }
+    });
+  }
 });
 
 $('#confirm').on('click', '#delete', function (e) {
@@ -213,3 +221,4 @@ $('#new').on('click', function (e) {
   $('#modal_title').text('Nuevo Proyecto');
   $("#myModal").modal();
 });
+
