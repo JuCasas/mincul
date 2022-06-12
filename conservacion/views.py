@@ -222,7 +222,8 @@ def listTasks(request,pk):
         return Response(result, status=status.HTTP_200_OK,template_name=None, content_type=None)
     else:
         context = {
-            'activity': Actividad.objects.get(pk=pk)
+            'activity': Actividad.objects.get(pk=pk),
+            'project': Actividad.objects.get(pk=pk).proyecto
         }
         return render(request,'proyectoConservacion/task_list.html',context)
 
@@ -257,4 +258,25 @@ def addActivity(request,pk):
     #     tipoProyecto=tipo,
     #     fechaInicio=fechaInicio,
     #     fechaFin=fechaFin)
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('POST',))
+def addTask(request, pk):
+    codigo = "ACT00"
+    nombre = request.POST['nombre']
+    descripcion = request.POST['descripcion']
+    presupuesto = request.POST['presupuesto']
+    gasto = request.POST['gasto']
+    fechaRegistro = datetime.datetime.strptime(request.POST['fechaRegistro'], "%Y-%m-%d").date()
+    fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
+    actividad = Actividad.objects.get(pk=pk)
+    tarea = ProyectoConservacion.objects.create(
+        codigo=codigo,
+        nombre=nombre,
+        descripcion=descripcion,
+        presupuesto=presupuesto,
+        gasto=gasto,
+        fechaRegistro=fechaRegistro,
+        fecha=fecha,
+        actividad=actividad)
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
