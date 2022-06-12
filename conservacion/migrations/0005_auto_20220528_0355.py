@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name='documentoporactividad',
-            name='actvidad',
+            name='actividad',
         ),
         migrations.RemoveField(
             model_name='documentoporactividad',

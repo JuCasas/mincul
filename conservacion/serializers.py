@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from conservacion.models import ProyectoConservacion
+from conservacion.models import ProyectoConservacion, Tarea
 from conservacion.models import Actividad
 
 
@@ -22,3 +22,13 @@ class ActividadSerializer (serializers.ModelSerializer):
     class Meta:
         model = Actividad
         fields = ['id','codigo','nombre','descripcion','fechaInicio','fechaFin','status']
+
+class TareaSerializer (serializers.ModelSerializer):
+
+    fechaRegistro = serializers.DateField(format='%d/%m/%Y', required=False)
+    fecha = serializers.DateField(format='%d/%m/%Y', required=False)
+
+    class Meta:
+        model = Tarea
+        fields = ['id','codigo','nombre','descripcion','fechaRegistro','fecha','presupuesto','gasto']
+        #                                               fechaInicio   , fechaFin

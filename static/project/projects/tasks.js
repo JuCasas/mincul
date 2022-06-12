@@ -35,40 +35,11 @@ let table = $('#tabla_autores').DataTable({
   "columns": [
     {"data": "codigo"},
     {"data": "nombre"},
-    {
-      "data": "tipoProyecto", render: function (data, type, row) {
-        console.log(data);
-        if (data == '0') {
-          resp = 'Preventivo'
-        } else if (data == '1') {
-          resp = 'Correctivo'
-        } else {
-          resp = 'Curativo'
-        }
-        return resp;
-      }
-    },
-    {
-      "data": "cantidadAct",
-      "data": "cantidadActR", render: function (data, type, row) {
-
-        return row.cantidadActR + '/' + row.cantidadAct
-      },
-
-    },
+    {"data": "descripcion"},
+    {"data": "presupuesto"},
+    {"data": "gastoTotal"},
     {"data": "fechaInicio"},
-    {
-      "data": "status", render: function (data, type, row) {
-        if (data == '0') {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
-        } else if (data == '1') {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Pendiente" + '</span>'
-        } else {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
-        }
-        return resp;
-      }
-    },
+    {"data": "fechaFin"},
     {
       "data": null,
       "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
@@ -105,16 +76,6 @@ let table = $('#tabla_autores').DataTable({
 $('#search').keyup(function () {
   $('#tabla_autores').DataTable().search($(this).val()).draw();
 })
-$('#status_filter').change(function () {
-  $('#tabla_autores').DataTable().draw();
-});
-$('#type_filter').change(function () {
-  $('#tabla_autores').DataTable().draw();
-});
-$('#exampleFormControlSelect3').change(function () {
-  $('#tabla_autores').DataTable().draw();
-});
-
 
 $('#tabla_autores tbody').on('click', 'button', function () {
   let data = table.row($(this).parents('tr')).data();
