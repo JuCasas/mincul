@@ -1,45 +1,3 @@
-    $('#new').on('click', function (e) {
-      $('#nombre').val('');
-      $('#descripcion').val("");
-      $('#fechaInicio').val("");
-      $('#fechaFin').val("");
-      $('#type').val('new');
-      $('#modal_title').text('Nueva Actividad');
-      $("#modalActividad").modal();
-    });
-
-    $('#formActividad').on('submit', function (e) {
-      e.preventDefault();
-      let $this = $(this);
-      let type = $('#type').val();
-      let method = '';
-      let url = '/conservacion/proyectos/';
-      if (type == 'new') {
-        // new
-        url = url + $('#idProject').val()+ '/actividades/add/';
-        method = 'POST';
-      } else {
-        // edit
-        url = url + 'edit/' + id + '/';
-        method = 'POST';
-      }
-
-      $.ajax({
-        url: url,
-        method: method,
-        data: $this.serialize(),
-
-        success: function (response) {
-          $('#modalActividad').modal('hide')
-          $("#tabla_autores").DataTable().draw();
-        },
-        error: function (error) {
-          console.log(error)
-        }
-      });
-    });
-
-
 let table = $('#tabla_autores').DataTable({
   "searching": false,
   "serverSide": true,
@@ -55,19 +13,19 @@ let table = $('#tabla_autores').DataTable({
       url: '',
       type: 'get',
       data: {
-          length: data.length,
-          start: data.start,
-          // search_value: $('#search').val(),
-          // type_filter: $('#type_filter').val(),
-          // status_filter: $('#status_filter').val(),
-          // order_column: order_column,
-          // order: order
+        length: data.length,
+        start: data.start,
+        search_value: $('#search').val(),
+        type_filter: $('#type_filter').val(),
+        status_filter: $('#status_filter').val(),
+        order_column: order_column,
+        order: order
       },
       success: function (data, textStatus, jQxhr) {
         callback({
-            recordsTotal: data.recordsTotal,
-            recordsFiltered: data.recordsFiltered,
-            data: data.data
+          recordsTotal: data.recordsTotal,
+          recordsFiltered: data.recordsFiltered,
+          data: data.data
         });
       },
       error: function (jqXhr, textStatus, errorThrown) {
@@ -77,20 +35,11 @@ let table = $('#tabla_autores').DataTable({
   "columns": [
     {"data": "codigo"},
     {"data": "nombre"},
+    {"data": "descripcion"},
+    {"data": "presupuesto"},
+    {"data": "gastoTotal"},
     {"data": "fechaInicio"},
     {"data": "fechaFin"},
-    {
-      "data": "status", render: function (data, type, row) {
-        if (data == '0') {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
-        } else if (data == '1') {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Pendiente" + '</span>'
-        } else {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
-        }
-        return resp;
-      }
-    },
     {
       "data": null,
       "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
@@ -124,27 +73,15 @@ let table = $('#tabla_autores').DataTable({
   },
 });
 
-
-
 $('#search').keyup(function () {
   $('#tabla_autores').DataTable().search($(this).val()).draw();
 })
-$('#exampleFormControlSelect1').change(function () {
-  $('#tabla_autores').DataTable().draw();
-});
-$('#exampleFormControlSelect2').change(function () {
-  $('#tabla_autores').DataTable().draw();
-});
-$('#exampleFormControlSelect3').change(function () {
-  $('#tabla_autores').DataTable().draw();
-});
 
 $('#tabla_autores tbody').on('click', 'button', function () {
   let data = table.row($(this).parents('tr')).data();
   let class_name = $(this).attr('class');
 
   id = data['id'];
-  idProyectos = data['id'];
 
   if (class_name == 'btn btn-edit') {
     // EDIT button
@@ -164,7 +101,7 @@ $('#tabla_autores tbody').on('click', 'button', function () {
     $('#modal_title').text('Editar Proyecto');
     $("#myModal").modal();
   } else if (class_name == 'btn btn-show') {
-    window.location.pathname = "/conservacion/actividades/" + id + "/tareas/";
+    window.location.pathname = "/conservacion/proyectos/" + id + "/actividades/";
   } else {
     // DELETE button
     $('#modal_title').text('DELETE');
@@ -174,20 +111,75 @@ $('#tabla_autores tbody').on('click', 'button', function () {
 
 });
 
+$("#btnEditarNivel").on('click', function () {
+  if ($("#formEditarNivel").valid()) {
+    editarNivel(pkEditarN);
+    $("#editarNivel").modal('hide');
+  }
+});
 
+$("form[name='formProyecto']").on('submit', function (e) {
+  if ($("#formProyecto").valid()) {
+    let $this = $(this);
+    let type = $('#type').val();
+    let method = '';
+    let url = '/conservacion/proyectos/';
+    if (type == 'new') {
+      // new
+      url = url + 'add/';
+      method = 'POST';
+    } else {
+      // edit
+      url = url + 'edit/' + id + '/';
+      method = 'POST';
+    }
+    $('#cover-spin').show(0)
+    $.ajax({
+      url: url,
+      method: method,
+      data: $this.serialize(),
+
+      success: function (response) {
+        $('#cover-spin').hide()
+        $('#myModal').modal('hide')
+        $("#tabla_autores").DataTable().draw();
+      },
+      error: function (error) {
+        $('#cover-spin').hide()
+        console.log(error)
+      }
+    });
+  }
+});
 
 $('#confirm').on('click', '#delete', function (e) {
+  $('#cover-spin').show(0)
   $.ajax({
     url: '/conservacion/proyectos/delete/' + id + '/',
     method: 'POST',
     success: function (response) {
+      $('#cover-spin').hide()
       $('#confirm').modal('hide')
       $("#tabla_autores").DataTable().draw();
     },
     error: function (error) {
+      $('#cover-spin').hide()
       console.log(error)
     }
   });
 });
 
+
+$('#new').on('click', function (e) {
+  $('#codigo').val('');
+  $('#nombre').val('');
+  $('#type').val('new');
+  let today = new Date()
+  today.setDate(today.getDate() - 1);
+  var currentDate = today.toISOString().slice(0, 10);
+  $('#fechaRegistro').val(currentDate);
+  $('#fechaRegistro').prop("disabled", true);
+  $('#modal_title').text('Nuevo Proyecto');
+  $("#myModal").modal();
+});
 

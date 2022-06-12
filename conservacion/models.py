@@ -78,6 +78,7 @@ class Tarea(models.Model):
     )
     descripcion = models.CharField(max_length=200)
     gasto = models.FloatField(blank=True, null=True)
+    presupuesto = models.FloatField(blank=True, null=True)
     fecha = models.DateField(blank=True, null=True, verbose_name='fecha')
     fechaRegistro = models.DateField(blank=True, null=True, verbose_name='fechaRegistro')
     actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE)
