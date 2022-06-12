@@ -3,7 +3,7 @@
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
-    <link href="../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
+    <link href="../../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
     <style>
 
     </style>
@@ -35,8 +35,8 @@
                     </div>
                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
                         <p class="card-text "
-                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">Ciudad
-                            Sagrada de Caral</p>
+                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ valor.nombreTituloDemoninacion }}
+                            </p>
                         <div class="col text-right">
                             {% if puntacion >= 1 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
@@ -136,7 +136,7 @@
                         <div class="row">
                             <div class="pr-2 col-lg-6 col-md-6 mb-4 mb-lg-0">
                                 <img
-                                        src="../static/img/landmarks/airCaral.jpg"
+                                        src="https://e.rpp-noticias.io/xlarge/2017/03/19/041104_368007.jpg"
                                         class="w-100 shadow-1-strong rounded mb-3"
                                         height="250"
                                         alt="Caral desde Aire"
@@ -144,7 +144,7 @@
                             </div>
                             <div class="pl-2 col-lg-6 col-md-6 mb-4 mb-lg-0">
                                 <img
-                                        src="../static/img/landmarks/routeCaral.jpg"
+                                        src="https://patrimoniomundial.cultura.pe/sites/default/files/styles/home_slider/public/pm/galeria/LANDING-LISTA-web-CARAL3.png?itok=b-RR0y7P"
                                         class="w-100 shadow-1-strong rounded mb-3"
                                         height="250"
                                         alt="Caminata por Caral"
@@ -154,7 +154,7 @@
                         <div class="row">
                             <div class="pr-2 col-lg-4 col-md-4 mb-4 mb-lg-0">
                                 <img
-                                        src="../static/img/landmarks/circuloCaral.jpg"
+                                        src="https://www.tvperu.gob.pe/sites/default/files/styles/note/public/caral-piramide1.jpg?itok=GmZui_GO"
                                         class="w-100 shadow-1-strong rounded"
                                         height="250"
                                         alt="Caral desde Aire"
@@ -162,7 +162,7 @@
                             </div>
                             <div class="pl-2 pr-2 col-lg-4 col-md-4 mb-4 mb-lg-0">
                                 <img
-                                        src="../static/img/landmarks/piramideCaral.jpg"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT21ZGXe7_AZlDKr3h9YWLhUN9vhHm6YzjbEg&usqp=CAU"
                                         class="w-100 shadow-1-strong rounded"
                                         height="250"
                                         alt="Caminata por Caral"
@@ -170,7 +170,7 @@
                             </div>
                             <div class="pl-2 col-lg-4 col-md-4 mb-4 mb-lg-0">
                                 <img
-                                        src="../static/img/landmarks/tourCaral.jpg"
+                                        src="https://historia.nationalgeographic.com.es/medio/2019/10/24/edificio-piramidal-visto-desde-un-dronse-conservan-seis-piramides-cada-una-de-ellas-con-una-escalera-central-orientada-hacia-determinadas-estrellas_27a7675b_1280x959.jpg"
                                         class="w-100 shadow-1-strong rounded"
                                         height="250"
                                         alt="Caminata por Caral"
@@ -189,7 +189,7 @@
                                     <div>
                                         <img class="img-fluid w-100"
                                              style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                             src="../static/img/generic/4-caral.jpg"
+                                             src="../../static/img/generic/4-caral.jpg"
                                              alt="Card image"/>
                                     </div>
                                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
@@ -213,7 +213,7 @@
                                     <div>
                                         <img class="img-fluid w-100"
                                              style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                             src="../static/img/generic/chavin-1.jpg"
+                                             src="../../static/img/generic/chavin-1.jpg"
                                              alt="Card image"/>
                                     </div>
                                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
@@ -237,7 +237,7 @@
                                     <div>
                                         <img class="img-fluid w-100"
                                              style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                             src="../static/img/generic/ciudadela-1.png"
+                                             src="../../static/img/generic/ciudadela-1.png"
                                              alt="Card image"/>
                                     </div>
                                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
@@ -294,5 +294,5 @@
 
 {% block extrajs %}
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
-    <script src="../static/lib/raty-js/jquery.raty.js"></script>
+    <script src="../../static/lib/raty-js/jquery.raty.js"></script>
 {% endblock %}

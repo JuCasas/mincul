@@ -96,6 +96,8 @@ class Patrimonio (models.Model):
     propietarios = models.ManyToManyField(Propietario)
     responsables = models.ManyToManyField(Responsable)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+    pronombre = models.CharField(max_length=1, null=True, blank=True)
+    url = models.CharField(max_length=1024, null=True, blank=True)
 
 class Servicio(models.Model):
     ESTADOS = (
