@@ -19,4 +19,4 @@ def patrimonio_edit(request,pk):
     context = {
         'patrimonio': patrimonio,
     }
-    return render(request, 'patrimonio/patrimony_edit.html', context)
+    return render(request, 'patrimonio/patrimony_inmaterial_edit.html', context)
