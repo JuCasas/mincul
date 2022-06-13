@@ -71,10 +71,32 @@ def viewTranfer(request,pk):
 
     #Nota, se debe considerar los patrominos del traslado
     patrimonios = traslado.patrimonios.all()
-    for patrimonio in patrimonios:
-        print(patrimonio.nombreTituloDemoninacion)
-
     documentos =  DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
+
+    context = {
+        'traslado': traslado,
+        'entidades': entidades,
+        'comisarios': comisarios,
+        'patrimonios': patrimonios,
+        'documentos': documentos,
+        'media_path': media_path
+    }
+
+    return render(request,'traslado/transfer_view.html', context)
+
+
+
+def editTransfer(request,pk):
+    media_path = MEDIA_URL
+    traslado = SolicitudTraslado.objects.get(pk=pk)
+    entidades = EntidadSolicitante.objects.filter()
+    comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
+
+    #Nota, se debe considerar los patrominos del traslado
+    patrimonios = traslado.patrimonios.all()
+    documentos = DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
+    estadosEditables = [('2', 'Evaluar'),('3', 'Rechazar'),('4', 'Aprobadar')]
+
 
 
     context = {
@@ -83,27 +105,8 @@ def viewTranfer(request,pk):
         'comisarios': comisarios,
         'patrimonios': patrimonios,
         'documentos': documentos,
-        'media_path':media_path
-    }
-
-    return render(request,'traslado/transfer_view.html', context)
-
-
-
-def editTransfer(request,pk):
-
-    traslado = SolicitudTraslado.objects.get(pk=pk)
-    entidades = EntidadSolicitante.objects.filter()
-    comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
-
-    #Nota, se debe considerar los patrominos del traslado
-    patrimonios = traslado.patrimonios.all()
-
-    context = {
-        'traslado': traslado,
-        'entidades': entidades,
-        'comisarios': comisarios,
-        'patrimonios': patrimonios
+        'media_path': media_path,
+        'estadosEditables': estadosEditables
     }
 
     return render(request,'traslado/transfer_edit.html', context)
