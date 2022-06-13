@@ -28,9 +28,9 @@
                 <div class="position-relative">
                     <div>
                         <img class="img-fluid w-100"
-                             style="height: 320px; object-fit: cover; border-radius: 3px"
+                             style="height: 320px; object-fit: fill; border-radius: 3px"
                                 {#                                         src="../static/img/generic/4-caral.jpg"#}
-                             src="https://www.peru.travel/Contenido/Noticia/Imagen/es/1320/1.0/Principal/caral.jpg"
+                             src={{ valor.url }}
                              alt="Card image"/>
                     </div>
                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
@@ -130,7 +130,7 @@
 
         <div class="row">
             <div class="col-8">
-                <div class="card ">
+                <div class="card m-3">
                     <div class="card-body">
                         <h5 class="card-title text-black">Imágenes:</h5>
                         <div class="row">
@@ -179,85 +179,50 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title text-black">Patrimonios cerca de la ciudad de Caral:</h5>
-                            <div class="card mb-5" >
-                                <div class="position-relative">
-                                    <div>
-                                        <img class="img-fluid w-100"
-                                             style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                             src="../../static/img/generic/4-caral.jpg"
-                                             alt="Card image"/>
-                                    </div>
-                                    <div class="card-img-overlay d-flex align-items-end text-white pb-2">
-                                        <p class="card-text "
-                                           style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
-                                            Ciudad
-                                            Sagrada de Caral</p>
-                                    </div>
+                <div class="col-sm-12 col-lg-12 mb-12">
+                    <div class="card bg-light">
+                      <div class="card-body">
+                        <div class="card-title">Valoraciones</div>
+                          {% for v in valoraciones %}
+                              <div class="row">
+                                <div class="col-4">
+                                    <p>{{ v.nombre }}</p>
                                 </div>
-                                <div class="card-body pt-2 pb-2">
-                                    <p class="mb-0 " style="font-size: 15px"> Patrimonio Cultural de la
-                                        humanidad </p>
-                                    <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
-                                            style="font-size: 10px">Ver
-                                        Ficha
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card mb-5" >
-                                <div class="position-relative">
-                                    <div>
-                                        <img class="img-fluid w-100"
-                                             style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                             src="../../static/img/generic/chavin-1.jpg"
-                                             alt="Card image"/>
-                                    </div>
-                                    <div class="card-img-overlay d-flex align-items-end text-white pb-2">
-                                        <p class="card-text "
-                                           style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
-                                            Chavin de
-                                            Huantar</p>
-                                    </div>
-                                </div>
-                                <div class="card-body pt-2 pb-2">
-                                    <p class="mb-0 " style="font-size: 15px"> Patrimonio Cultural de la
-                                        humanidad </p>
-                                    <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
-                                            style="font-size: 10px">Ver
-                                        Ficha
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card mb-5" >
-                                <div class="position-relative">
-                                    <div>
-                                        <img class="img-fluid w-100"
-                                             style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                             src="../../static/img/generic/ciudadela-1.png"
-                                             alt="Card image"/>
-                                    </div>
-                                    <div class="card-img-overlay d-flex align-items-end text-white pb-2">
-                                        <p class="card-text "
-                                           style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
-                                            Ciudadela</p>
-                                    </div>
-                                </div>
-                                <div class="card-body pt-2 pb-2">
-                                    <p class="mb-0 " style="font-size: 15px"> Patrimonio Cultural de la
-                                        humanidad </p>
-                                    <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
-                                            style="font-size: 10px">Ver
-                                        Ficha
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                                  <div class="col-8 pb-3">
+                                      {% if v.valoracion >= 1 %}
+                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        {% else %}
+                                        <span class="fa fa-star"></span>
+                                    {% endif %}
+                                    {% if v.valoracion >= 2 %}
+                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        {% else %}
+                                        <span class="fa fa-star"></span>
+                                    {% endif %}
+                                    {% if v.valoracion >= 3 %}
+                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        {% else %}
+                                        <span class="fa fa-star"></span>
+                                    {% endif %}
+                                    {% if v.valoracion >= 4 %}
+                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        {% else %}
+                                        <span class="fa fa-star"></span>
+                                    {% endif %}
+                                    {% if v.valoracion >= 5 %}
+                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        {% else %}
+                                        <span class="fa fa-star"></span>
+                                    {% endif %}
+                                  </div>
+                              <div class="card-text pl-3 mb-4 font-italic">{{ v.comentario }}</div>
+                              </div>
+                          {% endfor %}
+                      </div>
                     </div>
-
+                  </div>
+                </div>
+            <div class="col-4">
                     <div class="card mt-4">
                         <div class="card-body">
                             <h5 class="card-title text-black">Valora la ciudad sagrada de Caral:</h5>
