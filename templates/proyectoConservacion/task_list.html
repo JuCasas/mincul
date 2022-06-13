@@ -107,13 +107,13 @@
   <input type="hidden" value="{{ activity.id }}" id="idProject">
   <div class="card mb-3">
     <div class="card-body">
-{#        <div class="row justify-content-between align-items-center">#}
-{#        <a class="nav-link py-0" href="{% url 'listActivities ' pk=activity.id%}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Atrás</a>#}
-{#      </div>#}
+        <div class="row justify-content-between align-items-center">
+        <a class="nav-link py-0" href="{% url 'listActivities' pk=project.id %}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Atrás</a>
+      </div>
 
       <div class="row justify-content-between align-items-center">
         <div class="col-md-6">
-          <h5 class="mb-2 mb-md-0 text-black">{{ activity.nombre }}</h5>
+          <h5 class="mb-2 mb-md-0 text-black">Tareas de Actividad: {{ activity.nombre }}</h5>
         </div>
         <div class="col-md-2">
           {% if activity.status == '0' %}
@@ -124,53 +124,20 @@
             <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
           {% endif %}
         </div>
-        <div class="col-md-4">
-          <div class="nav-bar nav-bar-right">
-            <div class="nav nav-pills">
-              <button class="nav-link col-md-6 btn-1 my-1" disabled>Actividades</button>
-              <a class="nav-link col-md-6 btn-2 my-1" href="{% url 'listPatrimonys' pk=activity.id %}">Patrimonios</a>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
   <div class="card mb-3">
     <div class="card-body">
-      <div class="row filterBar mr-0">
+      <div class="row filterBar justify-content-end mr-0">
         <div class="form-group col-sm-3 mb-0">
           <div class="position-relative">
-            <input class="form-control" id="search" type="text" placeholder="Nombre del proyecto">
+            <input class="form-control" id="search" type="text" placeholder="Nombre de la tarea">
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
         </div>
-        <div class="form-group col-sm-2 mb-0">
-          <select class="form-control" id="status_filter">
-            <option value="" selected>Todos</option>
-            {% for mykey,myvalue in status_choices %}
-              <option value="{{ mykey }}">{{ myvalue }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group col-sm-2 mb-0">
-          <select class="form-control" id="type_filter">
-            <option value="" selected>Todos</option>
-            {% for mykey,myvalue in typeProjects %}
-              <option value="{{ mykey }}">{{ myvalue }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group col-sm-2 mb-0">
-          <select class="form-control" id="exampleFormControlSelect3">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
-        </div>
         <button class="btn btn-primary col-sm-3 mb-0" type="button" data-dismiss="modal" id="new">
-          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Actividad
+          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
         </button>
       </div>
     </div>
@@ -199,7 +166,7 @@
   </div>
 
   <!-- NEW and EDIT Modal -->
-  <div class="modal fade" id="modalActividad" role="dialog">
+  <div class="modal fade" id="modalTarea" role="dialog">
     <div class="modal-dialog mw-100 w-50">
       <!-- Modal content-->
       <div class="modal-content">
@@ -207,7 +174,7 @@
           <h4 class="modal-title" id="modal_title"></h4>
         </div>
         <div class="modal-body">
-          <form role="form" id="formActividad">
+          <form role="form" id="formTarea">
             {% csrf_token %}
 
             <div class="row">
@@ -305,5 +272,5 @@
 {% block extrajs %}
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'project/projects/activities.js' %}"></script>
+  <script src="{% static 'project/projects/tasks.js' %}"></script>
 {% endblock %}

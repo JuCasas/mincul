@@ -98,10 +98,10 @@ $('#tabla_autores tbody').on('click', 'button', function () {
     $('#fechaRegistro').val(currentDate);
     $('#fechaRegistro').prop("disabled", true);
     $('#type').val('edit');
-    $('#modal_title').text('Editar Proyecto');
+    $('#modal_title').text('Editar Tarea');
     $("#myModal").modal();
   } else if (class_name == 'btn btn-show') {
-    window.location.pathname = "/conservacion/proyectos/" + id + "/actividades/";
+    window.location.pathname = "/conservacion/actividades/" + id + "/tareas/";
   } else {
     // DELETE button
     $('#modal_title').text('DELETE');
@@ -123,7 +123,7 @@ $("form[name='formProyecto']").on('submit', function (e) {
     let $this = $(this);
     let type = $('#type').val();
     let method = '';
-    let url = '/conservacion/proyectos/';
+    let url = '/conservacion/actividades/';
     if (type == 'new') {
       // new
       url = url + 'add/';
@@ -179,7 +179,7 @@ $('#new').on('click', function (e) {
   var currentDate = today.toISOString().slice(0, 10);
   $('#fechaRegistro').val(currentDate);
   $('#fechaRegistro').prop("disabled", true);
-  $('#modal_title').text('Nuevo Proyecto');
+  $('#modal_title').text('Nueva Tarea');
   $("#myModal").modal();
 });
 

@@ -18,6 +18,7 @@ let table = $('#tabla_autores').DataTable({
         search_value: $('#search').val(),
         type_filter: $('#type_filter').val(),
         status_filter: $('#status_filter').val(),
+        patrimony_filter: $('#patrimonio').val(),
         order_column: order_column,
         order: order
       },
@@ -112,7 +113,7 @@ $('#status_filter').change(function () {
 $('#type_filter').change(function () {
   $('#tabla_autores').DataTable().draw();
 });
-$('#exampleFormControlSelect3').change(function () {
+$('#patrimonio').change(function () {
   $('#tabla_autores').DataTable().draw();
 });
 
@@ -158,39 +159,6 @@ $("#btnEditarNivel").on('click', function () {
   }
 });
 
-$("form[name='formProyecto']").on('submit', function (e) {
-  if ($("#formProyecto").valid()) {
-    let $this = $(this);
-    let type = $('#type').val();
-    let method = '';
-    let url = '/conservacion/proyectos/';
-    if (type == 'new') {
-      // new
-      url = url + 'add/';
-      method = 'POST';
-    } else {
-      // edit
-      url = url + 'edit/' + id + '/';
-      method = 'POST';
-    }
-    $('#cover-spin').show(0)
-    $.ajax({
-      url: url,
-      method: method,
-      data: $this.serialize(),
-
-      success: function (response) {
-        $('#cover-spin').hide()
-        $('#myModal').modal('hide')
-        $("#tabla_autores").DataTable().draw();
-      },
-      error: function (error) {
-        $('#cover-spin').hide()
-        console.log(error)
-      }
-    });
-  }
-});
 
 $('#confirm').on('click', '#delete', function (e) {
   $('#cover-spin').show(0)
@@ -201,6 +169,16 @@ $('#confirm').on('click', '#delete', function (e) {
       $('#cover-spin').hide()
       $('#confirm').modal('hide')
       $("#tabla_autores").DataTable().draw();
+      $.toast({
+        heading: 'Information',
+        text: 'Loaders are enabled by default. Use loader, loaderBg to change the default behavior',
+        icon: 'info',
+        loader: true,        // Change it to false to disable loader
+        loaderBg: '#9EC600',  // To change the background
+        position: 'top-center',
+        autohide:false,
+        hideAfter: 5000,
+      })
     },
     error: function (error) {
       $('#cover-spin').hide()
@@ -214,8 +192,10 @@ $('#new').on('click', function (e) {
   $('#codigo').val('');
   $('#nombre').val('');
   $('#type').val('new');
+  $("form[name='formProyecto']").validate().resetForm();
   let today = new Date()
-  today.setDate(today.getDate() - 1);
+  today = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+  console.log(today.toISOString())
   var currentDate = today.toISOString().slice(0, 10);
   $('#fechaRegistro').val(currentDate);
   $('#fechaRegistro').prop("disabled", true);

@@ -2,19 +2,14 @@
 {#{% load group_tags %}#}
 {#{% load has_group %}#}
 <nav class="d-flex align-items-start navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand" style="height: 75px">
-  <div class="d-flex align-items-center">
-    <div class="toggle-icon-wrapper">
-      <button class="btn navbar-toggler-humburger-icon navbar-toggler mr-1 mr-sm-3" type="button"
-              data-toggle="collapse"
-              data-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false"
-              aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span
-          class="toggle-line"></span></span></button>
-    </div>
-    <a class="navbar-brand">
-      <img src="{% static '/img/logos/mincult.png' %}" style="height: 50px;"/>
-    </a>
-  </div>
-  <div class="d-flex flex-row">
+
+  <div class="d-flex flex-row align-items-center">
+        <div class="mr-5">
+            <a href="/">
+                <img src="{% static '/img/logos/mincult.png' %}" style="height: 50px;"/>
+            </a>
+        </div>
+
         <a href="/incidente/listar">
             <button class="btn btn-primary px-3 mr-2" type="button">
                 <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Incidentes
@@ -29,14 +24,23 @@
             <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Reportes
         </button>
   </div>
-  <ul class="d-flex navbar-nav navbar-nav-icons ml-auto flex-row ">
-    <li class="d-flex flex-row nav-item mr-3">
+
+  <ul class="d-flex navbar-nav navbar-nav-icons ml-auto flex-row align-items-center mt-2">
+    {% comment %}<li class="d-flex flex-row nav-item mr-3">
+
       <p class="mb-2 mr-2">Admin </p>
       <p>Administrador</p>
       {#=======#}
       {#            <p class = "m-2">Rodrigo Correa22</p>#}
       {#            <p class = "m-2">Admin</p>#}
-    </li>
+    </li>{% endcomment %}
+    <li class="nav-item align-items-center">
+        <div class="col-md pr-0">
+          <h5 class="mb-0 text-right" id="top_navbar_name" style="font-size: 1rem">Admin</h5>
+          <p id="top_navbar_rol" style="color: #f5803e">Administrador</p>
+        </div>
+      </li>
+
     {% if 1 %}
       {#     <li class="nav-item">#}
       {#          <div class="col-md">#}
@@ -50,7 +54,7 @@
         {#                        <img id="top_navbar_photo" src="" alt="" hidden/>#}
         {#                    </div>#}
         {#                </a>#}
-        <a class="d-flex align-items-start nav-link" id="navbarDropdownUser" href="#"
+        <a class="d-flex align-items-start nav-link my-0 py-0" id="navbarDropdownUser" href="#"
             {#<<<<<<< Updated upstream#}
            role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {#                    <div class="avatar avatar-xl mt-5 mr-4">#}
@@ -78,8 +82,8 @@
           {#=======#}
           {#  role="button" data-toggle="dropdown" aria-haspopup="true"#}
           {#  aria-expanded="false">#}
-          <div class="avatar avatar-xl m-0">
-            <img class="rounded-circle" src="{% static 'img/team/3-thumb.png' %}" alt="" style="width: 45px; height: 45px"/>
+{#          <div class="avatar avatar-x my-0 py-0">#}
+{#            <img class="rounded-circle" src="{% static 'img/team/3-thumb.png' %}" alt="" style="width: 45px; height: 45px"/>#}
             {#                    {% if user.photo.name %}#}
             {#                        <img class="rounded-circle" src="{% get_media_prefix %}{{ request.user.photo }}" alt=""/>#}
             {#                    {% else %}#}
@@ -87,13 +91,11 @@
             {#                             src="{% static 'img/team/avatar.png' %}"#}
             {#                             alt=""/>#}
             {#                    {% endif %}#}
-          </div>
+{#          </div>#}
         </a>
 
         <div class="dropdown-menu dropdown-menu-right mt-0 mr-4" aria-labelledby="navbarDropdownUser">
           <div class="bg-white rounded-soft">
-
-            <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="">Cerrar sesión</a>
           </div>
         </div>
@@ -104,5 +106,6 @@
       </li>
     {% endif %}
   </ul>
+
 </nav>
 <div style="margin-top: 0rem; margin-bottom: 10px"></div>
