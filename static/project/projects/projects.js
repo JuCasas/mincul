@@ -159,39 +159,6 @@ $("#btnEditarNivel").on('click', function () {
   }
 });
 
-$("form[name='formProyecto']").on('submit', function (e) {
-  if ($("#formProyecto").valid()) {
-    let $this = $(this);
-    let type = $('#type').val();
-    let method = '';
-    let url = '/conservacion/proyectos/';
-    if (type == 'new') {
-      // new
-      url = url + 'add/';
-      method = 'POST';
-    } else {
-      // edit
-      url = url + 'edit/' + id + '/';
-      method = 'POST';
-    }
-    $('#cover-spin').show(0)
-    $.ajax({
-      url: url,
-      method: method,
-      data: $this.serialize(),
-
-      success: function (response) {
-        $('#cover-spin').hide()
-        $('#myModal').modal('hide')
-        $("#tabla_autores").DataTable().draw();
-      },
-      error: function (error) {
-        $('#cover-spin').hide()
-        console.log(error)
-      }
-    });
-  }
-});
 
 $('#confirm').on('click', '#delete', function (e) {
   $('#cover-spin').show(0)
@@ -202,6 +169,16 @@ $('#confirm').on('click', '#delete', function (e) {
       $('#cover-spin').hide()
       $('#confirm').modal('hide')
       $("#tabla_autores").DataTable().draw();
+      $.toast({
+        heading: 'Information',
+        text: 'Loaders are enabled by default. Use loader, loaderBg to change the default behavior',
+        icon: 'info',
+        loader: true,        // Change it to false to disable loader
+        loaderBg: '#9EC600',  // To change the background
+        position: 'top-center',
+        autohide:false,
+        hideAfter: 5000,
+      })
     },
     error: function (error) {
       $('#cover-spin').hide()
