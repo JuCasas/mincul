@@ -84,7 +84,9 @@ class Patrimonio (models.Model):
     departamento = models.CharField(max_length=100)
     provincia = models.CharField(max_length=100)
     distrito = models.CharField(max_length=100)
-    # ubicacion = models.PointField(geography=True, default=Point(0.0, 0.0))
+    lat = models.DecimalField(max_digits=9,decimal_places=6,null=True)
+    long = models.DecimalField(max_digits=9,decimal_places=6,null=True)
+    #ubicacion = models.MultiPolygonField(geography=True, default=Point(0.0, 0.0))
     # https: // raphael - leger.medium.com / django - handle - latitude - and -longitude - 54
     # a4bb2f6e3b
     descripcion = models.CharField(max_length=200)
