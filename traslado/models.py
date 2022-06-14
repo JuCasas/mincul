@@ -49,6 +49,7 @@ class SolicitudTraslado(models.Model):
     patrimonios = models.ManyToManyField(Patrimonio)
     documentos = models.ManyToManyField(Documento, through='DocumentoPorSolicitud')
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
+    detalleRechazo = models.CharField(max_length=250, null=True, blank=True)
 
 
 class DocumentoPorSolicitud(models.Model):
