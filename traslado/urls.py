@@ -8,6 +8,7 @@ urlpatterns = [
     path('listar/',views.listTranfers, name='list_transfers'),
     path('ver/<int:pk>/', views.viewTranfer, name='view_transfer'),
     path('editar/<int:pk>/', views.editTransfer, name='edit_transfer'),
+    path('editarTraslado/', views.actualizarEstado, name='actualizar_estado'),
     path('patrimonioAjax/',views.listarPatrimoniosTraslado,name='listPatrimoniosAjax'),
     
     
