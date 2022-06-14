@@ -167,7 +167,7 @@
                                             <th scope="col">Patrimonio</th>
                                             <th scope="col">Clasificación</th>
                                             <th scope="col">Tipo de bien</th>
-                                            <th scope="col">Acciones</th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -177,11 +177,6 @@
                                                 <td>{{ patrimonio.nombreTituloDemoninacion }}</td>
                                                 <td>{{ patrimonio.get_categoria_display }}</td>
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
-                                                <td>
-                                                    <a class="btn" href="#" type="button">
-                                                        <i class="fa fa-eye" data-fa-transform="shrink-3"></i>
-                                                    </a>
-                                                </td>
 
                                             </tr>
                                         {% endfor %}

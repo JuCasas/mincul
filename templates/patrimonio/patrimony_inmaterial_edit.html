@@ -1,0 +1,345 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <form class="form-group" id="patrimonio_edit">
+        <div class="row">
+            <div class="col-sm">
+                <!-- DATOS GENERALES -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-black">Datos de Identificación:</h5>
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <h6 class="mb-2 mb-md-0 text-black">Nombre:</h6>
+                                        <input class="form-control mt-3 mb-3" id="nombre" type="text">
+                                        <h6 class="mb-2 mb-md-0 text-black">Descripción:</h6>
+                                        <input class="form-control mt-3 mb-3" id="descripcion" type="text">
+                                        <h6 class="mb-2 mb-md-0 text-black">Departamento:</h6>
+                                        <select class="form-control mt-3 mb-3" id="departamento">
+                                          <option>Ica</option>
+                                        </select>
+                                        <h6 class="mb-2 mb-md-0 text-black">Provincia:</h6>
+                                        <select class="form-control mt-3 mb-3" id="provincia">
+                                          <option>-</option>
+                                        </select>
+                                        <h6 class="mb-2 mb-md-0 text-black">Distrito:</h6>
+                                        <select class="form-control mt-3 mb-3" id="distrito">
+                                          <option>-</option>
+                                        </select>
+                                        <h6 class="mb-2 mb-md-0 text-black">Observaciones:</h6>
+                                        <textarea class="form-control mt-3 mb-3" name="comment" form="observaciones"></textarea>
+                                    </div>
+                                    <div class="col-sm">
+                                        <h6 class="mb-2 mb-md-0 text-black">Código:</h6>
+                                        <input class="form-control mt-3 mb-3 bg-dark" style="color: white;" id="codigo" type="text" value="Codigo" readonly>
+                                        <h6 class="mb-2 mb-md-0 text-black">Dirección:</h6>
+                                        <input class="form-control mt-3 mb-3" id="direccion" type="text">
+                                        <h6 class="mb-2 mb-md-0 text-black">Tipo:</h6>
+                                        <input class="form-control mt-3 mb-3 bg-dark" style="color: white;" id="tipo" type="text" value="Inmaterial" readonly>
+                                        <h6 class="mb-2 mb-md-0 text-black">Categoría:</h6>
+                                        <select class="form-control mt-3 mb-3" id="categoria">
+                                          <option>-</option>
+                                        </select>
+                                        <h6 class="mb-2 mb-md-0 text-black">Institución:</h6>
+                                        <select class="form-control mt-3 mb-3" id="institucion">
+                                          <option>-</option>
+                                        </select>
+                                        <h6 class="mb-2 mb-md-0 text-black">Gestor de Patrimonio:</h6>
+                                        <select class="form-control mt-3 mb-3" id="gestorPatrimonio">
+                                          <option>-</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DATOS INMATERIAL -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-black">Datos Técnicos:</h5>
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <h6 class="mb-2 mb-md-0 text-black">Tipo:</h6>
+                                        <select class="form-control mt-3 mb-3" id="tipoInmaterial">
+                                          <option>-</option>
+                                        </select>
+                                        <h6 class="mb-2 mb-md-0 text-black">Subtipo:</h6>
+                                        <select class="form-control mt-3 mb-3" id="subtipoInmaterial">
+                                          <option>-</option>
+                                        </select>
+                                        <h6 class="mb-2 mb-md-0 text-black">Particularidades:</h6>
+                                        <textarea class="form-control mt-3 mb-3" name="particularidades" form="patrimonio_edit"></textarea>
+                                    </div>
+                                    <div class="col-sm">
+                                        <h6 class="mb-2 mb-md-0 text-black">Tipo Ingreso:</h6>
+                                        <select class="form-control mt-3 mb-3" id="tipoIngreso">
+                                          <option>-</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROPIETARIOS -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row justify-content-between align-items-center p-3">
+                                    <h5 class="card-title text-black m-0">Propietarios:</h5>
+                                    <button class="btn btn-primary" type="button">
+                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                        Agregar
+                                    </button>
+                                </div>
+                                <div class="row justify-content-center align-items-center pr-3 pl-3">
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Nombre: Propietario1</p>
+                                            <p class="m-0">Tipo: Tipo1</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Nombre: Propietario1</p>
+                                            <p class="m-0">Tipo: Tipo1</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Nombre: Propietario1</p>
+                                            <p class="m-0">Tipo: Tipo1</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AUTORES -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row justify-content-between align-items-center p-3">
+                                    <h5 class="card-title text-black m-0">Autores:</h5>
+                                    <button class="btn btn-primary" type="button">
+                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                        Agregar
+                                    </button>
+                                </div>
+                                <div class="row justify-content-center align-items-center pr-3 pl-3">
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Autor1</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Autor2</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Autor3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <!-- IMAGEN -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card" style="width: 100%;">
+                        <div class="position-relative">
+                            <div>
+                                <img class="img-fluid w-100"
+                                     style="height: 320px; object-fit: cover; border-radius: 3px"
+                                     src="https://www.peru.travel/Contenido/Noticia/Imagen/es/1320/1.0/Principal/caral.jpg"
+                                     alt="Card image"/>
+                            </div>
+                            <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                                <p class="card-text "
+                                   style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">Ciudad
+                                    Sagrada de Caral</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENTRADAS -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row justify-content-between align-items-center p-3">
+                                    <h5 class="card-title text-black m-0">Entradas:</h5>
+                                    <button class="btn btn-primary" type="button">
+                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                        Agregar
+                                    </button>
+                                </div>
+                                <div class="row pr-3 pl-3">
+                                    <button class="btn btn-falcon-info m-1" type="button">
+                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                        General S/.5.00
+                                    </button>
+                                    <button class="btn btn-falcon-info m-1" type="button">
+                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                        Universitario S/.3.50
+                                    </button>
+                                    <button class="btn btn-falcon-info m-1" type="button">
+                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                        Estudiante S/.1.50
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTIVIDADES TURISTICAS -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row justify-content-between align-items-center p-3">
+                                    <h5 class="card-title text-black m-0">Actividades Turísticas:</h5>
+                                    <button class="btn btn-primary" type="button">
+                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                        Agregar
+                                    </button>
+                                </div>
+                                <div class="row pr-3 pl-3">
+                                    <div class="card btn-falcon-info h-25 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Categoria: 1</p>
+                                            <p class="m-0">Tipo: 1</p>
+                                            <p class="m-0">Observaciones: ...</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info h-25 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Categoria: 1</p>
+                                            <p class="m-0">Tipo: 2</p>
+                                            <p class="m-0">Observaciones: ...</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info h-25 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Categoria: 2</p>
+                                            <p class="m-0">Tipo: 2</p>
+                                            <p class="m-0">Observaciones: ...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RESPONSABLE -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row justify-content-between align-items-center p-3">
+                                    <h5 class="card-title text-black m-0">Responsables:</h5>
+                                    <button class="btn btn-primary" type="button">
+                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                        Agregar
+                                    </button>
+                                </div>
+                                <div class="row pr-3 pl-3">
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Nombre: Responsable1</p>
+                                            <p class="m-0">Institucion: Institucion1</p>
+                                            <p class="m-0">Cargo: Cargo1</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Nombre: Responsable2</p>
+                                            <p class="m-0">Institucion: Institucion2</p>
+                                            <p class="m-0">Cargo: Cargo2</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Nombre: Responsable3</p>
+                                            <p class="m-0">Institucion: Institucion3</p>
+                                            <p class="m-0">Cargo: Cargo3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FUENTES BIBLIOGRAFICAS -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row justify-content-between align-items-center p-3">
+                                    <h5 class="card-title text-black m-0">Fuentes Bibliográficas:</h5>
+                                    <button class="btn btn-primary" type="button">
+                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                        Agregar
+                                    </button>
+                                </div>
+                                <div class="row pr-3 pl-3">
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Referencia1</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Referencia2</p>
+                                        </div>
+                                    </div>
+                                    <div class="card btn-falcon-info w-100 m-1">
+                                        <div class="card-body">
+                                            <p class="m-0">Referencia3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,780 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <!--Go back Buttton - TODO -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card mb-3 bg-card-gradient">
+                    <button class="btn-primary text-white" onclick="location.href='/patrimonio/detalle'">
+                        Volver
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!--Image and Data ID-->
+        <div class="row">
+            <!--Image-->
+            <div class="col-md-4">
+                <div class="card mb-3 rounded-3">
+                    <div class="card" style="width: 100%;">
+                        <div class="position-relative">
+                            <div>
+                                <img class="img-fluid w-100"
+                                     style="height: 320px; object-fit: cover; border-radius: 3px"
+                                        {#                                         src="../static/img/generic/4-caral.jpg"#}
+                                     src="https://www.peru.travel/Contenido/Noticia/Imagen/es/1320/1.0/Principal/caral.jpg"
+                                     alt="Card image"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Data ID-->
+            <div class="col-md-8">
+                <div class="card mb-3 rounded-3">
+                    <div class="card-header">
+                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                            Datos de Identificación
+                        </h1>
+                    </div>
+                    <div class="card-body bg-200">
+						<!--Nombre y Codigo de Inscripcion-->
+                        <div class="row">
+							<!--Nombre-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Nombre:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            {{ patrimony.nombreTituloDemoninacion}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Codigo de Inscripción-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Código de Inscripción:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            0000367079
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Tipo de Bien y Lugar de Manufactura-->
+						<div class="row">
+							<!--Tipo de bien-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Tipo de bien:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            {% if patrimony.tipoPatrimonio == 1 %}
+                                                Mueble
+                                            {% else %}
+                                                Inmueble
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Lugar de manufactura-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Lugar de Manufactura:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Perú
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Clasificacion y Estilo-->
+						<div class="row">
+							<!--Clasificacion-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Clasificación:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Arcaico
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Estilo-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Estilo:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            No determinado
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Titulo y Datacion-->
+						<div class="row">
+							<!--Titulo-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Título/Denominación:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            {{ patrimony.nombreTituloDemoninacion }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Datacion-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Datación:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            3000 a.C
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Autor-->
+						<div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Autor:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            --
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Tehnical Data and dimensions-->
+        <div class="row">
+            <!--Technical Data-->
+            <div class="col-md-8">
+                <div class="card mb-3 rounded-3">
+                    <div class="card-header">
+                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                            Datos técnicos
+                        </h1>
+                    </div>
+                    <div class="card-body bg-200">
+						<!--Material principal y secundario-->
+                        <div class="row">
+							<!--Material principal-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Material Principal:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Molde
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Material secundario-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Material Secundario:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Simple
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Tecnica de Manufactura y Tecnica de acabado-->
+						<div class="row">
+							<!--Tecnica de manufactura-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Técnica de Manufactura
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Manufactura
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Tecnica de acabado-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Técnica de acabado:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Acabado Simple
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Tecnica de decoracion-->
+						<div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Técnica de decoración:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Pincelado
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<!--Descripción-->
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Descripción
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Una escultura, es también, un sustantivo que indica el objeto creado por el artista
+                                            escultor. Con dicho trabajo, el escultor consigue expresar sus ideas ya sean estas
+                                            figurativas o abstractas, reflejando lo que alberga la mente del artista y su habilidad técnica.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Dimensions-->
+            <div class="col-md-4">
+                <div class="card mb-3 rounded-3">
+                    <div class="card-header">
+                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                            Dimensiones
+                        </h1>
+                    </div>
+                    <div class="card-body bg-200">
+						<!--Alto y Fondo-->
+                        <div class="row">
+							<!--Alto-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Alto (cm):
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            15.25
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Fondo-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Fondo (cm):
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            --
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<!--Largo y Diametro-->
+                        <div class="row">
+							<!--Largo-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Largo (cm):
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            28.5
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Diametro-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Diametro (cm):
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            --
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Ancho y Peso-->
+						<div class="row">
+							<!--Ancho-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Ancho (cm):
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            10.0
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Peso-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Peso (g):
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            452
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Espesor-->
+						<div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Espesor (cm):
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            --
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Preservation and origins-->
+        <div class="row">
+            <!--Preservation of data-->
+            <div class="col-md-8">
+                <div class="card mb-3 rounded-3">
+                    <div class="card-header">
+                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                            Datos de Conservación
+                        </h1>
+                    </div>
+                    <div class="card-body bg-200">
+					<!--Estado y Tratamiento-->
+                        <div class="row">
+							<!--Estado-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Estado de Conservación:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            --
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!--Tratamiento-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Tratamiento:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            --
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Integridad-->
+						<div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Estado de Integridad:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            --
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<!--Detalle de conservación-->
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Detalle de conservación:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Para garantizar que los datos personales no se conservan más tiempo del necesario
+                                            , el responsable del tratamiento ha de establecer plazos para su supresión o revisión
+                                            periódica, en cada caso, para cada actividad de tratamiento.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Origins-->
+            <div class="col-md-4">
+                <div class="card mb-3 rounded-3">
+                    <div class="card-header">
+                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                            Datos de procedencia
+                        </h1>
+                    </div>
+                    <div class="card-body bg-200">
+						<!--Area Geografica-->
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Área geográfica:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            Costa Central
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Excavacion arqueologica-->
+						<div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Excavación Arqueológica:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            No presenta
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Denominación del inmueble-->
+						<div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Denominación del inmueble:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            10.0
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--departamento-->
+						<div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Departamento:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            {{ patrimony.departamento }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--provincia-->
+						<div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Provincia:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            {{ patrimony.provincia }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Distrito-->
+						<div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Distrito:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            {{ patrimony.distrito }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Aditional Data-->
+        <div class="row">
+            <div class="col">
+                <div class="card mb-3 rounded-3">
+                    <div class="card-header">
+                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                            Datos adicionales
+                        </h1>
+                    </div>
+                    <div class="card-body bg-200">
+                        <div class="row">
+                            <!--Cultural value-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Valor cultural:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            La definición de lo que son valores culturales no es sencilla de establecer, ya que
+                                            varían de acuerdo a las distintas tradiciones que constituyen el acervo cultural
+                                            de la humanidad. A grandes rasgos pueden definirse como el conjunto inmaterial
+                                            de bienes ideas, consideraciones e ideales por los que un grupo humano considera
+                                            digno esforzarse y luchar. Por ejemplo: tradición, empatía, libertad, educación.
+                                            Esto no quiere decir que se traduzcan a rajatabla en conductas específicas, ya
+                                            que a menudo pertenecen a la esfera de lo idealizado o la imaginación, razón por
+                                            la cual el arte se hace portavoz de dichos valores. Entonces como lo que son
+                                            valores culturales de una sociedad a menudo se contradicen con los de otra:
+                                            entonces sobreviene el conflicto.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Observations-->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-black" style="font-size: medium">
+                                            Observaciones:
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                            --
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+{% endblock %}
