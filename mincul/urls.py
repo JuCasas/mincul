@@ -18,4 +18,5 @@ urlpatterns = [
     path('traslado/', include('traslado.urls')),
     path('auth/', include('authentication.urls')),
     path('mapa/',include('mapa.urls')),
+    path('mapa_patrimonio/',include('mapa_patrimonio.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
