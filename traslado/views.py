@@ -13,10 +13,11 @@ from django.http import JsonResponse
 
 def addTransfer(request):
     if request.POST:
+        patrimoniosSolicitados = list(request.POST['lista'].split(","))
         solicitudTraslado = SolicitudTraslado.objects.create(entidadSolicitante_id=request.POST['nombreInstitucion'],
-                                                             destino=request.POST['destino'],
                                                              nombreExposicion=request.POST['nombreExposicion'],
                                                              pais=request.POST['pais'],
+                                                             ubigeoDestino=request.POST['ubigeo'],
                                                              gestorConservacionTraslados_id=request.POST['comisario'],
                                                              gestorPatrimonio_id=request.POST['comisario'],
                                                              fechaSalidaProgramada=request.POST[
@@ -25,11 +26,8 @@ def addTransfer(request):
                                                                  'fechaRetornoProgramada'],
                                                              numeroResolucion=request.POST['nResolucion']
                                                              )
-        if request.POST['lista']:
-            patrimoniosSolicitados = list(request.POST['lista'].split(","))
-            for idPatrimonio in patrimoniosSolicitados:
-                solicitudTraslado.patrimonios.add(Patrimonio.objects.get(pk=idPatrimonio))
-
+        for idPatrimonio in patrimoniosSolicitados:
+            solicitudTraslado.patrimonios.add(Patrimonio.objects.get(pk=idPatrimonio))
         for f in request.FILES.getlist('file'):
             doc = Documento.objects.create(url=f)
             DocumentoPorSolicitud.objects.create(documento_id=doc.pk, solicitud_id=solicitudTraslado.pk)
@@ -43,6 +41,7 @@ def addTransfer(request):
         context = {
             'entidades': entidades,
             'comisarios': comisarios,
+            'patrimonios': patrimonios,
         }
         return render(request, 'traslado/transfer_add.html', context)
 
@@ -53,15 +52,6 @@ def listarPatrimoniosTraslado(request):
                                          fields=('id', 'nombreTituloDemoninacion','categoria', 'tipoPatrimonio'))
     print(ser_instance)
     return JsonResponse({"patrimoniosAjax": ser_instance}, status=200)
-
-def entidadEmail(request):
-    entidad = EntidadSolicitante.objects.get(pk=request.POST['entidad']).correo
-    return JsonResponse({"email": entidad}, status=200)
-
-def validarResolucion(request):
-    existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exists()
-    print(existe)
-    return JsonResponse({"existe": existe}, status=200)
 
 def listTranfers(request):
 
@@ -81,7 +71,11 @@ def viewTranfer(request,pk):
 
     #Nota, se debe considerar los patrominos del traslado
     patrimonios = traslado.patrimonios.all()
+    for patrimonio in patrimonios:
+        print(patrimonio.nombreTituloDemoninacion)
+
     documentos =  DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
+
 
     context = {
         'traslado': traslado,
@@ -89,7 +83,7 @@ def viewTranfer(request,pk):
         'comisarios': comisarios,
         'patrimonios': patrimonios,
         'documentos': documentos,
-        'media_path': media_path
+        'media_path':media_path
     }
 
     return render(request,'traslado/transfer_view.html', context)
@@ -97,26 +91,19 @@ def viewTranfer(request,pk):
 
 
 def editTransfer(request,pk):
-    media_path = MEDIA_URL
+
     traslado = SolicitudTraslado.objects.get(pk=pk)
     entidades = EntidadSolicitante.objects.filter()
     comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
 
     #Nota, se debe considerar los patrominos del traslado
     patrimonios = traslado.patrimonios.all()
-    documentos = DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
-    estadosEditables = [('2', 'Evaluar'),('3', 'Rechazar'),('4', 'Aprobadar')]
-
-
 
     context = {
         'traslado': traslado,
         'entidades': entidades,
         'comisarios': comisarios,
-        'patrimonios': patrimonios,
-        'documentos': documentos,
-        'media_path': media_path,
-        'estadosEditables': estadosEditables
+        'patrimonios': patrimonios
     }
 
     return render(request,'traslado/transfer_edit.html', context)
