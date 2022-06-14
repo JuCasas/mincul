@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <link href="../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            Barra
+        </div>
+        <div class="col-lg-8">
+            Mapa
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+    <script src="../static/lib/raty-js/jquery.raty.js"></script>
+{% endblock %}
