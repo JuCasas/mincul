@@ -21,8 +21,7 @@ class SolicitudTraslado(models.Model):
         ('2', 'En evaluación'),
         ('3', 'Rechazada'),
         ('4', 'Aprobada'),
-        ('5', 'Programada'),
-        ('6', 'Ejecutada'),
+        ('5', 'Ejecutada'),
     )
     TIPOS = (
         ('0', 'Tipo1'),
