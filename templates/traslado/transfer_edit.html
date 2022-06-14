@@ -313,6 +313,7 @@
 
         $(document).ready(function () {
             validar_campo_detalle();
+            set_validate();
         });
 
         function set_validate() {
@@ -352,9 +353,28 @@
         }
 
         function actualizarEstado() {
-            set_validate();
 
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'actualizar_estado'%}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    traslado_pk: {{ traslado.pk }},
+                    nuevo_estado: $("#estadoSolicitud").val(),
+                    detalle_rechazo:$("#detalleRechazo").val()
+                },
+                success: function (response) {
+                    $("#estadoSolicitud").empty();
+                    $("#detalleRechazo").empty();
+                    $('#actualizarEstado').hide()
 
+                    location.reload();
+
+                },
+                error: function (response) {
+                    alert(response["responseJSON"]["error"]);
+                }
+            });
         }
 
 

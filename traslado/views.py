@@ -7,7 +7,8 @@ from mincul.settings import MEDIA_URL
 from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
 from traslado.models import SolicitudTraslado, EntidadSolicitante, DocumentoPorSolicitud
-
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
 from django.core import serializers
 from django.http import JsonResponse
 
@@ -176,3 +177,50 @@ def eliminacionSolicitante(request):
     entidad = EntidadSolicitante.objects.get(doiSolicitante=doi)
     entidad.delete()
     return redirect('/traslado/entidades')
+
+
+
+def actualizarEstado(request):
+
+    estado = request.POST.get('nuevo_estado')
+    detalle_rechazo = request.POST.get('detalle_rechazo')
+
+    trasladopk = request.POST.get('traslado_pk')
+    traslado = SolicitudTraslado.objects.get(pk=trasladopk)
+
+    traslado.estado = estado
+    mensaje = ''
+
+    asunto=''
+    if(estado=='3'):
+        asunto = 'Aprobación de solicitud de traslado '+ traslado.numeroResolucion
+        traslado.detalleRechazo = detalle_rechazo
+        mensaje = 'Su solicitud de traslado ha sido rechazada de debido al siguiente motivo: '+ detalle_rechazo
+    elif(estado=='4'):
+        asunto = 'Desaprobación de solicitud de traslado ' + traslado.numeroResolucion
+        mensaje = 'Su solicitud de traslado ha sido aceptada de manera satisfactoria'
+
+    traslado.save()
+
+    correo = traslado.entidadSolicitante.correo
+    asunto: "Estado de solicitud"
+
+    if(estado=='3' or estado=='4'):
+        send_form_email(asunto, correo, mensaje)
+
+    return JsonResponse({}, status=200)
+
+
+def send_form_email(subject, recipient, texto):
+    sender = 'info@inova.team'
+    context = {
+        'texto': texto,
+        'correo_entidad': recipient,
+    }
+    template = get_template('traslado/body_email_transfer.html')
+    content = template.render(context)
+    correo = recipient.strip()
+    email = EmailMultiAlternatives(subject, '', sender, [correo], cc=[])
+    email.attach_alternative(content, 'text/html')
+    email.send()
+    print('Se envió correo')
