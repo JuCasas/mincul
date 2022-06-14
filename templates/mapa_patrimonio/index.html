@@ -72,6 +72,9 @@
                         createMarker: function () {
                             return null;
                         },
+                        lineOptions : {
+                            addWaypoints: false
+                        },
                         waypoints: [
                             L.latLng(data.puntosRuta[0].lat, data.puntosRuta[0].long),
                             L.latLng(data.puntosRuta[1].lat, data.puntosRuta[1].long)
