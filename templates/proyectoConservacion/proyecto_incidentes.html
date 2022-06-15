@@ -1,0 +1,474 @@
+{% extends 'base/base.html' %} {% load static %} {% block extrastyle %}
+<link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet" />
+<style>
+  .degradado {
+    background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
+    opacity: 0.8;
+  }
+</style>
+{% endblock %} {% block body %}
+
+<div class="card mb-3">
+  <div class="card-body p-0">
+    <div class="navbar">
+      <h4>Proyecto de Restauracion de {{proyecto.nombre}}</h4>
+      <div class="row d-flex align-items-center ml-auto">
+        <div class="form-group col-sm-auto my-1">
+          <row>
+            <button class="btn btn-primary" type="button">Incidentes</button>
+            <button class="btn btn-light" type="button">Patrimonios</button>
+            <button class="btn btn-light" type="button">Actividades</button>
+          </row>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card mb-3">
+  <div class="card-body p-0">
+    <div class="navbar">
+      <h4>Incidentes</h4>
+    </div>
+  </div>
+</div>
+<div class="card mb-3">
+  <div class="card-body p-0">
+    <div class="navbar">
+      <table class="default">
+        <th>
+          <h4>Tipos de Afectación</h4>
+        </th>
+        <tr>
+          <td>1: Invasión/Ocupación ilegal/Ampliación de invasión</td>
+          <td>4: Destrucción en zonas arqueológicas</td>
+          <td>7: Otros</td>
+        </tr>
+        <tr>
+          <td>2: Deterioro de patrimonio por efectos de la persona</td>
+          <td>5: Destrucción en Casonas</td>
+        </tr>
+        <tr>
+          <td>3: Deterioro de patrimonio por efectos de la naturaleza</td>
+          <td>6: Huaquería</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="card mb-3">
+  <div class="card-body p-0">
+    <div class="navbar">
+      <div class="col-sm-auto mb-2 mb-sm-0">
+        <h6 class="mb-0">
+          Lista de Incidentes - Mostrando 1-24 de 205 Patrimonios
+        </h6>
+      </div>
+      <div class="row d-flex align-items-center">
+        <div class="form-group col-sm-auto my-1">
+          <div class="position-relative">
+            <input
+              class="form-control"
+              id="name"
+              type="text"
+              placeholder="Nombre"
+            />
+            <span
+              class="fas fa-search inputIcon"
+              data-fa-transform="shrink-3"
+            ></span>
+          </div>
+        </div>
+        <div class="form-group col-sm-auto my-1">
+          <select class="form-control" id="exampleFormControlSelect1">
+            <option selected>Tipo</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-auto my-1">
+          <select class="form-control" id="exampleFormControlSelect1">
+            <option selected>Estado</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-auto my-1"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <h5 class="mb-0">Lista de Incidentes</h5>
+  </div>
+  <div class="card-body bg-light px-0">
+    <div class="row">
+      <div class="col-12">
+        <table
+          class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100"
+        >
+          <thead class="bg-200">
+            <tr>
+              <th class="sort">Código</th>
+              <th class="sort">Descripción</th>
+              <th class="sort">Tipo de Afectación</th>
+              <th class="sort">Informante</th>
+              <th class="sort">Fecha de Registro</th>
+              <th class="sort">Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            {% for e in lista_incidentes %}
+            <tr>
+              <td>{{ e.pk }}</td>
+              <td>{{ e.descripcion }}</td>
+              <td>{{ e.tipoAfectacion }}</td>
+              <td>{{ e.nombre }}</td>
+              <td>{{ e.fechaRegistro }}</td>
+              <td>{{ e.estado }}</td>
+              <td>
+                <button
+                  type="button"
+                  id="btnEditar"
+                  class="btn btn btn-outline-light"
+                  data-toggle="modal"
+                  data-target="#ModalEditar"
+                  data-id="{{ e.id }}"
+                  data-doi="{{ e.doiSolicitante }}"
+                  data-nombre="{{ e.nombreSolicitante }}"
+                  data-correo="{{ e.correo }}"
+                  data-pais="{{ e.pais }}"
+                  data-direccion="{{ e.direccion }}"
+                  data-telefono="{{ e.telefono }}"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="secondary"
+                    class="bi bi-pencil-square"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                    />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot class="bg-200">
+            <tr>
+              <th>Código</th>
+              <th>Descripción</th>
+              <th>Tipo de Afectación</th>
+              <th>Informante</th>
+              <th>Fecha de Registro</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="col-12"></div>
+    </div>
+  </div>
+</div>
+
+{% comment %} #Modal eliminacion {% endcomment %}
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-backdrop="static"
+  data-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">
+          Eliminar Entidad Solicitante
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">¿Esta seguro que desea eliminar la entidad?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cancelar
+        </button>
+        <form action="/traslado/eliminacionSolicitante/" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <input
+              type="text"
+              id="inputDOI3"
+              name="inputDOI3"
+              class="form-control"
+              style="display: none"
+            />
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block text-white">
+              Eliminar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% comment %} #Modal Agregar Entidad {% endcomment %}
+
+<div
+  class="modal fade"
+  id="ModalAgregar"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Nueva Entidad Solicitante
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/traslado/registrarSolicitantes/" method="POST">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputDOI">DOI Entidad</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputDOI"
+                name="inputDOI"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputNombre">Nombre Entidad</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputNombre"
+                name="inputNombre"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputCorreo">Correo</label>
+              <input
+                type="email"
+                class="form-control"
+                id="inputCorreo"
+                name="inputCorreo"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputPassword4">Dirección</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputDireccion"
+                name="inputDireccion"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputPais">Pais</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputPais"
+                name="inputPais"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputTelefono">Telefono</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputTelefono"
+                name="inputTelefono"
+                required
+              />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Agregar Entidad</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} #Modal Editar Entidad {% endcomment %}
+
+<div
+  class="modal fade"
+  id="ModalEditar"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Editar Entidad Solicitante
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/traslado/editarSolicitante/" method="POST">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputDOI">DOI Entidad</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputDOI2"
+                name="inputDOI2"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputNombre">Nombre Entidad</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputNombre2"
+                name="inputNombre2"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputCorreo">Correo</label>
+              <input
+                type="email"
+                class="form-control"
+                id="inputCorreo2"
+                name="inputCorreo2"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputPassword4">Dirección</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputDireccion2"
+                name="inputDireccion2"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputPais">Pais</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputPais2"
+                name="inputPais2"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputTelefono">Telefono</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputTelefono2"
+                name="inputTelefono2"
+                required
+              />
+            </div>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            id="inputID"
+            name="inputID"
+            style="display: none"
+          />
+          <button type="submit" class="btn btn-primary">Editar Entidad</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block extrajs %}
+<script>
+  $(document).on("click", "#btnEditar", function () {
+    var id = $(this).data("id");
+    var doi = $(this).data("doi");
+    var nombre = $(this).data("nombre");
+    var direccion = $(this).data("direccion");
+    var telefono = $(this).data("telefono");
+    var pais = $(this).data("pais");
+    var correo = $(this).data("correo");
+
+    $("#inputID").val(id);
+    $("#inputDOI2").val(doi);
+    $("#inputNombre2").val(nombre);
+    $("#inputDireccion2").val(direccion);
+    $("#inputCorreo2").val(correo);
+    $("#inputPais2").val(pais);
+    $("#inputTelefono2").val(telefono);
+  });
+</script>
+
+<script>
+  $(document).on("click", "#btnEliminar", function () {
+    var doi = $(this).data("doi");
+    $("#inputDOI3").val(doi);
+  });
+</script>
+
+<script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+{% endblock %}

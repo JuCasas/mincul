@@ -1,12 +1,14 @@
 import datetime
+from multiprocessing import context
 
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from conservacion.models import ProyectoConservacion, Actividad, Tarea
 from conservacion.serializers import ProyectoConservacionSerializer, ActividadSerializer, TareaSerializer, \
   PatrimonioSerializer
+from incidente.models import Incidente
 from patrimonios.models import Patrimonio
 
 
@@ -315,3 +317,16 @@ def addTask(request, pk):
     fecha=fecha,
     actividad=actividad)
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+
+def listIncidentes(request, pk):
+  proyecto = ProyectoConservacion.objects.get(pk=pk)
+  
+  context = {
+      'proyecto': proyecto,
+      'lista_incidentes': proyecto.incidentes.all()
+  }
+
+  return render(request, 'proyectoConservacion/proyecto_incidentes.html', context=context)
+  
+
