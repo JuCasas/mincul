@@ -71,10 +71,16 @@ class Patrimonio (models.Model):
     )
 
     CATEGORIA = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2 '),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
+        ('1', 'Sitios Naturales'),
+        ('2', 'Manifestaciones Culturales'),
+        ('3', 'Realizaciones Técnicas, Científicas y Artísticas Contemporáneas'),
+        ('4', 'Folclore'),
+        ('5', 'Acontecimientos Programados'),
+        ('6', 'Arqueológico'),
+        ('7', 'Histórico-Artístico'),
+        ('8', 'Etnográfico'),
+        ('9', 'Plaeontológico'),
+        ('10', 'Industrial'),
     )
 
     nombreTituloDemoninacion = models.CharField(max_length=30)
