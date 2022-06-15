@@ -8,6 +8,7 @@ urlpatterns = [
     path('listar/',views.listTranfers, name='list_transfers'),
     path('ver/<int:pk>/', views.viewTranfer, name='view_transfer'),
     path('editar/<int:pk>/', views.editTransfer, name='edit_transfer'),
+    path('editarTraslado/', views.actualizarEstado, name='actualizar_estado'),
     path('patrimonioAjax/',views.listarPatrimoniosTraslado,name='listPatrimoniosAjax'),
     
     
@@ -15,7 +16,5 @@ urlpatterns = [
     path('eliminarSolicitantes/<id>',views.eliminarSolicitantes, name='eliminarSolicitantes'),
     path('registrarSolicitantes/',views.registrarSolicitantes,name='registrarSolicitantes'),
     path('editarSolicitante/',views.editarSolicitante,name='editarSolicitante'),
-    path('eliminacionSolicitante/',views.eliminacionSolicitante,name='eliminacionSolicitante'),
-    path('emailEntidad/',views.entidadEmail,name='entidadEmail'),
-    path('validarResolucion/',views.validarResolucion,name='validarResolucion')
+    path('eliminacionSolicitante/',views.eliminacionSolicitante,name='eliminacionSolicitante')
 ]
