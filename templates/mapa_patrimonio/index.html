@@ -1,0 +1,96 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <style>
+        leaflet-routing-alternatives-container{
+            display: none; !important;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-10 offset-md-1" id="map" style="width:100%;height:100vh">
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+            crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block extrajs %}
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "/mapa_patrimonio/mapa/datos",
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.puntoMedio);
+                    console.log(data.puntoMedio.lat);
+                    var map = L.map('map').setView([data.puntoMedio.lat, data.puntoMedio.long],data.acercamiento);
+                    var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
+                    var puntoPartidaIcon = L.icon({
+                        iconUrl : '../../static/img/icons/punto-partida.png',
+                        iconSize: [24,35]
+                    });
+                    var puntoLlegadaIcon = L.icon({
+                        iconUrl : '../../static/img/icons/punto-llegada.png',
+                        iconSize: [24,35]
+                    });
+
+                    let markerInicio = L.marker([data.puntosRuta[0].lat, data.puntosRuta[0].long], {
+                        icon: puntoPartidaIcon,
+                        title: data.puntosRuta[0].nombre
+                    }).addTo(map).bindPopup('<div>' +
+                        '<h3 style="text-align: center">'+data.puntosRuta[0].nombre+'</h3>'+
+                        '<img src="'+ data.puntosRuta[0].imagen+'" height="100px" width="300px"/>'+
+                        '</div>');
+                    let markerLlegada = L.marker([data.puntosRuta[1].lat, data.puntosRuta[1].long], {
+                        icon: puntoLlegadaIcon,
+                        title: data.puntosRuta[0].nombre
+                    }).addTo(map).bindPopup('<div>' +
+                        '<h3 style="text-align: center">'+data.puntosRuta[1].nombre+'</h3>'+
+                        '<img src="'+ data.puntosRuta[1].imagen+'" height="100px" width="300px"/>'+
+                        '</div>');
+                    /*for(let i=1;i<data.puntosRuta.length-1;i++){ //Por si después hay más de un punto de interés en la ruta
+                        let marker = L.marker([data.puntosRuta[i].lat, data.puntosRuta[i].long], {
+                            icon: puntoLlegadaIcon,
+                            title: data.puntosRuta[i].nombre
+                        }).addTo(map).bindPopup('<div>' +
+                            '<h3 style="text-align: center">'+data.puntosRuta[i].nombre+'</h3>'+
+                            '<img src="'+ data.puntosRuta[i].imagen+'" height="100px" width="300px"/>'+
+                            '</div>');
+                    }*/
+                    L.Routing.control({
+                        createMarker: function () {
+                            return null;
+                        },
+                        lineOptions : {
+                            addWaypoints: false
+                        },
+
+                        waypoints: [
+                            L.latLng(data.puntosRuta[0].lat, data.puntosRuta[0].long),
+                            L.latLng(data.puntosRuta[1].lat, data.puntosRuta[1].long)
+                        ],
+                        language:'es',
+                    }).addTo(map);
+                }
+            });
+        });
+
+    </script>
+{% endblock %}

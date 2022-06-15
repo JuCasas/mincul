@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'traslado',
     'authentication',
     'mapa',
+    'mapa_patrimonio',
 ]
 
 MIDDLEWARE = [

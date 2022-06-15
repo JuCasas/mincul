@@ -10,3 +10,7 @@ def ficha(request,my_id):
         'patrimony':patrimonio
     }
     return render(request,'map/ficha.html',context)
+
+def mapa(request):
+
+    return render(request,'map/mapaBase.html')
