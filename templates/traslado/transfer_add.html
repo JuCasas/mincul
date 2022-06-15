@@ -1,282 +1,510 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load get_email %}
 
 {% block extrastyle %}
-  <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
-  <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
-  <link href="{% static 'lib/dropzone/dropzone.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/dropzone/dropzone.min.css' %}" rel="stylesheet">
 
-  <style>
+    <style>
 
-      table {
-          min-width: 100%;
-          color: #2B2D42 !important;
-          background-color: #EDF2F9;
-      }
-  </style>
+        table {
+            min-width: 100%;
+            color: #2B2D42 !important;
+            background-color: #EDF2F9;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
 
-  <div class="card p-5">
-    <form action="{% url 'addTransfer' %}" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="row d-flex justify-content-center ">
-        <div class="col-12">
-          <h4>Nuevo Traslado</h4>
-        </div>
-      </div>
-      <hr>
-      <p></p>
-
-      <div class="row">
-        <div class="form-group col-lg-6 col-sm-12">
-          <label for="nombreInstitucion">Entidad Solicitante</label>
-          <select class="form-control selectpicker" id="nombreInstitucion" name="nombreInstitucion"
-                  data-placeholder='Seleccione entidad...'>
-            {% for e in entidades %}
-              <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group col-lg-6 col-sm-12">
-          <label for="tipoTraslado">Tipo de Traslado</label>
-          <select class="form-control" id="tipoTraslado">
-            <option>Exposición en el extranjero</option>
-            <option>Exposición nacional</option>
-            <option>Misión diplomática</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-lg-6 col-sm-12">
-          <label for="nombreExposicion">Nombre de la Exposición</label>
-          <input class="form-control" id="nombreExposicion" name="nombreExposicion" type="text"
-                 placeholder="Nombre de la Exposición">
-        </div>
-        <div class="form-group col-lg-3 col-sm-12">
-          <label for="pais">País</label>
-          <input class="form-control" id="pais" name="pais" type="text"
-                 placeholder="Pais destino">
-        </div>
-        <div class="form-group col-lg-3 col-sm-12">
-          <label for="destino">Destino</label>
-          <input class="form-control" id="destino" name="destino" type="text"
-                 placeholder="Destino">
-        </div>
-      </div>
-
-
-      <div class="row">
-        <div class="form-group col-lg-6 col-sm-12">
-          <label for="comisario">Comisario</label>
-          <select class="form-control selectpicker" id="comisario" name="comisario"
-                  data-placeholder='Seleccione comisario...'>
-            {% for c in comisarios %}
-              <option value="{{ c.pk }}">{{ c.username }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group col-lg-3 col-sm-12">
-          <label for="nResolucion">N° de Resolucion</label>
-          <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                 placeholder="Número de Resolución">
-        </div>
-        <div class="form-group col-lg-3 col-sm-12">
-          <label for="ubigeo">Ubigeo</label>
-          <input class="form-control" id="ubigeo" name="ubigeo" type="text" placeholder="Ubigeo">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-lg-6 col-sm-12">
-          <label for="fechaSalidaProgramada">Fecha de salida Programada</label>
-          <input class="form-control" id="fechaSalidaProgramada" name="fechaSalidaProgramada" type="date" required>
-        </div>
-        <div class="form-group col-lg-6 col-sm-12">
-          <label for="fechaRetornoProgramada">Fecha de retorno Programada</label>
-          <input class="form-control" id="fechaRetornoProgramada" name="fechaRetornoProgramada" type="date" required>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-lg-6 col-sm-12">
-          <label for="fechaSalidaReal">Fecha de salida Real (opcional)</label>
-          <input class="form-control" id="fechaSalidaReal" name="fechaSalidaReal" type="date">
-        </div>
-        <div class="form-group col-lg-6 col-sm-12">
-          <label for="fechaRetornoReal">Fecha de retorno Real (opcional)</label>
-          <input class="form-control" id="fechaRetornoReal" name="fechaRetornoReal" type="date">
-        </div>
-      </div>
-
-
-      <div class="row">
-        <div class="form-group col-10">
-          <label for="patrimonio">Patrimonios a Trasladar</label>
-          <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                  data-placeholder='Seleccione patrimonio...'>
-            {% for p in patrimonios %}
-              <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.nombreTituloDemoninacion }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group col-auto d-flex align-items-end">
-          <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm" type="button"
-                  onclick="agregarPatrimonioTabla()">Agregar
-          </button>
-        </div>
-      </div>
-
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-12">
-
-          <table class="table">
-            <thead class="thead-dark">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Patrimonio</th>
-              <th scope="col">Clasificación</th>
-              <th scope="col">Tipo de bien</th>
-              <th scope="col">Acciones</th>
-            </tr>
-            </thead>
-            <tbody id="patrimonioAgregar">
-
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-
-      <div class="dropzone dropzone-multiple p-0" data-dropzone>
-        <div class="fallback">
-          <input type="file" name="file" multiple>
+    <div class="card">
+        <div class="card-header">
+            <h5>Nuevo Traslado</h5>
         </div>
 
+        <div class="card-body bg-light">
+            <form name="formAgregar" id="formAgregar" action="{% url 'addTransfer' %}" method="POST"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>General</h5>
+                            </div>
+                            <div class="card-body bg-light">
+                                <div class="form-group">
+                                    <label for="tipoTraslado">Tipo de Traslado:</label>
+                                    <select class="form-control" id="tipoTraslado" required>
+                                        <option {% if e.pk == '1' %} selected {% endif %}>Exposición en el extranjero
+                                        </option>
+                                        <option {% if e.pk == '2' %} selected {% endif %}>Exponsición nacional</option>
+                                        <option {% if e.pk == '3' %} selected {% endif %}>Misión Diplomática</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pais">País destino:</label>
+                                    <select class="form-control selectpicker" id="pais" name="pais"
+                                            data-placeholder='Seleccione pais...' required>
+                                        {% include 'traslado/paises.html' %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ubigeo">Dirección de destino:</label>
+                                    <input class="form-control" id="destino" name="destino" type="text" required>
+                                </div>
 
-        {#                <div class="dz-message" data-dz-message><img class="mr-2" src="{% static 'img/icons/cloud-upload.svg"' %}"#}
-        {#                                                             width="25" alt="">Drop your files here#}
-        {#                </div>#}
-        {#                <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">#}
-        {#                    <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger"><img#}
-        {#                            class="dz-image" src="..." alt="..." data-dz-thumbnail>#}
-        {#                        <div class="media-body d-flex flex-between-center">#}
-        {#                            <div>#}
-        {#                                <h6 data-dz-name></h6>#}
-        {#                                <div class="d-flex align-items-center">#}
-        {#                                    <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>#}
-        {#                                    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span>#}
-        {#                                    </div>#}
-        {#                                </div>#}
-        {#                            </div>#}
-        {#                            <div class="dropdown text-sans-serif">#}
-        {#                                <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"#}
-        {#                                        type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-        {#                                    <span class="fas fa-ellipsis-h"></span></button>#}
-        {#                                <div class="dropdown-menu dropdown-menu-right border py-0">#}
-        {#                                    <div class="bg-white py-2"><a class="dropdown-item" href="#!" data-dz-remove>Remove#}
-        {#                                        File </a></div>#}
-        {#                                </div>#}
-        {#                            </div>#}
-        {#                        </div>#}
-        {#                    </div>#}
-        {#                </div>#}
-      </div>
+                                <div class="form-group ">
+                                    <label for="nombreExposicion">Nombre de la Exposición:</label>
+                                    <input class="form-control" id="nombreExposicion" name="nombreExposicion"
+                                           type="text"
+                                           value="{{ traslado.nombreExposicion }}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="comisario">Comisario:</label>
+                                    <select class="form-control selectpicker" id="comisario" name="comisario"
+                                            data-placeholder='Seleccione comisario...'>
+                                        {% for c in comisarios %}
+                                            <option value="{{ c.pk }}">{{ c.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nResolucion">N° de Resolucion:</label>
+                                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                           value="{{ traslado.numeroResolucion }}">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Entidad solicitante</h5>
+                                    </div>
+                                    <div class="card-body bg-light">
+                                        <div class="form-group">
+                                            <label for="nombreInstitucion">Entidad Solicitante</label>
+                                            <select class="form-control selectpicker" id="nombreInstitucion"
+                                                    name="nombreInstitucion"
+                                                    data-placeholder='Seleccione entidad...' onchange="getEmail(this)">
+                                                {% for e in entidades %}
+                                                    <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group ">
+                                            <label for="nombreExposicion">Correo de la entidad solicitante:</label>
+                                            <input class="form-control" id="correoEntidadSolicitante"
+                                                   name="correoEntidadSolicitante"
+                                                   type="text"
+                                                   value="{{ traslado.entidadSolicitante.correo }}" disabled>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Fechas</h5>
+                                    </div>
+                                    <div class="card-body bg-light">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="fechaSalidaProgramada">Salida Programada: </label>
+                                                    <input class="form-control" id="fechaSalidaProgramada"
+                                                           name="fechaSalidaProgramada" type="date"
+                                                           value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group ">
+                                                    <label for="fechaRetornoProgramada">Retorno
+                                                        Programada: </label>
+                                                    <input class="form-control" id="fechaRetornoProgramada"
+                                                           name="fechaRetornoProgramada" type="date"
+                                                           value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="fechaSalidaReal">Salida Real:</label>
+                                                    <input class="form-control" id="fechaSalidaReal"
+                                                           name="fechaSalidaReal"
+                                                           type="date"
+                                                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
+                                                </div>
+
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="fechaRetornoReal">Retorno Real:</label>
+                                                    <input class="form-control" id="fechaRetornoReal"
+                                                           name="fechaRetornoReal" type="date"
+                                                           value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}"
+                                                           disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Patrimonios a ser trasladados</h5>
+                                    </div>
+                                    <div class="form-group col-auto d-flex align-items-end">
+                                        <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
+                                                data-placeholder='Seleccione patrimonio...'>
+                                        </select>
+                                        <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
+                                                type="button"
+                                                onclick="agregarPatrimonioTabla()">Agregar
+                                        </button>
+                                    </div>
+                                    <div class="card-body bg-light">
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Patrimonio</th>
+                                                <th scope="col">Clasificación</th>
+                                                <th scope="col">Tipo de bien</th>
+                                                <th scope="col">Acciones</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="patrimonioAgregar">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-11">
+                        <div class="row mx-3">
+                            <h5>Estado: </h5>
+                            {% if traslado.estado == '1' %}
+                                <button class="btn btn-sm btn-warning rounded-capsule mx-1">Sin aprobar</button>
+                            {% elif traslado.estado == '2' %}
+                                <button class="btn btn-secondary">Aprobado</button>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    <div class="col-1 align-items-end">
+                        <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>
+                    </div>
+                </div>
+                <div class="dropzone dropzone-multiple p-0" data-dropzone>
+                    <div class="fallback">
+                        <input type="file" name="file" multiple>
+                    </div>
 
 
-      <input id="lista" name="lista" type="hidden">
+                    <div class="dz-message" data-dz-message><img class="mr-2"
+                                                                 src="{% static 'img/icons/cloud-upload.svg"' %}"
+                                                                 width="25" alt="">Drop your files here
+                    </div>
+                    <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
+                        <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger"><img
+                                class="dz-image" src="..." alt="..." data-dz-thumbnail>
+                            <div class="media-body d-flex flex-between-center">
+                                <div>
+                                    <h6 data-dz-name></h6>
+                                    <div class="d-flex align-items-center">
+                                        <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>
+                                        <div class="dz-progress"><span class="dz-upload"
+                                                                       data-dz-uploadprogress=""></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dropdown text-sans-serif">
+                                    <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"
+                                            type="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                        <span class="fas fa-ellipsis-h"></span></button>
+                                    <div class="dropdown-menu dropdown-menu-right border py-0">
+                                        <div class="bg-white py-2"><a class="dropdown-item" href="#!" data-dz-remove>Remove
+                                            File </a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-      <div class="wrapper row justify-content-end">
-        <div class="d-flex flex-row justify-content-end">
-          <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Cancelar</a>
+                <div class="card my-3">
+                    <div class="card-header">
+                        <h5>Documentos:</h5>
+                    </div>
+                    <div class="card-body bg-light">
+                        <div class="row">
+                            {% for documento in documentos %}
+                                <div class="col-2">
+                                    <a class="notification notification-flush bg-0 "
+                                       href="{{ media_path }}{{ documento.documento.url }}" download>
+                                        <div class="card mx-1">
+                                            <div class="card-body p-0">
+                                                <div>
+                                                    <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
+                                                </div>
+                                            </div>
+                                            <div class="card-footer p-2">
+                                                <h6>{{ documento.documento.filename }}</h6>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <input id="lista" name="lista" type="hidden">
+
+                <div class="wrapper row justify-content-end">
+                    <div class="d-flex flex-row justify-content-end">
+                        <a class="btn btn-primary mr-3 mb-1" type="button"
+                           href="{% url 'list_transfers' %}">Cancelar</a>
+                    </div>
+                    <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Agregar
+                    </button>
+                </div>
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary mr-3 mb-1" type="button">Agregar
-        </button>
-      </div>
-    </form>
-  </div>
+
+    </div>
+
+    <div class="modal fade" id="modalFecha" tabindex="-1" role="dialog" aria-labelledby="modalFechaLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFechaLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorFecha" name="formErrorFecha">
+                        <div class="form-group">
+                            ¡La fecha de fin debe ser mayor que la fecha inicio!
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorFecha" class="btn btn-primary btn-sm" type="button" data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNombreCodigo" tabindex="-1" role="dialog" aria-labelledby="modalNombreCodigoLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalNombreCodigoLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorNombreCodigo" name="formErrorNombreCodigo">
+                        <div class="form-group">
+                            ¡Ingrese un número de resolución válido!
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorFecha" class="btn btn-primary btn-sm" type="button" data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block extrajs %}
-  <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
-  <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'lib/dropzone/dropzone.min.js' %}"></script>
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'lib/dropzone/dropzone.min.js' %}"></script>
+    <script src="{% static 'lib/jquery-validation/jquery.validate.min.js' %}"></script>
 
-  <script>
+    <script>
 
-    let patrimoniosLista = [];
+        let patrimoniosLista = [];
 
 
-    $(document).ready(function () {
-      $("#patrimonio_select").select2({
-        placeholder: "Select a State",
-        allowClear: true
-      });
+        $(document).ready(function () {
 
-      $('#patrimonio').select2({
-        ajax: {
-          url: "{% url 'listPatrimoniosAjax'%}",
-          dataType: 'json',
-          delay: 250,
-          data: function (params) {
-            return {
-              q: params.term,
-              page: params.page
-            };
-          },
-          processResults: function (data) {
-            let patrimoniosResultado = JSON.parse(data["patrimoniosAjax"]);
-            data = patrimoniosResultado.map(function (item) {
-              console.log(item);
-              return {
-                id: item["pk"],
-                text: item["fields"].nombreTituloDemoninacion,
-                tipoPatrimonio: item["fields"].tipoPatrimonio,
-                categoria: item["fields"].categoria,
-              };
+
+            $("#agr").on('click', function () {
+                if ($("#formAgregar").valid()) {
+                    var nResolucion = ValidarResolucion();
+                    var fechasCorrectas = ValidarFechas();
+                    if (!nResolucion && fechasCorrectas) {
+                        console.log("Todo Bien!");
+                        $("#formAgregar").submit();
+                    } else if (!fechasCorrectas) {
+                        $("#modalFecha").modal('show');
+                    } else if (nResolucion) {
+                        $("#modalNombreCodigo").modal('show');
+                    }
+                }
+                return false;
             });
-            return {results: data};
-          },
-          cache: true
-        },
-      });
-    });
 
-    function eliminarPatrimonio(btn, idEliminar) {
-      var row = btn.parentNode.parentNode;
-      patrimoniosLista = jQuery.grep(patrimoniosLista, function (value) {
-        return value != idEliminar;
-      });
-      row.parentNode.removeChild(row);
-      $("#lista").val(patrimoniosLista);
-      console.log("Eliminado");
-      console.log(patrimoniosLista);
-    }
+            function ValidarResolucion() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'validarResolucion'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
+            }
 
-    function agregarPatrimonioTabla() {
-      let patrimonioAgregar = $("#patrimonio").select2('data');
-      if (!patrimoniosLista.includes(patrimonioAgregar[0].id)) {
-        patrimoniosLista.push(patrimonioAgregar[0].id);
-        $("#lista").val(patrimoniosLista);
-        data = '<tr>' +
-            '<td>' + patrimonioAgregar[0].id + '</td>' +
-            ' <td>' + patrimonioAgregar[0].text + '</td>' +
-            '<td>' + patrimonioAgregar[0].categoria + '</td>' +
-            '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
-            '<td>' +
-            '<button class="btn" href="#" type="button" onclick="eliminarPatrimonio(this,' + patrimonioAgregar[0].id + ')">' +
-            '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-            '</button>' +
-            '</td>' +
-            '</tr>';
-        $("#patrimonioAgregar").append(data);
-        console.log("Agregado");
-        console.log(patrimoniosLista);
-      }
-    }
+            function ValidarFechas() {
+                var fechainicial = document.getElementById("fechaSalidaProgramada").value;
+                var fechafinal = document.getElementById("fechaRetornoProgramada").value;
 
-  </script>
+                var fechaIni = new Date(fechainicial);
+                var fechaFin = new Date(fechafinal);
+
+                return (fechaFin > fechaIni);
+            }
+
+            $("#patrimonio_select").select2({
+                placeholder: "Select a State",
+                allowClear: true
+            });
+
+            $('#patrimonio').select2({
+                language: {
+                    noResults: function (params) {
+                        return "No se encontraron resultados";
+                    },
+                    errorLoading: function (params) {
+                        return "Introduzca algún caracter para iniciar busqueda";
+                    },
+
+                },
+                ajax: {
+                    url: "{% url 'listPatrimoniosAjax'%}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data) {
+                        let patrimoniosResultado = JSON.parse(data["patrimoniosAjax"]);
+                        data = patrimoniosResultado.map(function (item) {
+                            console.log(item);
+                            return {
+                                id: item["pk"],
+                                text: item["fields"].nombreTituloDemoninacion,
+                                tipoPatrimonio: item["fields"].tipoPatrimonio,
+                                categoria: item["fields"].categoria,
+                            };
+                        });
+                        return {results: data};
+                    },
+                    cache: true
+                },
+            });
+            getEmail();
+        });
+
+        function getEmail() {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'entidadEmail'%}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    entidad: $("#nombreInstitucion").val(),
+
+                },
+                success: function (response) {
+                    $("#correoEntidadSolicitante").val(response['email']);
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    console.log(response)
+                }
+            });
+
+        }
+
+        function eliminarPatrimonio(btn, idEliminar) {
+            var row = btn.parentNode.parentNode;
+            patrimoniosLista = jQuery.grep(patrimoniosLista, function (value) {
+                return value != idEliminar;
+            });
+            row.parentNode.removeChild(row);
+            $("#lista").val(patrimoniosLista);
+            console.log("Eliminado");
+            console.log(patrimoniosLista);
+        }
+
+        function agregarPatrimonioTabla() {
+            let patrimonioAgregar = $("#patrimonio").select2('data');
+            if (!patrimoniosLista.includes(patrimonioAgregar[0].id)) {
+                patrimoniosLista.push(patrimonioAgregar[0].id);
+                $("#lista").val(patrimoniosLista);
+                data = '<tr>' +
+                    '<td>' + patrimonioAgregar[0].id + '</td>' +
+                    ' <td>' + patrimonioAgregar[0].text + '</td>' +
+                    '<td>' + patrimonioAgregar[0].categoria + '</td>' +
+                    '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
+                    '<td>' +
+                    '<button class="btn" href="#" type="button" onclick="eliminarPatrimonio(this,' + patrimonioAgregar[0].id + ')">' +
+                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
+                    '</button>' +
+                    '</td>' +
+                    '</tr>';
+                $("#patrimonioAgregar").append(data);
+                console.log("Agregado");
+                console.log(patrimoniosLista);
+            }
+        }
+
+    </script>
 {% endblock %}

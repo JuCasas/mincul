@@ -7,4 +7,6 @@ urlpatterns = [
     path('edit/<pk>', views.patrimonio_edit, name='patrimonio_edit'),
     path('detalle/<pk>', views.detalle, name='detalle'),
     path('email/<pk>', views.email_confirmation, name='email'),
+    path('listarInstituciones/',views.instituciones_list_api, name='instituciones_list_api'),
+    path('listarGestorPatrimonio/',views.gestorPatrimonio_list_api, name='gestorPatrimonio_list_api'),
 ]

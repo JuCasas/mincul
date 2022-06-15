@@ -88,16 +88,50 @@
 
       .form-control {
           background-color: white !important;
-          cursor: pointer!important;
       }
 
       .second {
-        background-color: white!important;
-        color: #2B2D42!important;
-        border-color: #8d8e99 !important;
-        border-radius: 12px!important;
-        height: 36px!important;
-        font-size: 12px!important;
+          background-color: white !important;
+          color: #2B2D42 !important;
+          border-color: #8d8e99 !important;
+          border-radius: 12px !important;
+          height: 36px !important;
+          font-size: 12px !important;
+      }
+
+      .form-control {
+          background-color: white !important;
+          cursor: pointer!important;
+      }
+
+
+      span.select2-selection.select2-selection--single{
+          display: flex!important;
+          align-items: center!important;
+      }
+
+      span.select2-selection__arrow{
+          margin-top: 5px!important;
+      }
+
+      span.select2-selection__arrow{
+          margin-top: 5px!important;
+      }
+
+      .select2-selection{
+          height: 36px!important;
+          border-radius: 10px!important;
+          border-color: #D7E1EE!important;
+          align-items: center!important;
+      }
+
+      .select2-selection__placeholder{
+          align-items: center!important;
+          font-size: 12px!important;
+          color: #BDC1D2!important;
+      }
+      .back{
+          font-size: 14px!important;
       }
 
   </style>
@@ -105,41 +139,66 @@
 {% endblock %}
 
 {% block body %}
-  <input type="hidden" value="{{ activity.id }}" id="idProject">
+  <input type="hidden" value="{{ project.id }}" id="idProject">
   <div class="card mb-3">
-    <div class="card-body">
-        <div class="row justify-content-between align-items-center">
-        <a class="nav-link py-0" href="{% url 'listActivities' pk=project.id %}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Actividades</a>
+    <div class="card-body row">
+      <div class="col-md-6 col-sm-12">
+          <div class="row justify-content-between align-items-center mb-1">
+        <a class="nav-link py-0 back" href="{% url 'listProjects' %}"><span class="fas fa-angle-left mr-2"
+                                                                       data-fa-transform="shrink-3"></span>Proyectos</a>
       </div>
 
-      <div class="row justify-content-between align-items-center">
-        <div class="col-md-6">
-          <h5 class="mb-2 mb-md-0 text-black">Tareas de Actividad: {{ activity.nombre }}</h5>
-        </div>
-        <div class="col-md-2">
-          {% if activity.status == '0' %}
+      <div class="row align-items-center justify-content-between">
+        <div class="col-md-6 d-flex">
+          <h5 class="mb-2 mb-sm-0 text-black mr-4">{{ project.nombre }}</h5>
+            {% if project.status == '0' %}
             <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
-          {% elif activity.status == '1' %}
+          {% elif project.status == '1' %}
             <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
           {% else %}
             <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
           {% endif %}
         </div>
       </div>
+      </div>
+
+    <div class="col-md-6 col-sm-12">
+          <div class="nav-bar nav-bar-right">
+            <div class="nav nav-pills">
+                <button class="nav-link col-md-4 btn-1 my-1" disabled>Incidentes</button>
+                <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listPatrimonys' pk=project.id %}">Patrimonios</a>
+                <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listActivities' pk=project.id %}">Actividades</a>
+            </div>
+          </div>
+      </div>
     </div>
   </div>
+
   <div class="card mb-3">
     <div class="card-body">
-      <div class="row filterBar justify-content-end mr-0">
+      <div class="row filterBar justify-content-end">
         <div class="form-group col-sm-3 mb-0">
           <div class="position-relative">
             <input class="form-control" id="search" type="text" placeholder="Nombre">
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
         </div>
-        <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" type="button" href="{% url 'addTaskView' pk=activity.id %}">
-          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
-        </a>
+        <div class="form-group col-sm-2 mb-0">
+          <select class="form-control" id="status_filter">
+            <option value="" selected>Tipos</option>
+            {% for mykey,myvalue in status_choices %}
+              <option value="{{ mykey }}">{{ myvalue }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col-sm-2 mb-0">
+          <select class="form-control" id="type_filter">
+            <option value="" selected>Estados</option>
+            {% for mykey,myvalue in typeProjects %}
+              <option value="{{ mykey }}">{{ myvalue }}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -150,12 +209,11 @@
         <thead class="bg-200">
         <tr>
           <th class="sort ">Código</th>
-          <th class="sort">Nombre</th>
-            <th class="sort">Descripción</th>
-            <th class="sort">Presupuesto</th>
-            <th class="sort">Gasto Total</th>
-          <th class="sort">Fecha de Inicio</th>
-          <th class="sort">Fecha de Fin</th>
+          <th class="sort">Descripción</th>
+          <th class="sort">Tipo de Afectación</th>
+          <th class="sort">Informante</th>
+          <th class="sort">Fecha de Registro</th>
+          <th class="sort">Estado</th>
           <th class="sort">Acciones</th>
         </tr>
         </thead>
@@ -167,7 +225,7 @@
   </div>
 
   <!-- NEW and EDIT Modal -->
-  <div class="modal fade" id="modalTarea" role="dialog">
+  <div class="modal fade" id="modalActividad" role="dialog">
     <div class="modal-dialog mw-100 w-50">
       <!-- Modal content-->
       <div class="modal-content">
@@ -175,7 +233,7 @@
           <h4 class="modal-title" id="modal_title"></h4>
         </div>
         <div class="modal-body">
-          <form role="form" id="formTarea">
+          <form role="form" id="formActividad">
             {% csrf_token %}
 
             <div class="row">
@@ -206,11 +264,8 @@
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="patrimonio">Patrimonio Asociado:</label>
-                <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                        data-placeholder='Seleccione patrimonio...'>
-                  {% for p in patrimonios %}
-                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.nombreTituloDemoninacion }}</option>
-                  {% endfor %}
+                <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
+                  <option value="" selected="selected">Todos</option>
                 </select>
               </div>
             </div>
@@ -220,9 +275,7 @@
                 <label for="conservadores">Conservador(es):</label>
                 <select class="form-control selectpicker" id="conservadores" name="conservadores"
                         data-placeholder='Seleccione patrimonio...'>
-                  {% for p in patrimonios %}
-                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>
-                  {% endfor %}
+
                 </select>
               </div>
               <div class="form-group col-auto d-flex align-items-end">
@@ -233,8 +286,8 @@
             </div>
 
             <div class="row justify-content-end mt-2 mr-1">
-                <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
-              <div >
+              <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+              <div>
                 <input type="hidden" id="type" name="type" value="">
                 <button type="submit" class="btn btn-primary btn-block"><span
                     class="glyphicon glyphicon-ok"></span> Guardar
@@ -254,12 +307,12 @@
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header justify-content-center">
-          <h4 class="modal-title">¿Estás seguro de eliminar el proyecto?</h4>
+          <h4 class="modal-title">¿Retirar Asignación?</h4>
         </div>
         <div class="modal-body px-9">
           <div class="row justify-content-between">
             <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
-            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Retirar Asignación</button>
           </div>
         </div>
       </div>
@@ -273,5 +326,38 @@
 {% block extrajs %}
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'project/projects/tasks.js' %}"></script>
+  <script src="{% static 'project/projects/incidents.js' %}"></script>
+  <script>
+    $(document).ready(function () {
+      $('#patrimonio').prepend('<option selected=""></option>').select2({
+        ajax: {
+          url: '/conservacion/proyectos/patrimonios',
+          datatype: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term || '',
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            console.log(data.items)
+            return {
+              results: $.map(data.items, function (obj, index) {
+                return {id: obj.id, text: obj.nombreTituloDemoninacion};
+              }),
+              pagination: {
+                more: (params.page * 10) < data.total_count
+              }
+            }
+          }
+        },
+        placeholder: "Patrimonio",
+        allowClear: true,
+        cache: false
+      });
+
+    });
+  </script>
 {% endblock %}

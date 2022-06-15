@@ -100,6 +100,10 @@
         font-size: 12px!important;
       }
 
+      .cbody{
+          background-color: #F9FAFD!important;
+      }
+
   </style>
 
 {% endblock %}
@@ -109,73 +113,23 @@
   <div class="card mb-3">
     <div class="card-body">
         <div class="row justify-content-between align-items-center">
-        <a class="nav-link py-0" href="{% url 'listActivities' pk=project.id %}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Actividades</a>
+        <a class="nav-link py-0" href="{% url 'listTasks' pk=activity.id %}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Tareas</a>
       </div>
 
       <div class="row justify-content-between align-items-center">
         <div class="col-md-6">
-          <h5 class="mb-2 mb-md-0 text-black">Tareas de Actividad: {{ activity.nombre }}</h5>
+          <h5 class="mb-2 mb-md-0 text-black">Crear Tarea</h5>
         </div>
-        <div class="col-md-2">
-          {% if activity.status == '0' %}
-            <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
-          {% elif activity.status == '1' %}
-            <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
-          {% else %}
-            <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="row filterBar justify-content-end mr-0">
-        <div class="form-group col-sm-3 mb-0">
-          <div class="position-relative">
-            <input class="form-control" id="search" type="text" placeholder="Nombre">
-            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
-          </div>
-        </div>
-        <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" type="button" href="{% url 'addTaskView' pk=activity.id %}">
-          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
-        </a>
       </div>
     </div>
   </div>
 
   <div class="card mb-3">
-    <div class="card-body">
-      <table id="tabla_autores" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
-        <thead class="bg-200">
-        <tr>
-          <th class="sort ">Código</th>
-          <th class="sort">Nombre</th>
-            <th class="sort">Descripción</th>
-            <th class="sort">Presupuesto</th>
-            <th class="sort">Gasto Total</th>
-          <th class="sort">Fecha de Inicio</th>
-          <th class="sort">Fecha de Fin</th>
-          <th class="sort">Acciones</th>
-        </tr>
-        </thead>
-        <tbody class="bg-white">
-
-        </tbody>
-      </table>
+  <div class="card-header">
+        <h5 class="mb-2 mb-md-0 text-black">General</h5>
     </div>
-  </div>
-
-  <!-- NEW and EDIT Modal -->
-  <div class="modal fade" id="modalTarea" role="dialog">
-    <div class="modal-dialog mw-100 w-50">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="modal_title"></h4>
-        </div>
-        <div class="modal-body">
-          <form role="form" id="formTarea">
+    <div class="card-body cbody px-5 py-4">
+        <form role="form" id="formTarea">
             {% csrf_token %}
 
             <div class="row">
@@ -193,78 +147,35 @@
               </div>
             </div>
             <div class="row">
-              <div class="form-group col-lg-6 col-sm-12">
+              <div class="form-group col-lg-4 col-sm-12">
                 <label for="fechaInicio">Fecha de Inicio:</label>
                 <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required>
               </div>
-              <div class="form-group col-lg-6 col-sm-12">
+              <div class="form-group col-lg-4 col-sm-12">
                 <label for="fechaFin">Fecha de Fin:</label>
                 <input class="form-control" id="fechaFin" name="fechaFin" type="date" required>
               </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-lg-12 col-sm-12">
-                <label for="patrimonio">Patrimonio Asociado:</label>
-                <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                        data-placeholder='Seleccione patrimonio...'>
-                  {% for p in patrimonios %}
-                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.nombreTituloDemoninacion }}</option>
-                  {% endfor %}
-                </select>
+                <div class="form-group col-lg-4 col-sm-12">
+                <label for="nombre">Presupuesto:</label>
+                <input class="form-control" id="nombre" name="nombre" type="text" required
+                       placeholder="S/">
               </div>
             </div>
 
-            <div class="row justify-content-between">
-              <div class="form-group col-9">
-                <label for="conservadores">Conservador(es):</label>
-                <select class="form-control selectpicker" id="conservadores" name="conservadores"
-                        data-placeholder='Seleccione patrimonio...'>
-                  {% for p in patrimonios %}
-                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="form-group col-auto d-flex align-items-end">
-                <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
-                        onclick="agregarPatrimonioTabla()">Agregar Conservador
-                </button>
-              </div>
-            </div>
 
-            <div class="row justify-content-end mt-2 mr-1">
+          </form>
+    </div>
+  </div>
+
+  <div class="row justify-content-end mt-2 mr-1">
                 <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
               <div >
                 <input type="hidden" id="type" name="type" value="">
                 <button type="submit" class="btn btn-primary btn-block"><span
-                    class="glyphicon glyphicon-ok"></span> Guardar
+                    class="glyphicon glyphicon-ok"></span> Crear Tarea
                 </button>
               </div>
             </div>
-
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Delete Modal -->
-  <div class="modal fade" id="confirm" role="dialog">
-    <div class="modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header justify-content-center">
-          <h4 class="modal-title">¿Estás seguro de eliminar el proyecto?</h4>
-        </div>
-        <div class="modal-body px-9">
-          <div class="row justify-content-between">
-            <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
-            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div id="cover-spin"></div>
 
