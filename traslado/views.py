@@ -225,5 +225,5 @@ def send_form_email(subject, recipient, texto):
     correo = recipient.strip()
     email = EmailMultiAlternatives(subject, '', sender, [correo], cc=[])
     email.attach_alternative(content, 'text/html')
-    email.send()
+    # email.send()
     print('Se envió correo')
