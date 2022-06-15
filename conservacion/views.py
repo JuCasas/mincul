@@ -210,6 +210,23 @@ def listActivities(request, pk):
     }
     return render(request, 'proyectoConservacion/activity_list.html', context)
 
+@api_view(('GET',))
+def listIncidents(request, pk):
+  if request.is_ajax():
+    activity = query_activities_by_args(pk, **request.GET)
+    serializer = ActividadSerializer((activity['items']), many=True)
+    result = dict()
+    result['data'] = serializer.data
+    result['recordsTotal'] = activity['total']
+    result['recordsFiltered'] = activity['count']
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  else:
+    context = {
+      'project': ProyectoConservacion.objects.get(pk=pk),
+      'patrimonios': Patrimonio.objects.all()
+    }
+    return render(request, 'proyectoConservacion/incident_list.html', context)
+
 
 @api_view(('GET',))
 def listPatrimonys(request, pk):
