@@ -104,6 +104,33 @@
           cursor: pointer!important;
       }
 
+
+      span.select2-selection.select2-selection--single{
+          display: flex!important;
+          align-items: center!important;
+      }
+
+      span.select2-selection__arrow{
+          margin-top: 5px!important;
+      }
+
+      span.select2-selection__arrow{
+          margin-top: 5px!important;
+      }
+
+      .select2-selection{
+          height: 36px!important;
+          border-radius: 10px!important;
+          border-color: #D7E1EE!important;
+          align-items: center!important;
+      }
+
+      .select2-selection__placeholder{
+          align-items: center!important;
+          font-size: 12px!important;
+          color: #BDC1D2!important;
+      }
+
   </style>
 
 {% endblock %}
@@ -151,10 +178,10 @@
 
   <div class="card mb-3">
     <div class="card-body">
-      <div class="row filterBar mr-0">
+      <div class="row filterBar justify-content-between mr-0">
         <div class="form-group col-sm-3 mb-0">
           <div class="position-relative">
-            <input class="form-control" id="search" type="text" placeholder="Nombre de la actividad">
+            <input class="form-control" id="search" type="text" placeholder="Nombre">
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
         </div>
@@ -183,7 +210,7 @@
             <option>5</option>
           </select>
         </div>
-        <button class="btn btn-primary col-sm-3 mb-0" type="button" data-dismiss="modal" id="new">
+        <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
           <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Actividad
         </button>
       </div>
@@ -339,7 +366,7 @@
             }
           }
         },
-        placeholder: "Seleccionar patrimonio",
+        placeholder: "Patrimonio",
         allowClear: true,
         cache: false
       });

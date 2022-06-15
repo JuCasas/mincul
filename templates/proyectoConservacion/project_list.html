@@ -135,9 +135,9 @@
   <div class="card mb-3">
     <div class="card-body">
       <div class="row filterBar mr-0">
-        <div class="form-group col-sm-2 mb-0">
+        <div class="form-group col-sm-3 mb-0">
           <div class="position-relative">
-            <input class="form-control" id="search" type="text" placeholder="Nombre del proyecto">
+            <input class="form-control" id="search" type="text" placeholder="Nombre">
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
         </div>
@@ -150,7 +150,7 @@
 
         <div class="form-group col-sm-2 mb-0">
           <select class="form-control" id="status_filter">
-            <option value="" selected>Todos</option>
+            <option value="" selected>Estados</option>
             {% for mykey,myvalue in status_choices %}
               <option value="{{ mykey }}">{{ myvalue }}</option>
             {% endfor %}
@@ -158,14 +158,14 @@
         </div>
         <div class="form-group col-sm-2 mb-0">
           <select class="form-control" id="type_filter">
-            <option value="" selected>Todos</option>
+            <option value="" selected>Tipos</option>
             {% for mykey,myvalue in typeProjects %}
               <option value="{{ mykey }}">{{ myvalue }}</option>
             {% endfor %}
           </select>
         </div>
 
-        <button class="btn btn-primary col-sm-3 mb-0" type="button" data-dismiss="modal" id="new">
+        <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
           <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Proyecto
         </button>
       </div>
@@ -249,7 +249,7 @@
 
               <div class="form-group col-lg-6 col-sm-12">
                 <label for="fechaRegistro"><span class="glyphicon glyphicon-eye-open"></span> Fecha de Registro</label>
-                <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date">
+                <input class="form-control pointer-event-none" id="fechaRegistro" name="fechaRegistro" type="date">
               </div>
             </div>
 
@@ -415,7 +415,7 @@
             }
           }
         },
-        placeholder: "Seleccionar patrimonio",
+        placeholder: "Patrimonio",
         allowClear: true,
         cache: false
       });
