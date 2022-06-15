@@ -29,7 +29,13 @@ def patrimonio_edit(request,pk):
 
 def detalle(request, pk):
     valor = Patrimonio.objects.get(pk=pk)
-    context = {'puntacion':4, 'valor':valor}
+    valoraciones = PatrimonioValoracion.objects.filter(patrimonio_id=pk).filter(estado=2)
+    puntuacion=0
+    for v in valoraciones:
+        puntuacion = v.valoracion + puntuacion
+
+    puntuacion=puntuacion/len(valoraciones)
+    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones}
 
     if request.POST:
         print(request.POST)
@@ -40,13 +46,13 @@ def detalle(request, pk):
         valoracion.comentario = request.POST.get("comment")
         valoracion.valoracion = request.POST.get("score")
         valoracion.save()
-        send_email(request, pk)
+        send_email(request, valoracion.pk)
         return HttpResponseRedirect(reverse(detalle, args=[pk]))
     return render(request, 'patrimonio/templateDetail.html', context)
 
 @method_decorator(csrf_exempt)
 def send_email(request, pk):
-    url = "http://localhost:8000/patrimonios/email/"+pk
+    url = "http://localhost:8000/patrimonios/email/"+str(pk)
     if request.POST:
         try:
             subject = "Confirma tu correo electrónico"
@@ -71,7 +77,9 @@ def send_email(request, pk):
 
 def email_confirmation(request, pk):
     valor = PatrimonioValoracion.objects.get(pk=pk)
+    print('Hola')
     valor.estado = 2
+    print(valor.estado)
     valor.save()
     context = {'valor':valor}
     return render(request, 'patrimonio/email_confirmation.html', context)
