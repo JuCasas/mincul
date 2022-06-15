@@ -68,6 +68,7 @@
 
       .form-control {
           background-color: white !important;
+          cursor: pointer!important;
       }
 
       .second {
@@ -77,6 +78,43 @@
           border-radius: 12px !important;
           height: 36px !important;
           font-size: 12px !important;
+      }
+
+      span.select2-selection.select2-selection--single{
+          display: flex!important;
+          align-items: center!important;
+      }
+
+      span.select2-selection__arrow{
+          margin-top: 5px!important;
+          display: none!important;
+      }
+
+      span.select2-selection__arrow > i.fa.fa-chevron-right:before {
+        content: "\f0fe";
+        }
+
+      span.select2-selection__arrow{
+          margin-top: 5px!important;
+      }
+
+      .select2-selection{
+          height: 36px!important;
+          border-radius: 10px!important;
+          border-color: #D7E1EE!important;
+          align-items: center!important;
+      }
+
+      .select2-selection__placeholder{
+          align-items: center!important;
+          font-size: 12px!important;
+          color: #BDC1D2!important;
+      }
+
+      .inputIcon2{
+          color: #393e44 !important;
+          font-size: 10px!important;
+          margin-top: 2px;
       }
 
   </style>
@@ -103,10 +141,13 @@
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
         </div>
+
         <div class="form-group col-sm-3 mb-0">
-          <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
+          <select class="selectpicker form-control" id="patrimonio" name="patrimonio">
           </select>
+            <span class="fas fa-chevron-down inputIcon inputIcon2 mr-3"></span>
         </div>
+
         <div class="form-group col-sm-2 mb-0">
           <select class="form-control" id="status_filter">
             <option value="" selected>Todos</option>
