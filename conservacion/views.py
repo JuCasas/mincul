@@ -271,6 +271,12 @@ def addActivity(request, pk):
   #     fechaFin=fechaFin)
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+@api_view(('GET',))
+def addTaskView(request, pk):
+    context = {
+      'activity': Actividad.objects.get(pk=pk)
+    }
+    return render(request, 'proyectoConservacion/addTask_view.html', context)
 
 @api_view(('POST',))
 def addTask(request, pk):

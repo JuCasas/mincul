@@ -358,26 +358,25 @@
             $('#cover-spin').hide()
             if (response["success"] !== undefined) {
               $.toast({
-                heading: 'Information',
                 text: response['message'],
                 icon: 'warning',
-                loader: true,        // Change it to false to disable loader
-                loaderBg: '#9EC600',  // To change the background
-                position: 'top-center',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#c67a71',
+                  textColor: '#000000',
+                position: 'bottom-right',
                 hideAfter: 3000,
               })
             } else {
               $('#myModal').modal('hide')
               $("#tabla_autores").DataTable().draw();
               $.toast({
-                heading: 'Information',
-                text: 'Loaders are enabled by default. Use `loader`, `loaderBg` to change the default behavior',
-                icon: 'info',
-                loader: true,        // Change it to false to disable loader
-                loaderBg: '#9EC600',  // To change the background
-                position: 'top-center',
-
-                hideAfter: 5000,
+                text: 'Proyecto actualizado con éxito',
+                icon: 'success',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#B7E6CA',  // To change the background
+                textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
               })
             }
           },

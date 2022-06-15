@@ -166,20 +166,31 @@ $('#confirm').on('click', '#delete', function (e) {
     url: '/conservacion/proyectos/delete/' + id + '/',
     method: 'POST',
     success: function (response) {
-      $('#cover-spin').hide()
-      $('#confirm').modal('hide')
-      $("#tabla_autores").DataTable().draw();
-      $.toast({
-        heading: 'Information',
-        text: 'Loaders are enabled by default. Use loader, loaderBg to change the default behavior',
-        icon: 'info',
-        loader: true,        // Change it to false to disable loader
-        loaderBg: '#9EC600',  // To change the background
-        position: 'top-center',
-        autohide:false,
-        hideAfter: 5000,
-      })
-    },
+            $('#cover-spin').hide()
+            if (response["success"] !== undefined) {
+              $.toast({
+                text: 'No se pudo eliminar el proyecto',
+                icon: 'warning',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#c67a71',
+                  textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
+              })
+            } else {
+              $('#myModal').modal('hide')
+              $("#tabla_autores").DataTable().draw();
+              $.toast({
+                text: 'Proyecto eliminado con éxito',
+                icon: 'success',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#B7E6CA',  // To change the background
+                textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
+              })
+            }
+          },
     error: function (error) {
       $('#cover-spin').hide()
       console.log(error)
