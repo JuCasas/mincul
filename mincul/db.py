@@ -1,7 +1,7 @@
 LOCAL = {
     'NAME': 'mincul',
     'USER': 'postgres',
-    'PASSWORD': '12345',
+    'PASSWORD': 'p0stgr3s742Fa!',
 }
 GAE = {
     'NAME': '',

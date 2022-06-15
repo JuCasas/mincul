@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+{% block body %}
+<div class="card mb-3">
+                <div class="position-relative">
+                    <div class="row" style="padding-bottom: 0px">
+                        <div class="col">
+                            <form id="form_buscar" method="post" action={% url 'mapaPatrimonio' %} >
+                                {% csrf_token %}
+                                <label for="txtBuscar"></label>
+                                <input name="patrimonio_name" class="form-control" id="txtBuscar" placeholder="Buscar patrimonio...">
+                                <div class="text-right">
+                                    <a class="text-black" style="font-size: small" href=#>
+                                        <u>Cambiar a búsqueda avanzada</u>
+                                    </a>
+                                </div>
+                                <button class="btn-primary text-white" type="submit" form="form_buscar">
+                                    Realizar Búsqueda
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+</html>

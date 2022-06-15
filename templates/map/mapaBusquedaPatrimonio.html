@@ -1,0 +1,80 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="../static/lib/flatpickr/flatpickr.min.css" rel="stylesheet">
+    <link href="../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
+
+    <link href="../static/lib/leaflet/leaflet.css" rel="stylesheet">
+    <link href="../static/lib/leaflet.markercluster/MarkerCluster.css" rel="stylesheet">
+    <link href="../static/lib/leaflet.markercluster/MarkerCluster.Default.css" rel="stylesheet">
+    <style></style>
+{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"/>
+    <!-- Crea la ruta -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <!--Barra lateral-->
+        <div class="col-md-4">
+            {% include 'map/latBar.html' %}
+        </div>
+        <!--Mapa-->
+        <div class="col-md-8">
+            <div class="card" style="width: 100%">
+                <div class="position-relative">
+                    <div id="map" style="height: 75vh; object-fit: cover; border-radius: 3px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if patrimonio %}
+    {% else %}
+        <!--modal para indicar una mala busqueda-->>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="../static/lib/flatpickr/flatpickr.min.js"></script>
+    <script src="{% static 'lib/raty-js/jquery.raty.js' %}"></script>
+
+    <script src="../static/lib/leaflet/leaflet.js"></script>
+    <script src="../static/lib/leaflet.markercluster/leaflet.markercluster.js"></script>
+    <script src="../static/lib/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js"></script>
+
+    <!-- leaflet js cdn -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <!-- ruta entre puntos -->
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script>
+        // leaflet map with osm tilelayer
+        var map = L.map('map').setView([-9.40, -75.00], 5);
+        var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
+
+        var myIcon = L.icon({
+            iconUrl: '../static/lib/leaflet/images/marker-icon.png',
+            iconSize: [15, 40],
+            iconAnchor: [15,40],
+            popupAnchor: [-1,-39]
+        });
+
+        {% if patrimonio %}
+        var marker = L.marker([{{ patrimonio.lat }},{{ patrimonio.long }}], {
+            icon: myIcon,
+            title: '{{ patrimonio.nombreTituloDemoninacion }}'
+        }).addTo(map).bindPopup(
+            "<div>" +
+                "<p>" + "{{ patrimonio.nombreTituloDemoninacion }}" +"</p>" +
+                "<img width='300' src='../static/img/generic/ciudadela-1.png'/>" +
+            "</div>").openPopup();
+        map.flyTo([{{ patrimonio.lat }},{{ patrimonio.long }}],14)
+        {% endif %}
+    </script>
+{% endblock %}
