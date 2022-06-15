@@ -180,6 +180,6 @@ $('#new').on('click', function (e) {
   $('#fechaRegistro').val(currentDate);
   $('#fechaRegistro').prop("disabled", true);
   $('#modal_title').text('Nueva Tarea');
-  $("#myModal").modal();
+  $("#modalTarea").modal();
 });
 
