@@ -14,11 +14,4 @@ urlpatterns = [
     path('proyectos/patrimonios/',views.listPatrimonys_Project, name='listPatrimonys_Project'),
     path('actividades/<pk>/tareas/addView/',views.addTaskView, name='addTaskView'),
     path('actividades/<pk>/tareas/add/',views.addTask, name='addTask'),
-    
-    
-    path('proyectos/<pk>/incidentes/', views.listIncidentes, name="listIncidentes")
-
-    
-    
-    
 ]
