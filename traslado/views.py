@@ -200,7 +200,7 @@ def editTransfer(request, pk):
         lista = list(patrimonios.values_list('pk',flat=True))
         print(lista)
         documentos = DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
-        estadosEditables = [('2', 'Evaluar'), ('3', 'Rechazar'), ('4', 'Aprobadar')]
+        estadosEditables = [('2', 'Evaluado'), ('3', 'Rechazado'), ('4', 'Aprobado')]
         operacion = 'editar'
         idEditar = pk
         context = {

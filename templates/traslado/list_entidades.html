@@ -284,33 +284,34 @@
             </button>
           </div>
           <div class="modal-body">
-            <form action="/traslado/registrarSolicitantes/" method="POST">{% csrf_token %}
+            <form name="formAddEntidades" id="formAddEntidades" action="/traslado/registrarSolicitantes/" method="POST">
+                {% csrf_token %}
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="inputDOI">DOI Entidad</label>
-                  <input type="text" class="form-control" id="inputDOI" name="inputDOI" required>
+                  <input type="text" class="form-control" id="inputDOI" name="inputDOI" >
                 </div>
                 <div class="form-group col-md-6">
                   <label for="inputNombre">Nombre Entidad</label>
-                  <input type="text" class="form-control" id="inputNombre" name="inputNombre" required>
+                  <input type="text" class="form-control" id="inputNombre" name="inputNombre" >
                 </div>
               </div><div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="inputCorreo">Correo</label>
-                  <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" required>
+                  <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" >
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="inputPassword4">Dirección</label>
-                  <input type="text" class="form-control" id="inputDireccion" name="inputDireccion" required>
+                  <label for="inputDireccion">Dirección</label>
+                  <input type="text" class="form-control" id="inputDireccion" name="inputDireccion" >
                 </div>
               </div><div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="inputPais">Pais</label>
-                  <input type="text" class="form-control" id="inputPais" name="inputPais" required>
+                  <input type="text" class="form-control" id="inputPais" name="inputPais" >
                 </div>
                 <div class="form-group col-md-6">
                   <label for="inputTelefono">Telefono</label>
-                  <input type="text" class="form-control" id="inputTelefono" name="inputTelefono" required>
+                  <input type="text" class="form-control" id="inputTelefono" name="inputTelefono" >
                 </div>
               </div>
               <button type="submit" class="btn btn-primary">Agregar Entidad</button>
@@ -334,33 +335,34 @@
             </button>
           </div>
           <div class="modal-body">
-            <form action="/traslado/editarSolicitante/" method="POST">{% csrf_token %}
+            <form action="/traslado/editarSolicitante/" method="POST" name="formEditEntidades" id="formEditEntidades">
+                {% csrf_token %}
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label for="inputDOI">DOI Entidad</label>
-                  <input type="text" class="form-control" id="inputDOI2" name="inputDOI2" required>
+                  <label for="inputDOI2">DOI Entidad</label>
+                  <input type="text" class="form-control" id="inputDOI2" name="inputDOI2" >
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="inputNombre">Nombre Entidad</label>
-                  <input type="text" class="form-control" id="inputNombre2" name="inputNombre2" required>
-                </div>
-              </div><div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputCorreo">Correo</label>
-                  <input type="email" class="form-control" id="inputCorreo2" name="inputCorreo2" required>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="inputPassword4">Dirección</label>
-                  <input type="text" class="form-control" id="inputDireccion2" name="inputDireccion2" required>
+                  <label for="inputNombre2">Nombre Entidad</label>
+                  <input type="text" class="form-control" id="inputNombre2" name="inputNombre2" >
                 </div>
               </div><div class="form-row">
                 <div class="form-group col-md-6">
-                  <label for="inputPais">Pais</label>
-                  <input type="text" class="form-control" id="inputPais2" name="inputPais2" required>
+                  <label for="inputCorreo2">Correo</label>
+                  <input type="email" class="form-control" id="inputCorreo2" name="inputCorreo2" >
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="inputTelefono">Telefono</label>
-                  <input type="text" class="form-control" id="inputTelefono2" name="inputTelefono2" required>
+                  <label for="inputDireccion2">Dirección</label>
+                  <input type="text" class="form-control" id="inputDireccion2" name="inputDireccion2" >
+                </div>
+              </div><div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputPais2">Pais</label>
+                  <input type="text" class="form-control" id="inputPais2" name="inputPais2" >
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputTelefono2">Telefono</label>
+                  <input type="text" class="form-control" id="inputTelefono2" name="inputTelefono2" >
                 </div>
               </div>
                 <input type="text" class="form-control" id="inputID" name="inputID" style="display: none">
@@ -375,7 +377,83 @@
 {% endblock %}
 
 {% block extrajs %}
+    <script src="{% static 'lib/jquery-validation/jquery.validate.min.js' %}"></script>
     <script >
+
+    jQuery.validator.addMethod("digitsROI", function (value, element) {
+            return this.optional(element) || /^(\d{8}|\d{11}|\d{12})+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+    jQuery.validator.addMethod("alphanumericNombreEnti", function (value, element) {
+            return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+    $("form[name='formAddEntidades']").validate({
+            rules: {
+                inputDOI: {
+                    required: true,
+                    digitsROI: true,
+                },
+                inputNombre: {
+                    required: true,
+                    alphanumericNombreEnti:true,
+                    maxlength: 100,
+                },
+                inputCorreo: {
+                    required: true,
+                },
+                inputDireccion:{
+                    required: true,
+                },
+                inputPais:{
+                    required:true,
+                },
+                inputDireccion:{
+                    required: true,
+                },
+                inputTelefono:{
+                    required: true,
+                }
+            },
+            messages: {
+                inputDOI: {
+                    required: "Debe ingresar el DOI de la entidad solicitante",
+                    digitsROI: "EL ROI debe ser una cadena numérica de 8, 11 o 12 dígitos ",
+                },
+                inputNombre: {
+                    required: "Debe ingresar el nombre de la entidad solicitante",
+                    alphanumericNombreEnti: "El nombre solo debe contener carácteres alfanuméricos incluido" +
+                        " guión(-) y guión bajo (_)",
+                    maxlength: "El nombre de la entidad no debe tener más de 100 caracteres",
+
+                },
+                inputCorreo: {
+                    required: "Debe ingresar el correo de la entidad solicitante",
+                },
+                inputDireccion:{
+                    required: "Debe ingresar la dirección de la entidad solicitante",
+                },
+                inputPais:{
+                    required: "Debe ingresar el país de la entidad solicitante",
+                },
+                inputDireccion:{
+                    required: "Debe ingresar la dirección de la entidad solicitante",
+                },
+                inputTelefono:{
+                    required: "Debe ingresar el teléfono de la entidad solicitante",
+                }
+            },
+            submitHandler: function (form, e) {
+                e.preventDefault();
+                if ($("#formAddEntidades").valid()) {
+                    form.submit();
+                }
+                return false;
+            }
+        });
+
+
+
 	$(document).on("click", "#btnEditar",function () {
 
            var id =$(this).data('id');
@@ -394,6 +472,71 @@
 		$("#inputPais2").val(pais);
 		$("#inputTelefono2").val(telefono);
     })
+    </script>
+
+    <script>
+    $("form[name='formEditEntidades']").validate({
+            rules: {
+                inputDOI2: {
+                    required: true,
+                    digitsROI: true,
+                },
+                inputNombre2: {
+                    required: true,
+                    alphanumericNombreEnti:true,
+                    maxlength: 100,
+                },
+                inputCorreo2: {
+                    required: true,
+                },
+                inputDireccion2:{
+                    required: true,
+                },
+                inputPais2:{
+                    required:true,
+                },
+                inputDireccion2:{
+                    required: true,
+                },
+                inputTelefono2:{
+                    required: true,
+                }
+            },
+            messages: {
+                inputDOI2: {
+                    required: "Debe ingresar el DOI de la entidad solicitante",
+                    digitsROI: "EL ROI debe ser una cadena numérica de 8, 11 o 12 dígitos ",
+                },
+                inputNombre2: {
+                    required: "Debe ingresar el nombre de la entidad solicitante",
+                    alphanumericNombreEnti: "El nombre solo debe contener carácteres alfanuméricos incluido" +
+                        " guión(-) y guión bajo (_)",
+                    maxlength: "El nombre de la entidad no debe tener más de 100 caracteres",
+                },
+                inputCorreo2: {
+                    required: "Debe ingresar el correo de la entidad solicitante",
+                },
+                inputDireccion2:{
+                    required: "Debe ingresar la dirección de la entidad solicitante",
+                },
+                inputPais2:{
+                    required: "Debe ingresar el país de la entidad solicitante",
+                },
+                inputDireccion2:{
+                    required: "Debe ingresar la dirección de la entidad solicitante",
+                },
+                inputTelefono2:{
+                    required: "Debe ingresar el teléfono de la entidad solicitante",
+                }
+            },
+            submitHandler: function (form, e) {
+                e.preventDefault();
+                if ($("#formEditEntidades").valid()) {
+                    form.submit();
+                }
+                return false;
+            }
+        });
     </script>
 
     <script >
