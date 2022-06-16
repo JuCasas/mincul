@@ -52,7 +52,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ubigeo">Dirección de destino:</label>
+                                    <label for="destino">Dirección de destino:</label>
                                     <input class="form-control" id="destino" name="destino" type="text" required>
                                 </div>
 
@@ -360,9 +360,102 @@
 
         let patrimoniosLista = [];
 
+        jQuery.validator.addMethod("alphanumeric", function (value, element) {
+        return this.optional(element) || /^[\w\-\s]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+        jQuery.validator.addMethod("alphanumericNombreExpo", function (value, element) {
+        return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+        jQuery.validator.addMethod("regexResolucion", function (value, element) {
+        return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-[SM][TC]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+        $("form[name='formAgregar']").validate({
+            rules: {
+                destino: {
+                    required: true,
+                    maxlength: 100,
+                    alphanumeric: true
+                },
+                nombreExposicion: {
+                    required: true,
+                    maxlength: 100,
+                    alphanumericNombreExpo: true
+                },
+                nResolucion: {
+                    required: true,
+                    regexResolucion: true
+                },
+            },
+            messages: {
+                destino: {
+                    required: "Debe ingresar el destino del traslado",
+                    maxlength: "El destino no debe tener más de 100 caracteres",
+                    alphanumeric: "El destino solo debe contener carácteres alfanuméricos"
+                },
+                nombreExposicion: {
+                    required: "Debe ingresar el nombre de la Exposición",
+                    maxlength: "El nombre de la exposición no debe tener más de 100 caracteres",
+                    alphanumericNombreExpo: "El destino solo debe contener carácteres alfanuméricos incluido" +
+                        " guión(-) y guión bajo (_)"
+                },
+                nResolucion: {
+                    required: "Debe ingresar el número de Resolución",
+                    regexResolucion: "El número de resolución debe ser una cadena conformada por 3 campos" +
+                        " (un número de 6 dígitos, el año actual y las letras “ST/MC”) separadas por un guion. "
+                },
+            },
+            submitHandler: function (form, e) {
+                e.preventDefault();
+                if ($("#formAgregar").valid()) {
+                    var nResolucion = ValidarResolucion();
+                    var fechasCorrectas = ValidarFechas();
+                    if (!nResolucion && fechasCorrectas) {
+                        console.log("Todo Bien!");
+                        form.submit();
+                    } else if (!fechasCorrectas) {
+                        $("#modalFecha").modal('show');
+                    } else if (nResolucion) {
+                        $("#modalNombreCodigo").modal('show');
+                    }
+                }
+                return false;
+
+                function ValidarResolucion() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'validarResolucion'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
+            }
+
+                function ValidarFechas() {
+                var fechainicial = document.getElementById("fechaSalidaProgramada").value;
+                var fechafinal = document.getElementById("fechaRetornoProgramada").value;
+
+                var fechaIni = new Date(fechainicial);
+                var fechaFin = new Date(fechafinal);
+
+                return (fechaFin > fechaIni);
+            }
+            }
+        });
+
 
         $(document).ready(function () {
-
 
             $("#agr").on('click', function () {
                 if ($("#formAgregar").valid()) {
@@ -408,6 +501,8 @@
 
                 return (fechaFin > fechaIni);
             }
+
+
 
             $("#patrimonio_select").select2({
                 placeholder: "Select a State",
