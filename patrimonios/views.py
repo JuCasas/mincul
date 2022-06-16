@@ -5,16 +5,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 # Create your views here.
-from patrimonios.models import Patrimonio
+from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
+    ActividadTuristica
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from patrimonios.models import PatrimonioValoracion, Patrimonio
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from authentication.models import User
-from patrimonios.models import Patrimonio, Institucion
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 from incidente.models import Incidente
 
@@ -62,10 +61,27 @@ def gestorPatrimonio_list_api(request):
 def patrimonio_edit(request,pk):
     patrimonio = -1
     #patrimonio = Patrimonio.objects.get(pk=pk)
-    context = {
-        'patrimonio': patrimonio,
-    }
-    return render(request, 'patrimonio/patrimony_edit.html', context)
+    entradas = Entrada.objects.filter()
+    actividadesTuristicas = ActividadTuristica.objects.filter()
+    if int(pk) == 1:
+        categorias = Categoria.objects.filter(tipo=2)
+        context = {
+            'patrimonio': patrimonio,
+            'categorias': categorias,
+
+        }
+        return render(request, 'patrimonio/patrimony_inmueble_edit.html', context)
+    else:
+        categorias = Categoria.objects.filter(tipo=1)
+        tiposIngreso = PatrimonioInMaterial.tipoIngreso.field.choices
+        context = {
+            'patrimonio': patrimonio,
+            'categorias': categorias,
+            'tiposIngreso': tiposIngreso,
+            'entradas': entradas,
+            'actividades_turisticas': actividadesTuristicas,
+        }
+        return render(request, 'patrimonio/patrimony_inmaterial_edit.html', context)
 
 def detalle(request, pk):
     valor = Patrimonio.objects.get(pk=pk)

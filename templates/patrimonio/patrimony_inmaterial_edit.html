@@ -54,7 +54,9 @@
                                                type="text" value="Inmaterial" readonly>
                                         <h6 class="mb-2 mb-md-0 text-black">Categoría:</h6>
                                         <select class="form-control mt-3 mb-3" id="categoria">
-                                            <option>-</option>
+                                            {% for categoria in categorias %}
+                                                <option> {{ categoria.nombre }} </option>
+                                            {% endfor %}
                                         </select>
                                         <h6 class="mb-2 mb-md-0 text-black">Institución:</h6>
                                         <select class="form-control mt-3 mb-3 selectpicker" id="institucion"
@@ -94,7 +96,9 @@
                                     <div class="col-sm">
                                         <h6 class="mb-2 mb-md-0 text-black">Tipo Ingreso:</h6>
                                         <select class="form-control mt-3 mb-3" id="tipoIngreso">
-                                            <option>-</option>
+                                            {% for tipo in tiposIngreso %}
+                                                <option>{{ tipo.1 }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                 </div>
@@ -208,18 +212,12 @@
                                     </button>
                                 </div>
                                 <div class="row pr-3 pl-3">
-                                    <button class="btn btn-falcon-info m-1" type="button">
-                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
-                                        General S/.5.00
-                                    </button>
-                                    <button class="btn btn-falcon-info m-1" type="button">
-                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
-                                        Universitario S/.3.50
-                                    </button>
-                                    <button class="btn btn-falcon-info m-1" type="button">
-                                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
-                                        Estudiante S/.1.50
-                                    </button>
+                                    {% for entrada in entradas %}
+                                        <button class="btn btn-falcon-info m-1" type="button">
+                                            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                            {{ entrada.descripcion }} S/.{{ entrada.precio }}
+                                        </button>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -239,27 +237,15 @@
                                     </button>
                                 </div>
                                 <div class="row pr-3 pl-3">
-                                    <div class="card btn-falcon-info h-25 m-1">
-                                        <div class="card-body">
-                                            <p class="m-0">Categoria: 1</p>
-                                            <p class="m-0">Tipo: 1</p>
-                                            <p class="m-0">Observaciones: ...</p>
+                                    {% for actividad in actividades_turisticas %}
+                                        <div class="card btn-falcon-info h-25 m-1">
+                                            <div class="card-body">
+                                                <p class="m-0">Categoria: {{ actividad.categoria }}</p>
+                                                <p class="m-0">Tipo: {{ actividad.tipo }}</p>
+                                                <p class="m-0">Observaciones: {{ actividad.observacion }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="card btn-falcon-info h-25 m-1">
-                                        <div class="card-body">
-                                            <p class="m-0">Categoria: 1</p>
-                                            <p class="m-0">Tipo: 2</p>
-                                            <p class="m-0">Observaciones: ...</p>
-                                        </div>
-                                    </div>
-                                    <div class="card btn-falcon-info h-25 m-1">
-                                        <div class="card-body">
-                                            <p class="m-0">Categoria: 2</p>
-                                            <p class="m-0">Tipo: 2</p>
-                                            <p class="m-0">Observaciones: ...</p>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>

@@ -6,5 +6,95 @@
       "name": "Administrador",
       "permissions": []
     }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 1,
+    "fields": {
+      "nombre": "Sitios Naturales",
+      "tipo": "2",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 2,
+    "fields": {
+      "nombre": "Manifestaciones Culturales",
+      "tipo": "2",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 3,
+    "fields": {
+      "nombre": "Realizaciones Tecnicas, Cientificas y Artisticas Contemporaneas",
+      "tipo": "2",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 4,
+    "fields": {
+      "nombre": "Folclore",
+      "tipo": "1",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 5,
+    "fields": {
+      "nombre": "Acontecimientos Programados",
+      "tipo": "1",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 6,
+    "fields": {
+      "nombre": "Arqueologico",
+      "tipo": "3",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 7,
+    "fields": {
+      "nombre": "Historico-Artistico",
+      "tipo": "3",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 8,
+    "fields": {
+      "nombre": "Etnografico",
+      "tipo": "3",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 9,
+    "fields": {
+      "nombre": "Plaeontologico",
+      "tipo": "3",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.categoria",
+    "pk": 10,
+    "fields": {
+      "nombre": "Industrial",
+      "tipo": "3",
+      "estado": "1"
+    }
   }
 ]

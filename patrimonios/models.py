@@ -57,6 +57,20 @@ class Responsable(models.Model):
     fecha = models.DateField(blank=True, null=True, verbose_name='fecha')
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
+class Categoria (models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    TIPO = (
+        ('1', 'Inmaterial'),
+        ('2', 'Material Inmueble'),
+        ('3', 'Material Mueble'),
+    )
+    nombre = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=2, choices=TIPO)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+
 class Patrimonio (models.Model):
     ESTADOS = (
         ('1', 'Activo'),
@@ -64,23 +78,9 @@ class Patrimonio (models.Model):
     )
 
     TIPO = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2 '),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
-    )
-
-    CATEGORIA = (
-        ('1', 'Sitios Naturales'),
-        ('2', 'Manifestaciones Culturales'),
-        ('3', 'Realizaciones Técnicas, Científicas y Artísticas Contemporáneas'),
-        ('4', 'Folclore'),
-        ('5', 'Acontecimientos Programados'),
-        ('6', 'Arqueológico'),
-        ('7', 'Histórico-Artístico'),
-        ('8', 'Etnográfico'),
-        ('9', 'Plaeontológico'),
-        ('10', 'Industrial'),
+        ('1', 'Inmaterial'),
+        ('2', 'Material Inmueble'),
+        ('3', 'Material Mueble'),
     )
 
     nombreTituloDemoninacion = models.CharField(max_length=30)
@@ -98,7 +98,7 @@ class Patrimonio (models.Model):
     descripcion = models.CharField(max_length=200)
     observacion = models.CharField(max_length=200)
     tipoPatrimonio = models.CharField(max_length=2, choices=TIPO, default='1')
-    categoria = models.CharField(max_length=2, choices=CATEGORIA, default='1')
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     institucion = models.ForeignKey(Institucion,null=True, on_delete=models.CASCADE)
     gestor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     propietarios = models.ManyToManyField(Propietario)
@@ -376,8 +376,7 @@ class PatrimonioInMaterial(models.Model):
     TIPOINGRESO = (
         ('1', 'Gratuito'),
         ('2', 'Pagado'),
-        ('3', 'Estado 3'),
-        ('4', 'No información'),
+        ('3', 'No información'),
     )
     tipo = models.CharField(max_length=2, choices=TIPO, default='1')
     subtipo = models.CharField(max_length=2, choices=SUBTIPO, default='1')
