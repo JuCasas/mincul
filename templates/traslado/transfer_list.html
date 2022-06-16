@@ -1,151 +1,240 @@
-{% extends 'base/base.html' %}
+{% extends 'traslado/components/base.html' %}
 {% load static %}
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
     <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
     <link href="{% static 'lib/dropzone/dropzone.min.css' %}" rel="stylesheet">
+    <style>
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
 
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-1 {
+            text-align: center;
+            float: left;
+            border: 1px solid #2B2D42 !important;
+            background-color: #2B2D42 !important;
+            color: white !important;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-2 {
+            text-align: center;
+            float: left;
+            border: 1px solid floralwhite;
+            background-color: white;
+            color: black;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-2:hover {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+        }
+
+
+        .table.dataTable tbody th, table.dataTable tbody td {
+            padding: 8px 10px 8px 18px !important;
+        }
+
+        .form-control {
+            background-color: white !important;
+        }
+
+        .form-control {
+            background-color: white !important;
+            cursor: pointer !important;
+        }
+
+
+        span.select2-selection.select2-selection--single {
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        span.select2-selection__arrow {
+            margin-top: 5px !important;
+        }
+
+        span.select2-selection__arrow {
+            margin-top: 5px !important;
+        }
+
+        .select2-selection {
+            height: 36px !important;
+            border-radius: 10px !important;
+            border-color: #D7E1EE !important;
+            align-items: center !important;
+        }
+
+        .select2-selection__placeholder {
+            align-items: center !important;
+            font-size: 12px !important;
+            color: #BDC1D2 !important;
+        }
+
+        .back {
+            font-size: 14px !important;
+        }
+
+    </style>
 {% endblock %}
 
 
 
 {% block body %}
 
-    <div class="card mb-3">
-        <div class="card-body p-0">
-            <div class="d-flex flex-row  justify-content-between my-1">
-                <div class="col-sm-auto mx-1 my-1">
-                    <h3>Traslados</h3>
-                </div>
-                <div class="col-sm-auto">
-                    <button class="btn btn-primary my-1 " type="button">
-                        Traslados
-                    </button>
-                    <a class="btn btn-secondary mr-1 my-1 " href="{%  url 'listEntidades' %}" type="button">
-                        Entidad solicitante
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="card mb-3">
-        <div class="card-body p-0">
-            <div class="navbar">
-                <div class="col-sm-auto mb-2 mb-sm-0">
-                  {% comment %}  <h6 class="mb-0">Mostrando 1-24 de 205 Traslados</h6>{% endcomment %}
+        <div class="card-body cardRed">
+            <div class="row justify-content-between ">
+                <div class="col-md-auto d-flex align-items-center">
+                    <h5 class="mb-2 mb-md-0 text-black">Traslados</h5>
                 </div>
-
-                <div class="row d-flex align-items-center">
-
-                    <div class="form-group col-sm-auto my-1">
-                        <a class="btn btn-primary" href="{% url 'addTransfer' %}" type="button">
-                            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar traslado
-                        </a>
-                    </div>
-
-                    <div class="form-group col-sm-auto my-1">
-                        <div class="position-relative">
-                            <input class="form-control" id="name" type="text" placeholder="Entidad solicitante">
-                            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                <div class="col-md-6 col-sm-12">
+                    <div class="nav-bar nav-bar-right">
+                        <div class="nav nav-pills d-flex justify-content-end">
+                            <button class="nav-link col-md-4 btn-1 my-1" disabled>Traslados</button>
+                            <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listEntidades' %}">Entidades</a>
                         </div>
                     </div>
-
-                    <div class="form-group col-sm-auto my-1">
-                        <div class="position-relative">
-                            <input class="form-control" id="fecha_llegada" type="date" placeholder="Fecha llegada">
-                            </imput>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-sm-auto my-1">
-                        <div class="position-relative">
-                            <input class="form-control" id="fecha_salida" type="date" placeholder="Fecha Salida">
-                            </imput>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group col-sm-auto my-1">
-                        <select class="form-control" id="estado_traslado">
-                            <option selected>Estado</option>
-                            <option>Lima</option>
-                            <option>Ica</option>
-                            <option>Cusco</option>
-                        </select>
-                    </div>
-
                 </div>
             </div>
+
+
         </div>
     </div>
-
 
     <div class="card mb-3">
         <div class="card-body">
-            <div class="falcon-data-table">
-                <table class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100"
-                       data-options='{"searching":false,"responsive":false,"pageLength":15,"info":true,"lengthChange":false,"sWrapper":"falcon-data-table-wrapper","dom":"<&#39;row mx-1&#39;<&#39;col-sm-12 col-md-6&#39;l><&#39;col-sm-12 col-md-6&#39;f>><&#39;table-responsive&#39;tr><&#39;row no-gutters px-1 py-3 align-items-center justify-content-center&#39;<&#39;col-auto&#39; p>>","language":{"paginate":{"next":"<span class=\"fas fa-chevron-right\"></span>","previous":"<span class=\"fas fa-chevron-left\"></span>"}}}'>
-                    <thead class="bg-200">
-                    <tr>
-                        <th class="sort">Nro. Documento</th>
-                        <th class="sort">Comisario</th>
-                        <th class="sort">Entidad Solicitante</th>
-                        <th class="sort">Fecha llegada</th>
-                        <th class="sort">Fecha Salida</th>
-                        <th class="sort">Estado</th>
-                        <th class="sort">Acciones</th>
-                    </tr>
-                    </thead>
-                    <tbody class="bg-white">
+            <div class="row filterBar justify-content-end mr-0">
+                <a class="btn btn-primary col-sm-2 mb-0" href="{% url 'addTransfer' %}" type="button">
+                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Actividad
+                </a>
+                <div class="form-group col-sm-3 mb-0">
+                    <div class="position-relative">
+                        <input class="form-control" id="search" type="text" placeholder="Entidad Solicitante">
+                        <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                    </div>
+                </div>
 
-                    {% for traslado in traslados %}
-                        <tr>
-                            <td>{{ traslado.pk }}</td>
-                            <td>{{ traslado.gestorConservacionTraslados }}</td>
-                            <td>{{ traslado.entidadSolicitante.nombreSolicitante }}</td>
-                            <td>{{ traslado.fechaRetornoProgramada }}</td>
-                            <td>{{ traslado.fechaSalidaProgramada }}</td>
-                            <td>
-                                {% if traslado.estado == '1' %}
-                                    <button class="btn btn-sm btn-info rounded-capsule">Registrado</button>
-                                {% elif traslado.estado == '2' %}
-                                    <button class="btn btn-secondary">Aprobado</button>
-                                {% elif traslado.estado == '3' %}
-                                    <button class="btn btn-secondary">Rechazado</button>
-                                {% endif %}
-                            </td>
+                <div class="form-group col-sm-2 mb-0">
+                    <select class="form-control" id="status_filter">
+                        <option value="" selected>Todos los estados</option>
+                        <option value="1">Registrada</option>
+                        <option value="2">En evaluación</option>
+                        <option value="3">Rechazada</option>
+                        <option value="4">Aprobada</option>
+                        <option value="5">Ejecutada</option>
+                    </select>
+                </div>
 
-                            <td>
-                                <a class="btn" href="{% url 'view_transfer' traslado.pk %}" type="button">
-                                    <i class="fa fa-eye" data-fa-transform="shrink-3"></i>
-                                </a>
-                                <a class="btn" href="{% url 'edit_transfer'  traslado.pk %}" type="button">
-                                    <i class="fa fa-edit" data-fa-transform="shrink-3"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-
-
-                    </tbody>
-
-                    <tfoot class="bg-200">
-                    <tr>
-                        <th class="sort">Nro. Documento</th>
-                        <th class="sort">Comisario</th>
-                        <th class="sort">Entidad Solicitante</th>
-                        <th class="sort">Fecha llegada</th>
-                        <th class="sort">Fecha Salida</th>
-                        <th class="sort">Estado</th>
-                        <th class="sort">Acciones</th>
-                    </tr>
-                    </tfoot>
-                </table>
             </div>
         </div>
     </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <table id="tabla_traslados" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
+                <thead class="bg-200">
+                <tr>
+                    <th class="sort ">Nro. Documento</th>
+                    <th class="sort">Comisario</th>
+                    <th class="sort">Entidad Solicitante</th>
+                    <th class="sort">Fecha llegada</th>
+                    <th class="sort">Fecha Salida</th>
+                    <th class="sort">Estado</th>
+                    <th class="sort">Acciones</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {#    <div class="card mb-3">#}
+    {#        <div class="card-body">#}
+    {#            <div class="falcon-data-table">#}
+    {#                <table class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100"#}
+    {#                       data-options='{"searching":false,"responsive":false,"pageLength":15,"info":true,"lengthChange":false,"sWrapper":"falcon-data-table-wrapper","dom":"<&#39;row mx-1&#39;<&#39;col-sm-12 col-md-6&#39;l><&#39;col-sm-12 col-md-6&#39;f>><&#39;table-responsive&#39;tr><&#39;row no-gutters px-1 py-3 align-items-center justify-content-center&#39;<&#39;col-auto&#39; p>>","language":{"paginate":{"next":"<span class=\"fas fa-chevron-right\"></span>","previous":"<span class=\"fas fa-chevron-left\"></span>"}}}'>#}
+    {#                    <thead class="bg-200">#}
+    {#                    <tr>#}
+    {#                        <th class="sort">Nro. Documento</th>#}
+    {#                        <th class="sort">Comisario</th>#}
+    {#                        <th class="sort">Entidad Solicitante</th>#}
+    {#                        <th class="sort">Fecha llegada</th>#}
+    {#                        <th class="sort">Fecha Salida</th>#}
+    {#                        <th class="sort">Estado</th>#}
+    {#                        <th class="sort">Acciones</th>#}
+    {#                    </tr>#}
+    {#                    </thead>#}
+    {#                    <tbody class="bg-white">#}
+    {##}
+    {#                    {% for traslado in traslados %}#}
+    {#                        <tr>#}
+    {#                            <td>{{ traslado.pk }}</td>#}
+    {#                            <td>{{ traslado.gestorConservacionTraslados }}</td>#}
+    {#                            <td>{{ traslado.entidadSolicitante.nombreSolicitante }}</td>#}
+    {#                            <td>{{ traslado.fechaRetornoProgramada }}</td>#}
+    {#                            <td>{{ traslado.fechaSalidaProgramada }}</td>#}
+    {#                            <td>#}
+    {#                                {% if traslado.estado == '1' %}#}
+    {#                                    <button class="btn btn-sm btn-info rounded-capsule">Registrado</button>#}
+    {#                                {% elif traslado.estado == '2' %}#}
+    {#                                    <button class="btn btn-secondary">Aprobado</button>#}
+    {#                                {% elif traslado.estado == '3' %}#}
+    {#                                    <button class="btn btn-secondary">Rechazado</button>#}
+    {#                                {% endif %}#}
+    {#                            </td>#}
+    {##}
+    {#                            <td>#}
+    {#                                <a class="btn" href="{% url 'view_transfer' traslado.pk %}" type="button">#}
+    {#                                    <i class="fa fa-eye" data-fa-transform="shrink-3"></i>#}
+    {#                                </a>#}
+    {#                                <a class="btn" href="{% url 'edit_transfer'  traslado.pk %}" type="button">#}
+    {#                                    <i class="fa fa-edit" data-fa-transform="shrink-3"></i>#}
+    {#                                </a>#}
+    {#                            </td>#}
+    {#                        </tr>#}
+    {#                    {% endfor %}#}
+    {##}
+    {##}
+    {#                    </tbody>#}
+    {##}
+    {#                    <tfoot class="bg-200">#}
+    {#                    <tr>#}
+    {#                        <th class="sort">Nro. Documento</th>#}
+    {#                        <th class="sort">Comisario</th>#}
+    {#                        <th class="sort">Entidad Solicitante</th>#}
+    {#                        <th class="sort">Fecha llegada</th>#}
+    {#                        <th class="sort">Fecha Salida</th>#}
+    {#                        <th class="sort">Estado</th>#}
+    {#                        <th class="sort">Acciones</th>#}
+    {#                    </tr>#}
+    {#                    </tfoot>#}
+    {#                </table>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
 
 
 
@@ -161,7 +250,117 @@
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'lib/dropzone/dropzone.min.js' %}"></script>
+    <script>
 
+
+        let table = $('#tabla_traslados').DataTable({
+            "searching": false,
+            "serverSide": true,
+            "processing": true,
+            "lengthChange": false,
+            "pageLength": 10,
+            "scrollX": true,
+            "ajax": function (data, callback, settings) {
+                let order_column = data.order[0].column
+                let order = data.order[0].dir
+
+                $.ajax({
+                    url: '',
+                    type: 'get',
+                    data: {
+                        length: data.length,
+                        start: data.start,
+                        search_value: $('#search').val(),
+                        status_filter: $('#status_filter').val(),
+                        order_column: order_column,
+                        order: order
+                    },
+                    success: function (data, textStatus, jQxhr) {
+                        console.log(data.data);
+                        callback({
+                            recordsTotal: data.recordsTotal,
+                            recordsFiltered: data.recordsFiltered,
+                            data: data.data
+                        });
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                    }
+                });
+            },
+            "columns": [
+                {"data": "id"},
+                {"data": "gestorConservacionTraslados"},
+                {"data": "entidadSolicitante"},
+                {"data": "fechaRetornoProgramada"},
+                {"data": "fechaSalidaProgramada"},
+                {
+                    "data": "estado", render: function (data, type, row) {
+                        if (data === '1') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrada" + '</span>'
+                        } else if (data === '2') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-info">' + "En Evaluacion" + '</span>'
+                        } else if (data === '3') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Rechazada" + '</span>'
+                        } else if (data === '4') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Aprobada" + '</span>'
+                        } else {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-dark">' + "Ejecutada" + '</span>'
+                        }
+                        return resp;
+                    },
+                },
+
+                {
+                    "data": "id", render: function (data, type, row) {
+                        resp = '<button type="button" class="btn btn-show" onclick="visualizarTraslado(' + data + ')"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                            '<button type="button" class="btn btn-edit" onclick="editarTraslado(' + data + ')" ><i class="fas fa-edit""></i></button>' + '&nbsp;&nbsp' +
+                            '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>';
+                        return resp;
+                    },
+                    "orderable": false,
+                },
+
+            ],
+            "language": {
+                "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+        });
+
+        $('#search').keyup(function () {
+            $('#tabla_traslados').DataTable().search($(this).val()).draw();
+        })
+        $('#status_filter').change(function () {
+            $('#tabla_traslados').DataTable().draw();
+        });
+
+        function visualizarTraslado(id) {
+            document.location.href = "../../traslado/ver/" + id;
+        };
+
+        function editarTraslado(id) {
+            document.location.href = "../../traslado/editar/" + id;
+        };
 
     </script>
 {% endblock %}

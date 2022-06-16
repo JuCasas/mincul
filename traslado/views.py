@@ -2,7 +2,11 @@ import datetime
 
 from django.shortcuts import render, redirect
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from authentication.models import User
+from traslado.serializers import TrasladoSerializer
 from mincul.settings import MEDIA_URL
 from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
@@ -11,6 +15,37 @@ from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from django.core import serializers
 from django.http import JsonResponse
+
+
+def query_transfer_by_args(**kwargs):
+  print(kwargs)
+  length = int(kwargs.get('length', None)[0])
+  start = int(kwargs.get('start', None)[0])
+  search_value = kwargs.get('search_value', None)[0]
+  status_filter = kwargs.get('status_filter', None)[0]
+  order_column = kwargs.get('order_column', None)[0]
+  order = kwargs.get('order', None)[0]
+
+  queryset = SolicitudTraslado.objects.all()
+
+  total = queryset.count()
+
+  # order_column = SolicitudTraslado.ORDER_COLUMN_CHOICES[order_column]
+  # if order == 'desc':
+  #   order_column = '-' + order_column
+
+  if search_value:
+    queryset = queryset.filter(entidadSolicitante__nombreSolicitante__icontains=search_value)
+  if status_filter:
+    queryset = queryset.filter(estado=status_filter)
+
+  count = queryset.count()
+  # queryset = queryset.order_by(order_column)[start:start + length]
+  return {
+    'items': queryset,
+    'count': count,
+    'total': total,
+  }
 
 def addTransfer(request):
     if request.POST:
@@ -67,12 +102,25 @@ def validarResolucion(request):
     print(existe)
     return JsonResponse({"existe": existe}, status=200)
 
+@api_view(('GET',))
 def listTranfers(request):
+    if request.is_ajax():
+        tranfers = query_transfer_by_args(**request.GET)
+        serializer = TrasladoSerializer((tranfers['items']), many=True)
+        result = dict()
+        result['data'] = serializer.data
+        result['recordsTotal'] = tranfers['total']
+        result['recordsFiltered'] = tranfers['count']
 
-    traslados = SolicitudTraslado.objects.all()
-    context = {
-        'traslados': traslados
-    }
+        print("####################################")
+        print(result)
+        print("####################################")
+        return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+    else:
+        traslados = SolicitudTraslado.objects.all()
+        context = {
+            'traslados': traslados
+        }
 
     return render(request,'traslado/transfer_list.html', context)
 
