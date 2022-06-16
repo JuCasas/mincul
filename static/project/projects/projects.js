@@ -63,7 +63,7 @@ let table = $('#tabla_autores').DataTable({
         if (data == '0') {
           resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
         } else if (data == '1') {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Pendiente" + '</span>'
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrado" + '</span>'
         } else {
           resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
         }

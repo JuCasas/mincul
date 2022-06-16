@@ -153,17 +153,17 @@ def listProjects(request, **kwargs):
 @api_view(('POST',))
 def addProject(request):
   try:
-    codigo = request.POST['codigo']
     nombre = request.POST['nombre']
     fechaInicio = datetime.date.today()
     fechaFin = datetime.date.today()
     tipo = int((request.POST['tipoPlan']))
     project = ProyectoConservacion.objects.create(
-      codigo=codigo,
       nombre=nombre,
       tipoProyecto=tipo,
       fechaInicio=fechaInicio,
       fechaFin=fechaFin)
+    project.codigo = "PROY" + str(project.id).zfill(6)
+    project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
   except Exception as e:
     result = dict()
