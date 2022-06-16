@@ -174,15 +174,19 @@ def addProject(request):
 
 @api_view(('POST',))
 def editProject(request, pk):
-  project = ProyectoConservacion.objects.get(pk=pk)
-  codigo = request.POST['codigo']
-  nombre = request.POST['nombre']
-  tipo = int((request.POST['tipoPlan']))
-  project.codigo = codigo
-  project.nombre = nombre
-  project.tipoProyecto = tipo
-  project.save()
-  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  try:
+    project = ProyectoConservacion.objects.get(pk=pk)
+    nombre = request.POST['nombre']
+    tipo = int((request.POST['tipoPlan']))
+    project.nombre = nombre
+    project.tipoProyecto = tipo
+    project.save()
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  except Exception as e:
+    result = dict()
+    result['success'] = False
+    result['message'] = str(e) # or custom message
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 
 @api_view(('POST',))
