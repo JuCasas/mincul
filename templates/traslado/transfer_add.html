@@ -5,7 +5,7 @@
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
     <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
-    <link href="{% static 'lib/dropzone/dropzone.min.css' %}" rel="stylesheet">
+
 
     <style>
 
@@ -52,7 +52,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="destino">Dirección de destino:</label>
+                                    <label for="ubigeo">Dirección de destino:</label>
                                     <input class="form-control" id="destino" name="destino" type="text" required>
                                 </div>
 
@@ -202,53 +202,44 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-11">
-                        <div class="row mx-3">
-                            <h5>Estado: </h5>
-                            {% if traslado.estado == '1' %}
-                                <button class="btn btn-sm btn-warning rounded-capsule mx-1">Sin aprobar</button>
-                            {% elif traslado.estado == '2' %}
-                                <button class="btn btn-secondary">Aprobado</button>
-                            {% endif %}
-                        </div>
-
+                <div class="card my-3">
+                    <div class="card-header">
+                        <h5>Documentos:</h5>
                     </div>
-                    <div class="col-1 align-items-end">
-                        <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>
-                    </div>
-                </div>
-                <div class="dropzone dropzone-multiple p-0" data-dropzone>
-                    <div class="fallback">
-                        <input type="file" name="file" multiple>
-                    </div>
-
-
-                    <div class="dz-message" data-dz-message><img class="mr-2"
-                                                                 src="{% static 'img/icons/cloud-upload.svg"' %}"
-                                                                 width="25" alt="">Drop your files here
-                    </div>
-                    <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
-                        <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger"><img
-                                class="dz-image" src="..." alt="..." data-dz-thumbnail>
-                            <div class="media-body d-flex flex-between-center">
-                                <div>
-                                    <h6 data-dz-name></h6>
-                                    <div class="d-flex align-items-center">
-                                        <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>
-                                        <div class="dz-progress"><span class="dz-upload"
-                                                                       data-dz-uploadprogress=""></span>
+                    <div class="card-body bg-light">
+                        <div class="dropzone dropzone-multiple p-0" data-dropzone
+                             data-options='{"url":"valid/url"}'>
+                            <div class="fallback">
+                                <input type="file" name="file2">
+                            </div>
+                            <div class="dz-message" data-dz-message><img class="mr-2"
+                                                                         src="{% static 'img/icons/cloud-upload.svg' %}"
+                                                                         width="25" alt="">Suelta tus archivos aquí
+                            </div>
+                            <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
+                                <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger">
+                                    <img
+                                            class="dz-image" src="..." alt="..." data-dz-thumbnail>
+                                    <div class="media-body d-flex flex-between-center">
+                                        <div>
+                                            <h6 data-dz-name></h6>
+                                            <div class="d-flex align-items-center">
+                                                <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>
+                                                <div class="dz-progress"><span class="dz-upload"
+                                                                               data-dz-uploadprogress=""></span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="dropdown text-sans-serif">
-                                    <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"
-                                            type="button" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                        <span class="fas fa-ellipsis-h"></span></button>
-                                    <div class="dropdown-menu dropdown-menu-right border py-0">
-                                        <div class="bg-white py-2"><a class="dropdown-item" href="#!" data-dz-remove>Remove
-                                            File </a></div>
+                                        <div class="dropdown text-sans-serif">
+                                            <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"
+                                                    type="button" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false"><span class="fas fa-ellipsis-h"></span>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right border py-0">
+                                                <div class="bg-white py-2"><a class="dropdown-item" href="#!"
+                                                                              data-dz-remove>Remove File </a></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -256,36 +247,9 @@
                     </div>
                 </div>
 
-                <div class="card my-3">
-                    <div class="card-header">
-                        <h5>Documentos:</h5>
-                    </div>
-                    <div class="card-body bg-light">
-                        <div class="row">
-                            {% for documento in documentos %}
-                                <div class="col-2">
-                                    <a class="notification notification-flush bg-0 "
-                                       href="{{ media_path }}{{ documento.documento.url }}" download>
-                                        <div class="card mx-1">
-                                            <div class="card-body p-0">
-                                                <div>
-                                                    <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
-                                                </div>
-                                            </div>
-                                            <div class="card-footer p-2">
-                                                <h6>{{ documento.documento.filename }}</h6>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-
                 <input id="lista" name="lista" type="hidden">
 
-                <div class="wrapper row justify-content-end">
+                <div class="wrapper row justify-content-end mt-5">
                     <div class="d-flex flex-row justify-content-end">
                         <a class="btn btn-primary mr-3 mb-1" type="button"
                            href="{% url 'list_transfers' %}">Cancelar</a>
@@ -353,7 +317,6 @@
 {% block extrajs %}
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'lib/dropzone/dropzone.min.js' %}"></script>
     <script src="{% static 'lib/jquery-validation/jquery.validate.min.js' %}"></script>
 
     <script>
