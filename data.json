@@ -1,0 +1,2148 @@
+[
+  {
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+      "action_time": "2022-06-13T08:23:24.385Z",
+      "user": 1,
+      "content_type": 10,
+      "object_id": "1",
+      "object_repr": "Institucion object (1)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+      "action_time": "2022-06-13T08:26:50.871Z",
+      "user": 1,
+      "content_type": 11,
+      "object_id": "1",
+      "object_repr": "Propietario object (1)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+      "action_time": "2022-06-13T08:27:30.449Z",
+      "user": 1,
+      "content_type": 7,
+      "object_id": "1",
+      "object_repr": "Patrimonio object (1)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+      "action_time": "2022-06-13T08:28:54.634Z",
+      "user": 1,
+      "content_type": 40,
+      "object_id": "1",
+      "object_repr": "EntidadSolicitante object (1)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+      "name": "Can add log entry",
+      "content_type": 1,
+      "codename": "add_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+      "name": "Can change log entry",
+      "content_type": 1,
+      "codename": "change_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+      "name": "Can delete log entry",
+      "content_type": 1,
+      "codename": "delete_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+      "name": "Can view log entry",
+      "content_type": 1,
+      "codename": "view_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+      "name": "Can add permission",
+      "content_type": 2,
+      "codename": "add_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+      "name": "Can change permission",
+      "content_type": 2,
+      "codename": "change_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+      "name": "Can delete permission",
+      "content_type": 2,
+      "codename": "delete_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+      "name": "Can view permission",
+      "content_type": 2,
+      "codename": "view_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+      "name": "Can add group",
+      "content_type": 3,
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+      "name": "Can change group",
+      "content_type": 3,
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+      "name": "Can delete group",
+      "content_type": 3,
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+      "name": "Can view group",
+      "content_type": 3,
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+      "name": "Can add content type",
+      "content_type": 4,
+      "codename": "add_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+      "name": "Can change content type",
+      "content_type": 4,
+      "codename": "change_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+      "name": "Can delete content type",
+      "content_type": 4,
+      "codename": "delete_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+      "name": "Can view content type",
+      "content_type": 4,
+      "codename": "view_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+      "name": "Can add session",
+      "content_type": 5,
+      "codename": "add_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+      "name": "Can change session",
+      "content_type": 5,
+      "codename": "change_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+      "name": "Can delete session",
+      "content_type": 5,
+      "codename": "delete_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+      "name": "Can view session",
+      "content_type": 5,
+      "codename": "view_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+      "name": "Can add documento",
+      "content_type": 6,
+      "codename": "add_documento"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+      "name": "Can change documento",
+      "content_type": 6,
+      "codename": "change_documento"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+      "name": "Can delete documento",
+      "content_type": 6,
+      "codename": "delete_documento"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+      "name": "Can view documento",
+      "content_type": 6,
+      "codename": "view_documento"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+      "name": "Can add patrimonio",
+      "content_type": 7,
+      "codename": "add_patrimonio"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+      "name": "Can change patrimonio",
+      "content_type": 7,
+      "codename": "change_patrimonio"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+      "name": "Can delete patrimonio",
+      "content_type": 7,
+      "codename": "delete_patrimonio"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+      "name": "Can view patrimonio",
+      "content_type": 7,
+      "codename": "view_patrimonio"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+      "name": "Can add actividad turistica",
+      "content_type": 8,
+      "codename": "add_actividadturistica"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+      "name": "Can change actividad turistica",
+      "content_type": 8,
+      "codename": "change_actividadturistica"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+      "name": "Can delete actividad turistica",
+      "content_type": 8,
+      "codename": "delete_actividadturistica"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+      "name": "Can view actividad turistica",
+      "content_type": 8,
+      "codename": "view_actividadturistica"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+      "name": "Can add entrada",
+      "content_type": 9,
+      "codename": "add_entrada"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+      "name": "Can change entrada",
+      "content_type": 9,
+      "codename": "change_entrada"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+      "name": "Can delete entrada",
+      "content_type": 9,
+      "codename": "delete_entrada"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+      "name": "Can view entrada",
+      "content_type": 9,
+      "codename": "view_entrada"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+      "name": "Can add institucion",
+      "content_type": 10,
+      "codename": "add_institucion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+      "name": "Can change institucion",
+      "content_type": 10,
+      "codename": "change_institucion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+      "name": "Can delete institucion",
+      "content_type": 10,
+      "codename": "delete_institucion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+      "name": "Can view institucion",
+      "content_type": 10,
+      "codename": "view_institucion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+      "name": "Can add propietario",
+      "content_type": 11,
+      "codename": "add_propietario"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+      "name": "Can change propietario",
+      "content_type": 11,
+      "codename": "change_propietario"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+      "name": "Can delete propietario",
+      "content_type": 11,
+      "codename": "delete_propietario"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+      "name": "Can view propietario",
+      "content_type": 11,
+      "codename": "view_propietario"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+      "name": "Can add servicio",
+      "content_type": 12,
+      "codename": "add_servicio"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+      "name": "Can change servicio",
+      "content_type": 12,
+      "codename": "change_servicio"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+      "name": "Can delete servicio",
+      "content_type": 12,
+      "codename": "delete_servicio"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+      "name": "Can view servicio",
+      "content_type": 12,
+      "codename": "view_servicio"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+      "name": "Can add patrimonio material mueble",
+      "content_type": 13,
+      "codename": "add_patrimoniomaterialmueble"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+      "name": "Can change patrimonio material mueble",
+      "content_type": 13,
+      "codename": "change_patrimoniomaterialmueble"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+      "name": "Can delete patrimonio material mueble",
+      "content_type": 13,
+      "codename": "delete_patrimoniomaterialmueble"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+      "name": "Can view patrimonio material mueble",
+      "content_type": 13,
+      "codename": "view_patrimoniomaterialmueble"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+      "name": "Can add patrimonio valoracion",
+      "content_type": 14,
+      "codename": "add_patrimoniovaloracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+      "name": "Can change patrimonio valoracion",
+      "content_type": 14,
+      "codename": "change_patrimoniovaloracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+      "name": "Can delete patrimonio valoracion",
+      "content_type": 14,
+      "codename": "delete_patrimoniovaloracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+      "name": "Can view patrimonio valoracion",
+      "content_type": 14,
+      "codename": "view_patrimoniovaloracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 57,
+    "fields": {
+      "name": "Can add responsable",
+      "content_type": 15,
+      "codename": "add_responsable"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 58,
+    "fields": {
+      "name": "Can change responsable",
+      "content_type": 15,
+      "codename": "change_responsable"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 59,
+    "fields": {
+      "name": "Can delete responsable",
+      "content_type": 15,
+      "codename": "delete_responsable"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 60,
+    "fields": {
+      "name": "Can view responsable",
+      "content_type": 15,
+      "codename": "view_responsable"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 61,
+    "fields": {
+      "name": "Can add patrimonio material in mueble",
+      "content_type": 16,
+      "codename": "add_patrimoniomaterialinmueble"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 62,
+    "fields": {
+      "name": "Can change patrimonio material in mueble",
+      "content_type": 16,
+      "codename": "change_patrimoniomaterialinmueble"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 63,
+    "fields": {
+      "name": "Can delete patrimonio material in mueble",
+      "content_type": 16,
+      "codename": "delete_patrimoniomaterialinmueble"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 64,
+    "fields": {
+      "name": "Can view patrimonio material in mueble",
+      "content_type": 16,
+      "codename": "view_patrimoniomaterialinmueble"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 65,
+    "fields": {
+      "name": "Can add patrimonio in material",
+      "content_type": 17,
+      "codename": "add_patrimonioinmaterial"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 66,
+    "fields": {
+      "name": "Can change patrimonio in material",
+      "content_type": 17,
+      "codename": "change_patrimonioinmaterial"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 67,
+    "fields": {
+      "name": "Can delete patrimonio in material",
+      "content_type": 17,
+      "codename": "delete_patrimonioinmaterial"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 68,
+    "fields": {
+      "name": "Can view patrimonio in material",
+      "content_type": 17,
+      "codename": "view_patrimonioinmaterial"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 69,
+    "fields": {
+      "name": "Can add fuente bibliografica",
+      "content_type": 18,
+      "codename": "add_fuentebibliografica"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 70,
+    "fields": {
+      "name": "Can change fuente bibliografica",
+      "content_type": 18,
+      "codename": "change_fuentebibliografica"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 71,
+    "fields": {
+      "name": "Can delete fuente bibliografica",
+      "content_type": 18,
+      "codename": "delete_fuentebibliografica"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 72,
+    "fields": {
+      "name": "Can view fuente bibliografica",
+      "content_type": 18,
+      "codename": "view_fuentebibliografica"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 73,
+    "fields": {
+      "name": "Can add epoca visita",
+      "content_type": 19,
+      "codename": "add_epocavisita"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 74,
+    "fields": {
+      "name": "Can change epoca visita",
+      "content_type": 19,
+      "codename": "change_epocavisita"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 75,
+    "fields": {
+      "name": "Can delete epoca visita",
+      "content_type": 19,
+      "codename": "delete_epocavisita"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 76,
+    "fields": {
+      "name": "Can view epoca visita",
+      "content_type": 19,
+      "codename": "view_epocavisita"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 77,
+    "fields": {
+      "name": "Can add autor",
+      "content_type": 20,
+      "codename": "add_autor"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 78,
+    "fields": {
+      "name": "Can change autor",
+      "content_type": 20,
+      "codename": "change_autor"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 79,
+    "fields": {
+      "name": "Can delete autor",
+      "content_type": 20,
+      "codename": "delete_autor"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 80,
+    "fields": {
+      "name": "Can view autor",
+      "content_type": 20,
+      "codename": "view_autor"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 81,
+    "fields": {
+      "name": "Can add elemento adicional",
+      "content_type": 21,
+      "codename": "add_elementoadicional"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 82,
+    "fields": {
+      "name": "Can change elemento adicional",
+      "content_type": 21,
+      "codename": "change_elementoadicional"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 83,
+    "fields": {
+      "name": "Can delete elemento adicional",
+      "content_type": 21,
+      "codename": "delete_elementoadicional"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 84,
+    "fields": {
+      "name": "Can view elemento adicional",
+      "content_type": 21,
+      "codename": "view_elementoadicional"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 85,
+    "fields": {
+      "name": "Can add excavacion",
+      "content_type": 22,
+      "codename": "add_excavacion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 86,
+    "fields": {
+      "name": "Can change excavacion",
+      "content_type": 22,
+      "codename": "change_excavacion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 87,
+    "fields": {
+      "name": "Can delete excavacion",
+      "content_type": 22,
+      "codename": "delete_excavacion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 88,
+    "fields": {
+      "name": "Can view excavacion",
+      "content_type": 22,
+      "codename": "view_excavacion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 89,
+    "fields": {
+      "name": "Can add material secundario",
+      "content_type": 23,
+      "codename": "add_materialsecundario"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 90,
+    "fields": {
+      "name": "Can change material secundario",
+      "content_type": 23,
+      "codename": "change_materialsecundario"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 91,
+    "fields": {
+      "name": "Can delete material secundario",
+      "content_type": 23,
+      "codename": "delete_materialsecundario"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 92,
+    "fields": {
+      "name": "Can view material secundario",
+      "content_type": 23,
+      "codename": "view_materialsecundario"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 93,
+    "fields": {
+      "name": "Can add patrimonio arqueologico",
+      "content_type": 24,
+      "codename": "add_patrimonioarqueologico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 94,
+    "fields": {
+      "name": "Can change patrimonio arqueologico",
+      "content_type": 24,
+      "codename": "change_patrimonioarqueologico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 95,
+    "fields": {
+      "name": "Can delete patrimonio arqueologico",
+      "content_type": 24,
+      "codename": "delete_patrimonioarqueologico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 96,
+    "fields": {
+      "name": "Can view patrimonio arqueologico",
+      "content_type": 24,
+      "codename": "view_patrimonioarqueologico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 97,
+    "fields": {
+      "name": "Can add patrimonio etnografico",
+      "content_type": 25,
+      "codename": "add_patrimonioetnografico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 98,
+    "fields": {
+      "name": "Can change patrimonio etnografico",
+      "content_type": 25,
+      "codename": "change_patrimonioetnografico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 99,
+    "fields": {
+      "name": "Can delete patrimonio etnografico",
+      "content_type": 25,
+      "codename": "delete_patrimonioetnografico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 100,
+    "fields": {
+      "name": "Can view patrimonio etnografico",
+      "content_type": 25,
+      "codename": "view_patrimonioetnografico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 101,
+    "fields": {
+      "name": "Can add patrimonio historico artistico",
+      "content_type": 26,
+      "codename": "add_patrimoniohistoricoartistico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 102,
+    "fields": {
+      "name": "Can change patrimonio historico artistico",
+      "content_type": 26,
+      "codename": "change_patrimoniohistoricoartistico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 103,
+    "fields": {
+      "name": "Can delete patrimonio historico artistico",
+      "content_type": 26,
+      "codename": "delete_patrimoniohistoricoartistico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 104,
+    "fields": {
+      "name": "Can view patrimonio historico artistico",
+      "content_type": 26,
+      "codename": "view_patrimoniohistoricoartistico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 105,
+    "fields": {
+      "name": "Can add patrimonio industrial",
+      "content_type": 27,
+      "codename": "add_patrimonioindustrial"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 106,
+    "fields": {
+      "name": "Can change patrimonio industrial",
+      "content_type": 27,
+      "codename": "change_patrimonioindustrial"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 107,
+    "fields": {
+      "name": "Can delete patrimonio industrial",
+      "content_type": 27,
+      "codename": "delete_patrimonioindustrial"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 108,
+    "fields": {
+      "name": "Can view patrimonio industrial",
+      "content_type": 27,
+      "codename": "view_patrimonioindustrial"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 109,
+    "fields": {
+      "name": "Can add patrimonio paleontologico",
+      "content_type": 28,
+      "codename": "add_patrimoniopaleontologico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 110,
+    "fields": {
+      "name": "Can change patrimonio paleontologico",
+      "content_type": 28,
+      "codename": "change_patrimoniopaleontologico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 111,
+    "fields": {
+      "name": "Can delete patrimonio paleontologico",
+      "content_type": 28,
+      "codename": "delete_patrimoniopaleontologico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 112,
+    "fields": {
+      "name": "Can view patrimonio paleontologico",
+      "content_type": 28,
+      "codename": "view_patrimoniopaleontologico"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 113,
+    "fields": {
+      "name": "Can add tecnica acabado",
+      "content_type": 29,
+      "codename": "add_tecnicaacabado"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 114,
+    "fields": {
+      "name": "Can change tecnica acabado",
+      "content_type": 29,
+      "codename": "change_tecnicaacabado"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 115,
+    "fields": {
+      "name": "Can delete tecnica acabado",
+      "content_type": 29,
+      "codename": "delete_tecnicaacabado"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 116,
+    "fields": {
+      "name": "Can view tecnica acabado",
+      "content_type": 29,
+      "codename": "view_tecnicaacabado"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 117,
+    "fields": {
+      "name": "Can add tecnica decoracion",
+      "content_type": 30,
+      "codename": "add_tecnicadecoracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 118,
+    "fields": {
+      "name": "Can change tecnica decoracion",
+      "content_type": 30,
+      "codename": "change_tecnicadecoracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 119,
+    "fields": {
+      "name": "Can delete tecnica decoracion",
+      "content_type": 30,
+      "codename": "delete_tecnicadecoracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 120,
+    "fields": {
+      "name": "Can view tecnica decoracion",
+      "content_type": 30,
+      "codename": "view_tecnicadecoracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 121,
+    "fields": {
+      "name": "Can add tecnica manufactura",
+      "content_type": 31,
+      "codename": "add_tecnicamanufactura"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 122,
+    "fields": {
+      "name": "Can change tecnica manufactura",
+      "content_type": 31,
+      "codename": "change_tecnicamanufactura"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 123,
+    "fields": {
+      "name": "Can delete tecnica manufactura",
+      "content_type": 31,
+      "codename": "delete_tecnicamanufactura"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 124,
+    "fields": {
+      "name": "Can view tecnica manufactura",
+      "content_type": 31,
+      "codename": "view_tecnicamanufactura"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 125,
+    "fields": {
+      "name": "Can add proyecto conservacion",
+      "content_type": 32,
+      "codename": "add_proyectoconservacion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 126,
+    "fields": {
+      "name": "Can change proyecto conservacion",
+      "content_type": 32,
+      "codename": "change_proyectoconservacion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 127,
+    "fields": {
+      "name": "Can delete proyecto conservacion",
+      "content_type": 32,
+      "codename": "delete_proyectoconservacion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 128,
+    "fields": {
+      "name": "Can view proyecto conservacion",
+      "content_type": 32,
+      "codename": "view_proyectoconservacion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 129,
+    "fields": {
+      "name": "Can add actividad",
+      "content_type": 33,
+      "codename": "add_actividad"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 130,
+    "fields": {
+      "name": "Can change actividad",
+      "content_type": 33,
+      "codename": "change_actividad"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 131,
+    "fields": {
+      "name": "Can delete actividad",
+      "content_type": 33,
+      "codename": "delete_actividad"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 132,
+    "fields": {
+      "name": "Can view actividad",
+      "content_type": 33,
+      "codename": "view_actividad"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 133,
+    "fields": {
+      "name": "Can add tarea",
+      "content_type": 34,
+      "codename": "add_tarea"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 134,
+    "fields": {
+      "name": "Can change tarea",
+      "content_type": 34,
+      "codename": "change_tarea"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 135,
+    "fields": {
+      "name": "Can delete tarea",
+      "content_type": 34,
+      "codename": "delete_tarea"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 136,
+    "fields": {
+      "name": "Can view tarea",
+      "content_type": 34,
+      "codename": "view_tarea"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 137,
+    "fields": {
+      "name": "Can add campo",
+      "content_type": 35,
+      "codename": "add_campo"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 138,
+    "fields": {
+      "name": "Can change campo",
+      "content_type": 35,
+      "codename": "change_campo"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 139,
+    "fields": {
+      "name": "Can delete campo",
+      "content_type": 35,
+      "codename": "delete_campo"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 140,
+    "fields": {
+      "name": "Can view campo",
+      "content_type": 35,
+      "codename": "view_campo"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 141,
+    "fields": {
+      "name": "Can add valoracion",
+      "content_type": 36,
+      "codename": "add_valoracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 142,
+    "fields": {
+      "name": "Can change valoracion",
+      "content_type": 36,
+      "codename": "change_valoracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 143,
+    "fields": {
+      "name": "Can delete valoracion",
+      "content_type": 36,
+      "codename": "delete_valoracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 144,
+    "fields": {
+      "name": "Can view valoracion",
+      "content_type": 36,
+      "codename": "view_valoracion"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 145,
+    "fields": {
+      "name": "Can add incidente",
+      "content_type": 37,
+      "codename": "add_incidente"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 146,
+    "fields": {
+      "name": "Can change incidente",
+      "content_type": 37,
+      "codename": "change_incidente"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 147,
+    "fields": {
+      "name": "Can delete incidente",
+      "content_type": 37,
+      "codename": "delete_incidente"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 148,
+    "fields": {
+      "name": "Can view incidente",
+      "content_type": 37,
+      "codename": "view_incidente"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 149,
+    "fields": {
+      "name": "Can add solicitud traslado",
+      "content_type": 38,
+      "codename": "add_solicitudtraslado"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 150,
+    "fields": {
+      "name": "Can change solicitud traslado",
+      "content_type": 38,
+      "codename": "change_solicitudtraslado"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 151,
+    "fields": {
+      "name": "Can delete solicitud traslado",
+      "content_type": 38,
+      "codename": "delete_solicitudtraslado"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 152,
+    "fields": {
+      "name": "Can view solicitud traslado",
+      "content_type": 38,
+      "codename": "view_solicitudtraslado"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 153,
+    "fields": {
+      "name": "Can add documento por solicitud",
+      "content_type": 39,
+      "codename": "add_documentoporsolicitud"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 154,
+    "fields": {
+      "name": "Can change documento por solicitud",
+      "content_type": 39,
+      "codename": "change_documentoporsolicitud"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 155,
+    "fields": {
+      "name": "Can delete documento por solicitud",
+      "content_type": 39,
+      "codename": "delete_documentoporsolicitud"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 156,
+    "fields": {
+      "name": "Can view documento por solicitud",
+      "content_type": 39,
+      "codename": "view_documentoporsolicitud"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 157,
+    "fields": {
+      "name": "Can add entidad solicitante",
+      "content_type": 40,
+      "codename": "add_entidadsolicitante"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 158,
+    "fields": {
+      "name": "Can change entidad solicitante",
+      "content_type": 40,
+      "codename": "change_entidadsolicitante"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 159,
+    "fields": {
+      "name": "Can delete entidad solicitante",
+      "content_type": 40,
+      "codename": "delete_entidadsolicitante"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 160,
+    "fields": {
+      "name": "Can view entidad solicitante",
+      "content_type": 40,
+      "codename": "view_entidadsolicitante"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 161,
+    "fields": {
+      "name": "Can add user",
+      "content_type": 41,
+      "codename": "add_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 162,
+    "fields": {
+      "name": "Can change user",
+      "content_type": 41,
+      "codename": "change_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 163,
+    "fields": {
+      "name": "Can delete user",
+      "content_type": 41,
+      "codename": "delete_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 164,
+    "fields": {
+      "name": "Can view user",
+      "content_type": 41,
+      "codename": "view_user"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Administrador",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Gestor de Conservacion y Traslados",
+      "permissions": []
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+      "app_label": "admin",
+      "model": "logentry"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+      "app_label": "auth",
+      "model": "permission"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+      "app_label": "auth",
+      "model": "group"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+      "app_label": "contenttypes",
+      "model": "contenttype"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+      "app_label": "sessions",
+      "model": "session"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+      "app_label": "mincul_app",
+      "model": "documento"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimonio"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "actividadturistica"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "entrada"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "institucion"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "propietario"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "servicio"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimoniomaterialmueble"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 14,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimoniovaloracion"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 15,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "responsable"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 16,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimoniomaterialinmueble"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 17,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimonioinmaterial"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 18,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "fuentebibliografica"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 19,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "epocavisita"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 20,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "autor"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 21,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "elementoadicional"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 22,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "excavacion"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 23,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "materialsecundario"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 24,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimonioarqueologico"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 25,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimonioetnografico"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 26,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimoniohistoricoartistico"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 27,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimonioindustrial"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 28,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "patrimoniopaleontologico"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 29,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "tecnicaacabado"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 30,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "tecnicadecoracion"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 31,
+    "fields": {
+      "app_label": "patrimonios",
+      "model": "tecnicamanufactura"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 32,
+    "fields": {
+      "app_label": "conservacion",
+      "model": "proyectoconservacion"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 33,
+    "fields": {
+      "app_label": "conservacion",
+      "model": "actividad"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 34,
+    "fields": {
+      "app_label": "conservacion",
+      "model": "tarea"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 35,
+    "fields": {
+      "app_label": "conservacion",
+      "model": "campo"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 36,
+    "fields": {
+      "app_label": "incidente",
+      "model": "valoracion"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 37,
+    "fields": {
+      "app_label": "incidente",
+      "model": "incidente"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 38,
+    "fields": {
+      "app_label": "traslado",
+      "model": "solicitudtraslado"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 39,
+    "fields": {
+      "app_label": "traslado",
+      "model": "documentoporsolicitud"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 40,
+    "fields": {
+      "app_label": "traslado",
+      "model": "entidadsolicitante"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 41,
+    "fields": {
+      "app_label": "authentication",
+      "model": "user"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "62kabc9c958q2jc00g2rzpt6bcn2pwoz",
+    "fields": {
+      "session_data": ".eJxVjEsOAiEQBe_C2hAYms-4dO8ZCN00Mmogmc_KeHedZBa6fVX1XiKmba1xW3iOUxZnocXpd8NED247yPfUbl1Sb-s8odwVedBFXnvm5-Vw_w5qWuq3ZjA5aeWBbEJGb4GN9crw4KgQgg0OxnEI2jN4Z9gRDVxUyIWBC6J4fwDlTzhu:1o0fLm:PKIsqml98nJEyQQ9B7bYHZ8bAllIqEKXSwYUyQ7pPNE",
+      "expire_date": "2022-06-27T08:23:06.297Z"
+    }
+  },
+  {
+    "model": "mincul_app.documento",
+    "pk": 1,
+    "fields": {
+      "url": "a",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.institucion",
+    "pk": 1,
+    "fields": {
+      "nombre": "PUCP",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.propietario",
+    "pk": 1,
+    "fields": {
+      "nombre": "Nombre",
+      "doi": "123",
+      "direccion": "A",
+      "departamento": "A",
+      "provincia": "A",
+      "distrito": "A",
+      "telefono": "4",
+      "correo": "A",
+      "tipo": "1",
+      "estado": "1",
+      "documentos": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "patrimonios.responsable",
+    "pk": 2,
+    "fields": {
+      "institucion": "A",
+      "nombre": "A",
+      "cargo": "A",
+      "correo": "A",
+      "telefono": "A",
+      "fecha": "2022-06-01",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.patrimonio",
+    "pk": 1,
+    "fields": {
+      "nombreTituloDemoninacion": "Cabeza Clava",
+      "codigo": "CAD12",
+      "direccion": "Norte del Peru",
+      "departamento": "Peru",
+      "provincia": "Peru",
+      "distrito": "Peru",
+      "lat": "10.000000",
+      "long": "10.000000",
+      "descripcion": "a",
+      "observacion": "a",
+      "tipoPatrimonio": "1",
+      "categoria": "1",
+      "institucion": 1,
+      "gestor": 1,
+      "estado": "1",
+      "propietarios": [
+        1
+      ],
+      "responsables": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "incidente.incidente",
+    "pk": 1,
+    "fields": {
+      "tipoAfectacion": "1",
+      "fechaOcurrencia": null,
+      "descripcion": "Se rompio una roca",
+      "nombre": null,
+      "correo": null,
+      "telefono": null,
+      "fechaRegistro": "2022-06-23",
+      "fechaAprobacion": null,
+      "patrimonio": 1,
+      "estado": "1",
+      "documentos": []
+    }
+  },
+  {
+    "model": "incidente.incidente",
+    "pk": 2,
+    "fields": {
+      "tipoAfectacion": "1",
+      "fechaOcurrencia": null,
+      "descripcion": "Reporte 2",
+      "nombre": null,
+      "correo": null,
+      "telefono": null,
+      "fechaRegistro": "2022-06-30",
+      "fechaAprobacion": null,
+      "patrimonio": 1,
+      "estado": "1",
+      "documentos": []
+    }
+  },
+  {
+    "model": "incidente.incidente",
+    "pk": 3,
+    "fields": {
+      "tipoAfectacion": "1",
+      "fechaOcurrencia": null,
+      "descripcion": "cdd",
+      "nombre": null,
+      "correo": null,
+      "telefono": null,
+      "fechaRegistro": "2022-06-17",
+      "fechaAprobacion": null,
+      "patrimonio": 1,
+      "estado": "1",
+      "documentos": []
+    }
+  },
+  {
+    "model": "incidente.incidente",
+    "pk": 4,
+    "fields": {
+      "tipoAfectacion": "1",
+      "fechaOcurrencia": null,
+      "descripcion": null,
+      "nombre": null,
+      "correo": null,
+      "telefono": null,
+      "fechaRegistro": null,
+      "fechaAprobacion": null,
+      "patrimonio": null,
+      "estado": "1",
+      "documentos": []
+    }
+  },
+  {
+    "model": "incidente.incidente",
+    "pk": 5,
+    "fields": {
+      "tipoAfectacion": "1",
+      "fechaOcurrencia": null,
+      "descripcion": "Hola",
+      "nombre": null,
+      "correo": null,
+      "telefono": null,
+      "fechaRegistro": "2022-06-16",
+      "fechaAprobacion": null,
+      "patrimonio": 1,
+      "estado": "1",
+      "documentos": []
+    }
+  },
+  {
+    "model": "traslado.entidadsolicitante",
+    "pk": 1,
+    "fields": {
+      "doiSolicitante": "123",
+      "nombreSolicitante": "Gobierno USA",
+      "correo": "juancasas29@gmail.com",
+      "direccion": "Av",
+      "pais": "Peru",
+      "telefono": "962831090",
+      "tipo": "1",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "traslado.entidadsolicitante",
+    "pk": 2,
+    "fields": {
+      "doiSolicitante": "124",
+      "nombreSolicitante": "Gobierno China",
+      "correo": "juancasas29gi@gmail.com",
+      "direccion": "Av",
+      "pais": "Oer",
+      "telefono": "845632",
+      "tipo": "1",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "traslado.solicitudtraslado",
+    "pk": 10,
+    "fields": {
+      "nombreExposicion": "Peru en Pekin",
+      "destino": null,
+      "pais": "China",
+      "direccion": null,
+      "distrito": null,
+      "provincia": null,
+      "departamento": null,
+      "numeroResolucion": "46565",
+      "fechaSalidaProgramada": "2022-06-12",
+      "fechaRetornoProgramada": "2022-06-15",
+      "fechaSalidaReal": null,
+      "fechaRetornoReal": null,
+      "ubigeoDestino": null,
+      "tipoTraslado": "1",
+      "gestorPatrimonio": 1,
+      "gestorConservacionTraslados": 1,
+      "entidadSolicitante": 2,
+      "estado": "1",
+      "detalleRechazo": null,
+      "patrimonios": []
+    }
+  },
+  {
+    "model": "traslado.solicitudtraslado",
+    "pk": 11,
+    "fields": {
+      "nombreExposicion": "Avenida Larco",
+      "destino": "Avenida Universitaria 6450",
+      "pais": "Per�",
+      "direccion": null,
+      "distrito": null,
+      "provincia": null,
+      "departamento": null,
+      "numeroResolucion": "46001",
+      "fechaSalidaProgramada": "2022-06-06",
+      "fechaRetornoProgramada": "2022-06-12",
+      "fechaSalidaReal": null,
+      "fechaRetornoReal": null,
+      "ubigeoDestino": null,
+      "tipoTraslado": "1",
+      "gestorPatrimonio": 1,
+      "gestorConservacionTraslados": 1,
+      "entidadSolicitante": 1,
+      "estado": "1",
+      "detalleRechazo": null,
+      "patrimonios": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$OML1YByhgnXzkv4UI7oFWu$laq+CowpcjnSlkn894Hu4FYQjlSLhIyF+XghwQQalwg=",
+      "last_login": "2022-06-13T08:23:06.296Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin@admin.pe",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-06-13T08:22:55.774Z",
+      "doi": "",
+      "celular": "",
+      "codigo": null,
+      "foto": null,
+      "groups": [
+        2
+      ],
+      "user_permissions": []
+    }
+  }
+]

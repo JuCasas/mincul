@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='actividad',
             name='status',
-            field=models.CharField(blank=True, choices=[('0', 'En Proceso'), ('1', 'Pendiente'), ('2', 'Completado')], default='0', max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('0', 'En Proceso'), ('1', 'Registrado'), ('2', 'Completado')], default='0', max_length=2, null=True),
         ),
     ]

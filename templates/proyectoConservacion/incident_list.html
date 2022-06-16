@@ -1,0 +1,367 @@
+{% extends 'proyectoConservacion/components/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+  <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+  <style>
+      #cover-spin {
+          position: fixed;
+          width: 100%;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          background-color: rgba(255, 255, 255, 0.7);
+          z-index: 9999;
+          display: none;
+      }
+
+      @-webkit-keyframes spin {
+          from {
+              -webkit-transform: rotate(0deg);
+          }
+          to {
+              -webkit-transform: rotate(360deg);
+          }
+      }
+
+      @keyframes spin {
+          from {
+              transform: rotate(0deg);
+          }
+          to {
+              transform: rotate(360deg);
+          }
+      }
+
+      #cover-spin::after {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 48%;
+          top: 40%;
+          width: 40px;
+          height: 40px;
+          border-style: solid;
+          border-color: black;
+          border-top-color: transparent;
+          border-width: 4px;
+          border-radius: 50%;
+          -webkit-animation: spin .8s linear infinite;
+          animation: spin .8s linear infinite;
+      }
+
+      .btn-1 {
+          text-align: center;
+          float: left;
+          border: 1px solid #2B2D42 !important;
+          background-color: #2B2D42 !important;
+          color: white !important;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-2 {
+          text-align: center;
+          float: left;
+          border: 1px solid floralwhite;
+          background-color: white;
+          color: black;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-2:hover {
+          transform: scale(0.98);
+          /* Scaling button to 0.98 to its original size */
+          box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+          /* Lowering the shadow */
+      }
+
+
+      .table.dataTable tbody th, table.dataTable tbody td {
+          padding: 8px 10px 8px 18px !important;
+      }
+
+      .modal-body {
+          background-color: #F7F8FB !important;
+      }
+
+      .form-control {
+          background-color: white !important;
+      }
+
+      .second {
+          background-color: white !important;
+          color: #2B2D42 !important;
+          border-color: #8d8e99 !important;
+          border-radius: 12px !important;
+          height: 36px !important;
+          font-size: 12px !important;
+      }
+
+      .form-control {
+          background-color: white !important;
+          cursor: pointer!important;
+      }
+
+
+      span.select2-selection.select2-selection--single{
+          display: flex!important;
+          align-items: center!important;
+      }
+
+      span.select2-selection__arrow{
+          margin-top: 5px!important;
+      }
+
+      span.select2-selection__arrow{
+          margin-top: 5px!important;
+      }
+
+      .select2-selection{
+          height: 36px!important;
+          border-radius: 10px!important;
+          border-color: #D7E1EE!important;
+          align-items: center!important;
+      }
+
+      .select2-selection__placeholder{
+          align-items: center!important;
+          font-size: 12px!important;
+          color: #BDC1D2!important;
+      }
+      .back{
+          font-size: 14px!important;
+      }
+
+      input:disabled{
+          background-color: #D2D2D2!important;
+      }
+
+  </style>
+
+{% endblock %}
+
+{% block body %}
+  <input type="hidden" value="{{ project.id }}" id="idProject">
+  <div class="card mb-3">
+    <div class="card-body row">
+      <div class="col-md-6 col-sm-12">
+          <div class="row justify-content-between align-items-center mb-1">
+        <a class="nav-link py-0 back" href="{% url 'listProjects' %}"><span class="fas fa-angle-left mr-2"
+                                                                       data-fa-transform="shrink-3"></span>Proyectos</a>
+      </div>
+
+      <div class="row align-items-center justify-content-between">
+        <div class="col-md-6 d-flex">
+          <h5 class="mb-2 mb-sm-0 text-black mr-4">{{ project.nombre }}</h5>
+            {% if project.status == '0' %}
+            <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
+          {% elif project.status == '1' %}
+            <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
+          {% else %}
+            <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
+          {% endif %}
+        </div>
+      </div>
+      </div>
+
+    <div class="col-md-6 col-sm-12">
+          <div class="nav-bar nav-bar-right">
+            <div class="nav nav-pills">
+                <button class="nav-link col-md-4 btn-1 my-1" disabled>Incidentes</button>
+                <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listPatrimonys' pk=project.id %}">Patrimonios</a>
+                <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listActivities' pk=project.id %}">Actividades</a>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row filterBar justify-content-end">
+        <div class="form-group col-sm-3 mb-0">
+          <div class="position-relative">
+            <input class="form-control" id="search" type="text" placeholder="Nombre">
+            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+          </div>
+        </div>
+        <div class="form-group col-sm-2 mb-0">
+          <select class="form-control" id="status_filter">
+            <option value="" selected>Tipos</option>
+            {% for mykey,myvalue in status_choices %}
+              <option value="{{ mykey }}">{{ myvalue }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col-sm-2 mb-0">
+          <select class="form-control" id="type_filter">
+            <option value="" selected>Estados</option>
+            {% for mykey,myvalue in typeProjects %}
+              <option value="{{ mykey }}">{{ myvalue }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <table id="tabla_autores" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
+        <thead class="bg-200">
+        <tr>
+          <th class="sort ">Código</th>
+          <th class="sort">Descripción</th>
+          <th class="sort">Tipo de Afectación</th>
+          <th class="sort">Informante</th>
+          <th class="sort">Fecha de Registro</th>
+          <th class="sort">Estado</th>
+          <th class="sort">Acciones</th>
+        </tr>
+        </thead>
+        <tbody class="bg-white">
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NEW and EDIT Modal -->
+  <div class="modal fade" id="modalActividad" role="dialog">
+    <div class="modal-dialog mw-100 w-50">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal_title"></h4>
+        </div>
+        <div class="modal-body">
+          <form role="form" id="formActividad">
+            {% csrf_token %}
+
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="nombre">Nombre:</label>
+                <input class="form-control" id="nombre" name="nombre" type="text" required
+                       placeholder="Nombre de la Actividad">
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="descripcion">Descripcion:</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
+                          placeholder="Descripción de la Actividad"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-6 col-sm-12">
+                <label for="fechaInicio">Fecha de Inicio:</label>
+                <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required>
+              </div>
+              <div class="form-group col-lg-6 col-sm-12">
+                <label for="fechaFin">Fecha de Fin:</label>
+                <input class="form-control" id="fechaFin" name="fechaFin" type="date" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="patrimonio">Patrimonio Asociado:</label>
+                <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
+                  <option value="" selected="selected">Todos</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row justify-content-between">
+              <div class="form-group col-9">
+                <label for="conservadores">Conservador(es):</label>
+                <select class="form-control selectpicker" id="conservadores" name="conservadores"
+                        data-placeholder='Seleccione patrimonio...'>
+
+                </select>
+              </div>
+              <div class="form-group col-auto d-flex align-items-end">
+                <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
+                        onclick="agregarPatrimonioTabla()">Agregar Conservador
+                </button>
+              </div>
+            </div>
+
+            <div class="row justify-content-end mt-2 mr-1">
+              <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+              <div>
+                <input type="hidden" id="type" name="type" value="">
+                <button type="submit" class="btn btn-primary btn-block"><span
+                    class="glyphicon glyphicon-ok"></span> Guardar
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal fade" id="confirm" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header justify-content-center">
+          <h4 class="modal-title">¿Retirar Asignación?</h4>
+        </div>
+        <div class="modal-body px-9">
+          <div class="row justify-content-between">
+            <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Retirar <Asignación></Asignación></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cover-spin"></div>
+
+{% endblock %}
+
+{% block extrajs %}
+  <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+  <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'project/projects/incidents.js' %}"></script>
+  <script>
+    $(document).ready(function () {
+      $('#patrimonio').prepend('<option selected=""></option>').select2({
+        ajax: {
+          url: '/conservacion/proyectos/patrimonios',
+          datatype: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term || '',
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            console.log(data.items)
+            return {
+              results: $.map(data.items, function (obj, index) {
+                return {id: obj.id, text: obj.nombreTituloDemoninacion};
+              }),
+              pagination: {
+                more: (params.page * 10) < data.total_count
+              }
+            }
+          }
+        },
+        placeholder: "Patrimonio",
+        allowClear: true,
+        cache: false
+      });
+
+    });
+  </script>
+{% endblock %}

@@ -82,23 +82,31 @@
           height: 36px !important;
           font-size: 12px !important;
       }
+
+      .back{
+          font-size: 14px!important;
+      }
+
+      input:disabled{
+          background-color: #D2D2D2!important;
+      }
   </style>
 {% endblock %}
 
 {% block body %}
 
   <div class="card mb-3">
-    <div class="card-body ">
-      <div class="row justify-content-between align-items-center">
-        <a class="nav-link py-0" href="{% url 'listProjects' %}"><span class="fas fa-angle-left mr-2"
-                                                                       data-fa-transform="shrink-3"></span>Atrás</a>
+    <div class="card-body row">
+      <div class="col-md-6 col-sm-12">
+          <div class="row justify-content-between align-items-center mb-1">
+        <a class="nav-link py-0 back" href="{% url 'listProjects' %}"><span class="fas fa-angle-left mr-2"
+                                                                       data-fa-transform="shrink-3"></span>Proyectos</a>
       </div>
-      <div class="row justify-content-between align-items-center">
-        <div class="col-md-6">
-          <h5 class="mb-2 mb-md-0 text-black">{{ project.nombre }}</h5>
-        </div>
-        <div class="col-md-2">
-          {% if project.status == '0' %}
+
+      <div class="row align-items-center justify-content-between">
+        <div class="col-md-6 d-flex">
+          <h5 class="mb-2 mb-sm-0 text-black mr-4">{{ project.nombre }}</h5>
+            {% if project.status == '0' %}
             <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
           {% elif project.status == '1' %}
             <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
@@ -107,20 +115,16 @@
           {% endif %}
         </div>
       </div>
-    </div>
-  </div>
+      </div>
 
-  <div class="card mb-3">
-    <div class="card-body ">
-      <div class="row justify-content-end align-items-center">
-        <div class="col-md-4">
+    <div class="col-md-6 col-sm-12">
           <div class="nav-bar nav-bar-right">
             <div class="nav nav-pills">
-              <a class="nav-link col-md-6 btn-2 my-1" href="{% url 'listActivities' pk=project.id %}">Actividades</a>
-              <button class="nav-link col-md-6 btn-1 my-1" disabled>Patrimonios</button>
+                <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listIncidents' pk=project.id %}">Incidentes</a>
+                <button class="nav-link col-md-4 btn-1 my-1" disabled>Patrimonios</button>
+                <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listActivities' pk=project.id %}">Actividades</a>
             </div>
           </div>
-        </div>
       </div>
     </div>
   </div>

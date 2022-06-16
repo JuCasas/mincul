@@ -27,11 +27,11 @@ class ProyectoConservacion(models.Model):
     )
     STATUS = (
         ('0', 'En Proceso'),
-        ('1','Pendiente'),
+        ('1','Registrado'),
         ('2','Completado'),
     )
-    codigo = models.CharField(max_length=8,unique=True)
-    nombre = models.CharField(max_length=50)
+    codigo = models.CharField(max_length=10, null=True)
+    nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.CharField(max_length=200)
     fechaInicio = models.DateField(blank=True, null=True, verbose_name='fechaInicio')
     fechaFin = models.DateField(blank=True, null=True, verbose_name='fechaFin')
@@ -43,12 +43,12 @@ class ProyectoConservacion(models.Model):
     patrimonios = models.ManyToManyField(Patrimonio)
     incidentes = models.ManyToManyField(Incidente)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
-    status = models.CharField(max_length=2, choices=STATUS, default='0', null=True, blank=True)
+    status = models.CharField(max_length=2, choices=STATUS, default='1', null=True, blank=True)
 
 class Actividad(models.Model):
     STATUS = (
         ('0', 'En Proceso'),
-        ('1','Pendiente'),
+        ('1','Registrado'),
         ('2','Completado'),
     )
     ESTADOS = (

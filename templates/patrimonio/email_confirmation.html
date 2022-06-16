@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title> Ministerio de Cultura </title>
+
+
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicons/apple-touch-icon.png' %}">
+{#    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicons/favicon-32x32.png' %}">#}
+{#    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicons/favicon-16x16.png' %}">#}
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/icons/escudo.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicons/favicon.png' %}">
+    <link rel="manifest" href="{% static 'img/favicons/manifest.json' %}">
+    <meta name="msapplication-TileImage" content="{% static 'img/favicons/mstile-150x150.png' %}">
+    <meta name="theme-color" content="#ffffff">
+
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    {% include 'base/stylesheets.html' %}
+
+  </head>
+
+
+  <body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+      <div class="container-fluid p-0">
+        <div class="row min-vh-100 flex-center no-gutters" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),url({{ valor.patrimonio.url }}); background-repeat: no-repeat; background-position: center; background-size: cover; ">
+          <div class="col-lg-8 col-xxl-5 py-3">
+            <div class="card overflow-hidden z-index-1">
+              <div class="card-body p-0">
+                <div class="row no-gutters h-100">
+                  <div class="col-md-5 text-white text-center"
+                  style="background-color: #AF1F1F;">
+                    <div class="position-relative p-4 pt-md-5 pb-md-7">
+                      <div class="bg-holder bg-auth-card-shape" style="background-image:url(../../assets/img/illustrations/half-circle.png);">
+                      </div>
+                      <!--/.bg-holder-->
+
+                      <div class="z-index-1 position-relative"><a class="text-white mb-4 text-sans-serif font-weight-extra-bold fs-4 d-inline-block">Valoración Registrada</a>
+                        <p class="text-white opacity-75">Se ha registrado la valoración de {{ valor.patrimonio.nombreTituloDemoninacion }} con {{ valor.valoracion }} estrellas</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-7 d-flex flex-center">
+                    <div class="p-4 p-md-5 flex-grow-1">
+                      <div class="text-center"><img class="d-block mx-auto mb-4" src="../../static/img/illustrations/envelope.png" alt="Email" width="70" />
+                        <h3 class="mb-2">Gracias por su Valoración</h3>
+                        <p>Puede seguir disfrutando de los servicios del aplicativo MINCUL
+                        </p><a class="btn btn-sm mt-3" href="http://127.0.0.1:8000/"
+                          style="background-color: #AF1F1F; color: white;"><span class="fas fa-chevron-left mr-1" data-fa-transform="shrink-4 down-1"></span>Ir a Mincul</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+
+
+
+
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <script src="../../static/js/jquery.min.js"></script>
+    <script src="../../static/js/popper.min.js"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
+    <script src="../../static/lib/@fortawesome/all.min.js"></script>
+    <script src="../../static/lib/stickyfilljs/stickyfill.min.js"></script>
+    <script src="../../static/lib/sticky-kit/sticky-kit.min.js"></script>
+    <script src="../../static/lib/is_js/is.min.js"></script>
+    <script src="../../static/lib/lodash/lodash.min.js"></script>
+    <script src="../../static/lib/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:100,200,300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+    <script src="../../static/js/theme.js"></script>
+
+  </body>
+
+</html>

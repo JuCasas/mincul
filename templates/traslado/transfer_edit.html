@@ -282,7 +282,7 @@
                         <div class="form-group" id="detallarRechazo">
                             <label for="detalleRechazo">Detalle:</label>
                             <textarea class="form-control" id="detalleRechazo" name="detalleRechazo"
-                                      rows="3"></textarea>
+                                      rows="3" required></textarea>
                         </div>
 
                     </form>
@@ -313,15 +313,17 @@
 
         $(document).ready(function () {
             validar_campo_detalle();
-            set_validate();
         });
 
         function set_validate() {
             if ($("#estadoSolicitud").val() === "3") {
+                $("#detalleRechazo").attr('required', true);
+                console.log("Campo detalle requerido");
                 var settings = $('#formularioActualizarEstado').validate().settings;
-                 $.extend(settings, {
+                console.log(settings);
+                $.extend(settings, {
                     rules: {
-                       detalleRechazo: {
+                        detalleRechazo: {
                             required: true,
                         },
                     },
@@ -332,10 +334,15 @@
                     }
                 });
             } else {
-              var settings = $('#formularioActualizarEstado').validate().settings;
-                 $.extend(settings, {
+                console.log("Campo detalle no requerido");
+
+                $("#detalleRechazo").attr('required', false);
+                var settings = $('#formularioActualizarEstado').validate().settings;
+                console.log(settings);
+
+                $.extend(settings, {
                     rules: {
-                       detalleRechazo: {
+                        detalleRechazo: {
                             required: false,
                         },
                     },
@@ -345,6 +352,8 @@
 
         function validar_campo_detalle() {
 
+            set_validate();
+
             if ($("#estadoSolicitud").val() === "3") {
                 $("#detallarRechazo").show();
             } else {
@@ -352,29 +361,36 @@
             }
         }
 
+
+        $('#formularioActualizarEstado').validate({
+
+            submitHandler: function (form) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'actualizar_estado'%}",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        traslado_pk: {{ traslado.pk }},
+                        nuevo_estado: $("#estadoSolicitud").val(),
+                        detalle_rechazo: $("#detalleRechazo").val()
+                    },
+                    success: function (response) {
+                        $("#estadoSolicitud").empty();
+                        $("#detalleRechazo").empty();
+                        $('#actualizarEstado').hide()
+
+                        location.reload();
+
+                    },
+                    error: function (response) {
+                        alert(response["responseJSON"]["error"]);
+                    }
+                });
+            }
+        });
+
         function actualizarEstado() {
-
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'actualizar_estado'%}",
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    traslado_pk: {{ traslado.pk }},
-                    nuevo_estado: $("#estadoSolicitud").val(),
-                    detalle_rechazo:$("#detalleRechazo").val()
-                },
-                success: function (response) {
-                    $("#estadoSolicitud").empty();
-                    $("#detalleRechazo").empty();
-                    $('#actualizarEstado').hide()
-
-                    location.reload();
-
-                },
-                error: function (response) {
-                    alert(response["responseJSON"]["error"]);
-                }
-            });
+            $('#formularioActualizarEstado').submit();
         }
 
 

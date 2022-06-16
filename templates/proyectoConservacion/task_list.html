@@ -100,6 +100,10 @@
         font-size: 12px!important;
       }
 
+      input:disabled{
+          background-color: #D2D2D2!important;
+      }
+
   </style>
 
 {% endblock %}
@@ -109,7 +113,7 @@
   <div class="card mb-3">
     <div class="card-body">
         <div class="row justify-content-between align-items-center">
-        <a class="nav-link py-0" href="{% url 'listActivities' pk=project.id %}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Atrás</a>
+        <a class="nav-link py-0" href="{% url 'listActivities' pk=project.id %}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Actividades</a>
       </div>
 
       <div class="row justify-content-between align-items-center">
@@ -137,9 +141,9 @@
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
         </div>
-        <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
+        <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" type="button" href="{% url 'addTaskView' pk=activity.id %}">
           <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
-        </button>
+        </a>
       </div>
     </div>
   </div>

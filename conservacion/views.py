@@ -153,17 +153,17 @@ def listProjects(request, **kwargs):
 @api_view(('POST',))
 def addProject(request):
   try:
-    codigo = request.POST['codigo']
     nombre = request.POST['nombre']
     fechaInicio = datetime.date.today()
     fechaFin = datetime.date.today()
     tipo = int((request.POST['tipoPlan']))
     project = ProyectoConservacion.objects.create(
-      codigo=codigo,
       nombre=nombre,
       tipoProyecto=tipo,
       fechaInicio=fechaInicio,
       fechaFin=fechaFin)
+    project.codigo = "PROY" + str(project.id).zfill(6)
+    project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
   except Exception as e:
     result = dict()
@@ -209,6 +209,23 @@ def listActivities(request, pk):
       'patrimonios': Patrimonio.objects.all()
     }
     return render(request, 'proyectoConservacion/activity_list.html', context)
+
+@api_view(('GET',))
+def listIncidents(request, pk):
+  if request.is_ajax():
+    activity = query_activities_by_args(pk, **request.GET)
+    serializer = ActividadSerializer((activity['items']), many=True)
+    result = dict()
+    result['data'] = serializer.data
+    result['recordsTotal'] = activity['total']
+    result['recordsFiltered'] = activity['count']
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  else:
+    context = {
+      'project': ProyectoConservacion.objects.get(pk=pk),
+      'patrimonios': Patrimonio.objects.all()
+    }
+    return render(request, 'proyectoConservacion/incident_list.html', context)
 
 
 @api_view(('GET',))
@@ -271,6 +288,12 @@ def addActivity(request, pk):
   #     fechaFin=fechaFin)
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+@api_view(('GET',))
+def addTaskView(request, pk):
+    context = {
+      'activity': Actividad.objects.get(pk=pk)
+    }
+    return render(request, 'proyectoConservacion/addTask_view.html', context)
 
 @api_view(('POST',))
 def addTask(request, pk):

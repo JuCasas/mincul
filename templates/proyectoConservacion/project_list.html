@@ -117,6 +117,10 @@
           margin-top: 2px;
       }
 
+      input:disabled{
+          background-color: #D2D2D2!important;
+      }
+
   </style>
 
 {% endblock %}
@@ -226,7 +230,7 @@
             <div class="row">
               <div class="form-group col-lg-6 col-sm-12">
                 <label for="codigo"><span class="glyphicon glyphicon-eye-open"></span> Código</label>
-                <input type="text" class="form-control" id="codigo" name="codigo" placeholder=""
+                <input type="text" class="form-control pointer-event-none" id="codigo" name="codigo" placeholder="" disabled
                 >
               </div>
 
@@ -318,6 +322,7 @@
         nombre: {
           required: true,
           maxlength: 50,
+          alphanumeric: true
         },
       },
       messages: {
@@ -329,6 +334,7 @@
         nombre: {
           required: "Debe ingresar el nombre del proyecto",
           maxlength: "El nombre no debe tener más de 50 caracteres",
+          alphanumeric: "El nombre solo debe contener carácteres alfanuméricos"
         }
       },
       submitHandler: function (form, e) {
@@ -358,26 +364,25 @@
             $('#cover-spin').hide()
             if (response["success"] !== undefined) {
               $.toast({
-                heading: 'Information',
-                text: response['message'],
+                text: 'El nombre del proyecto ya existe',
                 icon: 'warning',
-                loader: true,        // Change it to false to disable loader
-                loaderBg: '#9EC600',  // To change the background
-                position: 'top-center',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#c67a71',
+                  textColor: '#000000',
+                position: 'bottom-right',
                 hideAfter: 3000,
               })
             } else {
               $('#myModal').modal('hide')
               $("#tabla_autores").DataTable().draw();
               $.toast({
-                heading: 'Information',
-                text: 'Loaders are enabled by default. Use `loader`, `loaderBg` to change the default behavior',
-                icon: 'info',
-                loader: true,        // Change it to false to disable loader
-                loaderBg: '#9EC600',  // To change the background
-                position: 'top-center',
-
-                hideAfter: 5000,
+                text: 'Proyecto actualizado con éxito',
+                icon: 'success',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#B7E6CA',  // To change the background
+                textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
               })
             }
           },
