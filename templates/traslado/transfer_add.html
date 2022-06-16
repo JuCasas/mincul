@@ -299,12 +299,38 @@
                 <div class="modal-body">
                     <form id="formErrorNombreCodigo" name="formErrorNombreCodigo">
                         <div class="form-group">
-                            ¡Ingrese un número de resolución válido!
+                            ¡El número de resolución ya se encuentra registrado!
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button id="btnModalErrorFecha" class="btn btn-primary btn-sm" type="button" data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalPatrimonios" tabindex="-1" role="dialog" aria-labelledby="modalPatrimoniosLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPatrimoniosLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorModalPatrimonios" name="formErrorModalPatrimonios">
+                        <div class="form-group">
+                            ¡Debe seleccionar al menos un patrimonio!
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorPatrimonio" class="btn btn-primary btn-sm" type="button"
+                            data-dismiss="modal">
                         Cerrar
                     </button>
                 </div>
@@ -324,15 +350,15 @@
         let patrimoniosLista = [];
 
         jQuery.validator.addMethod("alphanumeric", function (value, element) {
-        return this.optional(element) || /^[\w\-\s]+$/i.test(value);
+            return this.optional(element) || /^[\w\-\s]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("alphanumericNombreExpo", function (value, element) {
-        return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
+            return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("regexResolucion", function (value, element) {
-        return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-[SM][TC]+$/i.test(value);
+            return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-[SM][TC]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         $("form[name='formAgregar']").validate({
@@ -373,11 +399,14 @@
             submitHandler: function (form, e) {
                 e.preventDefault();
                 if ($("#formAgregar").valid()) {
+                    var patrimoniosEvaluar = ValidarPatrimonio();
                     var nResolucion = ValidarResolucion();
                     var fechasCorrectas = ValidarFechas();
                     if (!nResolucion && fechasCorrectas) {
                         console.log("Todo Bien!");
                         form.submit();
+                    } else if (!patrimoniosEvaluar) {
+                        $("#modalPatrimonios").modal('show');
                     } else if (!fechasCorrectas) {
                         $("#modalFecha").modal('show');
                     } else if (nResolucion) {
@@ -387,33 +416,38 @@
                 return false;
 
                 function ValidarResolucion() {
-                return $.ajax({
-                    type: 'POST',
-                    url: "{% url 'validarResolucion'%}",
-                    async: false,
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        nResolucion: $("#nResolucion").val(),
-                    },
-                    success: function (response) {
-                        let resultado = response['existe'];
-                    },
-                    error: function (response) {
-                        // alert the error if any error occured
-                        console.log(response);
-                    }
-                }).responseJSON['existe'];
-            }
+                    return $.ajax({
+                        type: 'POST',
+                        url: "{% url 'validarResolucion'%}",
+                        async: false,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            nResolucion: $("#nResolucion").val(),
+                        },
+                        success: function (response) {
+                            let resultado = response['existe'];
+                        },
+                        error: function (response) {
+                            // alert the error if any error occured
+                            console.log(response);
+                        }
+                    }).responseJSON['existe'];
+                }
 
                 function ValidarFechas() {
-                var fechainicial = document.getElementById("fechaSalidaProgramada").value;
-                var fechafinal = document.getElementById("fechaRetornoProgramada").value;
+                    var fechainicial = document.getElementById("fechaSalidaProgramada").value;
+                    var fechafinal = document.getElementById("fechaRetornoProgramada").value;
 
-                var fechaIni = new Date(fechainicial);
-                var fechaFin = new Date(fechafinal);
+                    var fechaIni = new Date(fechainicial);
+                    var fechaFin = new Date(fechafinal);
 
-                return (fechaFin > fechaIni);
-            }
+                    return (fechaFin > fechaIni);
+                }
+
+                function ValidarPatrimonio() {
+                    console.log(patrimoniosLista.length);
+                    return (patrimoniosLista.length > 0);
+                }
             }
         });
 
@@ -423,10 +457,13 @@
             $("#agr").on('click', function () {
                 if ($("#formAgregar").valid()) {
                     var nResolucion = ValidarResolucion();
+                    var patrimoniosEvaluar = ValidarPatrimonio();
                     var fechasCorrectas = ValidarFechas();
-                    if (!nResolucion && fechasCorrectas) {
+                    if (!nResolucion && fechasCorrectas & patrimoniosEvaluar) {
                         console.log("Todo Bien!");
                         $("#formAgregar").submit();
+                    } else if (!patrimoniosEvaluar) {
+                        $("#modalPatrimonios").modal('show');
                     } else if (!fechasCorrectas) {
                         $("#modalFecha").modal('show');
                     } else if (nResolucion) {
@@ -465,6 +502,9 @@
                 return (fechaFin > fechaIni);
             }
 
+            function ValidarPatrimonio() {
+                return (patrimoniosLista.length > 0);
+            }
 
 
             $("#patrimonio_select").select2({
@@ -550,7 +590,7 @@
                 data = '<tr>' +
                     '<td>' + patrimonioAgregar[0].id + '</td>' +
                     ' <td>' + patrimonioAgregar[0].text + '</td>' +
-                    '<td>' + patrimonioAgregar[0].categoria + '</td>' +
+                    '<td>' + patrimonioAgregar[0].categoria.get + '</td>' +
                     '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
                     '<td>' +
                     '<button class="btn" href="#" type="button" onclick="eliminarPatrimonio(this,' + patrimonioAgregar[0].id + ')">' +
