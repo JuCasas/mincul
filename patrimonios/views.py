@@ -16,6 +16,7 @@ from django.core.mail import EmailMultiAlternatives
 from authentication.models import User
 from patrimonios.models import Patrimonio, Institucion
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
+from incidente.models import Incidente
 
 def patrimonio_list(request):
 
@@ -73,10 +74,26 @@ def detalle(request, pk):
     for v in valoraciones:
         puntuacion = v.valoracion + puntuacion
 
-    puntuacion=puntuacion/len(valoraciones)
-    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones}
+    if len(valoraciones) > 0: puntuacion = puntuacion / len(valoraciones)
+    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones, 'afectaciones': [c[1] for c in Incidente.AFECTACION]}
 
-    if request.POST:
+    if request.POST.get("accion") == "incidente":
+        print(request.POST)
+        incidente = Incidente.objects.create()
+        for c in Incidente.AFECTACION:
+            if c[1] == request.POST.get("tipo"):
+                incidente.tipoAfectacion = c[0]
+                break
+        incidente.fechaOcurrencia = request.POST.get("fecha")
+        incidente.descripcion = request.POST.get("descripcion")
+        incidente.nombre = request.POST.get("nombre")
+        incidente.correo = request.POST.get("email")
+        incidente.telefono = request.POST.get("telefono")
+        incidente.patrimonio_id = pk
+        incidente.save()
+        return HttpResponseRedirect(reverse(detalle, args=[pk]))
+
+    if request.POST.get("accion") == "valoracion":
         print(request.POST)
         valoracion = PatrimonioValoracion.objects.create()
         valoracion.patrimonio_id = pk;
