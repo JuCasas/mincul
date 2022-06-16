@@ -21,224 +21,252 @@
 
     <div class="card">
         <div class="card-header">
-            <h5>Nuevo Traslado</h5>
+            {% if operacion == "agregar" %}
+                <h5>Nuevo Traslado</h5>
+            {% else %}
+                <h5>Editar Traslado</h5>
+            {% endif %}
         </div>
 
         <div class="card-body bg-light">
-            <form name="formAgregar" id="formAgregar" action="{% url 'addTransfer' %}" method="POST"
-                  enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5>General</h5>
+            {% if operacion == "agregar" %}
+                <form name="formAgregar" id="formAgregar" action="{% url 'addTransfer' %}" method="POST"
+                      enctype="multipart/form-data">
+            {% else %}
+                <form name="formAgregar" id="formAgregar" action="{% url 'edit_transfer' idEditar %}" method="POST"
+                      enctype="multipart/form-data">
+            {% endif %}
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>General</h5>
+                        </div>
+                        <div class="card-body bg-light">
+                            <div class="form-group">
+                                <label for="tipoTraslado">Tipo de Traslado:</label>
+                                <select class="form-control" id="tipoTraslado" required>
+                                    <option {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
+                                        extranjero
+                                    </option>
+                                    <option {% if traslado.tipoTraslado == '2' %} selected {% endif %}>Exponsición
+                                        nacional
+                                    </option>
+                                    <option {% if traslado.tipoTraslado == '3' %} selected {% endif %}>Misión
+                                        Diplomática
+                                    </option>
+                                </select>
                             </div>
-                            <div class="card-body bg-light">
-                                <div class="form-group">
-                                    <label for="tipoTraslado">Tipo de Traslado:</label>
-                                    <select class="form-control" id="tipoTraslado" required>
-                                        <option {% if e.pk == '1' %} selected {% endif %}>Exposición en el extranjero
-                                        </option>
-                                        <option {% if e.pk == '2' %} selected {% endif %}>Exponsición nacional</option>
-                                        <option {% if e.pk == '3' %} selected {% endif %}>Misión Diplomática</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pais">País destino:</label>
-                                    <select class="form-control selectpicker" id="pais" name="pais"
-                                            data-placeholder='Seleccione pais...' required>
-                                        {% include 'traslado/paises.html' %}
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ubigeo">Dirección de destino:</label>
-                                    <input class="form-control" id="destino" name="destino" type="text" required>
-                                </div>
-
-                                <div class="form-group ">
-                                    <label for="nombreExposicion">Nombre de la Exposición:</label>
-                                    <input class="form-control" id="nombreExposicion" name="nombreExposicion"
-                                           type="text"
-                                           value="{{ traslado.nombreExposicion }}" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="comisario">Comisario:</label>
-                                    <select class="form-control selectpicker" id="comisario" name="comisario"
-                                            data-placeholder='Seleccione comisario...'>
-                                        {% for c in comisarios %}
-                                            <option value="{{ c.pk }}">{{ c.username }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nResolucion">N° de Resolucion:</label>
-                                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                                           value="{{ traslado.numeroResolucion }}">
-                                </div>
-
+                            <div class="form-group">
+                                <label for="pais">País destino:</label>
+                                <select class="form-control selectpicker" id="pais" name="pais"
+                                        data-placeholder='Seleccione pais...' required>
+                                    {% include 'traslado/paises.html' %}
+                                </select>
                             </div>
+                            <div class="form-group">
+                                <label for="ubigeo">Dirección de destino:</label>
+                                <input class="form-control" id="destino" name="destino" type="text"
+                                       value="{{ traslado.destino }}" required>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="nombreExposicion">Nombre de la Exposición:</label>
+                                <input class="form-control" id="nombreExposicion" name="nombreExposicion"
+                                       type="text"
+                                       value="{{ traslado.nombreExposicion }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="comisario">Comisario:</label>
+                                <select class="form-control selectpicker" id="comisario" name="comisario"
+                                        data-placeholder='Seleccione comisario...'>
+                                    {% for c in comisarios %}
+                                        <option value="{{ c.pk }}">{{ c.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="nResolucion">N° de Resolucion:</label>
+                                <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                       value="{{ traslado.numeroResolucion }}">
+                            </div>
+
                         </div>
                     </div>
-                    <div class="col-8">
-                        <div class="row">
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5>Entidad solicitante</h5>
-                                    </div>
-                                    <div class="card-body bg-light">
-                                        <div class="form-group">
-                                            <label for="nombreInstitucion">Entidad Solicitante</label>
-                                            <select class="form-control selectpicker" id="nombreInstitucion"
-                                                    name="nombreInstitucion"
-                                                    data-placeholder='Seleccione entidad...' onchange="getEmail(this)">
-                                                {% for e in entidades %}
-                                                    <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group ">
-                                            <label for="nombreExposicion">Correo de la entidad solicitante:</label>
-                                            <input class="form-control" id="correoEntidadSolicitante"
-                                                   name="correoEntidadSolicitante"
-                                                   type="text"
-                                                   value="{{ traslado.entidadSolicitante.correo }}" disabled>
-                                        </div>
-
-                                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Entidad solicitante</h5>
                                 </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5>Fechas</h5>
-                                    </div>
-                                    <div class="card-body bg-light">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="fechaSalidaProgramada">Salida Programada: </label>
-                                                    <input class="form-control" id="fechaSalidaProgramada"
-                                                           name="fechaSalidaProgramada" type="date"
-                                                           value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
-                                                    >
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="form-group ">
-                                                    <label for="fechaRetornoProgramada">Retorno
-                                                        Programada: </label>
-                                                    <input class="form-control" id="fechaRetornoProgramada"
-                                                           name="fechaRetornoProgramada" type="date"
-                                                           value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="fechaSalidaReal">Salida Real:</label>
-                                                    <input class="form-control" id="fechaSalidaReal"
-                                                           name="fechaSalidaReal"
-                                                           type="date"
-                                                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
-                                                </div>
-
-                                            </div>
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="fechaRetornoReal">Retorno Real:</label>
-                                                    <input class="form-control" id="fechaRetornoReal"
-                                                           name="fechaRetornoReal" type="date"
-                                                           value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}"
-                                                           disabled>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row my-3">
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5>Patrimonios a ser trasladados</h5>
-                                    </div>
-                                    <div class="form-group col-auto d-flex align-items-end">
-                                        <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                                                data-placeholder='Seleccione patrimonio...'>
+                                <div class="card-body bg-light">
+                                    <div class="form-group">
+                                        <label for="nombreInstitucion">Entidad Solicitante</label>
+                                        <select class="form-control selectpicker" id="nombreInstitucion"
+                                                name="nombreInstitucion"
+                                                data-placeholder='Seleccione entidad...' onchange="getEmail(this)">
+                                            {% for e in entidades %}
+                                                <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
+                                            {% endfor %}
                                         </select>
-                                        <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
-                                                type="button"
-                                                onclick="agregarPatrimonioTabla()">Agregar
-                                        </button>
                                     </div>
-                                    <div class="card-body bg-light">
-                                        <table class="table">
-                                            <thead class="thead-dark">
+
+                                    <div class="form-group ">
+                                        <label for="nombreExposicion">Correo de la entidad solicitante:</label>
+                                        <input class="form-control" id="correoEntidadSolicitante"
+                                               name="correoEntidadSolicitante"
+                                               type="text"
+                                               value="{{ traslado.entidadSolicitante.correo }}" disabled>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Fechas</h5>
+                                </div>
+                                <div class="card-body bg-light">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="fechaSalidaProgramada">Salida Programada: </label>
+                                                <input class="form-control" id="fechaSalidaProgramada"
+                                                       name="fechaSalidaProgramada" type="date"
+                                                       value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
+                                                >
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group ">
+                                                <label for="fechaRetornoProgramada">Retorno
+                                                    Programada: </label>
+                                                <input class="form-control" id="fechaRetornoProgramada"
+                                                       name="fechaRetornoProgramada" type="date"
+                                                       value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="fechaSalidaReal">Salida Real:</label>
+                                                <input class="form-control" id="fechaSalidaReal"
+                                                       name="fechaSalidaReal"
+                                                       type="date"
+                                                       value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
+                                            </div>
+
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="fechaRetornoReal">Retorno Real:</label>
+                                                <input class="form-control" id="fechaRetornoReal"
+                                                       name="fechaRetornoReal" type="date"
+                                                       value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Patrimonios a ser trasladados</h5>
+                                </div>
+                                <div class="form-group col-auto d-flex align-items-end">
+                                    <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
+                                            data-placeholder='Seleccione patrimonio...'>
+                                    </select>
+                                    <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
+                                            type="button"
+                                            onclick="agregarPatrimonioTabla()">Agregar
+                                    </button>
+                                </div>
+                                <div class="card-body bg-light">
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Patrimonio</th>
+                                            <th scope="col">Clasificación</th>
+                                            <th scope="col">Tipo de bien</th>
+                                            <th scope="col">Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="patrimonioAgregar">
+                                        {% for patrimonio in patrimonios %}
                                             <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Patrimonio</th>
-                                                <th scope="col">Clasificación</th>
-                                                <th scope="col">Tipo de bien</th>
-                                                <th scope="col">Acciones</th>
+                                                <td>{{ patrimonio.pk }}</td>
+                                                <td>{{ patrimonio.nombreTituloDemoninacion }}</td>
+                                                <td>{{ patrimonio.get_categoria_display }}</td>
+                                                <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
+                                                <td>
+                                                    <button class="btn" href="#" type="button"
+                                                            onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
+                                                        <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
-                                            </thead>
-                                            <tbody id="patrimonioAgregar">
+                                        {% endfor %}
 
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card my-3">
-                    <div class="card-header">
-                        <h5>Documentos:</h5>
-                    </div>
-                    <div class="card-body bg-light">
-                        <div class="dropzone dropzone-multiple p-0" data-dropzone
-                             data-options='{"url":"valid/url"}'>
-                            <div class="fallback">
-                                <input type="file" name="file2">
-                            </div>
-                            <div class="dz-message" data-dz-message><img class="mr-2"
-                                                                         src="{% static 'img/icons/cloud-upload.svg' %}"
-                                                                         width="25" alt="">Suelta tus archivos aquí
-                            </div>
-                            <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
-                                <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger">
-                                    <img
-                                            class="dz-image" src="..." alt="..." data-dz-thumbnail>
-                                    <div class="media-body d-flex flex-between-center">
-                                        <div>
-                                            <h6 data-dz-name></h6>
-                                            <div class="d-flex align-items-center">
-                                                <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>
-                                                <div class="dz-progress"><span class="dz-upload"
-                                                                               data-dz-uploadprogress=""></span>
-                                                </div>
+            <div class="card my-3">
+                <div class="card-header">
+                    <h5>Documentos:</h5>
+                </div>
+                <div class="card-body bg-light">
+                    <div class="dropzone dropzone-multiple p-0" data-dropzone
+                         data-options='{"url":"valid/url"}'>
+                        <div class="fallback">
+                            <input type="file" name="file2">
+                        </div>
+                        <div class="dz-message" data-dz-message><img class="mr-2"
+                                                                     src="{% static 'img/icons/cloud-upload.svg' %}"
+                                                                     width="25" alt="">Suelta tus archivos aquí
+                        </div>
+                        <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
+                            <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger">
+                                <img
+                                        class="dz-image" src="..." alt="..." data-dz-thumbnail>
+                                <div class="media-body d-flex flex-between-center">
+                                    <div>
+                                        <h6 data-dz-name></h6>
+                                        <div class="d-flex align-items-center">
+                                            <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>
+                                            <div class="dz-progress"><span class="dz-upload"
+                                                                           data-dz-uploadprogress=""></span>
                                             </div>
                                         </div>
-                                        <div class="dropdown text-sans-serif">
-                                            <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"
-                                                    type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false"><span class="fas fa-ellipsis-h"></span>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right border py-0">
-                                                <div class="bg-white py-2"><a class="dropdown-item" href="#!"
-                                                                              data-dz-remove>Remove File </a></div>
-                                            </div>
+                                    </div>
+                                    <div class="dropdown text-sans-serif">
+                                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"
+                                                type="button" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false"><span class="fas fa-ellipsis-h"></span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right border py-0">
+                                            <div class="bg-white py-2"><a class="dropdown-item" href="#!"
+                                                                          data-dz-remove>Remove File </a></div>
                                         </div>
                                     </div>
                                 </div>
@@ -246,17 +274,42 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <input id="lista" name="lista" type="hidden">
+            {% if operacion == "editar" %}
+                <div class="row mt-5">
+                    <div class="col-11">
+                        <div class="row mx-3">
+                            <div class="col-1">
+                                <h5>Estado: </h5>
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-warning  mx-1"
+                                        disabled>{{ traslado.get_estado_display }}</button>
+                            </div>
 
-                <div class="wrapper row justify-content-end mt-5">
-                    <div class="d-flex flex-row justify-content-end">
-                        <a class="btn btn-primary mr-3 mb-1" type="button"
-                           href="{% url 'list_transfers' %}">Cancelar</a>
+                            <div class="col-2">
+                                <button class="btn btn-primary" type="button" data-toggle="modal"
+                                        data-target="#actualizarEstado">Actualizar estado
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Agregar
-                    </button>
+{#                    <div class="col-1 align-items-end">#}
+{#                        <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>#}
+{#                    </div>#}
                 </div>
+            {% endif %}
+            <input id="lista" name="lista" type="hidden">
+
+            <div class="wrapper row justify-content-end mt-5">
+                <div class="d-flex flex-row justify-content-end">
+                    <a class="btn btn-primary mr-3 mb-1" type="button"
+                       href="{% url 'list_transfers' %}">Cancelar</a>
+                </div>
+                <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar
+                </button>
+            </div>
             </form>
         </div>
 
@@ -333,6 +386,55 @@
                             data-dismiss="modal">
                         Cerrar
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal-->
+    <div class="modal fade" id="actualizarEstado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar estado</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+
+                    <form id="formularioActualizarEstado">
+                        <div class="form-group">
+                            <label for="estadoSolicitud">Estado: </label>
+                            <select class="form-control selectpicker" id="estadoSolicitud" name="estadoSolicitud"
+                                    onchange="validar_campo_detalle()">
+
+                                {% if traslado.estado == '1' %}
+                                    <option disabled selected> Seleccione una acción</option>
+                                {% endif %}
+
+                                {% for estado in estadosEditables %}
+                                    <option data="{{ estado.0 }}" value={{ estado.0 }}
+                                            {% if traslado.estado == estado.0 %} selected {% endif %}>{{ estado.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="detallarRechazo">
+                            <label for="detalleRechazo">Detalle:</label>
+                            <textarea class="form-control" id="detalleRechazo" name="detalleRechazo"
+                                      rows="3" required></textarea>
+                        </div>
+
+                    </form>
+
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="actualizarEstado()">Guardar</button>
                 </div>
             </div>
         </div>
@@ -423,6 +525,8 @@
                         data: {
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                             nResolucion: $("#nResolucion").val(),
+                            operacion: '{{ operacion }}',
+                            idEditar: '{{ idEditar }}'
                         },
                         success: function (response) {
                             let resultado = response['existe'];
@@ -454,6 +558,25 @@
 
         $(document).ready(function () {
 
+            if ("{{ operacion }}" === "editar") {
+                validar_campo_detalle();
+                $("#pais").val("{{ traslado.pais }}").change();
+                $("#nombreInstitucion").val("{{ traslado.entidadSolicitante_id }}").change();
+                $("#comisario").val("{{ traslado.gestorConservacionTraslados_id }}").change();
+
+                console.log("Antes del parse");
+                console.log("{{ lista }}");
+                var array = JSON.parse("{{ lista }}");
+                console.log("Despues del parse");
+                console.log(array);
+
+                for (let i = 0; i < array.length; i++) {
+                    patrimoniosLista.push(array[i].toString());
+                }
+                console.log(patrimoniosLista);
+            }
+            ;
+
             $("#agr").on('click', function () {
                 if ($("#formAgregar").valid()) {
                     var nResolucion = ValidarResolucion();
@@ -481,6 +604,8 @@
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         nResolucion: $("#nResolucion").val(),
+                        operacion: '{{ operacion }}',
+                        idEditar: '{{ idEditar }}'
                     },
                     success: function (response) {
                         let resultado = response['existe'];
@@ -550,6 +675,84 @@
             });
             getEmail();
         });
+
+        function set_validate() {
+            if ($("#estadoSolicitud").val() === "3") {
+                $("#detalleRechazo").attr('required', true);
+                console.log("Campo detalle requerido");
+                var settings = $('#formularioActualizarEstado').validate().settings;
+                console.log(settings);
+                $.extend(settings, {
+                    rules: {
+                        detalleRechazo: {
+                            required: true,
+                        },
+                    },
+                    messages: {
+                        detalleRechazo: {
+                            required: "Debe ingresar un detalle del rechazo",
+                        },
+                    }
+                });
+            } else {
+                console.log("Campo detalle no requerido");
+
+                $("#detalleRechazo").attr('required', false);
+                var settings = $('#formularioActualizarEstado').validate().settings;
+                console.log(settings);
+
+                $.extend(settings, {
+                    rules: {
+                        detalleRechazo: {
+                            required: false,
+                        },
+                    },
+                });
+            }
+        }
+
+        function validar_campo_detalle() {
+
+            set_validate();
+
+            if ($("#estadoSolicitud").val() === "3") {
+                $("#detallarRechazo").show();
+            } else {
+                $("#detallarRechazo").hide();
+            }
+        }
+
+
+        $('#formularioActualizarEstado').validate({
+
+            submitHandler: function (form) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'actualizar_estado'%}",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        traslado_pk: {{ idEditar }},
+                        nuevo_estado: $("#estadoSolicitud").val(),
+                        detalle_rechazo: $("#detalleRechazo").val()
+                    },
+                    success: function (response) {
+                        $("#estadoSolicitud").empty();
+                        $("#detalleRechazo").empty();
+                        $('#actualizarEstado').hide()
+
+                        location.reload();
+
+                    },
+                    error: function (response) {
+                        alert(response["responseJSON"]["error"]);
+                    }
+                });
+            }
+        });
+
+        function actualizarEstado() {
+            $('#formularioActualizarEstado').submit();
+        }
 
         function getEmail() {
             $.ajax({
