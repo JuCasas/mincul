@@ -9,41 +9,126 @@
 {#<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>#}
 {#<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>#}
     <style>
-        .degradado {
-            background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
-            opacity: .8;
+
+
+                @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
         }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-1 {
+            text-align: center;
+            float: left;
+            border: 1px solid #2B2D42 !important;
+            background-color: #2B2D42 !important;
+            color: white !important;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-2 {
+            text-align: center;
+            float: left;
+            border: 1px solid floralwhite;
+            background-color: white;
+            color: black;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-2:hover {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+        }
+
+
+        .table.dataTable tbody th, table.dataTable tbody td {
+            padding: 8px 10px 8px 18px !important;
+        }
+
+        .form-control {
+            background-color: white !important;
+        }
+
+        .form-control {
+            background-color: white !important;
+            cursor: pointer !important;
+        }
+
+
+        span.select2-selection.select2-selection--single {
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        span.select2-selection__arrow {
+            margin-top: 5px !important;
+        }
+
+        span.select2-selection__arrow {
+            margin-top: 5px !important;
+        }
+
+        .select2-selection {
+            height: 36px !important;
+            border-radius: 10px !important;
+            border-color: #D7E1EE !important;
+            align-items: center !important;
+        }
+
+        .select2-selection__placeholder {
+            align-items: center !important;
+            font-size: 12px !important;
+            color: #BDC1D2 !important;
+        }
+
+        .back {
+            font-size: 14px !important;
+        }
+
     </style>
 {% endblock %}
 
 {% block body %}
 
-<div class="card mb-3">
-    <div class="card-body p-0">
-        <div class="navbar">
-            <p>Entidades Solicitantes</p>            
-            <div class="row d-flex align-items-center ml-auto">                
-                
-                <div class="form-group col-sm-auto my-1">
-                    <row>
-                        <button class="btn btn-primary " type="button">
-                        Importar patrimonios
-                    </button>
-                    <button class="btn btn-primary " type="button">
-                        Importar patrimonios
-                    </button>
-                </row>
-                    
+    <div class="card mb-3">
+        <div class="card-body cardRed">
+            <div class="row justify-content-between ">
+                <div class="col-md-auto d-flex align-items-center">
+                    <h5 class="mb-2 mb-md-0 text-black">Entidades Solicitantes</h5>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="nav-bar nav-bar-right">
+                        <div class="nav nav-pills d-flex justify-content-end">
+                            <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'list_transfers' %}">Traslados</a>
+                            <button class="nav-link col-md-4 btn-1 my-1" disabled>Entidades</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+
         </div>
     </div>
-</div>
+
 <div class="card mb-3">
     <div class="card-body p-0">
         <div class="navbar">
             <div class="col-sm-auto mb-2 mb-sm-0">
-                <h6 class="mb-0">Mostrando 1-24 de 205 Patrimonios</h6>
+                <h6 class="mb-0"></h6>
             </div>
             <div class="row d-flex align-items-center">
 {% comment %} 
@@ -158,7 +243,6 @@
   </div>
 
 
-    #Modal eliminacion
     <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -189,7 +273,6 @@
     </div>
   </div>
 </div>
-    #Modal Agregar Entidad
 
     <div class="modal fade" id="ModalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -240,8 +323,6 @@
         </div>
       </div>
 </div>
-
-    #Modal Editar Entidad
 
     <div class="modal fade" id="ModalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
