@@ -22,7 +22,67 @@
     <div class="row">
         <!--Barra lateral-->
         <div class="col-md-4">
-            {% include 'map/simpleLatBar.html' %}
+            <nav class="card mb-3" style="height: 75vh">
+            <!-- Content-->
+            <div class="navbar-vertical-content scrollbar perfect-scrollbar">
+                <div class="row" style="padding-bottom: 3px">
+                    <div class="col">
+                        <form id="form_buscar" method="post" action={% url 'mapaPatrimonioSimple' %} >
+                            {% csrf_token %}
+                            <label for="txtBuscar"></label>
+                            <input name="patrimonio_name" class="form-control" id="txtBuscar" placeholder="Buscar patrimonio...">
+                            <div class="text-right" style="padding: 3px">
+                                <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioAvanzado' %}">
+                                    <u>Cambiar a búsqueda avanzada</u>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row" style="padding: 5px">
+                    <div class="col">
+                        <button class="btn-primary text-white" type="submit" form="form_buscar">
+                            Realizar Búsqueda
+                        </button>
+                    </div>
+                </div>
+                {% for p in patrimonios %}
+                    <div class="card mb-5" style="padding: 3px">
+                        <div class="position-relative">
+                            <div>
+                                <img class="img-fluid w-100"
+                                     style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
+                                     src="../static/img/generic/ciudadela-1.png"
+                                     alt="Card image"/>
+                            </div>
+                            <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                                <p class="card-text "
+                                   style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
+                                    {{ p.nombreTituloDemoninacion }}</p>
+                            </div>
+                        </div>
+                        <div class="card-body pt-2 pb-2">
+                            <p class="mb-0 " style="font-size: 15px"> Patrimonio Cultural de la
+                                humanidad </p>
+                            {% comment %}
+                            <a href=#>
+                                <button class="btn bg-200 mr-1 mb-1 w-100" type="button"
+                                        style="font-size: 10px">
+                                            Ver en el mapa
+                                </button>
+                            </a>
+                            {% endcomment %}
+                            <a href="{% url 'detalle' %}">
+                                <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
+                                        style="font-size: 10px">
+                                            Ver Ficha
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </nav>
         </div>
         <!--Mapa-->
         <div class="col-md-8">
@@ -33,10 +93,6 @@
             </div>
         </div>
     </div>
-    {% if patrimonio %}
-    {% else %}
-        <!--modal para indicar una mala busqueda-->
-    {% endif %}
 </div>
 
 {% endblock %}
@@ -53,6 +109,7 @@
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
     <!-- ruta entre puntos -->
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
     <script>
         // leaflet map with osm tilelayer
         var map = L.map('map').setView([-9.40, -75.00], 5);
@@ -65,16 +122,15 @@
             popupAnchor: [-1,-39]
         });
 
-        {% if patrimonio is not None %}
-        var marker = L.marker([{{ patrimonio.lat }},{{ patrimonio.long }}], {
-            icon: myIcon,
-            title: '{{ patrimonio.nombreTituloDemoninacion }}'
-        }).addTo(map).bindPopup(
-            "<div>" +
-                "<p>" + "{{ patrimonio.nombreTituloDemoninacion }}" +"</p>" +
+        {% if patrimonio0 %}
+            let markerInicio = L.marker([{{patrimonio0.lat}}, {{patrimonio0.long}}], {
+                icon:myIcon,
+                title: "{{ patrimonio0.nombreTituloDemoninacion }}"
+            }).addTo(map).bindPopup("<div>" +
+                "<p>" + "{{ patrimonio0.nombreTituloDemoninacion }}" +"</p>"  +
                 "<img width='300' src='../static/img/generic/ciudadela-1.png'/>" +
-            "</div>").openPopup();
-        map.flyTo([{{ patrimonio.lat }},{{ patrimonio.long }}],14)
+            "</div>")
+            map.flyTo([{{ patrimonio0.lat }}, {{patrimonio0.long}}],14);
         {% endif %}
     </script>
 {% endblock %}
