@@ -22,7 +22,7 @@
     <div class="card">
         <div class="card-header">
             {% if operacion == "agregar" %}
-                <h5>Nuevo Traslado</h5>
+                <h5>Nueva Solicitud de Traslado</h5>
             {% else %}
                 <h5>Editar Traslado</h5>
             {% endif %}
@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-8">
                     <div class="row">
-                        <div class="col">
+                        <div class="col ">
                             <div class="card">
                                 <div class="card-header">
                                     <h5>Entidad solicitante</h5>
@@ -122,12 +122,11 @@
                                                type="text"
                                                value="{{ traslado.entidadSolicitante.correo }}" disabled>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col">
+                        <div class="col ">
                             <div class="card">
                                 <div class="card-header">
                                     <h5>Fechas</h5>
@@ -136,50 +135,56 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group">
-                                                <label for="fechaSalidaProgramada">Salida Programada: </label>
+                                                <label for="fechaSalidaProgramada">Fecha Salida Programada: </label>
                                                 <input class="form-control" id="fechaSalidaProgramada"
                                                        name="fechaSalidaProgramada" type="date"
                                                        value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
                                                 >
                                             </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group ">
-                                                <label for="fechaRetornoProgramada">Retorno
-                                                    Programada: </label>
-                                                <input class="form-control" id="fechaRetornoProgramada"
-                                                       name="fechaRetornoProgramada" type="date"
-                                                       value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}"
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="col">
                                             <div class="form-group">
-                                                <label for="fechaSalidaReal">Salida Real:</label>
+                                                <label for="fechaSalidaReal">Fecha de Salida Real:</label>
                                                 <input class="form-control" id="fechaSalidaReal"
                                                        name="fechaSalidaReal"
                                                        type="date"
-                                                       value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
+                                                       value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="fechaRetornoReal">Fecha de Retorno:</label>
+                                                <input class="form-control" id="fechaRetornoReal"
+                                                       name="fechaRetornoReal" type="date"
+                                                       value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}">
                                             </div>
 
                                         </div>
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="fechaRetornoReal">Retorno Real:</label>
-                                                <input class="form-control" id="fechaRetornoReal"
-                                                       name="fechaRetornoReal" type="date"
-                                                       value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}"
-                                                       disabled>
-                                            </div>
-                                        </div>
+                                        {% comment %}<div class="col">
+                                                <div class="form-group ">
+                                                    <label for="fechaRetornoProgramada">Retorno
+                                                        Programada: </label>
+                                                    <input class="form-control" id="fechaRetornoProgramada"
+                                                           name="fechaRetornoProgramada" type="date"
+                                                           value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}"
+                                                    >
+                                                </div>
+                                            </div>{% endcomment %}
                                     </div>
+
+                                    {% comment %}  <div class="row">
+                                            <div class="col">
+
+
+                                            </div>
+                                            <div class="col">
+
+                                            </div>
+                                        </div>{% endcomment %}
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
                     <div class="row my-3">
                         <div class="col">
                             <div class="card">
@@ -296,21 +301,23 @@
                             </div>
                         </div>
                     </div>
-{#                    <div class="col-1 align-items-end">#}
-{#                        <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>#}
-{#                    </div>#}
+                    {#                    <div class="col-1 align-items-end">#}
+                    {#                        <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>#}
+                    {#                    </div>#}
                 </div>
             {% endif %}
             <input id="lista" name="lista" type="hidden">
 
-            <div class="wrapper row justify-content-end mt-5">
-                <div class="d-flex flex-row justify-content-end">
+            <div class="d-flex flex-row justify-content-end mt-5">
+                <div class="flex-column">
                     <a class="btn btn-primary mr-3 mb-1" type="button"
                        href="{% url 'list_transfers' %}">Cancelar</a>
                 </div>
-                <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar
-                </button>
+                <div class="flex-column">
+                    <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
+                </div>
             </div>
+
             </form>
         </div>
 
