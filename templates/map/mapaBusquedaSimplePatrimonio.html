@@ -52,7 +52,7 @@
                             <div>
                                 <img class="img-fluid w-100"
                                      style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                     src="../static/img/generic/ciudadela-1.png"
+                                     src="{{ p.url }}"
                                      alt="Card image"/>
                             </div>
                             <div class="card-img-overlay d-flex align-items-end text-white pb-2">
@@ -72,7 +72,7 @@
                                 </button>
                             </a>
                             {% endcomment %}
-                            <a href="{% url 'detalle' %}">
+                            <a href="{% url 'detalle' pk=p.pk %}">
                                 <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
                                         style="font-size: 10px">
                                             Ver Ficha
@@ -128,7 +128,9 @@
                 title: "{{ patrimonio0.nombreTituloDemoninacion }}"
             }).addTo(map).bindPopup("<div>" +
                 "<p>" + "{{ patrimonio0.nombreTituloDemoninacion }}" +"</p>"  +
-                "<img width='300' src='../static/img/generic/ciudadela-1.png'/>" +
+                "<img width='300' src='" +
+                "{{ patrimonio0.url }}" +
+                "'/>" +
             "</div>")
             map.flyTo([{{ patrimonio0.lat }}, {{patrimonio0.long}}],14);
         {% endif %}

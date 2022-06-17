@@ -89,27 +89,11 @@ def detalle(request, pk):
     puntuacion=0
     for v in valoraciones:
         puntuacion = v.valoracion + puntuacion
+    if len(valoraciones):
+        puntuacion=puntuacion/len(valoraciones)
+    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones}
 
-    if len(valoraciones) > 0: puntuacion = puntuacion / len(valoraciones)
-    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones, 'afectaciones': [c[1] for c in Incidente.AFECTACION]}
-
-    if request.POST.get("accion") == "incidente":
-        print(request.POST)
-        incidente = Incidente.objects.create()
-        for c in Incidente.AFECTACION:
-            if c[1] == request.POST.get("tipo"):
-                incidente.tipoAfectacion = c[0]
-                break
-        incidente.fechaOcurrencia = request.POST.get("fecha")
-        incidente.descripcion = request.POST.get("descripcion")
-        incidente.nombre = request.POST.get("nombre")
-        incidente.correo = request.POST.get("email")
-        incidente.telefono = request.POST.get("telefono")
-        incidente.patrimonio_id = pk
-        incidente.save()
-        return HttpResponseRedirect(reverse(detalle, args=[pk]))
-
-    if request.POST.get("accion") == "valoracion":
+    if request.POST:
         print(request.POST)
         valoracion = PatrimonioValoracion.objects.create()
         valoracion.patrimonio_id = pk;
@@ -124,7 +108,7 @@ def detalle(request, pk):
 
 @method_decorator(csrf_exempt)
 def send_email(request, pk):
-    url = "http://localhost:8000/patrimonios/email/"+str(pk)
+    url = "http://localhost:8000/patrimonios/email_confirmation/"+str(pk)
     if request.POST:
         try:
             subject = "Confirma tu correo electrónico"
@@ -154,7 +138,4 @@ def email_confirmation(request, pk):
     print(valor.estado)
     valor.save()
     context = {'valor':valor}
-    if int(pk) == 1:
-        return render(request, 'patrimonio/patrimony_inmueble_edit.html', context)
-    else:
-        return render(request, 'patrimonio/patrimony_inmaterial_edit.html', context)
+    return render(request, 'patrimonio/email_confirmation.html', context)

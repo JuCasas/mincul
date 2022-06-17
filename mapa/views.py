@@ -36,13 +36,6 @@ def mapaPatrimonioAvanzado(request):
         patrimoniodistrito = request.POST['select_distrito']
         patrimonioNombre.rstrip()
         patrimonioNombre.lstrip()
-        print(":::")
-        print(patrimonioNombre)
-        print(patrimonioCategoria)
-        print(patrimoniodepartamento)
-        print(patrimonioprovincia)
-        print(patrimoniodistrito)
-        print(":::")
         if patrimonioNombre != '' or patrimonioNombre != None or patrimonioNombre != ' '\
             or patrimonioNombre != "" or patrimonioNombre != " ":
             patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre)
@@ -52,17 +45,17 @@ def mapaPatrimonioAvanzado(request):
             patriDis=[]
             if len(patrimonios) > 0:
                 for p in patrimonios:
-                    if p.categoria == 1 and patrimonioCategoria =='Mueble':
+                    if p.categoria.pk == 1 and patrimonioCategoria == "Mueble":
                         patriNom.append(p)
-                    elif p.categoria == 2 and patrimonioCategoria=='Inmueble':
+                    elif p.categoria.pk == 2 and patrimonioCategoria == "Inmueble":
                         patriNom.append(p)
-                    elif patrimonioCategoria=='Categoría':
+                    elif patrimonioCategoria == "Categoría":
                         patriNom.append(p)
                 if len(patriNom) >0:
                     for p in patriNom:
                         if p.departamento == patrimoniodepartamento:
                             patriDep.append(p)
-                        elif patrimoniodepartamento=='Departamento':
+                        elif patrimoniodepartamento == "Departamento":
                             patriDep.append(p)
                     if len(patriDep)>0:
                         for p in patriDep:
