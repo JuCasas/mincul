@@ -198,7 +198,7 @@
                         {% for documento in documentos %}
                             <div class="col-2">
                                 <a class="notification notification-flush bg-0 "
-                                    href="{{ media_path }}{{ documento.documento.url }}" download>
+                                   href="{{ media_path }}{{ documento.documento.url }}" download>
                                     <div class="card mx-1">
                                         <div class="card-body p-0">
                                             <div>
@@ -216,17 +216,30 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-11">
-                    <div class="row mx-3">
-                        <h5>Estado: </h5>
-                        {% if traslado.estado == '1' %}
-                            <button class="btn btn-sm btn-warning rounded-capsule mx-1" disabled>Sin aprobar</button>
-                        {% elif traslado.estado == '2' %}
-                            <button class="btn btn-secondary" disabled>Aprobado</button>
-                        {% endif %}
-                    </div>
+                    <div class="row">
+                        <div class="col-1">
+                            <h5>Estado: </h5>
+                        </div>
 
+                        <div class="col-2">
+                            <span class="badge badge rounded-capsule d-block badge-soft-warning
+                            {% if traslado.estado == '1' %}
+                                badge-soft-warning
+                            {% elif traslado.estado == '2' %}
+                                badge-soft-info
+                            {% elif traslado.estado == '3' %}
+                                badge-soft-danger
+                            {% elif traslado.estado == '4' %}
+                                 badge-soft-success
+                            {% elif traslado.estado == '5' %}
+                                 badge-soft-dark
+                            {% endif %} ">
+                                {{ traslado.get_estado_display }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-1 align-items-end">
                     <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>
