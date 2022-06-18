@@ -1,7 +1,7 @@
 from django.db import models
 
 #Create your models here.
-from patrimonios.models import Patrimonio
+from patrimonios.models import Patrimonio, Institucion
 from mincul_app.models import Documento
 
 
