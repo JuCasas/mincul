@@ -11,8 +11,10 @@ class Institucion(models.Model):
         ('2', 'Inactivo'),
     )
     nombre = models.CharField(max_length=200)
+    direccion = models.CharField(max_length=200, null=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     long = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
 
@@ -106,6 +108,7 @@ class Patrimonio (models.Model):
     gestor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     propietarios = models.ManyToManyField(Propietario)
     responsables = models.ManyToManyField(Responsable)
+    documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
     pronombre = models.CharField(max_length=1, null=True, blank=True)
     url = models.CharField(max_length=1024, null=True, blank=True)
