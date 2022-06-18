@@ -168,10 +168,7 @@
         {#                <div class="row">#}
         {#                  <div class="col-sm-5"></div>#}
         {#                  <div class="col-sm-7">#}
-        {#                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"#}
-        {#                       href="">#}
-        {#                      Ver detalle#}
-        {#                    </a>#}
+        {#                      '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +#}
         {#                  </div>#}
         {##}
         {#                </div>#}
@@ -222,6 +219,25 @@
             </div>
 
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal fade" id="confirm" role="dialog">
+    <input type="hidden" value="" id="idPat">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header justify-content-center">
+          <h4 class="modal-title">¿Estás seguro de eliminar el patrimonio?</h4>
+        </div>
+        <div class="modal-body px-9">
+          <div class="row justify-content-between">
+            <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -284,10 +300,8 @@
             + '<div class="row">'
             + '<div class="col-sm-5"></div>'
             + '<div class="col-sm-7">'
-            + '<a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"'
-            + 'href="">'
-            + 'Ver detalle'
-            + '</a>'
+            + '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>'
+            + '<button type="button" class="btn btn-delete" onclick="eliminarPat(' + data[i].id + ')"><i class="fas fa-trash-alt"></i></button>'
             + '</div>'
             + '</div>'
             + '</div>'
@@ -418,10 +432,31 @@
 
         },
         error: function (error) {
-          $('#cover-spin').hide()
           console.log(error)
         }
       });
     });
+
+    $('#confirm').on('click', '#delete', function (e) {
+      $.ajax({
+        url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/delete/',
+        method: 'POST',
+        data: {
+          'patrimonio': $("#idPat").val()
+        },
+        success: function (response) {
+          $('#confirm').modal('hide')
+        },
+        error: function (error) {
+          console.log(error)
+        }
+      });
+    });
+
+    function eliminarPat(id) {
+      $('#confirm').modal('show')
+      $("#idPat").val(id)
+    }
+
   </script>
 {% endblock %}

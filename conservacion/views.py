@@ -196,6 +196,14 @@ def deleteProject(request, pk):
   project.save()
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+@api_view(('POST',))
+def deletePatrimony(request, pk):
+  project = ProyectoConservacion.objects.get(pk=pk)
+  patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
+  project.patrimonios.remove(patrimonio)
+  project.save()
+  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 
 @api_view(('GET',))
 def listActivities(request, pk):

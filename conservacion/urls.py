@@ -9,6 +9,7 @@ urlpatterns = [
     path('proyectos/<pk>/patrimonios/',views.listPatrimonys, name='listPatrimonys'),
     path('proyectos/<pk>/patrimonios/list/',views.listPatrimonysForProject, name='listPatrimonysForProject'),
     path('proyectos/<pk>/patrimonios/add/',views.addPatrimony, name='addPatrimony'),
+    path('proyectos/<pk>/patrimonios/delete/',views.deletePatrimony, name='deletePatrimony'),
     path('proyectos/<pk>/actividades/',views.listActivities, name='listActivities'),
     path('proyectos/<pk>/incidentes/',views.listIncidents, name='listIncidents'),
     path('proyectos/<pk>/actividades/add/',views.addActivity, name='addActivity'),
