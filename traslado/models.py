@@ -45,9 +45,8 @@ class SolicitudTraslado(models.Model):
     departamento = models.CharField(max_length=100, null=True, blank=True)
     numeroResolucion = models.CharField(max_length=200, null=True, blank=True)
     fechaSalidaProgramada = models.DateField(blank=True, null=True, verbose_name='fechaSalidaProgramada')
-    fechaRetornoProgramada = models.DateField(blank=True, null=True, verbose_name='fechaRetornoProgramada')
     fechaSalidaReal = models.DateField(blank=True, null=True, verbose_name='fechaSalidaReal')
-    fechaRetornoReal = models.DateField(blank=True, null=True, verbose_name='fechaRetornoReal')
+    fechaRetorno = models.DateField(blank=True, null=True, verbose_name='fechaRetorno')
     ubigeoDestino = models.IntegerField(blank=True, null=True)
     tipoTraslado = models.CharField(max_length=2, choices=TIPOS, default='1', null=True, blank=True)
     gestorPatrimonio = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
