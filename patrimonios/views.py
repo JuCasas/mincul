@@ -106,6 +106,34 @@ def detalle(request, pk):
         return HttpResponseRedirect(reverse(detalle, args=[pk]))
     return render(request, 'patrimonio/templateDetail.html', context)
 
+def detalle_museo(request, pk):
+    #Provisional hasta cambio de la bd
+    #museo
+    valor = {'url': 'https://enlima.pe/sites/default/files/mali-lima.jpg',
+             'nombre': 'Museo Nacional de Arqueología, Antropología e Historia del Perú'}
+
+    area = {'direccion': 'Plaza Bolivar s/n',
+            'departamento': 'Lima',
+            'provincia': 'Lima',
+            'distrito': 'Pueblo Libre'}
+
+    #lista de patrimonio dentro del museo
+
+    #lista de valoraciones de esos patrimonios
+
+
+    #lista de incidentes
+
+
+
+
+
+
+    context = {"valor": valor,
+               "area": area}
+
+    return render(request, 'patrimonio/patrimony_museum.html',context)
+
 @method_decorator(csrf_exempt)
 def send_email(request, pk):
     url = "http://localhost:8000/patrimonios/email_confirmation/"+str(pk)

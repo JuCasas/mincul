@@ -9,4 +9,5 @@ urlpatterns = [
     path('email_confirmation/<pk>', views.email_confirmation, name='email'),
     path('listarInstituciones/',views.instituciones_list_api, name='instituciones_list_api'),
     path('listarGestorPatrimonio/',views.gestorPatrimonio_list_api, name='gestorPatrimonio_list_api'),
+    path('detalle/area/<pk>', views.detalle_museo, name='detalle_museo'),
 ]
