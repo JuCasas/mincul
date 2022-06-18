@@ -13,6 +13,7 @@ class Institucion(models.Model):
     nombre = models.CharField(max_length=200)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
+
 class Propietario(models.Model):
     ESTADOS = (
         ('1', 'Activo'),
@@ -42,6 +43,8 @@ class Autor(models.Model):
         ('2', 'Inactivo'),
     )
     nombre = models.CharField(max_length=200)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    long = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
 class Responsable(models.Model):
