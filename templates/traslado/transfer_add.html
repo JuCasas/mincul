@@ -742,7 +742,11 @@
 
 
         $(document).ready(function () {
-            validar_campo_detalle();
+
+            if ("{{ traslado.estado}}" === 2){
+                validar_campo_detalle();
+            }
+
             if ("{{ operacion }}" === "editar") {
                 $("#pais").val("{{ traslado.pais }}").change();
                 $("#nombreInstitucion").val("{{ traslado.entidadSolicitante_id }}").change();
