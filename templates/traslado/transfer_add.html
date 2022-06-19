@@ -208,6 +208,7 @@
                                             <th scope="col">Patrimonio</th>
                                             <th scope="col">Clasificación</th>
                                             <th scope="col">Tipo de bien</th>
+                                            <th scope="col">Estado</th>
                                             <th scope="col">Acciones</th>
                                         </tr>
                                         </thead>
@@ -218,6 +219,7 @@
                                                 <td>{{ patrimonio.nombreTituloDemoninacion }}</td>
                                                 <td>{{ patrimonio.get_categoria_display }}</td>
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
+                                                <td>{{ patrimonio.get_estado_display }}</td>
                                                 <td>
                                                     <button class="btn" href="#" type="button"
                                                             onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">

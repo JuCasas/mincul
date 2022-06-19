@@ -119,6 +119,21 @@ def validarResolucion(request):
     print(existe)
     return JsonResponse({"existe": existe}, status=200)
 
+def validarDOI(request):
+    doiEntrante = request.POST['DOI']
+    edit = request.POST['EDIT']
+    pkEditar = request.POST['PKEDITAR']
+    if (edit=='0'):
+        existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exists()
+    else:
+        print("EDITAR")
+        doiSolicitanteActual = EntidadSolicitante.objects.get(pk=pkEditar).doiSolicitante
+        existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exclude(doiSolicitante = doiSolicitanteActual).exists()
+    if existe:
+        return JsonResponse(False, status=200, safe=False)
+    else:
+        return JsonResponse(True, status=200, safe=False)
+
 
 @api_view(('GET',))
 def listTranfers(request):
@@ -332,13 +347,22 @@ def actualizarEstado2(request):
     traslado = SolicitudTraslado.objects.get(pk=trasladopk)
 
     nuevo_estado = ''
+    patrimonios = traslado.patrimonios.all()
 
     if (traslado.estado == '1'):
         nuevo_estado = '2'
     elif (traslado.estado == '4'):
         nuevo_estado = '5'
+        print('>>>>>>>>>>>>>>>>>Dentro ed actualizar esatdo de patrimonios a inactivo>>>>>>>>>>>>>>>>>>>>>>>>>')
+        for patrimonio in patrimonios: # se actualiza el estado de todos los patrimonios de la solicitud
+            patrimonio.estado='2' # estado no disponible
+            patrimonio.save()
     elif (traslado.estado == '5'):
         nuevo_estado = '6'
+        print('>>>>>>>>>>>>>>>>>Dentro ed actualizar esatdo de patrimonios a inactivo>>>>>>>>>>>>>>>>>>>>>>>>>')
+        for patrimonio in patrimonios:# se actualiza el estado de todos los patrimonios de la solicitud
+            patrimonio.estado='1' # estado disponible
+            patrimonio.save()
 
     traslado.estado = nuevo_estado
     traslado.save()
