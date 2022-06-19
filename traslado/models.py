@@ -31,6 +31,7 @@ class SolicitudTraslado(models.Model):
         ('3', 'Rechazada'),
         ('4', 'Aprobada'),
         ('5', 'Ejecutada'),
+        ('6', 'Finalizada'),
     )
     TIPOS = (
         ('0', 'Tipo1'),

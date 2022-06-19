@@ -224,20 +224,22 @@
                         </div>
 
                         <div class="col-2">
-                            <span class="badge badge rounded-capsule d-block badge-soft-warning
-                            {% if traslado.estado == '1' %}
-                                badge-soft-warning
-                            {% elif traslado.estado == '2' %}
-                                badge-soft-info
-                            {% elif traslado.estado == '3' %}
-                                badge-soft-danger
-                            {% elif traslado.estado == '4' %}
-                                 badge-soft-success
-                            {% elif traslado.estado == '5' %}
-                                 badge-soft-dark
-                            {% endif %} ">
-                                {{ traslado.get_estado_display }}
-                            </span>
+                            <span class="btn
+                                {% if traslado.estado == '1' %}
+                                    btn-warning
+                                {% elif traslado.estado == '2' %}
+                                    btn-info
+                                {% elif traslado.estado == '3' %}
+                                    btn-danger
+                                {% elif traslado.estado == '4' %}
+                                    btn-success
+                                {% elif traslado.estado == '5' %}
+                                    btn-secondary
+                                {% elif traslado.estado == '6' %}
+                                    btn-dark
+                                {% endif %} ">
+                                    {{ traslado.get_estado_display }}
+                                </span>
                         </div>
                     </div>
                 </div>

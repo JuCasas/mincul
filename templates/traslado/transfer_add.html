@@ -281,42 +281,72 @@
                 </div>
             </div>
 
-            {% if operacion == "editar" %}
-                <div class="row mt-5">
-                    <div class="col-11">
-                        <div class="row mx-3">
-                            <div class="col-2 flex-center mt-auto mb-auto ">
-                                <h5 class="mb-0">Estado: </h5>
-                            </div>
-                            <div class="col-3 p-0">
-                                <button class="btn btn-warning  mx-2"
-                                        disabled>{{ traslado.get_estado_display }}</button>
-                            </div>
+            <input id="lista" name="lista" type="hidden">
 
-                            <div class="col-3 p-0">
-                                <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
-                                        data-target="#actualizarEstado">
-                                    Actualizar estado
-                                </button>
+
+            <div class="row">
+                <div class="col-8">
+                    <div class="row mt-5">
+                        <div class="col-11">
+                            <div class="row mx-3">
+                                <div class="col-2 flex-center mt-auto mb-auto ">
+                                    <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
+                                </div>
+                                <div class="col-3">
+                                <span class="btn
+                                {% if traslado.estado == '1' %}
+                                    btn-warning
+                                {% elif traslado.estado == '2' %}
+                                    btn-info
+                                {% elif traslado.estado == '3' %}
+                                    btn-danger
+                                {% elif traslado.estado == '4' %}
+                                    btn-success
+                                {% elif traslado.estado == '5' %}
+                                    btn-dark
+                                {% elif traslado.estado == '6' %}
+                                    btn-light
+                                {% endif %} ">
+                                    {{ traslado.get_estado_display }}
+                                </span>
+                                </div>
+
+                                {% if operacion == "editar" %}
+                                    {% if traslado.estado == '1' or traslado.estado == '2' or traslado.estado == '4' or  traslado.estado == '5' %}
+                                        <div class="col-3 p-0">
+                                            <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
+                                                    data-target="#actualizarEstado">
+                                                Actualizar estado
+                                            </button>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if traslado.estado == '3' %}
+                                        <div class="col-3 p-0">
+                                            <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
+                                                    data-target="#verDetalleRechazo">
+                                                Ver detalle de rechazo
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                    {#                    <div class="col-1 align-items-end">#}
-                    {#                        <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>#}
-                    {#                    </div>#}
                 </div>
-            {% endif %}
-            <input id="lista" name="lista" type="hidden">
-
-            <div class="d-flex flex-row justify-content-end mt-5">
-                <div class="flex-column">
-                    <a class="btn btn-primary mr-3 mb-1" type="button"
-                       href="{% url 'list_transfers' %}">Cancelar</a>
-                </div>
-                <div class="flex-column">
-                    <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
+                <div class="col-4">
+                    <div class="d-flex flex-row justify-content-end mt-5">
+                        <div class="flex-column">
+                            <a class="btn btn-primary mr-3 mb-1" type="button"
+                               href="{% url 'list_transfers' %}">Cancelar</a>
+                        </div>
+                        <div class="flex-column">
+                            <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
 
             </form>
         </div>
@@ -411,38 +441,83 @@
                 </div>
                 <div class="modal-body">
 
-                    <form id="formularioActualizarEstado">
-                        <div class="form-group">
-                            <label for="estadoSolicitud">Estado: </label>
-                            <select class="form-control selectpicker" id="estadoSolicitud" name="estadoSolicitud"
-                                    onchange="validar_campo_detalle()">
+                    {% if traslado.estado == '1' %}
+                        <p>
+                            A continuación se procederá a actualizar el estado de la solicitud a "EVALUAR".
+                            ¿Esta seguro que desea confirmar esta acción?
+                        </p>
+                    {% endif %}
 
-                                {% if traslado.estado == '1' %}
-                                    <option disabled selected> Seleccione una acción</option>
-                                {% endif %}
+                    {% if traslado.estado == '2' %}
+                        <form id="formularioActualizarEstado">
+                            <div class="form-group">
+                                <label for="estadoSolicitud">Estado: </label>
+                                <select class="form-control selectpicker" id="estadoSolicitud" name="estadoSolicitud"
+                                        onchange="validar_campo_detalle()">
 
-                                {% for estado in estadosEditables %}
-                                    <option data="{{ estado.0 }}" value={{ estado.0 }}
-                                            {% if traslado.estado == estado.0 %} selected {% endif %}>{{ estado.1 }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                                    {% if traslado.estado == '1' %}
+                                        <option disabled selected> Seleccione una acción</option>
+                                    {% endif %}
 
-                        <div class="form-group" id="detallarRechazo">
-                            <label for="detalleRechazo">Detalle:</label>
-                            <textarea class="form-control" id="detalleRechazo" name="detalleRechazo"
-                                      rows="3" required></textarea>
-                        </div>
+                                    {% for estado in estadosEditables %}
+                                        <option data="{{ estado.0 }}" value={{ estado.0 }}
+                                                {% if traslado.estado == estado.0 %} selected {% endif %}>{{ estado.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
-                    </form>
+                            <div class="form-group" id="detallarRechazo">
+                                <label for="detalleRechazo">Detalle:</label>
+                                <textarea class="form-control" id="detalleRechazo" name="detalleRechazo"
+                                          rows="3" required></textarea>
+                            </div>
+                        </form>
+                    {% endif %}
 
+                    {% if traslado.estado == '4' %}
+                        <p>
+                            A continuación se procederá a actualizar el estado de la solicitud a "EJECUTAR".
+                            ¿Esta seguro que desea confirmar esta acción?
+                        </p>
+                    {% endif %}
 
+                    {% if traslado.estado == '5' %}
+                        <p>
+                            A continuación se procederá a actualizar el estado de la solicitud a "FINALIZAR".
+                            ¿Esta seguro que desea confirmar esta acción?
+                        </p>
+                    {% endif %}
                 </div>
-
 
                 <div class="modal-footer">
                     <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary btn-sm" type="button" onclick="actualizarEstado()">Guardar</button>
+                    <button class="btn btn-primary btn-sm" type="button"
+                            {% if traslado.estado == '2' %}onclick="actualizarEstado()"{% endif %}
+                            {% if traslado.estado == '1' or traslado.estado == '4' or traslado.estado == '5' %}
+                            onclick="actualizarEstado2()"{% endif %}
+                    >Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ver detalle de rechazo -->
+    <div class="modal fade" id="verDetalleRechazo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalle de rechazo</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ traslado.detalleRechazo }}</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -740,6 +815,7 @@
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         traslado_pk: {{ idEditar }},
+                        estado: {{ traslado.pk }},
                         nuevo_estado: $("#estadoSolicitud").val(),
                         detalle_rechazo: $("#detalleRechazo").val()
                     },
@@ -762,6 +838,23 @@
             $('#formularioActualizarEstado').submit();
         }
 
+        function actualizarEstado2(){
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'actualizar_estado_2'%}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    traslado_pk: {{ idEditar }},
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        }
+
         function getEmail() {
             $.ajax({
                 type: 'POST',
@@ -779,7 +872,6 @@
                     console.log(response)
                 }
             });
-
         }
 
         function eliminarPatrimonio(btn, idEliminar) {
