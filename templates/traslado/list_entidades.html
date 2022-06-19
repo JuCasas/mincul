@@ -388,11 +388,24 @@
             return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
+
     $("form[name='formAddEntidades']").validate({
             rules: {
                 inputDOI: {
                     required: true,
                     digitsROI: true,
+                    remote: {
+                        url: "{% url 'validarDOI'%}",
+                        type: "POST",
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            'DOI': function(){
+                                return $("#inputDOI").val();
+                            },
+                            'EDIT': 0,
+                        },
+                        dataType: 'json'
+                    }
                 },
                 inputNombre: {
                     required: true,
@@ -418,7 +431,8 @@
             messages: {
                 inputDOI: {
                     required: "Debe ingresar el DOI de la entidad solicitante",
-                    digitsROI: "EL ROI debe ser una cadena numérica de 8, 11 o 12 dígitos ",
+                    digitsROI: "EL DOI debe ser una cadena numérica de 8, 11 o 12 dígitos ",
+                    remote: "Este DOI ya está registrado"
                 },
                 inputNombre: {
                     required: "Debe ingresar el nombre de la entidad solicitante",
@@ -480,6 +494,19 @@
                 inputDOI2: {
                     required: true,
                     digitsROI: true,
+                    remote: {
+                        url: "{% url 'validarDOI'%}",
+                        type: "POST",
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            'DOI': function(){
+                                return $("#inputDOI2").val();
+                            },
+                            'EDIT':1,
+
+                        },
+                        dataType: 'json'
+                    }
                 },
                 inputNombre2: {
                     required: true,
@@ -505,7 +532,8 @@
             messages: {
                 inputDOI2: {
                     required: "Debe ingresar el DOI de la entidad solicitante",
-                    digitsROI: "EL ROI debe ser una cadena numérica de 8, 11 o 12 dígitos ",
+                    digitsROI: "EL DOI debe ser una cadena numérica de 8, 11 o 12 dígitos ",
+                    remote: "Este DOI ya está registrado"
                 },
                 inputNombre2: {
                     required: "Debe ingresar el nombre de la entidad solicitante",

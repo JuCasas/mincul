@@ -119,6 +119,20 @@ def validarResolucion(request):
     print(existe)
     return JsonResponse({"existe": existe}, status=200)
 
+def validarDOI(request):
+    doiEntrante = request.POST['DOI']
+    print(doiEntrante)
+    edit = request.POST['EDIT']
+    if (edit=='0'):
+        existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exists()
+    else:
+        print("EDITAR")
+        existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exclude(doiSolicitante = doiEntrante).exists()
+    if existe:
+        return JsonResponse(False, status=200, safe=False)
+    else:
+        return JsonResponse(True, status=200, safe=False)
+
 
 @api_view(('GET',))
 def listTranfers(request):
