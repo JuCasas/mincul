@@ -47,7 +47,7 @@
             {% endif %}
             {% csrf_token %}
             <div class="row">
-                <div class="col-4">
+                <div class="col-md-4 col-lg-4 col-sm-12">
                     <div class="card">
                         <div class="card-header">
                             <h5>General</h5>
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-md-8 col-lg-8 col-sm-12">
                     <div class="row">
                         <div class="col ">
                             <div class="card">
@@ -210,7 +210,7 @@
                                     </button>
                                 </div>
                                 <div class="card-body bg-light">
-                                    <table class="table">
+                                    <table class="table table-responsive-sm">
                                         <thead class="thead-dark">
                                         <tr>
                                             <th scope="col">#</th>
@@ -308,7 +308,7 @@
 
                                         <div class="card-header p-2 d-flex justify-content-end">
                                             <button class="close float-none" type="button" aria-label="Close"
-                                                    onclick="eliminaDocumento(this,{{ documento.documento.pk }})">
+                                                    onclick="abrirModalEliminar(this,{{ documento.documento.pk }}, '{{ documento.documento.filename }}')">
                                                 <span aria-hidden="true">×</span>
                                             </button>
                                         </div>
@@ -576,6 +576,28 @@
         </div>
     </div>
 
+
+    <!-- Ver detalle de rechazo -->
+    <div class="modal fade" id="modalEliminarDocumento" tabindex="-1" role="dialog" aria-labelledby="modalEliminarDocumentoLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEliminarDocumentoLabel">Confirmación</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="nombreModal">
+
+                </div>
+
+                <div class="modal-footer" id="botonesModal">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block extrajs %}
@@ -588,10 +610,30 @@
 
 
         let patrimoniosLista = [];
+        var objeto;
 
-        function eliminaDocumento(btn, pk) {
+        function abrirModalEliminar(btn, pk, archivo) {
+
+            $('#modalEliminarDocumento').modal('show');
+
+            objeto = btn;
+
+            var botones = '<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>'+
+                    '<button class="btn btn-primary btn-sm" type="button" onclick="eliminaDocumento('+pk+')" data-dismiss="modal">Confirmar</button>';
+            var texto = '<p>Desea eliminar el archivo "'+archivo+'"</p>';
+
+            $("#nombreModal").html(texto);
+            $("#botonesModal").html(botones);
+        }
+
+
+        function eliminaDocumento(pk) {
             console.log("Elimnar cocumneto");
             console.log(pk);
+
+            var btn = objeto;
+
+            $('#modalEliminarDocumento').modal('show');
 
             var columna = btn.parentNode.parentNode.parentNode;
 
@@ -629,11 +671,9 @@
                         position: 'bottom-right',
                         hideAfter: 3000,
                     })
-                }
-            });
-
-
+                }});
         }
+
 
         jQuery.validator.addMethod("alphanumeric", function (value, element) {
             return this.optional(element) || /^[\w\-\s]+$/i.test(value);
