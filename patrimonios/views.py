@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
     ActividadTuristica
@@ -16,6 +17,7 @@ from django.core.mail import EmailMultiAlternatives
 from authentication.models import User
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 from incidente.models import Incidente
+from mincul.settings import ALLOWED_HOSTS
 
 def patrimonio_list(request):
 
@@ -136,7 +138,12 @@ def detalle_museo(request, pk):
 
 @method_decorator(csrf_exempt)
 def send_email(request, pk):
-    url = "http://localhost:8000/patrimonios/email_confirmation/"+str(pk)
+
+    if str(ALLOWED_HOSTS) == "[]":
+        url = "http://localhost:8000/patrimonios/email_confirmation/" + str(pk)
+    else:
+        url = "http://http://119.8.150.164:8080/patrimonios/email_confirmation/" + str(pk)
+
     if request.POST:
         try:
             subject = "Confirma tu correo electrónico"
