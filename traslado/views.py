@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from django.shortcuts import render, redirect
 
@@ -58,8 +59,8 @@ def addTransfer(request):
                                                              gestorPatrimonio_id=request.POST['comisario'],
                                                              fechaSalidaProgramada=request.POST[
                                                                  'fechaSalidaProgramada'],
-                                                             fechaRetornoProgramada=request.POST[
-                                                                 'fechaRetornoProgramada'],
+                                                             # fechaRetornoProgramada=request.POST[
+                                                             #     'fechaRetornoProgramada'],
                                                              numeroResolucion=request.POST['nResolucion']
                                                              )
         if request.POST['lista']:
@@ -107,6 +108,7 @@ def entidadEmail(request):
 
 def validarResolucion(request):
     print(request.POST)
+    print("porblmea probnlema problema")
     pk = request.POST['idEditar']
     print(pk)
     if (pk == '0'):
@@ -119,16 +121,27 @@ def validarResolucion(request):
     print(existe)
     return JsonResponse({"existe": existe}, status=200)
 
+def eliminarDocumentoTraslado(request):
+    traslado = SolicitudTraslado.objects.get(pk=request.POST['traslado'])
+    documento = Documento.objects.get(pk=request.POST['documento'])
+    path = documento.url.path
+    os.remove(path)
+    documento.delete()
+    traslado.save()
+    return JsonResponse({}, status=200)
+
+
 def validarDOI(request):
     doiEntrante = request.POST['DOI']
     edit = request.POST['EDIT']
     pkEditar = request.POST['PKEDITAR']
-    if (edit=='0'):
+    if (edit == '0'):
         existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exists()
     else:
         print("EDITAR")
         doiSolicitanteActual = EntidadSolicitante.objects.get(pk=pkEditar).doiSolicitante
-        existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exclude(doiSolicitante = doiSolicitanteActual).exists()
+        existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exclude(
+            doiSolicitante=doiSolicitanteActual).exists()
     if existe:
         return JsonResponse(False, status=200, safe=False)
     else:
@@ -190,7 +203,7 @@ def editTransfer(request, pk):
         solicitudTraslado.gestorConservacionTraslados_id = request.POST['comisario']
         solicitudTraslado.gestorPatrimonio_id = request.POST['comisario']
         solicitudTraslado.fechaSalidaProgramada = request.POST['fechaSalidaProgramada']
-        solicitudTraslado.fechaRetornoProgramada = request.POST['fechaRetornoProgramada']
+        # solicitudTraslado.fechaRetornoProgramada = request.POST['fechaRetornoProgramada']
         solicitudTraslado.numeroResolucion = request.POST['nResolucion']
         solicitudTraslado.save()
 
@@ -354,23 +367,19 @@ def actualizarEstado2(request):
     elif (traslado.estado == '4'):
         nuevo_estado = '5'
         print('>>>>>>>>>>>>>>>>>Dentro ed actualizar esatdo de patrimonios a inactivo>>>>>>>>>>>>>>>>>>>>>>>>>')
-        for patrimonio in patrimonios: # se actualiza el estado de todos los patrimonios de la solicitud
-            patrimonio.estado='2' # estado no disponible
+        for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
+            patrimonio.estado = '2'  # estado no disponible
             patrimonio.save()
     elif (traslado.estado == '5'):
         nuevo_estado = '6'
         print('>>>>>>>>>>>>>>>>>Dentro ed actualizar esatdo de patrimonios a inactivo>>>>>>>>>>>>>>>>>>>>>>>>>')
-        for patrimonio in patrimonios:# se actualiza el estado de todos los patrimonios de la solicitud
-            patrimonio.estado='1' # estado disponible
+        for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
+            patrimonio.estado = '1'  # estado disponible
             patrimonio.save()
 
     traslado.estado = nuevo_estado
     traslado.save()
     return JsonResponse({}, status=200)
-
-
-
-
 
 
 def send_form_email(subject, recipient, texto):

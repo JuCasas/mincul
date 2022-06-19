@@ -19,5 +19,6 @@ urlpatterns = [
     path('eliminacionSolicitante/',views.eliminacionSolicitante,name='eliminacionSolicitante'),
     path('emailEntidad/',views.entidadEmail,name='entidadEmail'),
     path('validarResolucion/',views.validarResolucion,name='validarResolucion'),
+    path('eliminarDocumentoTraslado/',views.eliminarDocumentoTraslado,name='eliminarDocumentoTraslado'),
     path('validarDOI/',views.validarDOI,name="validarDOI")
 ]
