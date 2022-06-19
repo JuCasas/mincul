@@ -6,8 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('patrimonios', '0019_alter_patrimoniovaloracion_estado'),
-        ('patrimonios', '0021_alter_patrimonioinmaterial_tipoingreso'),
+        ('patrimonios', '0028_institucion_direccion'),
+        ('patrimonios', '0028_institucion_direccion'),
     ]
 
     operations = [
