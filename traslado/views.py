@@ -121,13 +121,14 @@ def validarResolucion(request):
 
 def validarDOI(request):
     doiEntrante = request.POST['DOI']
-    print(doiEntrante)
     edit = request.POST['EDIT']
+    pkEditar = request.POST['PKEDITAR']
     if (edit=='0'):
         existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exists()
     else:
         print("EDITAR")
-        existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exclude(doiSolicitante = doiEntrante).exists()
+        doiSolicitanteActual = EntidadSolicitante.objects.get(pk=pkEditar).doiSolicitante
+        existe = EntidadSolicitante.objects.filter(doiSolicitante=request.POST['DOI']).exclude(doiSolicitante = doiSolicitanteActual).exists()
     if existe:
         return JsonResponse(False, status=200, safe=False)
     else:
