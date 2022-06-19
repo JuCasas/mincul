@@ -1,17 +1,19 @@
-{% extends 'base/base.html' %}
+{% extends 'traslado/components/base.html' %}
 {% load static %}
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
-{#    probando si va o no va esto jquery#}
-{#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">#}
-{#	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>#}
-{#<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>#}
-{#<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>#}
+    <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+
+    {#    probando si va o no va esto jquery#}
+    {#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">#}
+    {#	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>#}
+    {#<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>#}
+    {#<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>#}
     <style>
 
 
-                @-webkit-keyframes spin {
+        @-webkit-keyframes spin {
             from {
                 -webkit-transform: rotate(0deg);
             }
@@ -124,286 +126,339 @@
         </div>
     </div>
 
-<div class="card mb-3">
-    <div class="card-body p-0">
-        <div class="navbar">
-            <div class="col-sm-auto mb-2 mb-sm-0">
-                <h6 class="mb-0"></h6>
-            </div>
-            <div class="row d-flex align-items-center">
-{% comment %} 
-                <div class="form-group col-sm-auto my-1">
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row filterBar justify-content-end mr-0">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAgregar">
+                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Entidad
+                </button>
+
+
+                <div class="form-group col-sm-3 mb-0">
                     <div class="position-relative">
-                        <input class="form-control" id="name" type="text" placeholder="Nombre">
+                        <input class="form-control" id="search" name="search" type="text"
+                               placeholder="Nombre de la Entidad">
                         <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
                     </div>
-                </div> {% endcomment %}
-
-                <div class="form-group col-sm-auto my-1">
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option selected>Clasificación</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-auto my-1">
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option selected>Tipo de Bien</option>
-                        <option>Cultural</option>
-                        <option>Humano</option>
-                        <option>Kriptoniano</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-auto my-1">
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option selected>Departamento</option>
-                        <option>Lima</option>
-                        <option>Ica</option>
-                        <option>Cusco</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-auto my-1">
-{#                    <button class="btn btn-primary col-sm-auto" type="button">#}
-{#                        <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Agregar Entidad#}
-{#                    </button>#}
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAgregar">
-                      Agregar Entidad
-                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="card mb-3">
-    <div class="card-header">
-      <h5 class="mb-0">Tabla de Entidades Solicitantes</h5>
-    </div>
-    <div class="card-body bg-light px-0">
-      <div class="row">
-        <div class="col-12">
-          <table class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
-            <thead class="bg-200">
-              <tr>  
-                <th class="sort">DOI</th>
-                <th class="sort">Nombre</th>
-                <th class="sort">Dirección</th>
-                <th class="sort">Telefono</th>
-                <th class="sort">Correo</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white">
-            {% for e in entidades %}
-              <tr>
-                <td>{{ e.doiSolicitante }}</td>
-                <td>{{ e.nombreSolicitante }}</td>
-                <td>{{ e.direccion }}</td>
-                <td>{{ e.telefono }}</td>
-                <td>{{ e.correo }}</td>
-                <td>
-{#                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalEditar">Editar</button>#}
-                    <button type="button" id ="btnEditar" class="btn btn btn-outline-light" data-toggle="modal" data-target="#ModalEditar" data-id = "{{ e.id }}" data-doi="{{ e.doiSolicitante }}" data-nombre="{{ e.nombreSolicitante }}" data-correo="{{ e.correo }}"
-                    data-pais="{{ e.pais }}" data-direccion="{{ e.direccion }}" data-telefono="{{ e.telefono }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="secondary" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                      <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                      <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                    </svg></button>
-{#                    <a href="/edicionEntidad/{{ e.id }}" class="btn btn-info">Editar</a>#}
-{#                    Este es el boton eliminar#}
-{#                    <a href="/traslado/eliminarSolicitantes/{{ e.id }}" class="btn btn-danger">Eliminar</a>}#}
-{#                    Aca termina en caso no sirva el nuevo boton #}
-
-{#                    <button type="button" id="btnEliminar" class="btn btn btn-outline-light" data-toggle="modal" data-target="#staticBackdrop"class="btn btn-danger" data-doi="{{ e.doiSolicitante }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="secondary" class="bi bi-trash" viewBox="0 0 16 16">#}
-{#                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>#}
-{#                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>#}
-{#                    </svg></button>#}
-{#                    <a href="/eliminarEntidad/{{ e.id }}" class="btn btn-danger">Eliminar</a>#}
-                </td>
-              </tr>
-            {% endfor %}
-
-            </tbody>
-            <tfoot class="bg-200">
-              <tr>
-                <th>DOI</th>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Telefono</th>
-                <th>Correo</th>
-                <th>Acciones</th>
-              </tr>
-            </tfoot>
-          </table>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="mb-0">Tabla de Entidades Solicitantes</h5>
         </div>
-        <div class="col-12">
+        <div class="card-body bg-light">
+            <table class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100" id="tablaEntidades">
+                <thead class="bg-200">
+                <tr>
+                    <th class="sort">DOI</th>
+                    <th class="sort">Nombre</th>
+                    <th class="sort">Dirección</th>
+                    <th class="sort">Telefono</th>
+                    <th class="sort">Correo</th>
+                    <th class="no-sort">Acciones</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white">
+                {#                {% for e in entidades %}#}
+                {#                    <tr>#}
+                {#                        <td>{{ e.doiSolicitante }}</td>#}
+                {#                        <td>{{ e.nombreSolicitante }}</td>#}
+                {#                        <td>{{ e.direccion }}</td>#}
+                {#                        <td>{{ e.telefono }}</td>#}
+                {#                        <td>{{ e.correo }}</td>#}
+                {#                        <td>#}
+                {#                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalEditar">Editar</button>#}
+                {#                            <button type="button" id="btnEditar" class="btn btn btn-outline-light"#}
+                {#                                    data-toggle="modal" data-target="#ModalEditar" data-id="{{ e.id }}"#}
+                {#                                    data-doi="{{ e.doiSolicitante }}" data-nombre="{{ e.nombreSolicitante }}"#}
+                {#                                    data-correo="{{ e.correo }}"#}
+                {#                                    data-pais="{{ e.pais }}" data-direccion="{{ e.direccion }}"#}
+                {#                                    data-telefono="{{ e.telefono }}">#}
+                {#                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="secondary"#}
+                {#                                     class="bi bi-pencil-square" viewBox="0 0 16 16">#}
+                {#                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>#}
+                {#                                    <path fill-rule="evenodd"#}
+                {#                                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>#}
+                {#                                </svg>#}
+                {#                            </button>#}
+                {#                        </td>#}
+                {#                    </tr>#}
+                {#                {% endfor %}#}
+
+                </tbody>
+
+            </table>
+
         </div>
-      </div>
     </div>
-  </div>
 
 
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Eliminar Entidad Solicitante</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ¿Esta seguro que desea eliminar la entidad?
-      </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <form action="/traslado/eliminacionSolicitante/" method="POST">{% csrf_token %}
-              <div class="form-group">
-                  <input type="text" id="inputDOI3" name="inputDOI3" class="form-control" style="display: none">
-              </div>
-              <div class="form-group">
-                  <button type="submit" class="btn btn-primary btn-block text-white">Eliminar
-                  </button>
-              </div>
-          </form>
-
-{#          <a href="/traslado/eliminarSolicitantes/{{ e.id }}" class="btn btn-primary">Eliminar</a>#}
-{#        <button type="button" class="btn btn-primary">Confirmar</button>#}
-      </div>
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Eliminar Entidad Solicitante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Esta seguro que desea eliminar la entidad?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form action="/traslado/eliminacionSolicitante/" method="POST">{% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" id="inputDOI3" name="inputDOI3" class="form-control"
+                                   style="display: none">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block text-white">Eliminar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
     <div class="modal fade" id="ModalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Nueva Entidad Solicitante</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form name="formAddEntidades" id="formAddEntidades" action="/traslado/registrarSolicitantes/" method="POST">
-                {% csrf_token %}
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputDOI">DOI Entidad</label>
-                  <input type="text" class="form-control" id="inputDOI" name="inputDOI" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nueva Entidad Solicitante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="inputNombre">Nombre Entidad</label>
-                  <input type="text" class="form-control" id="inputNombre" name="inputNombre" >
-                </div>
-              </div><div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputCorreo">Correo</label>
-                  <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" >
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="inputDireccion">Dirección</label>
-                  <input type="text" class="form-control" id="inputDireccion" name="inputDireccion" >
-                </div>
-              </div><div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputPais">Pais</label>
-                  <select class="form-control selectpicker" id="inputPais" name="inputPais"
+                <div class="modal-body">
+                    <form name="formAddEntidades" id="formAddEntidades" action="/traslado/registrarSolicitantes/"
+                          method="POST">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputDOI">DOI Entidad</label>
+                                <input type="text" class="form-control" id="inputDOI" name="inputDOI">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputNombre">Nombre Entidad</label>
+                                <input type="text" class="form-control" id="inputNombre" name="inputNombre">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputCorreo">Correo</label>
+                                <input type="email" class="form-control" id="inputCorreo" name="inputCorreo">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputDireccion">Dirección</label>
+                                <input type="text" class="form-control" id="inputDireccion" name="inputDireccion">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputPais">Pais</label>
+                                <select class="form-control selectpicker" id="inputPais" name="inputPais"
                                         data-placeholder='Seleccione pais...' required>
                                     {% include 'traslado/paises.html' %}
-                  </select>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputTelefono">Telefono</label>
+                                <input type="text" class="form-control" id="inputTelefono" name="inputTelefono">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar Entidad</button>
+                    </form>
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="inputTelefono">Telefono</label>
-                  <input type="text" class="form-control" id="inputTelefono" name="inputTelefono" >
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary">Agregar Entidad</button>
-            </form>
-          </div>
-{#          <div class="modal-footer">#}
-{#            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
-{#            <button type="button" class="btn btn-primary">Save changes</button>#}
-{#          </div>#}
+                {#          <div class="modal-footer">#}
+                {#            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
+                {#            <button type="button" class="btn btn-primary">Save changes</button>#}
+                {#          </div>#}
+            </div>
         </div>
-      </div>
-</div>
+    </div>
 
     <div class="modal fade" id="ModalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Editar Entidad Solicitante</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form action="/traslado/editarSolicitante/" method="POST" name="formEditEntidades" id="formEditEntidades">
-                {% csrf_token %}
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputDOI2">DOI Entidad</label>
-                  <input type="text" class="form-control" id="inputDOI2" name="inputDOI2" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar Entidad Solicitante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="inputNombre2">Nombre Entidad</label>
-                  <input type="text" class="form-control" id="inputNombre2" name="inputNombre2" >
-                </div>
-              </div><div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputCorreo2">Correo</label>
-                  <input type="email" class="form-control" id="inputCorreo2" name="inputCorreo2" >
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="inputDireccion2">Dirección</label>
-                  <input type="text" class="form-control" id="inputDireccion2" name="inputDireccion2" >
-                </div>
-              </div><div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputPais2">Pais</label>
-                  <select class="form-control selectpicker" id="inputPais2" name="inputPais2"
-                                        data-placeholder='Seleccione pais...' value="{{ this.pais }}"  required>
+                <div class="modal-body">
+                    <form action="/traslado/editarSolicitante/" method="POST" name="formEditEntidades"
+                          id="formEditEntidades">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputDOI2">DOI Entidad</label>
+                                <input type="text" class="form-control" id="inputDOI2" name="inputDOI2">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputNombre2">Nombre Entidad</label>
+                                <input type="text" class="form-control" id="inputNombre2" name="inputNombre2">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputCorreo2">Correo</label>
+                                <input type="email" class="form-control" id="inputCorreo2" name="inputCorreo2">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputDireccion2">Dirección</label>
+                                <input type="text" class="form-control" id="inputDireccion2" name="inputDireccion2">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputPais2">Pais</label>
+                                <select class="form-control selectpicker" id="inputPais2" name="inputPais2"
+                                        data-placeholder='Seleccione pais...' value="{{ this.pais }}" required>
                                     {% include 'traslado/paises.html' %}
-                  </select>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputTelefono2">Telefono</label>
+                                <input type="text" class="form-control" id="inputTelefono2" name="inputTelefono2">
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" id="inputID" name="inputID" style="display: none">
+                        <button type="submit" class="btn btn-primary">Editar Entidad</button>
+                    </form>
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="inputTelefono2">Telefono</label>
-                  <input type="text" class="form-control" id="inputTelefono2" name="inputTelefono2" >
-                </div>
-              </div>
-                <input type="text" class="form-control" id="inputID" name="inputID" style="display: none">
-              <button type="submit" class="btn btn-primary">Editar Entidad</button>
-            </form>
-          </div>
+            </div>
         </div>
-      </div>
-</div>
+    </div>
 
 
 {% endblock %}
 
 {% block extrajs %}
     <script src="{% static 'lib/jquery-validation/jquery.validate.min.js' %}"></script>
-    <script >
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
 
-    jQuery.validator.addMethod("digitsROI", function (value, element) {
+    <script>
+
+        let table = $('#tablaEntidades').DataTable({
+            "searching": false,
+            "serverSide": true,
+            "processing": true,
+            "lengthChange": false,
+            "pageLength": 10,
+            "scrollX": true,
+            "ajax": function (data, callback, settings) {
+                let order_column = data.order[0].column
+                let order = data.order[0].dir
+
+                $.ajax({
+                    url: '',
+                    type: 'get',
+                    data: {
+                        length: data.length,
+                        start: data.start,
+                        search_value: $('#search').val(),
+                        order_column: order_column,
+                        order: order
+                    },
+                    success: function (data, textStatus, jQxhr) {
+                        console.log(data.data);
+                        callback({
+                            recordsTotal: data.recordsTotal,
+                            recordsFiltered: data.recordsFiltered,
+                            data: data.data
+                        });
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                    }
+                });
+            },
+            "columns": [
+                {"data": "doiSolicitante"},
+                {"data": "nombreSolicitante"},
+                {"data": "direccion"},
+                {"data": "telefono"},
+                {"data": "correo"},
+                {
+                    "data": "doiSolicitante",
+                    "data": "nombreSolicitante",
+                    "data": "direccion",
+                    "data": "telefono",
+                    "data": "correo",
+                    "data": "pais",
+                    "data": "id", render: function (data, type, row) {
+
+                        return '            <button type="button" id="btnEditar" class="btn btn btn-outline-light"' +
+                            '                   data-toggle="modal" data-target="#ModalEditar" data-id="' + row.id + '"' +
+                            '                  data-doi="' + row.doiSolicitante + '" data-nombre="' + row.nombreSolicitante + '"' +
+                            '                 data-correo="' + row.correo + '"' +
+                            '                data-pais="' + row.pais + '" data-direccion="' + row.direccion + '"' +
+                            '              data-telefono="' + row.telefono + '">' +
+                            '          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="secondary"' +
+                            '              class="bi bi-pencil-square" viewBox="0 0 16 16">' +
+                            '            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>' +
+                            '          <path fill-rule="evenodd"' +
+                            '                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>' +
+                            '     </svg>' +
+                            '</button>';
+                    },
+                },
+            ],
+            "language": {
+                "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+        });
+
+        $('#search').keyup(function () {
+            $('#tablaEntidades').DataTable().search($(this).val()).draw();
+        })
+
+        jQuery.validator.addMethod("digitsROI", function (value, element) {
             return this.optional(element) || /^(\d{8}|\d{11}|\d{12})+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
-    jQuery.validator.addMethod("alphanumericNombreEnti", function (value, element) {
+        jQuery.validator.addMethod("alphanumericNombreEnti", function (value, element) {
             return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
-    jQuery.validator.addMethod("alphanumeric", function (value, element) {
+        jQuery.validator.addMethod("alphanumeric", function (value, element) {
             return this.optional(element) || /^[\w\-\s]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
-    jQuery.validator.addMethod("telefono", function (value, element) {
+        jQuery.validator.addMethod("telefono", function (value, element) {
             return this.optional(element) || /^\d{1,20}$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
 
-    $("form[name='formAddEntidades']").validate({
+        $("form[name='formAddEntidades']").validate({
             rules: {
                 inputDOI: {
                     required: true,
@@ -413,32 +468,32 @@
                         type: "POST",
                         data: {
                             csrfmiddlewaretoken: '{{ csrf_token }}',
-                            'DOI': function(){
+                            'DOI': function () {
                                 return $("#inputDOI").val();
                             },
                             'EDIT': 0,
                             'PKEDITAR': 0,
-                            },
+                        },
                         dataType: 'json'
                     }
                 },
                 inputNombre: {
                     required: true,
-                    alphanumericNombreEnti:true,
+                    alphanumericNombreEnti: true,
                     maxlength: 100,
                 },
                 inputCorreo: {
                     required: true,
                     email: true,
                 },
-                inputPais:{
-                    required:true,
+                inputPais: {
+                    required: true,
                 },
-                inputDireccion:{
+                inputDireccion: {
                     required: true,
                     alphanumeric: true,
                 },
-                inputTelefono:{
+                inputTelefono: {
                     required: true,
                     telefono: true
                 }
@@ -460,14 +515,14 @@
                     required: "Debe ingresar el correo de la entidad solicitante",
                     email: "Debe ingresar un formato de correo válido"
                 },
-                inputDireccion:{
+                inputDireccion: {
                     required: "Debe ingresar la dirección de la entidad solicitante",
                     alphanumeric: "La dirección solo puede contener caracteres alfanuméricos"
                 },
-                inputPais:{
+                inputPais: {
                     required: "Debe ingresar el país de la entidad solicitante",
                 },
-                inputTelefono:{
+                inputTelefono: {
                     required: "Debe ingresar el teléfono de la entidad solicitante",
                     telefono: "Debe ingresar una cadena de máximo 20 carácteres numéricos"
                 }
@@ -482,29 +537,28 @@
         });
 
 
+        $(document).on("click", "#btnEditar", function () {
 
-	$(document).on("click", "#btnEditar",function () {
+            var id = $(this).data('id');
+            var doi = $(this).data('doi');
+            var nombre = $(this).data('nombre');
+            var direccion = $(this).data('direccion');
+            var telefono = $(this).data('telefono');
+            var pais = $(this).data('pais');
+            var correo = $(this).data('correo');
 
-           var id =$(this).data('id');
-           var doi =$(this).data('doi');
-           var nombre =$(this).data('nombre');
-           var direccion =$(this).data('direccion');
-           var telefono =$(this).data('telefono');
-           var pais =$(this).data('pais');
-           var correo =$(this).data('correo');
-
-		$("#inputID").val(id);
-		$("#inputDOI2").val(doi);
-		$("#inputNombre2").val(nombre);
-		$("#inputDireccion2").val(direccion);
-		$("#inputCorreo2").val(correo);
-		$("#inputPais2").val(pais).change();
-		$("#inputTelefono2").val(telefono);
-    })
+            $("#inputID").val(id);
+            $("#inputDOI2").val(doi);
+            $("#inputNombre2").val(nombre);
+            $("#inputDireccion2").val(direccion);
+            $("#inputCorreo2").val(correo);
+            $("#inputPais2").val(pais).change();
+            $("#inputTelefono2").val(telefono);
+        })
     </script>
 
     <script>
-    $("form[name='formEditEntidades']").validate({
+        $("form[name='formEditEntidades']").validate({
             rules: {
                 inputDOI2: {
                     required: true,
@@ -514,11 +568,11 @@
                         type: "POST",
                         data: {
                             csrfmiddlewaretoken: '{{ csrf_token }}',
-                            'DOI': function(){
+                            'DOI': function () {
                                 return $("#inputDOI2").val();
                             },
-                            'EDIT':1,
-                            'PKEDITAR': function(){
+                            'EDIT': 1,
+                            'PKEDITAR': function () {
                                 return $("#inputID").val();
                             },
 
@@ -528,21 +582,21 @@
                 },
                 inputNombre2: {
                     required: true,
-                    alphanumericNombreEnti:true,
+                    alphanumericNombreEnti: true,
                     maxlength: 100,
                 },
                 inputCorreo2: {
                     required: true,
                     email: true,
                 },
-                inputPais2:{
-                    required:true,
+                inputPais2: {
+                    required: true,
                 },
-                inputDireccion2:{
+                inputDireccion2: {
                     required: true,
                     alphanumeric: "La dirección solo puede contener caracteres alfanuméricos"
                 },
-                inputTelefono2:{
+                inputTelefono2: {
                     required: true,
                     telefono: true,
                 }
@@ -563,17 +617,17 @@
                     required: "Debe ingresar el correo de la entidad solicitante",
                     email: "Debe ingresar un formato de correo válido"
                 },
-                inputDireccion2:{
+                inputDireccion2: {
                     required: "Debe ingresar la dirección de la entidad solicitante",
                 },
-                inputPais2:{
+                inputPais2: {
                     required: "Debe ingresar el país de la entidad solicitante",
                 },
-                inputDireccion2:{
+                inputDireccion2: {
                     required: "Debe ingresar la dirección de la entidad solicitante",
                     alphanumeric: "Debe ingresar caracteres alfanuméricos",
                 },
-                inputTelefono2:{
+                inputTelefono2: {
                     required: "Debe ingresar el teléfono de la entidad solicitante",
                     telefono: "Debe ingresar una cadena de máximo 20 carácteres numéricos",
                 }
@@ -588,11 +642,11 @@
         });
     </script>
 
-    <script >
-	$(document).on("click", "#btnEliminar",function () {
-        var doi =$(this).data('doi');
-		$("#inputDOI3").val(doi);
-    })
+    <script>
+        $(document).on("click", "#btnEliminar", function () {
+            var doi = $(this).data('doi');
+            $("#inputDOI3").val(doi);
+        })
     </script>
 
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>

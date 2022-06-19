@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from authentication.models import User
-from traslado.serializers import TrasladoSerializer, PatrimonioSerializer
+from traslado.serializers import TrasladoSerializer, PatrimonioSerializer, EntidadSerializer
 from mincul.settings import MEDIA_URL
 from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
@@ -40,6 +40,35 @@ def query_transfer_by_args(**kwargs):
         queryset = queryset.filter(entidadSolicitante__nombreSolicitante__icontains=search_value)
     if status_filter:
         queryset = queryset.filter(estado=status_filter)
+
+    count = queryset.count()
+    queryset = queryset.order_by(order_column)[start:start + length]
+    return {
+        'items': queryset,
+        'count': count,
+        'total': total,
+    }
+
+
+
+def query_entities_by_args(**kwargs):
+    print(kwargs)
+    length = int(kwargs.get('length', None)[0])
+    start = int(kwargs.get('start', None)[0])
+    search_value = kwargs.get('search_value', None)[0]
+    order_column = kwargs.get('order_column', None)[0]
+    order = kwargs.get('order', None)[0]
+
+    queryset = EntidadSolicitante.objects.all()
+
+    total = queryset.count()
+
+    order_column = EntidadSolicitante.ORDER_COLUMN_CHOICES[order_column]
+    if order == 'desc':
+      order_column = '-' + order_column
+
+    if search_value:
+        queryset = queryset.filter(nombreSolicitante__icontains=search_value)
 
     count = queryset.count()
     queryset = queryset.order_by(order_column)[start:start + length]
@@ -257,13 +286,28 @@ def editTransfer(request, pk):
         return render(request, 'traslado/transfer_add.html', context)
 
 
+@api_view(('GET',))
 def listEntidades(request):
-    entidades = EntidadSolicitante.objects.filter()
-    context = {
-        'entidades': entidades
-    }
+    if request.is_ajax():
+        print("HOTASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+        entities = query_entities_by_args(**request.GET)
+        serializer = EntidadSerializer((entities['items']), many=True)
+        result = dict()
+        result['data'] = serializer.data
+        result['recordsTotal'] = entities['total']
+        result['recordsFiltered'] = entities['count']
 
-    return render(request, 'traslado/list_entidades.html', context=context)
+        print("####################################")
+        print(result)
+        print("####################################")
+        return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+    else:
+        entidades = EntidadSolicitante.objects.filter()
+        context = {
+            'entidades': entidades
+        }
+
+        return render(request, 'traslado/list_entidades.html', context=context)
 
 
 def eliminarSolicitantes(request, id):

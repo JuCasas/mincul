@@ -7,6 +7,13 @@ from mincul_app.models import Documento
 
 
 class EntidadSolicitante(models.Model):
+    ORDER_COLUMN_CHOICES = {
+        '0': 'doiSolicitante',
+        '1': 'nombreSolicitante',
+        '2': 'direccion',
+        '3': 'telefono',
+        '4': 'correo',
+    }
     ESTADOS = (
         ('1', 'Activo'),
         ('2', 'Inactivo'),

@@ -1,7 +1,13 @@
 from rest_framework import serializers
 
 from patrimonios.models import Patrimonio
-from traslado.models import SolicitudTraslado
+from traslado.models import SolicitudTraslado, EntidadSolicitante
+
+
+class EntidadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EntidadSolicitante
+        fields = '__all__'
 
 
 class TrasladoSerializer(serializers.ModelSerializer):
