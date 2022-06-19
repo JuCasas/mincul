@@ -142,7 +142,7 @@ def send_email(request, pk):
     if str(ALLOWED_HOSTS) == "[]":
         url = "http://localhost:8000/patrimonios/email_confirmation/" + str(pk)
     else:
-        url = "http://http://119.8.150.164:8080/patrimonios/email_confirmation/" + str(pk)
+        url = "http://119.8.150.164:8080/patrimonios/email_confirmation/" + str(pk)
 
     if request.POST:
         try:
