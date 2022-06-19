@@ -415,3 +415,19 @@ class EpocaVisita(models.Model):
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
 
+class PuntoGeografico(models.Model):
+  TIPO = (
+    ('1', 'Patrimonio'),
+    ('2', 'Institucion'),
+  )
+  nombre = models.CharField(max_length=200)
+  patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE, null=True)
+  institucion = models.ForeignKey(Institucion, on_delete=models.CASCADE, null=True)
+  tipo = models.CharField(max_length=2, choices=TIPO)
+
+
+# @receiver(post_save, sender=Institucion)
+# def crear_punto_geografico_tipo_institucion(sender, instance, **kwargs):
+#   punto = PuntoGeografico.objects.create(
+#     nombre=instance.nombre,
+#     institucion=instance)
