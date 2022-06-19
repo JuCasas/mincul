@@ -213,10 +213,9 @@ def editTransfer(request, pk):
             for idPatrimonio in patrimoniosSolicitados:
                 solicitudTraslado.patrimonios.add(Patrimonio.objects.get(pk=idPatrimonio))
 
-            #
-        # for f in request.FILES.getlist('file'):
-        #     doc = Documento.objects.create(url=f)
-        #     DocumentoPorSolicitud.objects.create(documento_id=doc.pk, solicitud_id=solicitudTraslado.pk)
+        for f in request.FILES.getlist('file'):
+            doc = Documento.objects.create(url=f)
+            DocumentoPorSolicitud.objects.create(documento_id=doc.pk, solicitud_id=solicitudTraslado.pk)
         return redirect('list_transfers')
     else:
         media_path = MEDIA_URL
