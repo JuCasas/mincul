@@ -848,15 +848,6 @@
                 }).responseJSON['existe'];
             }
 
-            function ValidarFechas() {
-                var fechainicial = document.getElementById("fechaSalidaProgramada").value;
-                var fechafinal = document.getElementById("fechaRetornoProgramada").value;
-
-                var fechaIni = new Date(fechainicial);
-                var fechaFin = new Date(fechafinal);
-
-                return (fechaFin > fechaIni);
-            }
 
             function ValidarPatrimonio() {
                 return (patrimoniosLista.length > 0);

@@ -307,7 +307,10 @@
               </div><div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="inputPais">Pais</label>
-                  <input type="text" class="form-control" id="inputPais" name="inputPais" >
+                  <select class="form-control selectpicker" id="inputPais" name="inputPais"
+                                        data-placeholder='Seleccione pais...' required>
+                                    {% include 'traslado/paises.html' %}
+                  </select>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="inputTelefono">Telefono</label>
@@ -358,7 +361,10 @@
               </div><div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="inputPais2">Pais</label>
-                  <input type="text" class="form-control" id="inputPais2" name="inputPais2" >
+                  <select class="form-control selectpicker" id="inputPais2" name="inputPais2"
+                                        data-placeholder='Seleccione pais...' value="{{ this.pais }}"  required>
+                                    {% include 'traslado/paises.html' %}
+                  </select>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="inputTelefono2">Telefono</label>
@@ -388,6 +394,14 @@
             return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
+    jQuery.validator.addMethod("alphanumeric", function (value, element) {
+            return this.optional(element) || /^[\w\-\s]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+    jQuery.validator.addMethod("telefono", function (value, element) {
+            return this.optional(element) || /^\d{1,20}$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
 
     $("form[name='formAddEntidades']").validate({
             rules: {
@@ -403,7 +417,8 @@
                                 return $("#inputDOI").val();
                             },
                             'EDIT': 0,
-                        },
+                            'PKEDITAR': 0,
+                            },
                         dataType: 'json'
                     }
                 },
@@ -414,18 +429,18 @@
                 },
                 inputCorreo: {
                     required: true,
-                },
-                inputDireccion:{
-                    required: true,
+                    email: true,
                 },
                 inputPais:{
                     required:true,
                 },
                 inputDireccion:{
                     required: true,
+                    alphanumeric: true,
                 },
                 inputTelefono:{
                     required: true,
+                    telefono: true
                 }
             },
             messages: {
@@ -443,18 +458,18 @@
                 },
                 inputCorreo: {
                     required: "Debe ingresar el correo de la entidad solicitante",
+                    email: "Debe ingresar un formato de correo válido"
                 },
                 inputDireccion:{
                     required: "Debe ingresar la dirección de la entidad solicitante",
+                    alphanumeric: "La dirección solo puede contener caracteres alfanuméricos"
                 },
                 inputPais:{
                     required: "Debe ingresar el país de la entidad solicitante",
                 },
-                inputDireccion:{
-                    required: "Debe ingresar la dirección de la entidad solicitante",
-                },
                 inputTelefono:{
                     required: "Debe ingresar el teléfono de la entidad solicitante",
+                    telefono: "Debe ingresar una cadena de máximo 20 carácteres numéricos"
                 }
             },
             submitHandler: function (form, e) {
@@ -483,7 +498,7 @@
 		$("#inputNombre2").val(nombre);
 		$("#inputDireccion2").val(direccion);
 		$("#inputCorreo2").val(correo);
-		$("#inputPais2").val(pais);
+		$("#inputPais2").val(pais).change();
 		$("#inputTelefono2").val(telefono);
     })
     </script>
@@ -518,18 +533,18 @@
                 },
                 inputCorreo2: {
                     required: true,
-                },
-                inputDireccion2:{
-                    required: true,
+                    email: true,
                 },
                 inputPais2:{
                     required:true,
                 },
                 inputDireccion2:{
                     required: true,
+                    alphanumeric: "La dirección solo puede contener caracteres alfanuméricos"
                 },
                 inputTelefono2:{
                     required: true,
+                    telefono: true,
                 }
             },
             messages: {
@@ -546,6 +561,7 @@
                 },
                 inputCorreo2: {
                     required: "Debe ingresar el correo de la entidad solicitante",
+                    email: "Debe ingresar un formato de correo válido"
                 },
                 inputDireccion2:{
                     required: "Debe ingresar la dirección de la entidad solicitante",
@@ -555,9 +571,11 @@
                 },
                 inputDireccion2:{
                     required: "Debe ingresar la dirección de la entidad solicitante",
+                    alphanumeric: "Debe ingresar caracteres alfanuméricos",
                 },
                 inputTelefono2:{
                     required: "Debe ingresar el teléfono de la entidad solicitante",
+                    telefono: "Debe ingresar una cadena de máximo 20 carácteres numéricos",
                 }
             },
             submitHandler: function (form, e) {
