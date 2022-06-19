@@ -882,12 +882,12 @@
                     processResults: function (data) {
                         let patrimoniosResultado = JSON.parse(data["patrimoniosAjax"]);
                         data = patrimoniosResultado.map(function (item) {
-                            console.log(item);
                             return {
-                                id: item["pk"],
-                                text: item["fields"].nombreTituloDemoninacion,
-                                tipoPatrimonio: item["fields"].tipoPatrimonio,
-                                categoria: item["fields"].categoria,
+                                id: item.id,
+                                text: item.nombreTituloDemoninacion,
+                                tipoPatrimonio: item.tipoPatrimonio,
+                                categoria: item.categoria,
+                                estado:item.estado,
                             };
                         });
                         return {results: data};
@@ -1036,6 +1036,7 @@
                     ' <td>' + patrimonioAgregar[0].text + '</td>' +
                     '<td>' + patrimonioAgregar[0].categoria + '</td>' +
                     '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
+                    '<td>' + patrimonioAgregar[0].estado + '</td>' +
                     '<td>' +
                     '<button class="btn" href="#" type="button" onclick="eliminarPatrimonio(this,' + patrimonioAgregar[0].id + ')">' +
                     '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +

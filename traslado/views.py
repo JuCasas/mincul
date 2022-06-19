@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 
 from django.shortcuts import render, redirect
@@ -7,7 +8,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from authentication.models import User
-from traslado.serializers import TrasladoSerializer
+from traslado.serializers import TrasladoSerializer, PatrimonioSerializer
 from mincul.settings import MEDIA_URL
 from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
@@ -92,9 +93,8 @@ def addTransfer(request):
 def listarPatrimoniosTraslado(request):
     filtro = request.GET['q']
     patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=filtro)
-    ser_instance = serializers.serialize('json', list(patrimonios),
-                                         fields=('id', 'nombreTituloDemoninacion', 'categoria', 'tipoPatrimonio'))
-    print(ser_instance)
+    serializer = PatrimonioSerializer((patrimonios), many=True)
+    ser_instance = json.dumps(serializer.data)
     return JsonResponse({"patrimoniosAjax": ser_instance}, status=200)
 
 
