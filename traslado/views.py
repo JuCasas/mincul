@@ -32,9 +32,9 @@ def query_transfer_by_args(**kwargs):
 
     total = queryset.count()
 
-    # order_column = SolicitudTraslado.ORDER_COLUMN_CHOICES[order_column]
-    # if order == 'desc':
-    #   order_column = '-' + order_column
+    order_column = SolicitudTraslado.ORDER_COLUMN_CHOICES[order_column]
+    if order == 'desc':
+      order_column = '-' + order_column
 
     if search_value:
         queryset = queryset.filter(entidadSolicitante__nombreSolicitante__icontains=search_value)
@@ -42,7 +42,7 @@ def query_transfer_by_args(**kwargs):
         queryset = queryset.filter(estado=status_filter)
 
     count = queryset.count()
-    # queryset = queryset.order_by(order_column)[start:start + length]
+    queryset = queryset.order_by(order_column)[start:start + length]
     return {
         'items': queryset,
         'count': count,

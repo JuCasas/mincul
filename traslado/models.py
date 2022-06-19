@@ -25,6 +25,13 @@ class EntidadSolicitante(models.Model):
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
 
 class SolicitudTraslado(models.Model):
+    ORDER_COLUMN_CHOICES = {
+        '0': 'numeroResolucion',
+        '1': 'gestorConservacionTraslados__first_name',
+        '2': 'entidadSolicitante__nombreSolicitante',
+        '3': 'fechaSalidaProgramada',
+        '4': 'estado',
+    }
     ESTADOS = (
         ('1', 'Registrada'),
         ('2', 'En evaluación'),
