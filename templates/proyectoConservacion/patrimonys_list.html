@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'proyectoConservacion/components/base.html' %}
 {% load static %}
 
 {% block extrastyle %}
@@ -83,92 +83,162 @@
           font-size: 12px !important;
       }
 
-      .back{
-          font-size: 14px!important;
+      .back {
+          font-size: 14px !important;
       }
 
-      input:disabled{
-          background-color: #D2D2D2!important;
+      input:disabled {
+          background-color: #D2D2D2 !important;
       }
   </style>
 {% endblock %}
 
 {% block body %}
-
+  <input type="hidden" value="{{ project.id }}" id="idProject">
   <div class="card mb-3">
     <div class="card-body row">
       <div class="col-md-6 col-sm-12">
-          <div class="row justify-content-between align-items-center mb-1">
-        <a class="nav-link py-0 back" href="{% url 'listProjects' %}"><span class="fas fa-angle-left mr-2"
-                                                                       data-fa-transform="shrink-3"></span>Proyectos</a>
-      </div>
+        <div class="row justify-content-between align-items-center mb-1">
+          <a class="nav-link py-0 back" href="{% url 'listProjects' %}"><span class="fas fa-angle-left mr-2"
+                                                                              data-fa-transform="shrink-3"></span>Proyectos</a>
+        </div>
 
-      <div class="row align-items-center justify-content-between">
-        <div class="col-md-6 d-flex">
-          <h5 class="mb-2 mb-sm-0 text-black mr-4">{{ project.nombre }}</h5>
+        <div class="row align-items-center justify-content-between">
+          <div class="col-md-6 d-flex">
+            <h5 class="mb-2 mb-sm-0 text-black mr-4">{{ project.nombre }}</h5>
             {% if project.status == '0' %}
-            <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
-          {% elif project.status == '1' %}
-            <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
-          {% else %}
-            <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
-          {% endif %}
+              <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
+            {% elif project.status == '1' %}
+              <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
+            {% else %}
+              <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
+            {% endif %}
+          </div>
         </div>
       </div>
-      </div>
 
-    <div class="col-md-6 col-sm-12">
-          <div class="nav-bar nav-bar-right">
-            <div class="nav nav-pills">
-                <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listIncidents' pk=project.id %}">Incidentes</a>
-                <button class="nav-link col-md-4 btn-1 my-1" disabled>Patrimonios</button>
-                <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listActivities' pk=project.id %}">Actividades</a>
-            </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="nav-bar nav-bar-right">
+          <div class="nav nav-pills">
+            <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listIncidents' pk=project.id %}">Incidentes</a>
+            <button class="nav-link col-md-4 btn-1 my-1" disabled>Patrimonios</button>
+            <a class="nav-link col-md-4 btn-2 my-1" href="{% url 'listActivities' pk=project.id %}">Actividades</a>
           </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="card mb-3">
     <div class="card-body">
-      <div class="row">
-        {% for pat in patrimonios %}
-          <div class="col-12 col-lg-4 col-md-4 col-sm-6">
-            <div class="card">
-              <div class="card-img-top" style="height: 13rem">
-                <img class="h-100 w-100 rounded-top"
-                     src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"
-                     alt="Card image cap">
-              </div>
-              <div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">
-                <h5 class="card-text pt-9" style="color: white">{{ pat.tituloDemoninacion }}</h5>
-              </div>
-              <div class="card-body">
-                <p class="card-text font-italic mb-0">{{ pat.get_categoria_display }}
-                  - {{ pat.get_subcategoria_display }}</p>
-                <p class="card-text font-weight-semi-bold">{{ pat.direccion }}</p>
-                <div class="row">
-                  <div class="col-sm-5"></div>
-                  <div class="col-sm-7">
-                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
-                       href="">
-                      Ver detalle
-                    </a>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            <div><p></p></div>
+      <div class="row filterBar mr-0 justify-content-end">
+        <div class="form-group col-sm-3 mb-0">
+          <div class="position-relative">
+            <input class="form-control" id="search" type="text" placeholder="Nombre">
+            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
-        {% endfor %}
+        </div>
+
+
+        <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
+          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Patrimonio
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row" id="container">
+        {#        {% for pat in patrimonios %}#}
+        {#          <div class="col-12 col-lg-4 col-md-4 col-sm-6">#}
+        {#            <div class="card">#}
+        {#              <div class="card-img-top" style="height: 13rem">#}
+        {#                <img class="h-100 w-100 rounded-top"#}
+        {#                     src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"#}
+        {#                     alt="Card image cap">#}
+        {#              </div>#}
+        {#              <div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">#}
+        {#                <h5 class="card-text pt-9" style="color: white">{{ pat.tituloDemoninacion }}</h5>#}
+        {#              </div>#}
+        {#              <div class="card-body">#}
+        {#                <p class="card-text font-italic mb-0">{{ pat.get_categoria_display }}#}
+        {#                  - {{ pat.get_subcategoria_display }}</p>#}
+        {#                <p class="card-text font-weight-semi-bold">{{ pat.direccion }}</p>#}
+        {#                <div class="row">#}
+        {#                  <div class="col-sm-5"></div>#}
+        {#                  <div class="col-sm-7">#}
+        {#                      '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +#}
+        {#                  </div>#}
+        {##}
+        {#                </div>#}
+        {#              </div>#}
+        {#            </div>#}
+        {#            <div><p></p></div>#}
+        {#          </div>#}
+        {#        {% endfor %}#}
       </div>
     </div>
     <!--Paginacion-->
     <div class="card-footer bg-light d-flex justify-content-center">
 
-      <div id="paginator">
+      <div class="paginator">
         <ul class="pagination"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog mw-100 w-25">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal_title">Agregar Patrimonio</h4>
+        </div>
+        <div class="modal-body">
+          <form id="formPatrimonio" name="formPatrimonio">
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="patrimonio"><span class="glyphicon glyphicon-eye-open"></span> Patrimonio</label>
+                <select class="selectpicker form-control" id="patrimonio" name="patrimonio">
+                </select>
+              </div>
+            </div>
+
+
+            <div class="row justify-content-end mt-2 mr-1">
+
+              <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+
+              <div>
+                <input type="hidden" id="type" name="type" value="">
+                <button id="submit" class="btn btn-primary"><span
+                    class="glyphicon glyphicon-ok"></span> Guardar
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal fade" id="confirm" role="dialog">
+    <input type="hidden" value="" id="idPat">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header justify-content-center">
+          <h4 class="modal-title">¿Estás seguro de eliminar el patrimonio?</h4>
+        </div>
+        <div class="modal-body px-9">
+          <div class="row justify-content-between">
+            <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -180,13 +250,213 @@
   <script src="{% static 'lib/bootstrap-pagy-master/bootstrap-pagy.js' %}"></script>
   <script src="{% static 'lib/bootstrap-pagy-master/js/prettify.js' %}"></script>
   <script>
-    $("#paginator").pagy({
-      totalPages: 5,
-      currentPage: 1,
+    //Variables globales de estado
+    let result = {};
+    let init = true
+
+    function getData2(start, length) {
+      $.ajax({
+        url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/list/',
+        type: 'get',
+        data: {
+          length: length,
+          start: start,
+          search_value: $('#search').val(),
+        },
+        success: function (data, textStatus, jQxhr) {
+          result["total_count"] = data.total_count
+          result["items"] = data.items
+          cargarPatrimonios()
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+          console.log(jqXhr)
+        }
+      });
+      return 1;
+    }
+
+    function cargarPatrimonios() {
+      $("#container").empty();
+      let data = result['items']
+      console.log(data)
+      let content = ''
+      for (i = 0; i < data.length; i++) {
+        let div;
+        content += (
+            '<div class="col-12 col-lg-4 col-md-4 col-sm-6">'
+            + '<div class="card">'
+            + '<div class="card-img-top" style="height: 13rem">'
+            + '<img class="h-100 w-100 rounded-top"'
+            + 'src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"'
+            + 'alt="Card image cap">'
+            + '</div>'
+            + '<div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">'
+            + '<h5 class="card-text pt-9" style="color: white">' + data[i]['nombreTituloDemoninacion'] + '</h5>'
+            + '</div>'
+            + '<div class="card-body">'
+            + '<p class="card-text font-italic mb-0">' + data[i]['nombreTituloDemoninacion']
+            + '-' + data[i]['nombreTituloDemoninacion'] + '</p>'
+            + '<p class="card-text font-weight-semi-bold">' + data[i]['nombreTituloDemoninacion'] + '</p>'
+            + '<div class="row">'
+            + '<div class="col-sm-5"></div>'
+            + '<div class="col-sm-7">'
+            + '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>'
+            + '<button type="button" class="btn btn-delete" onclick="eliminarPat(' + data[i].id + ')"><i class="fas fa-trash-alt"></i></button>'
+            + '</div>'
+            + '</div>'
+            + '</div>'
+            + '</div>'
+            + '<div><p></p></div>'
+            + '</div>'
+
+        )
+      }
+      $("#container").html(content);
+    }
+
+    $(".paginator").pagy({
+      totalPages: null,
+      currentPage: null,
+
       page: function (page) {
-        console.log(page)
+        if (!init) {
+          let start = (page - 1) * 9
+          getData2(start, 9)
+        }
+        search = $('#search').val()
+        console.log(`page: ${page} , search: ${search}`)
+        init = false
         return true;
       }
     });
+
+
+    function getData(start, length) {
+      $.ajax({
+        url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/list/',
+        type: 'get',
+        data: {
+          length: length,
+          start: start,
+          search_value: $('#search').val(),
+        },
+        success: function (data, textStatus, jQxhr) {
+          result["total_count"] = data.total_count
+          result["items"] = data.items
+          if (result["total_count"] == 0) {
+            $(".paginator").hide()
+            $("#container").empty();
+          } else {
+            let mod = result["total_count"] % 9
+            let div = (result["total_count"] - mod) / 9
+            if (mod != 0) {
+              div = div + 1;
+            }
+            cargarPatrimonios()
+            $(".paginator").pagy("page", 1, div);
+          }
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+          console.log(jqXhr)
+        }
+      });
+
+    }
+
+    $('#search').keyup(function () {
+      init = true
+      getData(0, 9)
+    });
+
+    $(document).ready(function () {
+      init = true
+      $('#search').val('');
+      getData(0, 9)
+    });
+
+    $('#new').on('click', function (e) {
+      $('#type').val('new');
+      $("#myModal").modal();
+    });
+
+    $(document).ready(function () {
+      $('#patrimonio').select2({
+        ajax: {
+          url: '/conservacion/proyectos/patrimonios',
+          datatype: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term || '',
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            console.log(data.items)
+            return {
+              results: $.map(data.items, function (obj, index) {
+                return {id: obj.id, text: obj.nombreTituloDemoninacion};
+              }),
+              pagination: {
+                more: (params.page * 10) < data.total_count
+              }
+            }
+          }
+        },
+        placeholder: "Patrimonio",
+        allowClear: true,
+        cache: false
+      });
+
+      $('#patrimonio').on("select2:clear", function (evt) {
+        $(this).on("select2:opening.cancelOpen", function (evt) {
+          evt.preventDefault();
+
+          $(this).off("select2:opening.cancelOpen");
+        });
+      });
+    });
+
+    $('#formPatrimonio').on('submit', function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/add/',
+        method: 'POST',
+        data: {
+          'patrimonio': $("#patrimonio").val()
+        },
+        success: function (response) {
+
+          $('#myModal').modal('hide')
+
+        },
+        error: function (error) {
+          console.log(error)
+        }
+      });
+    });
+
+    $('#confirm').on('click', '#delete', function (e) {
+      $.ajax({
+        url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/delete/',
+        method: 'POST',
+        data: {
+          'patrimonio': $("#idPat").val()
+        },
+        success: function (response) {
+          $('#confirm').modal('hide')
+        },
+        error: function (error) {
+          console.log(error)
+        }
+      });
+    });
+
+    function eliminarPat(id) {
+      $('#confirm').modal('show')
+      $("#idPat").val(id)
+    }
+
   </script>
 {% endblock %}

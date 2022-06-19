@@ -168,27 +168,39 @@ def addProject(request):
   except Exception as e:
     result = dict()
     result['success'] = False
-    result['message'] = str(e) # or custom message
+    result['message'] = str(e)  # or custom message
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 
 @api_view(('POST',))
 def editProject(request, pk):
-  project = ProyectoConservacion.objects.get(pk=pk)
-  codigo = request.POST['codigo']
-  nombre = request.POST['nombre']
-  tipo = int((request.POST['tipoPlan']))
-  project.codigo = codigo
-  project.nombre = nombre
-  project.tipoProyecto = tipo
-  project.save()
-  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  try:
+    project = ProyectoConservacion.objects.get(pk=pk)
+    nombre = request.POST['nombre']
+    tipo = int((request.POST['tipoPlan']))
+    project.nombre = nombre
+    project.tipoProyecto = tipo
+    project.save()
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  except Exception as e:
+    result = dict()
+    result['success'] = False
+    result['message'] = str(e)  # or custom message
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 
 @api_view(('POST',))
 def deleteProject(request, pk):
   project = ProyectoConservacion.objects.get(pk=pk)
   project.estado = '2'
+  project.save()
+  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('POST',))
+def deletePatrimony(request, pk):
+  project = ProyectoConservacion.objects.get(pk=pk)
+  patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
+  project.patrimonios.remove(patrimonio)
   project.save()
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
@@ -209,6 +221,7 @@ def listActivities(request, pk):
       'patrimonios': Patrimonio.objects.all()
     }
     return render(request, 'proyectoConservacion/activity_list.html', context)
+
 
 @api_view(('GET',))
 def listIncidents(request, pk):
@@ -232,9 +245,35 @@ def listIncidents(request, pk):
 def listPatrimonys(request, pk):
   context = {
     'project': ProyectoConservacion.objects.get(pk=pk),
-    'patrimonios': Patrimonio.objects.all()
   }
   return render(request, 'proyectoConservacion/patrimonys_list.html', context)
+
+
+@api_view(('GET',))
+def listPatrimonysForProject(request, pk):
+  project = ProyectoConservacion.objects.get(pk=pk)
+  search = request.GET['search_value']
+  start = int(request.GET['start'])
+  length = int(request.GET['length'])
+  queryset = project.patrimonios.all()
+  if search:
+    queryset = queryset.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
+  count = queryset.count()
+  queryset = queryset[start:start+length]
+  serializer = PatrimonioSerializer(queryset, many=True)
+  result = dict()
+  result['items'] = serializer.data
+  result['total_count'] = count
+  return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('POST',))
+def addPatrimony(request, pk):
+  patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
+  proyecto = ProyectoConservacion.objects.get(pk=pk)
+  proyecto.patrimonios.add(patrimonio)
+  proyecto.save()
+  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 
 
 @api_view(('GET',))
@@ -288,12 +327,14 @@ def addActivity(request, pk):
   #     fechaFin=fechaFin)
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 @api_view(('GET',))
 def addTaskView(request, pk):
-    context = {
-      'activity': Actividad.objects.get(pk=pk)
-    }
-    return render(request, 'proyectoConservacion/addTask_view.html', context)
+  context = {
+    'activity': Actividad.objects.get(pk=pk)
+  }
+  return render(request, 'proyectoConservacion/addTask_view.html', context)
+
 
 @api_view(('POST',))
 def addTask(request, pk):

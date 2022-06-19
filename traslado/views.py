@@ -109,12 +109,13 @@ def validarResolucion(request):
     print(request.POST)
     pk = request.POST['idEditar']
     print(pk)
-    if (pk=='0'):
+    if (pk == '0'):
         existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exists()
     else:
-        nResActual = SolicitudTraslado.objects.get(pk = pk).numeroResolucion
+        nResActual = SolicitudTraslado.objects.get(pk=pk).numeroResolucion
         print(nResActual)
-        existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exclude(numeroResolucion=nResActual).exists()
+        existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exclude(
+            numeroResolucion=nResActual).exists()
     print(existe)
     return JsonResponse({"existe": existe}, status=200)
 
@@ -167,15 +168,15 @@ def viewTranfer(request, pk):
 def editTransfer(request, pk):
     if request.POST:
         solicitudTraslado = SolicitudTraslado.objects.get(pk=pk)
-        solicitudTraslado.entidadSolicitante_id=request.POST['nombreInstitucion']
-        solicitudTraslado.destino=request.POST['destino']
-        solicitudTraslado.nombreExposicion=request.POST['nombreExposicion']
-        solicitudTraslado.pais=request.POST['pais']
-        solicitudTraslado.gestorConservacionTraslados_id=request.POST['comisario']
-        solicitudTraslado.gestorPatrimonio_id=request.POST['comisario']
-        solicitudTraslado.fechaSalidaProgramada=request.POST['fechaSalidaProgramada']
-        solicitudTraslado.fechaRetornoProgramada=request.POST['fechaRetornoProgramada']
-        solicitudTraslado.numeroResolucion=request.POST['nResolucion']
+        solicitudTraslado.entidadSolicitante_id = request.POST['nombreInstitucion']
+        solicitudTraslado.destino = request.POST['destino']
+        solicitudTraslado.nombreExposicion = request.POST['nombreExposicion']
+        solicitudTraslado.pais = request.POST['pais']
+        solicitudTraslado.gestorConservacionTraslados_id = request.POST['comisario']
+        solicitudTraslado.gestorPatrimonio_id = request.POST['comisario']
+        solicitudTraslado.fechaSalidaProgramada = request.POST['fechaSalidaProgramada']
+        solicitudTraslado.fechaRetornoProgramada = request.POST['fechaRetornoProgramada']
+        solicitudTraslado.numeroResolucion = request.POST['nResolucion']
         solicitudTraslado.save()
 
         if request.POST['lista']:
@@ -197,10 +198,20 @@ def editTransfer(request, pk):
 
         # Nota, se debe considerar los patrominos del traslado
         patrimonios = traslado.patrimonios.all()
-        lista = list(patrimonios.values_list('pk',flat=True))
+        lista = list(patrimonios.values_list('pk', flat=True))
         print(lista)
         documentos = DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
-        estadosEditables = [('2', 'Evaluado'), ('3', 'Rechazado'), ('4', 'Aprobado')]
+
+        estadosEditables = []
+        if (traslado.estado == '1'):
+            estadosEditables = [('2', 'Evaluar')]
+        elif (traslado.estado == '2'):
+            estadosEditables = [('3', 'Rechazar'), ('4', 'Aprobar')]
+        elif (traslado.estado == '4'):
+            estadosEditables = [('5', 'Ejecutar')]
+        elif (traslado.estado == '5'):
+            estadosEditables = [('6', 'Finalizar')]
+
         operacion = 'editar'
         idEditar = pk
         context = {
@@ -211,7 +222,7 @@ def editTransfer(request, pk):
             'documentos': documentos,
             'media_path': media_path,
             'estadosEditables': estadosEditables,
-            'operacion':operacion,
+            'operacion': operacion,
             'idEditar': idEditar,
             'lista': lista
         }
@@ -279,21 +290,29 @@ def eliminacionSolicitante(request):
 
 
 def actualizarEstado(request):
-    estado = request.POST.get('nuevo_estado')
-    detalle_rechazo = request.POST.get('detalle_rechazo')
-
     trasladopk = request.POST.get('traslado_pk')
     traslado = SolicitudTraslado.objects.get(pk=trasladopk)
 
-    traslado.estado = estado
+    nuevo_estado = ''
+    if (traslado.estado == '1'):
+        nuevo_estado = '2'
+    elif (traslado.estado == '2'):
+        nuevo_estado = request.POST.get('nuevo_estado')  # puede ser 3 o 4
+    elif (traslado.estado == '4'):
+        nuevo_estado = '5'
+    elif (traslado.estado == '5'):
+        nuevo_estado = '6'
+
+    detalle_rechazo = request.POST.get('detalle_rechazo')
+    traslado.estado = nuevo_estado
     mensaje = ''
 
     asunto = ''
-    if (estado == '3'):
+    if (nuevo_estado == '3'):
         asunto = 'Aprobación de solicitud de traslado ' + traslado.numeroResolucion
         traslado.detalleRechazo = detalle_rechazo
         mensaje = 'Su solicitud de traslado ha sido rechazada de debido al siguiente motivo: ' + detalle_rechazo
-    elif (estado == '4'):
+    elif (nuevo_estado == '4'):
         asunto = 'Desaprobación de solicitud de traslado ' + traslado.numeroResolucion
         mensaje = 'Su solicitud de traslado ha sido aceptada de manera satisfactoria'
 
@@ -302,10 +321,32 @@ def actualizarEstado(request):
     correo = traslado.entidadSolicitante.correo
     asunto: "Estado de solicitud"
 
-    if (estado == '3' or estado == '4'):
+    if (nuevo_estado == '3' or nuevo_estado == '4'):
         send_form_email(asunto, correo, mensaje)
 
     return JsonResponse({}, status=200)
+
+
+def actualizarEstado2(request):
+    trasladopk = request.POST.get('traslado_pk')
+    traslado = SolicitudTraslado.objects.get(pk=trasladopk)
+
+    nuevo_estado = ''
+
+    if (traslado.estado == '1'):
+        nuevo_estado = '2'
+    elif (traslado.estado == '4'):
+        nuevo_estado = '5'
+    elif (traslado.estado == '5'):
+        nuevo_estado = '6'
+
+    traslado.estado = nuevo_estado
+    traslado.save()
+    return JsonResponse({}, status=200)
+
+
+
+
 
 
 def send_form_email(subject, recipient, texto):

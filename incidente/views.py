@@ -2,15 +2,41 @@ from django.shortcuts import render
 
 # Create your views here.
 from incidente.models import Incidente
-from patrimonios.models import Patrimonio
+from patrimonios.models import Patrimonio, Institucion
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+class Incidentado:
+    @classmethod
+    def fromPatrimonio(inc, patrimonio):
+        inc.nombre = patrimonio.nombreTituloDemoninacion
+        inc.documentos = patrimonio.documentos
+        inc.lat = patrimonio.lat
+        inc.long = patrimonio.long
+
+    @classmethod
+    def fromInstitucion(inc, institucion):
+        inc.nombre = institucion.nombre
+        inc.documentos = institucion.documentos
+        inc.lat = institucion.lat
+        inc.long = institucion.long
+
 def patrimonio_incidente_listar(request):
+
+    patrimonios = Patrimonio.objects.filter(tipoPatrimonio=2, institucion=None, estado=1)
+    instituciones = Institucion.objects.filter(estado=1)
+
+    incPat = [Incidentado.fromPatrimonio(p) for p in patrimonios]
+    incIns = [Incidentado.fromInstitucion(i) for i in instituciones]
+
+    incidentados = []
+    incidentados.append(incPat)
+    incidentados.append(incIns)
 
     context = {
         'patrimonios': Patrimonio.objects.all(),
-        'incidentes': Incidente.objects.all()
+        'incidentes': Incidente.objects.all(),
+        'incidentados': incidentados
     }
 
     return render(request, 'incidencia/patrimonio_incidente_listar.html', context=context)

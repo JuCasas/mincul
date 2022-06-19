@@ -7,7 +7,8 @@ urlpatterns = [
     path('listar/',views.listTranfers, name='list_transfers'),
     path('ver/<int:pk>/', views.viewTranfer, name='view_transfer'),
     path('editar/<int:pk>/', views.editTransfer, name='edit_transfer'),
-    path('editarTraslado/', views.actualizarEstado, name='actualizar_estado'),
+    path('editarEstado/', views.actualizarEstado, name='actualizar_estado'),
+    path('editarEstado2/', views.actualizarEstado2, name='actualizar_estado_2'),
     path('patrimonioAjax/',views.listarPatrimoniosTraslado,name='listPatrimoniosAjax'),
     
     
