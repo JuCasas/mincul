@@ -14,4 +14,4 @@ class TrasladoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SolicitudTraslado
-        fields = ['id','entidadSolicitante','gestorConservacionTraslados','fechaRetornoProgramada','fechaSalidaProgramada','estado']
+        fields = ['numeroResolucion','id','entidadSolicitante','gestorConservacionTraslados','fechaRetornoProgramada','fechaSalidaProgramada','estado']
