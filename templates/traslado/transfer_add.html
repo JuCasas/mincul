@@ -56,7 +56,7 @@
                             <div class="form-group">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
                                 <select class="form-control" id="tipoTraslado" required
-                                        {% if traslado.estado != '1' and idEditar != 0  %}disabled{% endif %}>
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     <option {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
                                         extranjero
                                     </option>
@@ -718,8 +718,8 @@
                 if ($("#formAgregar").valid()) {
                     var patrimoniosEvaluar = ValidarPatrimonio();
                     var nResolucion = false;
-                    if("{{ traslado.estado }}" === '1'){
-                       nResolucion = ValidarResolucion();
+                    if ("{{ traslado.estado }}" === '1') {
+                        nResolucion = ValidarResolucion();
                     }
 
                     //TODO FIX
@@ -748,6 +748,7 @@
                             nResolucion: $("#nResolucion").val(),
                             operacion: '{{ operacion }}',
                             idEditar: '{{ idEditar }}',
+                            estado: '{{ estado }}',
                         },
                         success: function (response) {
                             let resultado = response['existe'];
@@ -804,9 +805,9 @@
             $("#agr").on('click', function () {
                 if ($("#formAgregar").valid()) {
 
-                    var nResolucion = false ;
-                    if("{{ traslado.estado }}" === '1'){
-                       nResolucion = ValidarResolucion();
+                    var nResolucion = false;
+                    if ("{{ traslado.estado }}" === '1') {
+                        nResolucion = ValidarResolucion();
                     }
 
                     var patrimoniosEvaluar = ValidarPatrimonio();
@@ -836,7 +837,9 @@
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         nResolucion: $("#nResolucion").val(),
                         operacion: '{{ operacion }}',
-                        idEditar: '{{ idEditar }}'
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
                     },
                     success: function (response) {
                         let resultado = response['existe'];
