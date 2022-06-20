@@ -409,13 +409,11 @@ def actualizarEstado2(request):
         nuevo_estado = '2'
     elif (traslado.estado == '4'):
         nuevo_estado = '5'
-        print('>>>>>>>>>>>>>>>>>Dentro ed actualizar esatdo de patrimonios a inactivo>>>>>>>>>>>>>>>>>>>>>>>>>')
         for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
             patrimonio.estado = '2'  # estado no disponible
             patrimonio.save()
     elif (traslado.estado == '5'):
         nuevo_estado = '6'
-        print('>>>>>>>>>>>>>>>>>Dentro ed actualizar esatdo de patrimonios a inactivo>>>>>>>>>>>>>>>>>>>>>>>>>')
         for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
             patrimonio.estado = '1'  # estado disponible
             patrimonio.save()
