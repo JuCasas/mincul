@@ -17,7 +17,6 @@ class Institucion(models.Model):
     documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
-
 class Propietario(models.Model):
     ESTADOS = (
         ('1', 'Activo'),
@@ -100,7 +99,7 @@ class Patrimonio (models.Model):
     #ubicacion = models.MultiPolygonField(geography=True, default=Point(0.0, 0.0))
     # https: // raphael - leger.medium.com / django - handle - latitude - and -longitude - 54
     # a4bb2f6e3b
-    descripcion = models.CharField(max_length=200)
+    descripcion = models.CharField(max_length=4000)
     observacion = models.CharField(max_length=200)
     tipoPatrimonio = models.CharField(max_length=2, choices=TIPO, default='1')
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
