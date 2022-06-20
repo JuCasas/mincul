@@ -23,47 +23,47 @@ from patrimonios.serializers import InstitucionSerializer, UserSerializer
 def patrimonio_list(request):
 
     if request.POST:
-        print('POST')
         file = request.FILES['file']
         data = json.load(file)
-        beautify = json.dumps(data, indent=4)
-        print(beautify)
+        # beautify = json.dumps(data, indent=4)
+        # print(beautify)
         for pat in data:
-            patrimonio = Patrimonio()
-            patrimonio.nombreTituloDemoninacion = pat['nombre']
-            patrimonio.codigo = pat['codigo']
-            patrimonio.departamento = pat['departamento']
-            patrimonio.provincia = pat['provincia']
-            patrimonio.distrito = pat['distrito']
-            patrimonio.lat = pat['latitud']
-            patrimonio.long = pat['longitud']
-            patrimonio.descripcion = pat['descripcion']
-            patrimonio.observacion = pat['observaciones']
-            patrimonio.tipoPatrimonio = Patrimonio.tipoPatrimonio.field.choices[int(cat.tipo) - 1]
+            if len(Patrimonio.objects.filter(nombreTituloDemoninacion=pat['nombre']))==0:
+                patrimonio = Patrimonio()
+                patrimonio.nombreTituloDemoninacion = pat['nombre']
+                patrimonio.codigo = pat['codigo']
+                patrimonio.departamento = pat['departamento']
+                patrimonio.provincia = pat['provincia']
+                patrimonio.distrito = pat['distrito']
+                patrimonio.lat = pat['latitud']
+                patrimonio.long = pat['longitud']
+                patrimonio.descripcion = pat['descripcion']
+                patrimonio.observacion = pat['observaciones']
 
-            cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
-            patrimonio.categoria = cat
+                cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
+                patrimonio.tipoPatrimonio = int(cat.tipo)
+                patrimonio.categoria = cat
 
-            resp = Responsable.objects.filter(nombre=pat['responsable']['nombreResponsable'])
-            if len(resp) > 0:
-                resp = Responsable.objects.get(nombre=pat['responsable']['nombreResponsable'])
-            else:
-                resp = Responsable()
-                resp.institucion = pat['responsable']['institucionLlenadoFicha']
-                resp.nombre = pat['responsable']['nombreResponsable']
-                resp.cargo = pat['responsable']['cargo']
-                resp.correo = pat['responsable']['correo']
-                resp.telefono = pat['responsable']['telefono']
-                resp.fecha = datetime.strptime(pat['responsable']['fecha'],"%d/%m/%Y")
-                resp.save()
-            patrimonio.responsables.add(resp)
-
-            
+                resp = Responsable.objects.filter(nombre=pat['responsable']['nombreResponsable'])
+                if len(resp) > 0:
+                    resp = Responsable.objects.get(nombre=pat['responsable']['nombreResponsable'])
+                else:
+                    resp = Responsable()
+                    resp.institucion = pat['responsable']['institucionLlenadoFicha']
+                    resp.nombre = pat['responsable']['nombreResponsable']
+                    resp.cargo = pat['responsable']['cargo']
+                    resp.correo = pat['responsable']['correo']
+                    resp.telefono = pat['responsable']['telefono']
+                    resp.fecha = datetime.strptime(pat['responsable']['fecha'],"%d/%m/%Y")
+                    resp.save()
+                patrimonio.save()
+                patrimonio.responsables.add(resp)
+                patrimonio.save()
+                print(patrimonio.nombreTituloDemoninacion)
 
     context = {
         'patrimonios': Patrimonio.objects.all()
     }
-
 
     return render(request, 'patrimonio/patrimony_list.html', context=context)
 
