@@ -363,28 +363,26 @@ class PatrimonioMaterialInMueble(models.Model):
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
 
 class PatrimonioInMaterial(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    TIPO = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2'),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
+    TIPOINMATERIAL = (
+        ('1', 'Acontecimientos Programados'),
+        ('2', 'Folclore'),
     )
     SUBTIPO = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2'),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
+        ('1', 'Artístico'),
+        ('2', 'Eventos'),
+        ('3', 'Fiestas'),
+        ('4', 'Artesanía y Artes'),
+        ('5', 'Creencias Populares'),
+        ('6', 'Ferias y Mercados'),
+        ('7', 'Gastronomía'),
+        ('8', 'Músicas y Danzas'),
     )
     TIPOINGRESO = (
         ('1', 'Gratuito'),
         ('2', 'Pagado'),
         ('3', 'No información'),
     )
-    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    tipoInmaterial = models.CharField(max_length=2, choices=TIPOINMATERIAL, default='1')
     subtipo = models.CharField(max_length=2, choices=SUBTIPO, default='1')
     particularidades = models.CharField(max_length=200, null=True, blank=True)
     tipoIngreso = models.CharField(max_length=2, choices=TIPOINGRESO, default='1')

@@ -1,3 +1,6 @@
+import json
+from types import SimpleNamespace
+
 from django.core import serializers
 from django.shortcuts import render
 from rest_framework import status
@@ -20,6 +23,17 @@ from incidente.models import Incidente
 from mincul.settings import ALLOWED_HOSTS
 
 def patrimonio_list(request):
+
+    if request.POST:
+        print('POST')
+        file = request.FILES['file']
+        data = json.load(file)
+        #beautify = json.dumps(data, indent=4)
+        #print(beautify)
+        for pat in data:
+            patrimonio = Patrimonio()
+
+            print('Nombre:',pat['nombre'])
 
     context = {
         'patrimonios': Patrimonio.objects.all()
