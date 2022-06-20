@@ -104,7 +104,7 @@ class Patrimonio (models.Model):
     tipoPatrimonio = models.CharField(max_length=2, choices=TIPO, default='1')
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     institucion = models.ForeignKey(Institucion,null=True, on_delete=models.CASCADE)
-    gestor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    gestor = models.ForeignKey(settings.AUTH_USER_MODEL,null=True, on_delete=models.CASCADE)
     propietarios = models.ManyToManyField(Propietario)
     responsables = models.ManyToManyField(Responsable)
     documentos = models.ManyToManyField(Documento)
