@@ -364,10 +364,6 @@ class PatrimonioMaterialInMueble(models.Model):
 
 class PatrimonioInMaterial(models.Model):
     TIPOINMATERIAL = (
-        ('1', 'Acontecimientos Programados'),
-        ('2', 'Folclore'),
-    )
-    SUBTIPO = (
         ('1', 'Artístico'),
         ('2', 'Eventos'),
         ('3', 'Fiestas'),
@@ -383,7 +379,7 @@ class PatrimonioInMaterial(models.Model):
         ('3', 'No información'),
     )
     tipoInmaterial = models.CharField(max_length=2, choices=TIPOINMATERIAL, default='1')
-    subtipo = models.CharField(max_length=2, choices=SUBTIPO, default='1')
+    subtipo = models.CharField(max_length=100, null=True)
     particularidades = models.CharField(max_length=200, null=True, blank=True)
     tipoIngreso = models.CharField(max_length=2, choices=TIPOINGRESO, default='1')
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
