@@ -519,7 +519,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="inputDetalle">
                                 <label for="detalleRechazo">Detalle:</label>
                                 <textarea class="form-control" id="detalleRechazo" name="detalleRechazo"
                                           rows="3" required></textarea>
@@ -578,7 +578,8 @@
 
 
     <!-- Ver detalle de rechazo -->
-    <div class="modal fade" id="modalEliminarDocumento" tabindex="-1" role="dialog" aria-labelledby="modalEliminarDocumentoLabel"
+    <div class="modal fade" id="modalEliminarDocumento" tabindex="-1" role="dialog"
+         aria-labelledby="modalEliminarDocumentoLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -618,9 +619,9 @@
 
             objeto = btn;
 
-            var botones = '<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>'+
-                    '<button class="btn btn-primary btn-sm" type="button" onclick="eliminaDocumento('+pk+')" data-dismiss="modal">Confirmar</button>';
-            var texto = '<p>Desea eliminar el archivo "'+archivo+'"</p>';
+            var botones = '<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>' +
+                '<button class="btn btn-primary btn-sm" type="button" onclick="eliminaDocumento(' + pk + ')" data-dismiss="modal">Confirmar</button>';
+            var texto = '<p>Desea eliminar el archivo "' + archivo + '"</p>';
 
             $("#nombreModal").html(texto);
             $("#botonesModal").html(botones);
@@ -671,7 +672,8 @@
                         position: 'bottom-right',
                         hideAfter: 3000,
                     })
-                }});
+                }
+            });
         }
 
 
@@ -784,8 +786,9 @@
 
         $(document).ready(function () {
 
-            if ("{{ traslado.estado}}" === 2) {
+            if ("{{ traslado.estado}}" === '2') {
                 validar_campo_detalle();
+
             }
 
             if ("{{ operacion }}" === "editar") {
@@ -887,7 +890,7 @@
                                 text: item.nombreTituloDemoninacion,
                                 tipoPatrimonio: item.tipoPatrimonio,
                                 categoria: item.categoria,
-                                estado:item.estado,
+                                estado: item.estado,
                             };
                         });
                         return {results: data};
@@ -901,8 +904,10 @@
 
         function set_validate() {
             if ($("#estadoSolicitud").val() === "3") {
+                $("#inputDetalle").show();
                 $("#detalleRechazo").attr('required', true);
                 console.log("Campo detalle requerido");
+
                 var settings = $('#formularioActualizarEstado').validate().settings;
                 console.log(settings);
                 $.extend(settings, {
@@ -921,6 +926,7 @@
                 console.log("Campo detalle no requerido");
 
                 $("#detalleRechazo").attr('required', false);
+                $("#inputDetalle").hide();
                 var settings = $('#formularioActualizarEstado').validate().settings;
                 console.log(settings);
 
