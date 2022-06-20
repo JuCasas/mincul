@@ -48,7 +48,7 @@
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-4 col-lg-4 col-sm-12">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-header">
                             <h5>General</h5>
                         </div>
@@ -56,7 +56,7 @@
                             <div class="form-group">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
                                 <select class="form-control" id="tipoTraslado" required
-                                        {% if traslado.estado != '1' %}disabled{% endif %}>
+                                        {% if traslado.estado != '1' and idEditar != 0  %}disabled{% endif %}>
                                     <option {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
                                         extranjero
                                     </option>
@@ -72,7 +72,7 @@
                                 <label for="pais">País destino:</label>
                                 <select class="form-control selectpicker" id="pais" name="pais"
                                         data-placeholder='Seleccione pais...' required
-                                        {% if traslado.estado != '1' %}disabled{% endif %}>
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% include 'traslado/paises.html' %}
                                 </select>
                             </div>
@@ -80,7 +80,7 @@
                                 <label for="ubigeo">Dirección de destino:</label>
                                 <input class="form-control" id="destino" name="destino" type="text"
                                        value="{{ traslado.destino }}" required
-                                       {% if traslado.estado != '1' %}disabled{% endif %}>
+                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                             </div>
 
                             <div class="form-group ">
@@ -88,14 +88,14 @@
                                 <input class="form-control" id="nombreExposicion" name="nombreExposicion"
                                        type="text"
                                        value="{{ traslado.nombreExposicion }}" required
-                                       {% if traslado.estado != '1' %}disabled{% endif %}>
+                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                             </div>
 
                             <div class="form-group">
                                 <label for="comisario">Comisario:</label>
                                 <select class="form-control selectpicker" id="comisario" name="comisario"
                                         data-placeholder='Seleccione comisario...'
-                                        {% if traslado.estado != '1' %}disabled{% endif %}>
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% for c in comisarios %}
                                         <option value="{{ c.pk }}">{{ c.username }}</option>
                                     {% endfor %}
@@ -125,7 +125,7 @@
                                         <select class="form-control selectpicker" id="nombreInstitucion"
                                                 name="nombreInstitucion"
                                                 data-placeholder='Seleccione entidad...' onchange="getEmail(this)"
-                                                {% if traslado.estado != '1' %}disabled{% endif %}>
+                                                {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                             {% for e in entidades %}
                                                 <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
                                             {% endfor %}
@@ -156,7 +156,7 @@
                                                 <input class="form-control" id="fechaSalidaProgramada"
                                                        name="fechaSalidaProgramada" type="date"
                                                        value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
-                                                       {% if traslado.estado != '1' %}disabled{% endif %}>
+                                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                             </div>
 
                                             {% if traslado.estado == '4' %}
@@ -185,22 +185,22 @@
                     </div>
 
 
-                    <div class="row my-3">
+                    <div class="row mt-3">
                         <div class="col">
-                            <div class="card">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Patrimonios a ser trasladados</h5>
                                 </div>
                                 <div class="form-group col-auto d-flex align-items-end">
                                     <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
                                             data-placeholder='Seleccione patrimonio...'
-                                            {% if traslado.estado != '1' %} hidden {% endif %} >
+                                            {% if traslado.estado != '1' and idEditar != 0 %} hidden {% endif %} >
                                     </select>
 
                                     <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
                                             type="button"
                                             onclick="agregarPatrimonioTabla()"
-                                            {% if traslado.estado != '1' %}  hidden{% endif %}
+                                            {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}
                                     >Agregar
                                     </button>
 
@@ -243,7 +243,7 @@
                 </div>
             </div>
 
-            <div class="card my-3">
+            <div class="card my-3" {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}>
                 <div class="card-header">
                     <h5>Documentos nuevos:</h5>
                 </div>
@@ -717,7 +717,11 @@
                 e.preventDefault();
                 if ($("#formAgregar").valid()) {
                     var patrimoniosEvaluar = ValidarPatrimonio();
-                    var nResolucion = ValidarResolucion();
+                    var nResolucion = false;
+                    if("{{ traslado.estado }}" === '1'){
+                       nResolucion = ValidarResolucion();
+                    }
+
                     //TODO FIX
                     {#var fechasCorrectas = ValidarFechas();#}
                     var fechasCorrectas = true;
@@ -743,7 +747,7 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                             nResolucion: $("#nResolucion").val(),
                             operacion: '{{ operacion }}',
-                            idEditar: '{{ idEditar }}'
+                            idEditar: '{{ idEditar }}',
                         },
                         success: function (response) {
                             let resultado = response['existe'];
@@ -799,7 +803,12 @@
 
             $("#agr").on('click', function () {
                 if ($("#formAgregar").valid()) {
-                    var nResolucion = ValidarResolucion();
+
+                    var nResolucion = false ;
+                    if("{{ traslado.estado }}" === '1'){
+                       nResolucion = ValidarResolucion();
+                    }
+
                     var patrimoniosEvaluar = ValidarPatrimonio();
                     {#var fechasCorrectas = ValidarFechas();#}
                     //TODO FIX
