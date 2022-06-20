@@ -133,7 +133,9 @@ def detalle_museo(request, pk):
             'provincia': 'Lima',
             'distrito': 'Pueblo Libre'}
 
+    institucion = Institucion.objects.get(pk=pk)
     #lista de patrimonio dentro del museo
+    patrimonios = Patrimonio.objects.filter(institucion_id=pk)
 
     #lista de valoraciones de esos patrimonios
 
@@ -146,7 +148,9 @@ def detalle_museo(request, pk):
 
 
     context = {"valor": valor,
-               "area": area}
+               "area": area,
+               "institucion": institucion,
+               "patrimonios": patrimonios}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
 
