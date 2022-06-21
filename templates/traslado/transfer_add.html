@@ -104,9 +104,13 @@
 
                             {% if traslado.estado == '2' or traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
                                 <div class="form-group">
-                                    <label for="nResolucion">N° de Resolucion:</label>
+                                    <label for="nResolucion">N° de Resolución:</label>
                                     <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                           {% if traslado.numeroResolucion != null %}
                                            value="{{ traslado.numeroResolucion }}"
+                                            {% else %} 
+                                               placeholder="Ingrese Número de Resolución"
+                                           {% endif %}
                                             {% if traslado.estado != '2' and idEditar != 0 %}disabled{% endif %}>
                                 </div>
                             {% endif %}
