@@ -7,7 +7,8 @@ urlpatterns = [
     path('listar/',views.listTranfers, name='list_transfers'),
     path('ver/<int:pk>/', views.viewTranfer, name='view_transfer'),
     path('editar/<int:pk>/', views.editTransfer, name='edit_transfer'),
-    path('editarTraslado/', views.actualizarEstado, name='actualizar_estado'),
+    path('editarEstado/', views.actualizarEstado, name='actualizar_estado'),
+    path('editarEstado2/', views.actualizarEstado2, name='actualizar_estado_2'),
     path('patrimonioAjax/',views.listarPatrimoniosTraslado,name='listPatrimoniosAjax'),
     
     
@@ -17,5 +18,12 @@ urlpatterns = [
     path('editarSolicitante/',views.editarSolicitante,name='editarSolicitante'),
     path('eliminacionSolicitante/',views.eliminacionSolicitante,name='eliminacionSolicitante'),
     path('emailEntidad/',views.entidadEmail,name='entidadEmail'),
-    path('validarResolucion/',views.validarResolucion,name='validarResolucion')
+    path('validarResolucion/',views.validarResolucion,name='validarResolucion'),
+    path('eliminarDocumentoTraslado/',views.eliminarDocumentoTraslado,name='eliminarDocumentoTraslado'),
+    path('validarDOI/',views.validarDOI,name="validarDOI"),
+    path('validarFechas/',views.validarFechas,name="validarFechas"),
+    path('existeResolucion/',views.existeResolucion,name="existeResolucion"),
+    path ('existeFechaSalidaProgramada/',views.existeFechaSalidaProgramada,name="existeFechaSalidaProgramada"),
+    path ('existeFechaSalidaReal/',views.existeFechaSalidaReal,name="existeFechaSalidaReal"),
+    path ('existeFechaRetornoReal/',views.existeFechaRetornoReal,name="existeFechaRetornoReal")
 ]

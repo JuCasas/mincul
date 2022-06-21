@@ -1,28 +1,69 @@
-from django.core import serializers
+import json
+from datetime import datetime
+
+from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.template.loader import get_template
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from authentication.models import User
+from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
-    ActividadTuristica
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.template.loader import get_template
-from django.core.mail import EmailMultiAlternatives
-from authentication.models import User
+    ActividadTuristica, Responsable
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
-from incidente.models import Incidente
+
 
 def patrimonio_list(request):
+
+    if request.POST:
+        file = request.FILES['file']
+        data = json.load(file)
+        # beautify = json.dumps(data, indent=4)
+        # print(beautify)
+        for pat in data:
+            if len(Patrimonio.objects.filter(nombreTituloDemoninacion=pat['nombre']))==0:
+                patrimonio = Patrimonio()
+                patrimonio.nombreTituloDemoninacion = pat['nombre']
+                patrimonio.codigo = pat['codigo']
+                patrimonio.departamento = pat['departamento']
+                patrimonio.provincia = pat['provincia']
+                patrimonio.distrito = pat['distrito']
+                patrimonio.lat = pat['latitud']
+                patrimonio.long = pat['longitud']
+                patrimonio.descripcion = pat['descripcion']
+                patrimonio.observacion = pat['observaciones']
+
+                cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
+                patrimonio.tipoPatrimonio = int(cat.tipo)
+                patrimonio.categoria = cat
+
+                resp = Responsable.objects.filter(nombre=pat['responsable']['nombreResponsable'])
+                if len(resp) > 0:
+                    resp = Responsable.objects.get(nombre=pat['responsable']['nombreResponsable'])
+                else:
+                    resp = Responsable()
+                    resp.institucion = pat['responsable']['institucionLlenadoFicha']
+                    resp.nombre = pat['responsable']['nombreResponsable']
+                    resp.cargo = pat['responsable']['cargo']
+                    resp.correo = pat['responsable']['correo']
+                    resp.telefono = pat['responsable']['telefono']
+                    resp.fecha = datetime.strptime(pat['responsable']['fecha'],"%d/%m/%Y")
+                    resp.save()
+                patrimonio.save()
+                patrimonio.responsables.add(resp)
+                patrimonio.save()
+                print(patrimonio.nombreTituloDemoninacion)
 
     context = {
         'patrimonios': Patrimonio.objects.all()
     }
-
 
     return render(request, 'patrimonio/patrimony_list.html', context=context)
 
@@ -89,27 +130,11 @@ def detalle(request, pk):
     puntuacion=0
     for v in valoraciones:
         puntuacion = v.valoracion + puntuacion
+    if len(valoraciones):
+        puntuacion=puntuacion/len(valoraciones)
+    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones}
 
-    if len(valoraciones) > 0: puntuacion = puntuacion / len(valoraciones)
-    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones, 'afectaciones': [c[1] for c in Incidente.AFECTACION]}
-
-    if request.POST.get("accion") == "incidente":
-        print(request.POST)
-        incidente = Incidente.objects.create()
-        for c in Incidente.AFECTACION:
-            if c[1] == request.POST.get("tipo"):
-                incidente.tipoAfectacion = c[0]
-                break
-        incidente.fechaOcurrencia = request.POST.get("fecha")
-        incidente.descripcion = request.POST.get("descripcion")
-        incidente.nombre = request.POST.get("nombre")
-        incidente.correo = request.POST.get("email")
-        incidente.telefono = request.POST.get("telefono")
-        incidente.patrimonio_id = pk
-        incidente.save()
-        return HttpResponseRedirect(reverse(detalle, args=[pk]))
-
-    if request.POST.get("accion") == "valoracion":
+    if request.POST:
         print(request.POST)
         valoracion = PatrimonioValoracion.objects.create()
         valoracion.patrimonio_id = pk;
@@ -122,9 +147,48 @@ def detalle(request, pk):
         return HttpResponseRedirect(reverse(detalle, args=[pk]))
     return render(request, 'patrimonio/templateDetail.html', context)
 
+def detalle_museo(request, pk):
+    #Provisional hasta cambio de la bd
+    #museo
+    valor = {'url': 'https://enlima.pe/sites/default/files/mali-lima.jpg',
+             'nombre': 'Museo Nacional de Arqueología, Antropología e Historia del Perú'}
+
+    area = {'direccion': 'Plaza Bolivar s/n',
+            'departamento': 'Lima',
+            'provincia': 'Lima',
+            'distrito': 'Pueblo Libre'}
+
+    institucion = Institucion.objects.get(pk=pk)
+    #lista de patrimonio dentro del museo
+    patrimonios = Patrimonio.objects.filter(institucion_id=pk)
+
+    #lista de valoraciones de esos patrimonios
+    list_pat = list(Patrimonio.objects.filter(institucion_id=pk).values_list('pk', flat=True))
+    valoraciones = PatrimonioValoracion.objects.filter(patrimonio_id__in=list_pat).filter(estado=2)
+
+    #lista de incidentes
+
+
+
+
+
+
+    context = {"valor": valor,
+               "area": area,
+               "institucion": institucion,
+               "patrimonios": patrimonios,
+               "valoraciones": valoraciones}
+
+    return render(request, 'patrimonio/patrimony_museum.html',context)
+
 @method_decorator(csrf_exempt)
 def send_email(request, pk):
-    url = "http://localhost:8000/patrimonios/email/"+str(pk)
+
+    if str(ALLOWED_HOSTS) == "[]":
+        url = "http://localhost:8000/patrimonios/email_confirmation/" + str(pk)
+    else:
+        url = "http://119.8.150.164:8080/patrimonios/email_confirmation/" + str(pk)
+
     if request.POST:
         try:
             subject = "Confirma tu correo electrónico"
@@ -154,7 +218,4 @@ def email_confirmation(request, pk):
     print(valor.estado)
     valor.save()
     context = {'valor':valor}
-    if int(pk) == 1:
-        return render(request, 'patrimonio/patrimony_inmueble_edit.html', context)
-    else:
-        return render(request, 'patrimonio/patrimony_inmaterial_edit.html', context)
+    return render(request, 'patrimonio/email_confirmation.html', context)

@@ -10,3 +10,7 @@ requests==2.27.1
 django-sendgrid-v5==1.2.0
 openpyxl==3.0.9
 xlrd==1.2.0
+django-migration-fixer
+folium
+django-crispy-forms
+geocoder

@@ -1,7 +1,7 @@
 from django.db import models
 
 #Create your models here.
-from patrimonios.models import Patrimonio
+from patrimonios.models import Patrimonio, Institucion, PuntoGeografico
 from mincul_app.models import Documento
 
 
@@ -22,7 +22,7 @@ class Incidente(models.Model):
     telefono = models.CharField(max_length=20, null=True)
     fechaRegistro = models.DateField(blank=True, null=True, verbose_name='fechaRegistro')
     fechaAprobacion = models.DateField(blank=True, null=True, verbose_name='fechaAprobacion')
-    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE, null=True)
+    zona = models.ForeignKey(PuntoGeografico, on_delete=models.CASCADE, null=True)
     documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
 

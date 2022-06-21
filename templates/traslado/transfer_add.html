@@ -5,9 +5,18 @@
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
     <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
 
     <style>
+
+        .jq-toast-wrap {
+            width: 500px;
+        }
+
+        .close-icon {
+            cursor: pointer;
+        }
 
         table {
             min-width: 100%;
@@ -22,7 +31,7 @@
     <div class="card">
         <div class="card-header">
             {% if operacion == "agregar" %}
-                <h5>Nuevo Traslado</h5>
+                <h5>Nueva Solicitud de Traslado</h5>
             {% else %}
                 <h5>Editar Traslado</h5>
             {% endif %}
@@ -38,15 +47,16 @@
             {% endif %}
             {% csrf_token %}
             <div class="row">
-                <div class="col-4">
-                    <div class="card">
+                <div class="col-md-4 col-lg-4 col-sm-12">
+                    <div class="card h-100">
                         <div class="card-header">
                             <h5>General</h5>
                         </div>
                         <div class="card-body bg-light">
                             <div class="form-group">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
-                                <select class="form-control" id="tipoTraslado" required>
+                                <select class="form-control" id="tipoTraslado" required
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     <option {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
                                         extranjero
                                     </option>
@@ -61,45 +71,52 @@
                             <div class="form-group">
                                 <label for="pais">País destino:</label>
                                 <select class="form-control selectpicker" id="pais" name="pais"
-                                        data-placeholder='Seleccione pais...' required>
+                                        data-placeholder='Seleccione pais...' required
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% include 'traslado/paises.html' %}
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="ubigeo">Dirección de destino:</label>
                                 <input class="form-control" id="destino" name="destino" type="text"
-                                       value="{{ traslado.destino }}" required>
+                                       value="{{ traslado.destino }}" required
+                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                             </div>
 
                             <div class="form-group ">
                                 <label for="nombreExposicion">Nombre de la Exposición:</label>
                                 <input class="form-control" id="nombreExposicion" name="nombreExposicion"
                                        type="text"
-                                       value="{{ traslado.nombreExposicion }}" required>
+                                       value="{{ traslado.nombreExposicion }}" required
+                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                             </div>
 
                             <div class="form-group">
                                 <label for="comisario">Comisario:</label>
                                 <select class="form-control selectpicker" id="comisario" name="comisario"
-                                        data-placeholder='Seleccione comisario...'>
+                                        data-placeholder='Seleccione comisario...'
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% for c in comisarios %}
                                         <option value="{{ c.pk }}">{{ c.username }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="nResolucion">N° de Resolucion:</label>
-                                <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                                       value="{{ traslado.numeroResolucion }}">
-                            </div>
 
+                            {% if traslado.estado == '2' or traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
+                                <div class="form-group">
+                                    <label for="nResolucion">N° de Resolucion:</label>
+                                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                           value="{{ traslado.numeroResolucion }}"
+                                            {% if traslado.estado != '2' and idEditar != 0 %}disabled{% endif %}>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-md-8 col-lg-8 col-sm-12">
                     <div class="row">
-                        <div class="col">
-                            <div class="card">
+                        <div class="col ">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Entidad solicitante</h5>
                                 </div>
@@ -108,7 +125,8 @@
                                         <label for="nombreInstitucion">Entidad Solicitante</label>
                                         <select class="form-control selectpicker" id="nombreInstitucion"
                                                 name="nombreInstitucion"
-                                                data-placeholder='Seleccione entidad...' onchange="getEmail(this)">
+                                                data-placeholder='Seleccione entidad...' onchange="getEmail(this)"
+                                                {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                             {% for e in entidades %}
                                                 <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
                                             {% endfor %}
@@ -122,13 +140,12 @@
                                                type="text"
                                                value="{{ traslado.entidadSolicitante.correo }}" disabled>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col">
-                            <div class="card">
+                        <div class="col ">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Fechas</h5>
                                 </div>
@@ -136,73 +153,70 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group">
-                                                <label for="fechaSalidaProgramada">Salida Programada: </label>
+                                                <label for="fechaSalidaProgramada">Fecha de Salida Programada: </label>
                                                 <input class="form-control" id="fechaSalidaProgramada"
                                                        name="fechaSalidaProgramada" type="date"
                                                        value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group ">
-                                                <label for="fechaRetornoProgramada">Retorno
-                                                    Programada: </label>
-                                                <input class="form-control" id="fechaRetornoProgramada"
-                                                       name="fechaRetornoProgramada" type="date"
-                                                       value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}"
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="fechaSalidaReal">Salida Real:</label>
-                                                <input class="form-control" id="fechaSalidaReal"
-                                                       name="fechaSalidaReal"
-                                                       type="date"
-                                                       value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
+                                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                             </div>
 
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="fechaRetornoReal">Retorno Real:</label>
-                                                <input class="form-control" id="fechaRetornoReal"
-                                                       name="fechaRetornoReal" type="date"
-                                                       value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}"
-                                                       disabled>
-                                            </div>
+                                            {% if traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
+                                                <div class="form-group">
+                                                    <label for="fechaSalidaReal">Fecha de Salida Real:</label>
+                                                    <input class="form-control" id="fechaSalidaReal"
+                                                           name="fechaSalidaReal"
+                                                           type="date"
+                                                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}"
+                                                            {% if traslado.estado != '4' and idEditar != 0 %}disabled{% endif %}>
+                                                </div>
+                                            {% endif %}
+
+                                            {% if traslado.estado == '5' or traslado.estado == '6'%}
+                                                <div class="form-group">
+                                                    <label for="fechaRetornoReal">Fecha de Retorno real:</label>
+                                                    <input class="form-control" id="fechaRetornoReal"
+                                                           name="fechaRetornoReal" type="date"
+                                                           value="{{ traslado.fechaRetorno|date:'Y-m-d' }}"
+                                                    {% if traslado.estado != '5' and idEditar != 0 %}disabled{% endif %}>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row my-3">
+
+
+                    <div class="row mt-3">
                         <div class="col">
-                            <div class="card">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Patrimonios a ser trasladados</h5>
                                 </div>
                                 <div class="form-group col-auto d-flex align-items-end">
                                     <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                                            data-placeholder='Seleccione patrimonio...'>
+                                            data-placeholder='Seleccione patrimonio...'
+                                            {% if traslado.estado != '1' and idEditar != 0 %} hidden {% endif %} >
                                     </select>
+
                                     <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
                                             type="button"
-                                            onclick="agregarPatrimonioTabla()">Agregar
+                                            onclick="agregarPatrimonioTabla()"
+                                            {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}
+                                    >Agregar
                                     </button>
+
                                 </div>
                                 <div class="card-body bg-light">
-                                    <table class="table">
+                                    <table class="table table-responsive-sm">
                                         <thead class="thead-dark">
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Patrimonio</th>
                                             <th scope="col">Clasificación</th>
                                             <th scope="col">Tipo de bien</th>
+                                            <th scope="col">Estado</th>
                                             <th scope="col">Acciones</th>
                                         </tr>
                                         </thead>
@@ -211,8 +225,9 @@
                                             <tr>
                                                 <td>{{ patrimonio.pk }}</td>
                                                 <td>{{ patrimonio.nombreTituloDemoninacion }}</td>
-                                                <td>{{ patrimonio.get_categoria_display }}</td>
+                                                <td>{{ patrimonio.categoria.nombre }}</td>
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
+                                                <td>{{ patrimonio.get_estado_display }}</td>
                                                 <td>
                                                     <button class="btn" href="#" type="button"
                                                             onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
@@ -231,89 +246,158 @@
                 </div>
             </div>
 
-            <div class="card my-3">
+            <div class="card my-3" {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}>
                 <div class="card-header">
-                    <h5>Documentos:</h5>
+                    <h5>Documentos nuevos:</h5>
                 </div>
                 <div class="card-body bg-light">
                     <div class="dropzone dropzone-multiple p-0" data-dropzone
                          data-options='{"url":"valid/url"}'>
                         <div class="fallback">
-                            <input type="file" name="file2">
+                            <input type="file" name="file" multiple>
                         </div>
-                        <div class="dz-message" data-dz-message><img class="mr-2"
-                                                                     src="{% static 'img/icons/cloud-upload.svg' %}"
-                                                                     width="25" alt="">Suelta tus archivos aquí
-                        </div>
-                        <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
-                            <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger">
-                                <img
-                                        class="dz-image" src="..." alt="..." data-dz-thumbnail>
-                                <div class="media-body d-flex flex-between-center">
-                                    <div>
-                                        <h6 data-dz-name></h6>
-                                        <div class="d-flex align-items-center">
-                                            <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>
-                                            <div class="dz-progress"><span class="dz-upload"
-                                                                           data-dz-uploadprogress=""></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown text-sans-serif">
-                                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"
-                                                type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false"><span class="fas fa-ellipsis-h"></span>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right border py-0">
-                                            <div class="bg-white py-2"><a class="dropdown-item" href="#!"
-                                                                          data-dz-remove>Remove File </a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% comment %}                             <div class="dz-message" data-dz-message><img class="mr-2"
+                                                                                             src="{% static 'img/icons/cloud-upload.svg' %}"
+                                                                                             width="25" alt="">Suelta tus archivos aquí
+                                                </div>
+                                                <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
+                                                    <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger">
+                                                        <img
+                                                                class="dz-image" src="..." alt="..." data-dz-thumbnail>
+                                                        <div class="media-body d-flex flex-between-center">
+                                                            <div>
+                                                                <h6 data-dz-name></h6>
+                                                                <div class="d-flex align-items-center">
+                                                                    <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>
+                                                                    <div class="dz-progress"><span class="dz-upload"
+                                                                                                   data-dz-uploadprogress=""></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="dropdown text-sans-serif">
+                                                                <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"
+                                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
+                                                                        aria-expanded="false"><span class="fas fa-ellipsis-h"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-right border py-0">
+                                                                    <div class="bg-white py-2"><a class="dropdown-item" href="#!"
+                                                                                                  data-dz-remove>Remove File </a></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>{% endcomment %}
                     </div>
                 </div>
             </div>
 
-            {% if operacion == "editar" %}
-                <div class="row mt-5">
-                    <div class="col-11">
-                        <div class="row mx-3">
-                            <div class="col-2 flex-center mt-auto mb-auto ">
-                                <h5 class="mb-0">Estado: </h5>
-                            </div>
-                            <div class="col-3 p-0">
-                                <button class="btn btn-warning  mx-2"
-                                        disabled>{{ traslado.get_estado_display }}</button>
-                            </div>
 
-                            <div class="col-3 p-0">
-                                <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
-                                        data-target="#actualizarEstado">
-                                    Actualizar estado
-                                </button>
-                            </div>
+            {% if operacion == "editar" %}
+                <div class="card my-3">
+                    <div class="card-header">
+                        <h5>Documentos actuales:</h5>
+                    </div>
+                    <div class="card-body bg-light">
+                        <div class="row">
+                            {% for documento in documentos %}
+                                <div class="col-2">
+                                    <div class="card mx-1">
+
+                                        <div class="card-header p-2 d-flex justify-content-end">
+                                            <button class="close float-none" type="button" aria-label="Close"
+                                                    onclick="abrirModalEliminar(this,{{ documento.documento.pk }}, '{{ documento.documento.filename }}')">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+
+                                        <a class="notification notification-flush bg-0 "
+                                           href="{{ media_path }}{{ documento.documento.url }}" download>
+                                            <div class="card-body p-0">
+                                                <div>
+                                                    <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
+                                                </div>
+                                            </div>
+                                            <div class="card-footer p-2">
+                                                <h6>{{ documento.documento.filename }}</h6>
+                                            </div>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
-{#                    <div class="col-1 align-items-end">#}
-{#                        <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>#}
-{#                    </div>#}
                 </div>
             {% endif %}
             <input id="lista" name="lista" type="hidden">
 
-            <div class="wrapper row justify-content-end mt-5">
-                <div class="d-flex flex-row justify-content-end">
-                    <a class="btn btn-primary mr-3 mb-1" type="button"
-                       href="{% url 'list_transfers' %}">Cancelar</a>
+
+            <div class="row">
+                <div class="col-8">
+                    <div class="row mt-5">
+                        <div class="col-11">
+                            <div class="row mx-3">
+                                <div class="col-2 flex-center mt-auto mb-auto ">
+                                    {% if operacion != 'agregar' %}
+                                    <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
+                                    {% endif %}
+                                </div>
+                                <div class="col-3">
+                                <span class="btn
+                                {% if traslado.estado == '1' %}
+                                    btn-warning
+                                {% elif traslado.estado == '2' %}
+                                    btn-info
+                                {% elif traslado.estado == '3' %}
+                                    btn-danger
+                                {% elif traslado.estado == '4' %}
+                                    btn-success
+                                {% elif traslado.estado == '5' %}
+                                    btn-dark
+                                {% elif traslado.estado == '6' %}
+                                    btn-light
+                                {% endif %} ">
+                                    {{ traslado.get_estado_display }}
+                                </span>
+                                </div>
+
+                                {% if operacion == "editar" %}
+                                    {% if traslado.estado == '1' or traslado.estado == '2' or traslado.estado == '4' or  traslado.estado == '5' %}
+                                        <div class="col-3 p-0">
+                                            <button id="actualizar" class="btn btn-primary mx-1" type="button" data-toggle="modal"
+                                                    >
+                                                Actualizar estado
+                                            </button>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if traslado.estado == '3' %}
+                                        <div class="col-3 p-0">
+                                            <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
+                                                    data-target="#verDetalleRechazo">
+                                                Ver detalle de rechazo
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar
-                </button>
+                <div class="col-4">
+                    <div class="d-flex flex-row justify-content-end mt-5">
+                        <div class="flex-column">
+                            <a class="btn btn-primary mr-3 mb-1" type="button"
+                               href="{% url 'list_transfers' %}">Cancelar</a>
+                        </div>
+                        <div class="flex-column">
+                            <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             </form>
         </div>
-
     </div>
 
     <div class="modal fade" id="modalFecha" tabindex="-1" role="dialog" aria-labelledby="modalFechaLabel"
@@ -392,6 +476,32 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalNumResolucion" tabindex="-1" role="dialog" aria-labelledby="modalNumResolucionLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalNumResolucionLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorModalNumResolucion" name="formErrorModalNumResolucion">
+                        <div class="form-group">
+                            Debe registar y guardar el Número de Resolución antes de cambiar de estado.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorNumREsolucion" class="btn btn-primary btn-sm" type="button"
+                            data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal-->
     <div class="modal fade" id="actualizarEstado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -404,42 +514,190 @@
                 </div>
                 <div class="modal-body">
 
-                    <form id="formularioActualizarEstado">
-                        <div class="form-group">
-                            <label for="estadoSolicitud">Estado: </label>
-                            <select class="form-control selectpicker" id="estadoSolicitud" name="estadoSolicitud"
-                                    onchange="validar_campo_detalle()">
+                    {% if traslado.estado == '1' %}
+                        <p>
+                            A continuación se procederá a actualizar el estado de la solicitud a "EVALUAR".
+                            ¿Esta seguro que desea confirmar esta acción?
+                        </p>
+                    {% endif %}
 
-                                {% if traslado.estado == '1' %}
-                                    <option disabled selected> Seleccione una acción</option>
-                                {% endif %}
+                    {% if traslado.estado == '2' %}
+                        <form id="formularioActualizarEstado">
+                            <div class="form-group">
+                                <label for="estadoSolicitud">Estado: </label>
+                                <select class="form-control selectpicker" id="estadoSolicitud" name="estadoSolicitud"
+                                        onchange="validar_campo_detalle()">
 
-                                {% for estado in estadosEditables %}
-                                    <option data="{{ estado.0 }}" value={{ estado.0 }}
-                                            {% if traslado.estado == estado.0 %} selected {% endif %}>{{ estado.1 }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                                    {% if traslado.estado == '1' %}
+                                        <option disabled selected> Seleccione una acción</option>
+                                    {% endif %}
 
-                        <div class="form-group" id="detallarRechazo">
-                            <label for="detalleRechazo">Detalle:</label>
-                            <textarea class="form-control" id="detalleRechazo" name="detalleRechazo"
-                                      rows="3" required></textarea>
-                        </div>
+                                    {% for estado in estadosEditables %}
+                                        <option data="{{ estado.0 }}" value={{ estado.0 }}
+                                                {% if traslado.estado == estado.0 %} selected {% endif %}>{{ estado.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
-                    </form>
+                            <div class="form-group" id="inputDetalle">
+                                <label for="detalleRechazo">Detalle:</label>
+                                <textarea class="form-control" id="detalleRechazo" name="detalleRechazo"
+                                          rows="3" required></textarea>
+                            </div>
+                        </form>
+                    {% endif %}
 
+                    {% if traslado.estado == '4' %}
+                        <p>
+                            A continuación se procederá a actualizar el estado de la solicitud a "EJECUTAR".
+                            ¿Esta seguro que desea confirmar esta acción?
+                        </p>
+                    {% endif %}
 
+                    {% if traslado.estado == '5' %}
+                        <p>
+                            A continuación se procederá a actualizar el estado de la solicitud a "FINALIZAR".
+                            ¿Esta seguro que desea confirmar esta acción?
+                        </p>
+                    {% endif %}
                 </div>
-
 
                 <div class="modal-footer">
                     <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary btn-sm" type="button" onclick="actualizarEstado()">Guardar</button>
+                    <button class="btn btn-primary btn-sm" type="button"
+                            {% if traslado.estado == '2' %}onclick="actualizarEstado()"{% endif %}
+                            {% if traslado.estado == '1' or traslado.estado == '4' or traslado.estado == '5' %}
+                            onclick="actualizarEstado2()"{% endif %}
+                    >Confirmar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Ver detalle de rechazo -->
+    <div class="modal fade" id="verDetalleRechazo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalle de rechazo</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ traslado.detalleRechazo }}</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Ver detalle de rechazo -->
+    <div class="modal fade" id="modalEliminarDocumento" tabindex="-1" role="dialog"
+         aria-labelledby="modalEliminarDocumentoLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEliminarDocumentoLabel">Confirmación</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="nombreModal">
+
+                </div>
+
+                <div class="modal-footer" id="botonesModal">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalFechaSalidaProgramada" tabindex="-1" role="dialog" aria-labelledby="modalFechaSalidaProgramada"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFechaSalidaProgramadaLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorModalFechaSalidaProgramada" name="formErrorModalFechaSalidaProgramada">
+                        <div class="form-group">
+                            Debe registar y guardar la Fecha de Salida Programada antes de cambiar de estado.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorFechaSalidaProgramada" class="btn btn-primary btn-sm" type="button"
+                            data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalFechaSalidaReal" tabindex="-1" role="dialog" aria-labelledby="modalFechaSalidaReal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFechaSalidaRealLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorModalFechaSalidaReal" name="formErrorModalFechaSalidaReal">
+                        <div class="form-group">
+                            Debe registar y guardar la Fecha de Salida Real antes de cambiar de estado.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorFechaSalidaReal" class="btn btn-primary btn-sm" type="button"
+                            data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalFechaRetornoReal" tabindex="-1" role="dialog" aria-labelledby="modalFechaRetornoReal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFechaRetornoRealLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorModalFechaRetornoReal" name="formErrorModalFechaRetornoReal">
+                        <div class="form-group">
+                            Debe registar y guardar la Fecha de Retorno Real antes de cambiar de estado.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorFechaRetornoReal" class="btn btn-primary btn-sm" type="button"
+                            data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 {% endblock %}
 
@@ -447,21 +705,113 @@
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'lib/jquery-validation/jquery.validate.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
 
     <script>
 
         let patrimoniosLista = [];
+        var objeto;
+
+        function abrirModalEliminar(btn, pk, archivo) {
+
+            $('#modalEliminarDocumento').modal('show');
+
+            objeto = btn;
+
+            var botones = '<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>' +
+                '<button class="btn btn-primary btn-sm" type="button" onclick="eliminaDocumento(' + pk + ')" data-dismiss="modal">Confirmar</button>';
+            var texto = '<p>Desea eliminar el archivo "' + archivo + '"</p>';
+
+            $("#nombreModal").html(texto);
+            $("#botonesModal").html(botones);
+        }
+
+
+        function eliminaDocumento(pk) {
+            console.log("Elimnar cocumneto");
+            console.log(pk);
+
+            var btn = objeto;
+
+            $('#modalEliminarDocumento').modal('show');
+
+            var columna = btn.parentNode.parentNode.parentNode;
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'eliminarDocumentoTraslado'%}",
+                async: false,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    documento: pk,
+                    traslado: {{ idEditar }}
+                },
+                success: function (response) {
+                    let resultado = response['existe'];
+                    columna.parentNode.removeChild(columna);
+                    $.toast({
+                        text: 'Documento eliminado con éxito',
+                        icon: 'success',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#B7E6CA',  // To change the background
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 3000,
+                    })
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    console.log(response);
+                    $.toast({
+                        text: 'Ocurrió un error inesperado',
+                        icon: 'warning',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#c67a71',
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 3000,
+                    })
+                }
+            });
+        }
+
 
         jQuery.validator.addMethod("alphanumeric", function (value, element) {
             return this.optional(element) || /^[\w\-\s]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("alphanumericNombreExpo", function (value, element) {
-            return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
+            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\s\w\-]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("regexResolucion", function (value, element) {
             return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-[SM][TC]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+        jQuery.validator.addMethod("regexDestino", function (value, element) {
+            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\w\s+\.]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+        jQuery.validator.addMethod("validarFechas", function (value, element) {
+            var fechainicial = document.getElementById("fechaSalidaReal").value;
+            var fechafinal = document.getElementById("fechaRetornoReal").value;
+
+            var fechaIni = new Date(fechainicial);
+            var fechaFin = new Date(fechafinal);
+
+            return (fechaFin > fechaIni);
+        }, "Letters, numbers, and underscores only please");
+
+        jQuery.validator.addMethod("validarFechaMayor", function (value, element) {
+            var fechaSalidaProgramada = document.getElementById("fechaSalidaProgramada").value;
+
+            var fechaIni = new Date();
+            fechaIni.setHours(0,0,0,0);
+            console.log(fechaIni)
+            var fechaFin = new Date(fechaSalidaProgramada);
+
+            return (fechaFin > fechaIni);
         }, "Letters, numbers, and underscores only please");
 
         $("form[name='formAgregar']").validate({
@@ -469,7 +819,7 @@
                 destino: {
                     required: true,
                     maxlength: 100,
-                    alphanumeric: true
+                    regexDestino: true
                 },
                 nombreExposicion: {
                     required: true,
@@ -477,36 +827,80 @@
                     alphanumericNombreExpo: true
                 },
                 nResolucion: {
+                    remote: {
+                        url: "{% url 'validarResolucion'%}",
+                        type: "POST",
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            'numResolucion': function () {
+                                return $("#nResolucion").val();
+                            },
+                            'PK':"{{ idEditar }}",
+                            'estado': "{{traslado.estado}}",
+                        },
+                        dataType: 'json'
+                    },
                     required: true,
                     regexResolucion: true
                 },
+                fechaRetornoReal:{
+                    validarFechas: true,
+                    required: true,
+                },
+                fechaSalidaProgramada:{
+                    required: true,
+                    validarFechaMayor: true,
+                },
+                fechaSalidaReal:{
+                    required: true,
+                    validarFechaMayor:true
+                }
             },
             messages: {
                 destino: {
                     required: "Debe ingresar el destino del traslado",
                     maxlength: "El destino no debe tener más de 100 caracteres",
-                    alphanumeric: "El destino solo debe contener carácteres alfanuméricos"
+                    regexDestino: "El destino solo debe contener carácteres alfanuméricos"
                 },
                 nombreExposicion: {
                     required: "Debe ingresar el nombre de la Exposición",
                     maxlength: "El nombre de la exposición no debe tener más de 100 caracteres",
-                    alphanumericNombreExpo: "El destino solo debe contener carácteres alfanuméricos incluido" +
+                    alphanumericNombreExpo: "El nombre de la exposición solo debe contener carácteres alfanuméricos incluido" +
                         " guión(-) y guión bajo (_)"
                 },
                 nResolucion: {
                     required: "Debe ingresar el número de Resolución",
                     regexResolucion: "El número de resolución debe ser una cadena conformada por 3 campos" +
-                        " (un número de 6 dígitos, el año actual y las letras “ST/MC”) separadas por un guion. "
+                        " (un número de 6 dígitos, el año actual y las letras “ST/MC”) separadas por un guion. ",
+                    remote: "Este número de resolución ya se encuentra registrado"
                 },
+                fechaRetornoReal:{
+                    validarFechas: "La fecha de retorno debe suceder después de la fecha real",
+                    required: "Debe ingresar una fecha de retorno real"
+                },
+                fechaSalidaProgramada:{
+                    required: "Ingrese una fecha de salida programada",
+                    validarFechaMayor: "Ingrese una fecha posterior a la actual"
+                },
+                fechaSalidaReal:{
+                    required: "Ingrese una fecha de salida real",
+                    validarFechaMayor: "Ingrese una fecha posterior a la actual"
+                }
             },
             submitHandler: function (form, e) {
                 e.preventDefault();
                 if ($("#formAgregar").valid()) {
                     var patrimoniosEvaluar = ValidarPatrimonio();
-                    var nResolucion = ValidarResolucion();
-                    var fechasCorrectas = ValidarFechas();
+                    var nResolucion = false;
+                    if ("{{ traslado.estado }}" === '1') {
+                        nResolucion = ValidarResolucion();
+                    }
+
+                    //TODO FIX
+                    {#var fechasCorrectas = ValidarFechas();#}
+                    var fechasCorrectas = true;
                     if (!nResolucion && fechasCorrectas) {
-                        console.log("Todo Bien!");
+                        console.log("Todo Bien Miguel!");
                         form.submit();
                     } else if (!patrimoniosEvaluar) {
                         $("#modalPatrimonios").modal('show');
@@ -527,7 +921,8 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                             nResolucion: $("#nResolucion").val(),
                             operacion: '{{ operacion }}',
-                            idEditar: '{{ idEditar }}'
+                            idEditar: '{{ idEditar }}',
+                            estado: '{{ estado }}',
                         },
                         success: function (response) {
                             let resultado = response['existe'];
@@ -559,8 +954,11 @@
 
         $(document).ready(function () {
 
-            if ("{{ operacion }}" === "editar") {
+            if ("{{ traslado.estado}}" === '2') {
                 validar_campo_detalle();
+            }
+
+            if ("{{ operacion }}" === "editar") {
                 $("#pais").val("{{ traslado.pais }}").change();
                 $("#nombreInstitucion").val("{{ traslado.entidadSolicitante_id }}").change();
                 $("#comisario").val("{{ traslado.gestorConservacionTraslados_id }}").change();
@@ -580,11 +978,17 @@
 
             $("#agr").on('click', function () {
                 if ($("#formAgregar").valid()) {
-                    var nResolucion = ValidarResolucion();
+                    var nResolucion = false;
+                    if ("{{ traslado.estado }}" === '1') {
+                        nResolucion = ValidarResolucion();
+                    }
+
                     var patrimoniosEvaluar = ValidarPatrimonio();
-                    var fechasCorrectas = ValidarFechas();
+                    {#var fechasCorrectas = ValidarFechas();#}
+                    //TODO FIX
+                    var fechasCorrectas = true;
                     if (!nResolucion && fechasCorrectas & patrimoniosEvaluar) {
-                        console.log("Todo Bien!");
+                        console.log("Todo Bien Juan!");
                         $("#formAgregar").submit();
                     } else if (!patrimoniosEvaluar) {
                         $("#modalPatrimonios").modal('show');
@@ -597,16 +1001,68 @@
                 return false;
             });
 
-            function ValidarResolucion() {
+            $("#actualizar").on('click', function () {
+                var existeResolucion = false;
+                var existeFechaSalidaProgramada = false;
+                var existeFechaSalidaReal = false;
+                var existeFechaRetornoReal = false;
+
+                if ("{{ traslado.estado }}" === '1') {
+                    existeFechaSalidaProgramada = ExisteFechaSalidaProgramada();
+                    if (!existeFechaSalidaProgramada){
+
+                        $("#modalFechaSalidaProgramada").modal('show');
+                    }
+                    else {
+                       $("#actualizarEstado").modal('show');
+                    }
+                }
+
+                if ("{{ traslado.estado }}" === '2') {
+                    existeResolucion = ExisteResolucion();
+                    if (!existeResolucion) {
+                        $("#modalNumResolucion").modal('show');
+                    }
+                    else {
+                        $("#actualizarEstado").modal('show');
+                    }
+                }
+
+                if ("{{ traslado.estado }}" === '4') {
+                    existeFechaSalidaReal = ExisteFechaSalidaReal();
+                    if (!existeFechaSalidaReal) {
+                        $("#modalFechaSalidaReal").modal('show');
+                    }
+                    else {
+                        $("#actualizarEstado").modal('show');
+                    }
+                }
+
+                if ("{{ traslado.estado }}" === '5') {
+                    existeFechaRetornoReal = ExisteFechaRetornoReal();
+                    if (!existeFechaRetornoReal) {
+                        $("#modalFechaRetornoReal").modal('show');
+                    }
+                    else {
+                        $("#actualizarEstado").modal('show');
+                    }
+                }
+
+                return false;
+            });
+
+            function ExisteFechaSalidaProgramada(){
                 return $.ajax({
                     type: 'POST',
-                    url: "{% url 'validarResolucion'%}",
+                    url: "{% url 'existeFechaSalidaProgramada'%}",
                     async: false,
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         nResolucion: $("#nResolucion").val(),
                         operacion: '{{ operacion }}',
-                        idEditar: '{{ idEditar }}'
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
                     },
                     success: function (response) {
                         let resultado = response['existe'];
@@ -618,15 +1074,98 @@
                 }).responseJSON['existe'];
             }
 
-            function ValidarFechas() {
-                var fechainicial = document.getElementById("fechaSalidaProgramada").value;
-                var fechafinal = document.getElementById("fechaRetornoProgramada").value;
+            function ExisteResolucion() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'existeResolucion'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        operacion: '{{ operacion }}',
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
 
-                var fechaIni = new Date(fechainicial);
-                var fechaFin = new Date(fechafinal);
-
-                return (fechaFin > fechaIni);
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
             }
+
+            function ExisteFechaSalidaReal() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'existeFechaSalidaReal'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        operacion: '{{ operacion }}',
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
+            }
+
+            function ExisteFechaRetornoReal() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'existeFechaRetornoReal'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        operacion: '{{ operacion }}',
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
+            }
+
+            function ValidarResolucion() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'validarResolucion'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        operacion: '{{ operacion }}',
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
+            }
+
 
             function ValidarPatrimonio() {
                 return (patrimoniosLista.length > 0);
@@ -661,12 +1200,12 @@
                     processResults: function (data) {
                         let patrimoniosResultado = JSON.parse(data["patrimoniosAjax"]);
                         data = patrimoniosResultado.map(function (item) {
-                            console.log(item);
                             return {
-                                id: item["pk"],
-                                text: item["fields"].nombreTituloDemoninacion,
-                                tipoPatrimonio: item["fields"].tipoPatrimonio,
-                                categoria: item["fields"].categoria,
+                                id: item.id,
+                                text: item.nombreTituloDemoninacion,
+                                tipoPatrimonio: item.tipoPatrimonio,
+                                categoria: item.categoria,
+                                estado: item.estado,
                             };
                         });
                         return {results: data};
@@ -677,10 +1216,13 @@
             getEmail();
         });
 
+
         function set_validate() {
             if ($("#estadoSolicitud").val() === "3") {
+                $("#inputDetalle").show();
                 $("#detalleRechazo").attr('required', true);
                 console.log("Campo detalle requerido");
+
                 var settings = $('#formularioActualizarEstado').validate().settings;
                 console.log(settings);
                 $.extend(settings, {
@@ -699,6 +1241,7 @@
                 console.log("Campo detalle no requerido");
 
                 $("#detalleRechazo").attr('required', false);
+                $("#inputDetalle").hide();
                 var settings = $('#formularioActualizarEstado').validate().settings;
                 console.log(settings);
 
@@ -711,6 +1254,7 @@
                 });
             }
         }
+
 
         function validar_campo_detalle() {
 
@@ -733,6 +1277,7 @@
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         traslado_pk: {{ idEditar }},
+                        {#estado: {{ traslado.pk }},#}
                         nuevo_estado: $("#estadoSolicitud").val(),
                         detalle_rechazo: $("#detalleRechazo").val()
                     },
@@ -755,6 +1300,23 @@
             $('#formularioActualizarEstado').submit();
         }
 
+        function actualizarEstado2() {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'actualizar_estado_2'%}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    traslado_pk: {{ idEditar }},
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        }
+
         function getEmail() {
             $.ajax({
                 type: 'POST',
@@ -772,7 +1334,6 @@
                     console.log(response)
                 }
             });
-
         }
 
         function eliminarPatrimonio(btn, idEliminar) {
@@ -796,6 +1357,7 @@
                     ' <td>' + patrimonioAgregar[0].text + '</td>' +
                     '<td>' + patrimonioAgregar[0].categoria + '</td>' +
                     '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
+                    '<td>' + patrimonioAgregar[0].estado + '</td>' +
                     '<td>' +
                     '<button class="btn" href="#" type="button" onclick="eliminarPatrimonio(this,' + patrimonioAgregar[0].id + ')">' +
                     '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +

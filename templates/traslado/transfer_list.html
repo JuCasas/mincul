@@ -143,6 +143,7 @@
                         <option value="3">Rechazada</option>
                         <option value="4">Aprobada</option>
                         <option value="5">Ejecutada</option>
+                        <option value="6">Finalizada</option>
                     </select>
                 </div>
 
@@ -155,10 +156,9 @@
             <table id="tabla_traslados" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
                 <thead class="bg-200">
                 <tr>
-                    <th class="sort ">Nro. Documento</th>
+                    <th class="sort ">Nro. Resolucion</th>
                     <th class="sort">Comisario</th>
                     <th class="sort">Entidad Solicitante</th>
-                    <th class="sort">Fecha llegada</th>
                     <th class="sort">Fecha Salida</th>
                     <th class="sort">Estado</th>
                     <th class="sort">Acciones</th>
@@ -288,10 +288,18 @@
                 });
             },
             "columns": [
-                {"data": "id"},
+                {
+                    "data": "estado",
+                    "data": "numeroResolucion", render: function (data, type, row){
+                        if(row.estado == 1){
+                            return 'PENDIENTE';
+                        }else {
+                            return row.numeroResolucion;
+                        }
+                    },
+                },
                 {"data": "gestorConservacionTraslados"},
                 {"data": "entidadSolicitante"},
-                {"data": "fechaRetornoProgramada"},
                 {"data": "fechaSalidaProgramada"},
                 {
                     "data": "estado", render: function (data, type, row) {
@@ -303,8 +311,10 @@
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Rechazada" + '</span>'
                         } else if (data === '4') {
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Aprobada" + '</span>'
-                        } else {
+                        }  else if (data === '5'){
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-dark">' + "Ejecutada" + '</span>'
+                        } else {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-white">' + "Finalizada" + '</span>'
                         }
                         return resp;
                     },

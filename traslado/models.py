@@ -7,6 +7,13 @@ from mincul_app.models import Documento
 
 
 class EntidadSolicitante(models.Model):
+    ORDER_COLUMN_CHOICES = {
+        '0': 'doiSolicitante',
+        '1': 'nombreSolicitante',
+        '2': 'direccion',
+        '3': 'telefono',
+        '4': 'correo',
+    }
     ESTADOS = (
         ('1', 'Activo'),
         ('2', 'Inactivo'),
@@ -25,12 +32,20 @@ class EntidadSolicitante(models.Model):
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
 
 class SolicitudTraslado(models.Model):
+    ORDER_COLUMN_CHOICES = {
+        '0': 'numeroResolucion',
+        '1': 'gestorConservacionTraslados__first_name',
+        '2': 'entidadSolicitante__nombreSolicitante',
+        '3': 'fechaSalidaProgramada',
+        '4': 'estado',
+    }
     ESTADOS = (
         ('1', 'Registrada'),
         ('2', 'En evaluación'),
         ('3', 'Rechazada'),
         ('4', 'Aprobada'),
         ('5', 'Ejecutada'),
+        ('6', 'Finalizada'),
     )
     TIPOS = (
         ('0', 'Tipo1'),
@@ -45,9 +60,8 @@ class SolicitudTraslado(models.Model):
     departamento = models.CharField(max_length=100, null=True, blank=True)
     numeroResolucion = models.CharField(max_length=200, null=True, blank=True)
     fechaSalidaProgramada = models.DateField(blank=True, null=True, verbose_name='fechaSalidaProgramada')
-    fechaRetornoProgramada = models.DateField(blank=True, null=True, verbose_name='fechaRetornoProgramada')
     fechaSalidaReal = models.DateField(blank=True, null=True, verbose_name='fechaSalidaReal')
-    fechaRetornoReal = models.DateField(blank=True, null=True, verbose_name='fechaRetornoReal')
+    fechaRetorno = models.DateField(blank=True, null=True, verbose_name='fechaRetorno')
     ubigeoDestino = models.IntegerField(blank=True, null=True)
     tipoTraslado = models.CharField(max_length=2, choices=TIPOS, default='1', null=True, blank=True)
     gestorPatrimonio = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,

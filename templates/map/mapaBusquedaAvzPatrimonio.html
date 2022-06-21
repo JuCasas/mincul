@@ -1,0 +1,190 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="../static/lib/flatpickr/flatpickr.min.css" rel="stylesheet">
+    <link href="../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
+
+    <link href="../static/lib/leaflet/leaflet.css" rel="stylesheet">
+    <link href="../static/lib/leaflet.markercluster/MarkerCluster.css" rel="stylesheet">
+    <link href="../static/lib/leaflet.markercluster/MarkerCluster.Default.css" rel="stylesheet">
+    <style></style>
+{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"/>
+    <!-- Crea la ruta -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+{% endblock %}
+
+{% block body %}
+<div class="card mb-3">
+    <div class="row">
+        <!--Barra lateral-->
+        <div class="col-md-4" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
+            <nav class="card mb-3" style="height: 75vh">
+                <div class="navbar-vertical-content">
+                    <div class="position-relative">
+                        <div class="row" style="padding-bottom: 3px">
+                            <div class="col">
+                                <form id="form_buscar" method="post" action={% url 'mapaPatrimonioAvanzado' %} >
+                                    {% csrf_token %}
+                                    <div class="row" style="padding:3px">
+                                        <div class="col">
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <label for="txtBuscar"></label>
+                                                <input name="patrimonio_name" class="form-control" id="txtBuscar"
+                                                       placeholder="Buscar patrimonio...">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding:3px">
+                                        <div class="col">
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <select class="form-control" id="formSelectCategoría" style="padding:3px" name="select_categoria">
+                                                  <option>Categoría</option>
+                                                  <option>Mueble</option>
+                                                  <option>Inmueble</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding:3px">
+                                        <div class="col">
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <select class="form-control" id="formSelectDepartamento" style="padding:3px" name="select_departamento">
+                                                  <option>Departamento</option>
+                                                  <option>Lima Provincia</option>
+                                                  <option>Ucayali</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding:3px">
+                                        <div class="col">
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <select class="form-control" id="formSelectProvincia" style="padding:3px"name="select_provincia">
+                                                  <option>Provincia</option>
+                                                  <option>Barranca</option>
+                                                  <option>Padre Abad</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding:3px">
+                                        <div class="col">
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <select class="form-control" id="formSelectDistrito" style="padding:3px"name="select_distrito">
+                                                  <option>Distrito</option>
+                                                  <option>Supe</option>
+                                                  <option>Padre Abad</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right" style="padding: 10px">
+                                        <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioSimple' %}">
+                                            <u>Cambiar a búsqueda básica</u>
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 3px">
+                            <div class="col">
+                                <div class="position-relative" style="padding: 10px;">
+                                    <button class="btn-primary text-white" type="submit" form="form_buscar">
+                                        Realizar Búsqueda
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% for p in patrimonios %}
+                        <div class="card mb-5" style="padding: 10px">
+                            <div class="position-relative">
+                                <div>
+                                    <img class="img-fluid w-100"
+                                         style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
+                                         src="{{ p.url }}"
+                                         alt="Card image"/>
+                                </div>
+                                <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                                    <p class="card-text "
+                                       style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
+                                        {{ p.nombreTituloDemoninacion }}</p>
+                                </div>
+                            </div>
+                            <div class="card-body pt-2 pb-2">
+                                <p class="mb-0 " style="font-size: 15px"> Patrimonio Cultural de la
+                                    humanidad </p>
+                                {% comment %}
+                                <button class="btn bg-200 mr-1 mb-1 w-100" type="button"
+                                        style="font-size: 10px">
+                                            Ver en el mapa
+                                </button>
+                                {% endcomment %}
+                                <a href="{% url 'detalle' pk=p.pk %}">
+                                    <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
+                                            style="font-size: 10px">
+                                                Ver Ficha
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </nav>
+        </div>
+        <!--Mapa-->
+        <div class="col-md-8">
+            <div class="card" style="width: 100%">
+                <div class="position-relative">
+                    <div id="map" style="height: 75vh; object-fit: cover; border-radius: 3px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="../static/lib/flatpickr/flatpickr.min.js"></script>
+    <script src="{% static 'lib/raty-js/jquery.raty.js' %}"></script>
+
+    <script src="../static/lib/leaflet/leaflet.js"></script>
+    <script src="../static/lib/leaflet.markercluster/leaflet.markercluster.js"></script>
+    <script src="../static/lib/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js"></script>
+
+    <!-- leaflet js cdn -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <!-- ruta entre puntos -->
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <script>
+        // leaflet map with osm tilelayer
+        var map = L.map('map').setView([-9.40, -75.00], 5);
+        var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
+
+        var myIcon = L.icon({
+            iconUrl: '../static/lib/leaflet/images/marker-icon.png',
+            iconSize: [15, 40],
+            iconAnchor: [15,40],
+            popupAnchor: [-1,-39]
+        });
+
+        {% if patrimonio0 %}
+            let markerInicio = L.marker([{{patrimonio0.lat}}, {{patrimonio0.long}}], {
+                icon:myIcon,
+                title: "{{ patrimonio0.nombreTituloDemoninacion }}"
+            }).addTo(map).bindPopup("<div>" +
+                "<p>" + "{{ patrimonio0.nombreTituloDemoninacion }}" +"</p>"  +
+                "<img width='300' src='" +
+                "{{ patrimonio0.url }}" +
+                "'/>" +
+            "</div>").openPopup()
+            map.flyTo([{{ patrimonio0.lat }}, {{patrimonio0.long}}],14);
+        {% endif %}
+    </script>
+{% endblock %}

@@ -1,5 +1,13 @@
 from rest_framework import serializers
-from traslado.models import SolicitudTraslado
+
+from patrimonios.models import Patrimonio
+from traslado.models import SolicitudTraslado, EntidadSolicitante
+
+
+class EntidadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EntidadSolicitante
+        fields = '__all__'
 
 
 class TrasladoSerializer(serializers.ModelSerializer):
@@ -7,7 +15,28 @@ class TrasladoSerializer(serializers.ModelSerializer):
     fechaSalidaProgramada = serializers.DateField(format='%d/%m/%Y', required=False)
     fechaRetornoProgramada = serializers.DateField(format='%d/%m/%Y', required=False)
     entidadSolicitante = serializers.CharField(source='entidadSolicitante.nombreSolicitante')
-    gestorConservacionTraslados = serializers.CharField(source='gestorConservacionTraslados.username')
+    gestorConservacionTraslados = serializers.SerializerMethodField()
+
+    def get_gestorConservacionTraslados(self, obj):
+        return '{} {}'.format(obj.gestorConservacionTraslados.first_name, obj.gestorConservacionTraslados.last_name)
+
     class Meta:
         model = SolicitudTraslado
-        fields = ['id','entidadSolicitante','gestorConservacionTraslados','fechaRetornoProgramada','fechaSalidaProgramada','estado']
+        fields = ['numeroResolucion','id','entidadSolicitante','gestorConservacionTraslados','fechaRetornoProgramada','fechaSalidaProgramada','estado']
+
+
+class PatrimonioSerializer(serializers.ModelSerializer):
+    categoria = serializers.CharField(source='categoria.nombre')
+    tipoPatrimonio = serializers.CharField(source='get_tipoPatrimonio_display')
+    estado = serializers.CharField(source='get_estado_display')
+
+    # tipoPatrimonio = serializers.SerializerMethodField()
+    #
+    # def get_gestorConservacionTraslados(self, obj):
+    #     return '{} {}'.format(obj.gestorConservacionTraslados.first_name, obj.gestorConservacionTraslados.last_name)
+
+    class Meta:
+        model = Patrimonio
+        fields = ['id','nombreTituloDemoninacion','categoria','tipoPatrimonio', 'estado']
+
+
