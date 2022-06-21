@@ -803,6 +803,16 @@
             return (fechaFin > fechaIni);
         }, "Letters, numbers, and underscores only please");
 
+        jQuery.validator.addMethod("validarFechasDos", function (value, element) {
+            var fechainicial = document.getElementById("fechaSalidaProgramada").value;
+            var fechafinal = document.getElementById("fechaSalidaReal").value;
+
+            var fechaIni = new Date(fechainicial);
+            var fechaFin = new Date(fechafinal);
+
+            return (fechaFin >= fechaIni);
+        }, "Letters, numbers, and underscores only please");
+
         jQuery.validator.addMethod("validarFechaMayor", function (value, element) {
             var fechaSalidaProgramada = document.getElementById("fechaSalidaProgramada").value;
 
@@ -853,7 +863,8 @@
                 },
                 fechaSalidaReal:{
                     required: true,
-                    validarFechaMayor:true
+                    validarFechaMayor:true,
+                    validarFechasDos: true,
                 }
             },
             messages: {
@@ -884,7 +895,8 @@
                 },
                 fechaSalidaReal:{
                     required: "Ingrese una fecha de salida real",
-                    validarFechaMayor: "Ingrese una fecha posterior a la actual"
+                    validarFechaMayor: "Ingrese una fecha posterior a la actual",
+                    validarFechasDos: "La fecha de salida real debe ser igual o posterior a la programada"
                 }
             },
             submitHandler: function (form, e) {
