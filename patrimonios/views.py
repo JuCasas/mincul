@@ -1,44 +1,69 @@
 import json
-from types import SimpleNamespace
+from datetime import datetime
 
-from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.template.loader import get_template
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-
+from authentication.models import User
+from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
-    ActividadTuristica
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.template.loader import get_template
-from django.core.mail import EmailMultiAlternatives
-from authentication.models import User
+    ActividadTuristica, Responsable
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
-from incidente.models import Incidente
-from mincul.settings import ALLOWED_HOSTS
+
 
 def patrimonio_list(request):
 
     if request.POST:
-        print('POST')
         file = request.FILES['file']
         data = json.load(file)
-        #beautify = json.dumps(data, indent=4)
-        #print(beautify)
+        # beautify = json.dumps(data, indent=4)
+        # print(beautify)
         for pat in data:
-            patrimonio = Patrimonio()
+            if len(Patrimonio.objects.filter(nombreTituloDemoninacion=pat['nombre']))==0:
+                patrimonio = Patrimonio()
+                patrimonio.nombreTituloDemoninacion = pat['nombre']
+                patrimonio.codigo = pat['codigo']
+                patrimonio.departamento = pat['departamento']
+                patrimonio.provincia = pat['provincia']
+                patrimonio.distrito = pat['distrito']
+                patrimonio.lat = pat['latitud']
+                patrimonio.long = pat['longitud']
+                patrimonio.descripcion = pat['descripcion']
+                patrimonio.observacion = pat['observaciones']
 
-            print('Nombre:',pat['nombre'])
+                cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
+                patrimonio.tipoPatrimonio = int(cat.tipo)
+                patrimonio.categoria = cat
+
+                resp = Responsable.objects.filter(nombre=pat['responsable']['nombreResponsable'])
+                if len(resp) > 0:
+                    resp = Responsable.objects.get(nombre=pat['responsable']['nombreResponsable'])
+                else:
+                    resp = Responsable()
+                    resp.institucion = pat['responsable']['institucionLlenadoFicha']
+                    resp.nombre = pat['responsable']['nombreResponsable']
+                    resp.cargo = pat['responsable']['cargo']
+                    resp.correo = pat['responsable']['correo']
+                    resp.telefono = pat['responsable']['telefono']
+                    resp.fecha = datetime.strptime(pat['responsable']['fecha'],"%d/%m/%Y")
+                    resp.save()
+                patrimonio.save()
+                patrimonio.responsables.add(resp)
+                patrimonio.save()
+                print(patrimonio.nombreTituloDemoninacion)
 
     context = {
         'patrimonios': Patrimonio.objects.all()
     }
-
 
     return render(request, 'patrimonio/patrimony_list.html', context=context)
 
