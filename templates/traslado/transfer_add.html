@@ -789,6 +789,10 @@
             return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-[SM][TC]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
+        jQuery.validator.addMethod("regexDestino", function (value, element) {
+            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\s+\.]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
         jQuery.validator.addMethod("validarFechas", function (value, element) {
             var fechainicial = document.getElementById("fechaSalidaReal").value;
             var fechafinal = document.getElementById("fechaRetornoReal").value;
@@ -799,12 +803,23 @@
             return (fechaFin > fechaIni);
         }, "Letters, numbers, and underscores only please");
 
+        jQuery.validator.addMethod("validarFechaMayor", function (value, element) {
+            var fechaSalidaProgramada = document.getElementById("fechaSalidaProgramada").value;
+
+            var fechaIni = new Date();
+            fechaIni.setHours(0,0,0,0);
+            console.log(fechaIni)
+            var fechaFin = new Date(fechaSalidaProgramada);
+
+            return (fechaFin > fechaIni);
+        }, "Letters, numbers, and underscores only please");
+
         $("form[name='formAgregar']").validate({
             rules: {
                 destino: {
                     required: true,
                     maxlength: 100,
-                    alphanumeric: true
+                    regexDestino: true
                 },
                 nombreExposicion: {
                     required: true,
@@ -834,21 +849,23 @@
                 },
                 fechaSalidaProgramada:{
                     required: true,
+                    validarFechaMayor: true,
                 },
                 fechaSalidaReal:{
                     required: true,
+                    validarFechaMayor:true
                 }
             },
             messages: {
                 destino: {
                     required: "Debe ingresar el destino del traslado",
                     maxlength: "El destino no debe tener más de 100 caracteres",
-                    alphanumeric: "El destino solo debe contener carácteres alfanuméricos"
+                    regexDestino: "El destino solo debe contener carácteres alfanuméricos"
                 },
                 nombreExposicion: {
                     required: "Debe ingresar el nombre de la Exposición",
                     maxlength: "El nombre de la exposición no debe tener más de 100 caracteres",
-                    alphanumericNombreExpo: "El destino solo debe contener carácteres alfanuméricos incluido" +
+                    alphanumericNombreExpo: "El nombre de la exposición solo debe contener carácteres alfanuméricos incluido" +
                         " guión(-) y guión bajo (_)"
                 },
                 nResolucion: {
@@ -863,9 +880,11 @@
                 },
                 fechaSalidaProgramada:{
                     required: "Ingrese una fecha de salida programada",
+                    validarFechaMayor: "Ingrese una fecha posterior a la actual"
                 },
                 fechaSalidaReal:{
                     required: "Ingrese una fecha de salida real",
+                    validarFechaMayor: "Ingrese una fecha posterior a la actual"
                 }
             },
             submitHandler: function (form, e) {
