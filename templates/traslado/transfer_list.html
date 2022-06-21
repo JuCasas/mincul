@@ -290,10 +290,10 @@
             "columns": [
                 {
                     "data": "estado",
-                    "data": "numeroResolucion", render: function (data, type, row){
-                        if(row.estado == 1){
+                    "data": "numeroResolucion", render: function (data, type, row) {
+                        if (row.estado == 1) {
                             return 'PENDIENTE';
-                        }else {
+                        } else {
                             return row.numeroResolucion;
                         }
                     },
@@ -311,7 +311,7 @@
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Rechazada" + '</span>'
                         } else if (data === '4') {
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Aprobada" + '</span>'
-                        }  else if (data === '5'){
+                        } else if (data === '5') {
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-dark">' + "Ejecutada" + '</span>'
                         } else {
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-white">' + "Finalizada" + '</span>'
@@ -321,9 +321,14 @@
                 },
 
                 {
+                    "data": "estado",
                     "data": "id", render: function (data, type, row) {
-                        resp = '<button type="button" class="btn btn-show" onclick="visualizarTraslado(' + data + ')"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-                            '<button type="button" class="btn btn-edit" onclick="editarTraslado(' + data + ')" ><i class="fas fa-edit""></i></button>' + '&nbsp;&nbsp';
+                        if (row.estado === '3' || row.estado === '6') {
+                            resp = '<button type="button" class="btn btn-show" onclick="visualizarTraslado(' + row.id + ')"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' ;
+                        } else {
+                            resp = '<button type="button" class="btn btn-show" onclick="visualizarTraslado(' + row.id + ')"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit" onclick="editarTraslado(' + row.id + ')" ><i class="fas fa-edit""></i></button>' + '&nbsp;&nbsp';
+                        }
                         return resp;
                     },
                     "orderable": false,
