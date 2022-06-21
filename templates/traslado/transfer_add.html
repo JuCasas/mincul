@@ -786,7 +786,7 @@
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("regexResolucion", function (value, element) {
-            return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-[SM][TC]+$/i.test(value);
+            return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-ST\/MC+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("regexDestino", function (value, element) {
