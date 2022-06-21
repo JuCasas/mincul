@@ -31,7 +31,7 @@
                                 <img class="img-fluid w-100"
                                      style="height: 320px; object-fit: cover; border-radius: 3px"
                                         {#                                         src="../static/img/generic/4-caral.jpg"#}
-                                     src="https://www.peru.travel/Contenido/Noticia/Imagen/es/1320/1.0/Principal/caral.jpg"
+                                     src="{{ patrimony.url}}"
                                      alt="Card image"/>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            0000367079
+                                            {{ patrimony.codigo }}
                                         </div>
                                     </div>
                                 </div>
@@ -98,10 +98,12 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == 1 %}
-                                                Mueble
+                                            {% if patrimony.tipoPatrimonio == "1" %}
+                                                Inmaterial
+                                            {% elif patrimony.tipoPatrimonio == "2" %}
+                                                Material Inmueble
                                             {% else %}
-                                                Inmueble
+                                                Material Mueble
                                             {% endif %}
                                         </div>
                                     </div>
@@ -212,7 +214,12 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            --
+                                            <!--Tiene autor solo si no es Inmueble-->
+                                            {% if patrimony.tipoPatrimonio != "2" %}
+                                                Tiene autor
+                                            {% else %}
+                                                --
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

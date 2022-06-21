@@ -31,7 +31,7 @@
                             {% csrf_token %}
                             <label for="txtBuscar"></label>
                             <input name="patrimonio_name" class="form-control" id="txtBuscar" placeholder="Buscar patrimonio...">
-                            <div class="text-right" style="padding: 3px">
+                            <div class="text-right" style="padding-bottom: 3px">
                                 <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioAvanzado' %}">
                                     <u>Cambiar a búsqueda avanzada</u>
                                 </a>
@@ -39,48 +39,64 @@
                         </form>
                     </div>
                 </div>
-                <div class="row" style="padding: 5px">
+                <div class="row" style="padding-bottom: 5px">
                     <div class="col">
                         <button class="btn-primary text-white" type="submit" form="form_buscar">
                             Realizar Búsqueda
                         </button>
                     </div>
                 </div>
-                {% for p in patrimonios %}
-                    <div class="card mb-5" style="padding: 3px">
-                        <div class="position-relative">
-                            <div>
-                                <img class="img-fluid w-100"
-                                     style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                     src="{{ p.url }}"
-                                     alt="Card image"/>
-                            </div>
-                            <div class="card-img-overlay d-flex align-items-end text-white pb-2">
-                                <p class="card-text "
-                                   style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
-                                    {{ p.nombreTituloDemoninacion }}</p>
-                            </div>
-                        </div>
-                        <div class="card-body pt-2 pb-2">
-                            <p class="mb-0 " style="font-size: 15px"> Patrimonio Cultural de la
-                                humanidad </p>
-                            {% comment %}
-                            <a href=#>
-                                <button class="btn bg-200 mr-1 mb-1 w-100" type="button"
-                                        style="font-size: 10px">
-                                            Ver en el mapa
-                                </button>
-                            </a>
-                            {% endcomment %}
-                            <a href="{% url 'detalle' pk=p.pk %}">
-                                <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
-                                        style="font-size: 10px">
-                                            Ver Ficha
-                                </button>
-                            </a>
+                <!--if queried, then it must show the # of results given, including case 0-->
+                {% if success != -1 %}
+                    <div class="row">
+                        <div class="col">
+                            {% if success == 0 %}
+                            <p>No se encontraron resultados</p>
+                            {% elif success == 1 %}
+                                {% if lensearch == 1 %}
+                                    <p> Se encontró {{  lensearch }} resultado</p>
+                                {% else %}
+                                    <p> Se encontraron {{  lensearch }} resultados</p>
+                                {% endif %}
+                            {% else %}
+                                    <!--Nothing-->
+                            {% endif %}
                         </div>
                     </div>
-                {% endfor %}
+                    {% for p in patrimonios %}
+                        <div class="card mb-5" style="padding-bottom: 2px">
+                            <div class="position-relative">
+                                <div>
+                                    <img class="img-fluid w-100"
+                                         style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
+                                         src="{{ p.url }}"
+                                         alt="Card image"/>
+                                </div>
+                                <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                                    <p class="card-text "
+                                       style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
+                                        {{ p.nombreTituloDemoninacion }}</p>
+                                </div>
+                            </div>
+                            <div class="card-body pt-2 pb-2">
+                                <p class="mb-0 " style="font-size: 15px"> Patrimonio Cultural de la
+                                    humanidad </p>
+                                {% comment %}
+                                <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                        value="[{{ p.lat }}, {{ p.long }}]" name="btn-ver-mapa">
+                                            Ver en el mapa
+                                </button>
+                                {% endcomment %}
+                                <a href="{% url 'detalle' pk=p.pk %}">
+                                    <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
+                                            style="font-size: 10px">
+                                                Ver Ficha
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </nav>
         </div>
@@ -131,8 +147,15 @@
                 "<img width='300' src='" +
                 "{{ patrimonio0.url }}" +
                 "'/>" +
-            "</div>")
+            "</div>").openPopup()
             map.flyTo([{{ patrimonio0.lat }}, {{patrimonio0.long}}],14);
         {% endif %}
     </script>
+    {% comment %}
+    <script>
+        document.getElementById('btn-ver-mapa').addEventListener('click',function (e){
+            console.log(e.target)
+        })
+    </script>
+    {% endcomment %}
 {% endblock %}
