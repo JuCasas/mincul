@@ -21,39 +21,37 @@
 <div class="card mb-3">
     <div class="row">
         <!--Barra lateral-->
-        <div class="col-md-4" style="padding-left:30px; padding-top: 15px;">
+        <div class="col-md-4" style="padding-left:30px; padding-top: 15px; overflow-y: scroll; ">
             <nav class="card mb-3" style="height: 75vh">
             <!-- Content-->
             <div class="navbar-vertical-content">
                 <div class="row" style="padding-bottom: 3px">
                     <div class="col">
-                        <div id="form_buscar" class="form-group col-sm-12 mb-0" method="post" action={% url 'mapaPatrimonioSimple' %} >
+                        <form id="form_buscar" method="post" action={% url 'mapaPatrimonioSimple' %} >
                             {% csrf_token %}
-                            <div class="position-relative">
+                            <div class="position-relative" style="padding: 10px;">
                                 <label for="txtBuscar"></label>
                                 <input name="patrimonio_name" class="form-control" id="txtBuscar" placeholder="Buscar patrimonio...">
                             </div>
-                            <div class="text-right" style="padding: 3px">
-                            <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioAvanzado' %}">
-                                <u>Cambiar a búsqueda avanzada</u>
-                            </a>
+                            <div class="text-right" style="padding: 10px">
+                                <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioAvanzado' %}">
+                                    <u>Cambiar a búsqueda avanzada</u>
+                                </a>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="padding: 5px">
                     <div class="col">
-                        <div class="form-group col-sm-12 mb-0">
-                            <div class="position-relative">
-                                <button class="btn-primary text-white" type="submit" form="form_buscar">
-                                    Realizar Búsqueda
-                                </button>
-                            </div>
+                        <div class="position-relative" style="padding: 5px;">
+                            <button class="btn-primary text-white" type="submit" form="form_buscar">
+                                Realizar Búsqueda
+                            </button>
                         </div>
                     </div>
                 </div>
                 {% for p in patrimonios %}
-                    <div class="card mb-5" style="padding: 3px">
+                    <div class="card mb-5" style="padding: 10px;margin-top: 10px;">
                         <div class="position-relative">
                             <div>
                                 <img class="img-fluid w-100"

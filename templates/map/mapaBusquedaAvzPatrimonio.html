@@ -18,12 +18,12 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="card mb-3">
     <div class="row">
         <!--Barra lateral-->
-        <div class="col-md-4">
+        <div class="col-md-4" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
             <nav class="card mb-3" style="height: 75vh">
-                <div class="navbar-vertical-content scrollbar perfect-scrollbar">
+                <div class="navbar-vertical-content">
                     <div class="position-relative">
                         <div class="row" style="padding-bottom: 3px">
                             <div class="col">
@@ -31,48 +31,58 @@
                                     {% csrf_token %}
                                     <div class="row" style="padding:3px">
                                         <div class="col">
-                                            <label for="txtBuscar"></label>
-                                            <input name="patrimonio_name" class="form-control" id="txtBuscar"
-                                                   placeholder="Buscar patrimonio...">
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <label for="txtBuscar"></label>
+                                                <input name="patrimonio_name" class="form-control" id="txtBuscar"
+                                                       placeholder="Buscar patrimonio...">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row" style="padding:3px">
                                         <div class="col">
-                                            <select class="form-control" id="formSelectCategoría" style="padding:3px" name="select_categoria">
-                                              <option>Categoría</option>
-                                              <option>Mueble</option>
-                                              <option>Inmueble</option>
-                                            </select>
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <select class="form-control" id="formSelectCategoría" style="padding:3px" name="select_categoria">
+                                                  <option>Categoría</option>
+                                                  <option>Mueble</option>
+                                                  <option>Inmueble</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row" style="padding:3px">
                                         <div class="col">
-                                            <select class="form-control" id="formSelectDepartamento" style="padding:3px" name="select_departamento">
-                                              <option>Departamento</option>
-                                              <option>Lima Provincia</option>
-                                              <option>Ucayali</option>
-                                            </select>
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <select class="form-control" id="formSelectDepartamento" style="padding:3px" name="select_departamento">
+                                                  <option>Departamento</option>
+                                                  <option>Lima Provincia</option>
+                                                  <option>Ucayali</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row" style="padding:3px">
                                         <div class="col">
-                                            <select class="form-control" id="formSelectProvincia" style="padding:3px"name="select_provincia">
-                                              <option>Provincia</option>
-                                              <option>Barranca</option>
-                                              <option>Padre Abad</option>
-                                            </select>
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <select class="form-control" id="formSelectProvincia" style="padding:3px"name="select_provincia">
+                                                  <option>Provincia</option>
+                                                  <option>Barranca</option>
+                                                  <option>Padre Abad</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row" style="padding:3px">
                                         <div class="col">
-                                            <select class="form-control" id="formSelectDistrito" style="padding:3px"name="select_distrito">
-                                              <option>Distrito</option>
-                                              <option>Supe</option>
-                                              <option>Padre Abad</option>
-                                            </select>
+                                            <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+                                                <select class="form-control" id="formSelectDistrito" style="padding:3px"name="select_distrito">
+                                                  <option>Distrito</option>
+                                                  <option>Supe</option>
+                                                  <option>Padre Abad</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="text-right" style="padding: 3px">
+                                    <div class="text-right" style="padding: 10px">
                                         <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioSimple' %}">
                                             <u>Cambiar a búsqueda básica</u>
                                         </a>
@@ -82,14 +92,16 @@
                         </div>
                         <div class="row" style="padding: 3px">
                             <div class="col">
-                                <button class="btn-primary text-white" type="submit" form="form_buscar">
-                                    Realizar Búsqueda
-                                </button>
+                                <div class="position-relative" style="padding: 10px;">
+                                    <button class="btn-primary text-white" type="submit" form="form_buscar">
+                                        Realizar Búsqueda
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                     {% for p in patrimonios %}
-                        <div class="card mb-5" style="padding: 3px">
+                        <div class="card mb-5" style="padding: 10px">
                             <div class="position-relative">
                                 <div>
                                     <img class="img-fluid w-100"
