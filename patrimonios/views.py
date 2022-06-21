@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 
 from django.core.mail import EmailMultiAlternatives
+from django.db.models.lookups import In
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import get_template
@@ -17,6 +18,7 @@ from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
     ActividadTuristica, Responsable
+from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
 
@@ -161,23 +163,17 @@ def detalle_museo(request, pk):
     institucion = Institucion.objects.get(pk=pk)
     #lista de patrimonio dentro del museo
     patrimonios = Patrimonio.objects.filter(institucion_id=pk)
-
-    #lista de valoraciones de esos patrimonios
-    list_pat = list(Patrimonio.objects.filter(institucion_id=pk).values_list('pk', flat=True))
-    valoraciones = PatrimonioValoracion.objects.filter(patrimonio_id__in=list_pat).filter(estado=2)
-
+    #lista de valoraciones general de la institucion
+    valoraciones = PatrimonioValoracion.objects.filter(zona__institucion_id=pk).filter(estado=2)
     #lista de incidentes
-
-
-
-
-
+    incidentes = Incidente.objects.filter(zona__institucion_id=pk)
 
     context = {"valor": valor,
                "area": area,
                "institucion": institucion,
                "patrimonios": patrimonios,
-               "valoraciones": valoraciones}
+               "valoraciones": valoraciones,
+               "incidentes": incidentes}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
 

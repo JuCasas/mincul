@@ -163,7 +163,19 @@
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white">
-
+                                {% for inci in incidentes %}
+                                    <tr>
+                                        <td class="align-middle">
+                                            {{ forloop.counter}}
+                                        </td>
+                                        <td class="align-middle">
+                                            {{ inci.descripcion|default:'-' }}
+                                        </td>
+                                        <td class="align-middle">
+                                            {{ inci.fechaOcurrencia|date:'d/m/Y'|default:'-'}}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
                                 </tbody>
                             </table>
                       </div>
