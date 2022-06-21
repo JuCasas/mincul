@@ -50,8 +50,9 @@
                                         <div class="col">
                                             <select class="form-control" id="formSelectDepartamento" style="padding:3px" name="select_departamento">
                                               <option>Departamento</option>
-                                              <option>Lima Provincia</option>
-                                              <option>Ucayali</option>
+                                              {%  for dep in departamentos %}
+                                                <option> {{ dep }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
