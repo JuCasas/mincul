@@ -1,0 +1,426 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Administrador",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Gestor de Patrimonio",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "Conservador",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+      "name": "Gestor de Conservaci�n y Traslados",
+      "permissions": []
+    }
+  },
+  {
+    "model": "patrimonios.institucion",
+    "pk": 1,
+    "fields": {
+      "nombre": "PUCP",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.propietario",
+    "pk": 1,
+    "fields": {
+      "nombre": "Juan",
+      "doi": "76827286",
+      "direccion": "Av. Universitaria 1801",
+      "telefono": "962831090",
+      "correo": "juancasas29@gmail.com",
+      "estado": "1"
+    }
+  },
+  {
+    "model": "patrimonios.patrimonio",
+    "pk": 1,
+    "fields": {
+      "tituloDemoninacion": "Cabeza Clava",
+      "datacion": "2022-05-26",
+      "observacion": "Cabeza en buen estado",
+      "direccion": "Sierra norte del Per�",
+      "departamento": "-",
+      "provincia": "-",
+      "distrito": "-",
+      "tipoPatrimonio": "1",
+      "categoria": "1",
+      "subcategoria": "2",
+      "gestor": 1,
+      "institucion": 1,
+      "estado": "1",
+      "propietarios": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "patrimonios.patrimonio",
+    "pk": 2,
+    "fields": {
+      "tituloDemoninacion": "Chav�n de Hu�ntar",
+      "datacion": "2022-05-26",
+      "observacion": "Hola",
+      "direccion": "�ncash",
+      "departamento": "�ncash",
+      "provincia": "�ncash",
+      "distrito": "�ncash",
+      "tipoPatrimonio": "1",
+      "categoria": "2",
+      "subcategoria": "1",
+      "gestor": 1,
+      "institucion": 1,
+      "estado": "1",
+      "propietarios": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "patrimonios.patrimonio",
+    "pk": 3,
+    "fields": {
+      "tituloDemoninacion": "Piquillacta",
+      "datacion": "2022-05-26",
+      "observacion": "Hola",
+      "direccion": "Cuzco",
+      "departamento": "Cuzco",
+      "provincia": "Cuzco",
+      "distrito": "Cuzco",
+      "tipoPatrimonio": "1",
+      "categoria": "1",
+      "subcategoria": "1",
+      "gestor": 1,
+      "institucion": 1,
+      "estado": "1",
+      "propietarios": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 1,
+    "fields": {
+      "codigo": "PC104",
+      "nombre": "Plan de Conservacion Norte",
+      "descripcion": "Plan de conservaci�n en zona norte",
+      "fechaInicio": "2022-05-17",
+      "fechaFin": "2022-05-25",
+      "tipoProyecto": "1",
+      "responsable": 1,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 2,
+    "fields": {
+      "codigo": "PC120",
+      "nombre": "Plan de Conservacion Sur",
+      "descripcion": "Plan de conservaci�n en zona sur",
+      "fechaInicio": "2022-05-17",
+      "fechaFin": "2022-05-24",
+      "tipoProyecto": "1",
+      "responsable": 1,
+      "estado": "2",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 3,
+    "fields": {
+      "codigo": "PC201",
+      "nombre": "Plan de Conservacion Oeste",
+      "descripcion": "Plan de conservaci�n en zona oeste",
+      "fechaInicio": "2022-05-08",
+      "fechaFin": "2022-05-15",
+      "tipoProyecto": "1",
+      "responsable": 1,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 4,
+    "fields": {
+      "codigo": "PC502",
+      "nombre": "Plan Correctivo 1",
+      "descripcion": "Plan de conservaci�n correctivo 1",
+      "fechaInicio": "2022-05-24",
+      "fechaFin": "2022-05-25",
+      "tipoProyecto": "1",
+      "responsable": 1,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 6,
+    "fields": {
+      "codigo": "PC602",
+      "nombre": "Plan Correctivo 2",
+      "descripcion": "Plan de conservaci�n correctivo 2",
+      "fechaInicio": "2022-05-08",
+      "fechaFin": "2022-05-16",
+      "tipoProyecto": "1",
+      "responsable": 1,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 7,
+    "fields": {
+      "codigo": "PC701",
+      "nombre": "Plan Correctivo 3",
+      "descripcion": "Plan de conservaci�n correctivo 3",
+      "fechaInicio": "2022-05-08",
+      "fechaFin": "2022-05-09",
+      "tipoProyecto": "1",
+      "responsable": 1,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 8,
+    "fields": {
+      "codigo": "PR120",
+      "nombre": "Prueba",
+      "descripcion": "",
+      "fechaInicio": "2022-05-27",
+      "fechaFin": "2022-05-27",
+      "tipoProyecto": "0",
+      "responsable": null,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 9,
+    "fields": {
+      "codigo": "PR2",
+      "nombre": "PRUEBA 23",
+      "descripcion": "",
+      "fechaInicio": "2022-05-27",
+      "fechaFin": "2022-05-27",
+      "tipoProyecto": "0",
+      "responsable": null,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 10,
+    "fields": {
+      "codigo": "PRUE1",
+      "nombre": "WEWE",
+      "descripcion": "",
+      "fechaInicio": "2022-05-27",
+      "fechaFin": "2022-05-27",
+      "tipoProyecto": "0",
+      "responsable": null,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 11,
+    "fields": {
+      "codigo": "AAA",
+      "nombre": "AAAS",
+      "descripcion": "",
+      "fechaInicio": "2022-05-27",
+      "fechaFin": "2022-05-27",
+      "tipoProyecto": "0",
+      "responsable": null,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 12,
+    "fields": {
+      "codigo": "WE12",
+      "nombre": "ASDS",
+      "descripcion": "",
+      "fechaInicio": "2022-05-27",
+      "fechaFin": "2022-05-27",
+      "tipoProyecto": "0",
+      "responsable": null,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "conservacion.proyectoconservacion",
+    "pk": 13,
+    "fields": {
+      "codigo": "ERED",
+      "nombre": "ASA3",
+      "descripcion": "",
+      "fechaInicio": "2022-05-27",
+      "fechaFin": "2022-05-27",
+      "tipoProyecto": "0",
+      "responsable": null,
+      "estado": "1",
+      "documentos": [],
+      "patrimonios": [],
+      "incidentes": []
+    }
+  },
+  {
+    "model": "traslado.entidadsolicitante",
+    "pk": 1,
+    "fields": {
+      "doiSolicitante": "123",
+      "nombreSolicitante": "Entidad 1",
+      "correo": "ent@ent.pe",
+      "direccion": "Av Ent",
+      "pais": "Peru",
+      "telefono": "+51962831090"
+    }
+  },
+  {
+    "model": "traslado.entidadsolicitante",
+    "pk": 2,
+    "fields": {
+      "doiSolicitante": "111",
+      "nombreSolicitante": "Entidad Especial 2",
+      "correo": "en@ens.es",
+      "direccion": "Av Esp",
+      "pais": "Argentina",
+      "telefono": "+52549206"
+    }
+  },
+  {
+    "model": "traslado.entidadsolicitante",
+    "pk": 3,
+    "fields": {
+      "doiSolicitante": "234",
+      "nombreSolicitante": "Gobierno Americano",
+      "correo": "ame@gob.com",
+      "direccion": "Av Pizza",
+      "pais": "USA",
+      "telefono": "+1451288962"
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$RAc5GytAr3UAYdsONe6YNw$lz340wF2mb1YyT+aVFVMtk9hu+tYdP5alq/cxVtaIr8=",
+      "last_login": "2022-05-26T20:43:03.184Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin@admin.pe",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-05-26T20:42:50.279Z",
+      "doi": "",
+      "celular": "",
+      "groups": [
+        1,
+        3,
+        4
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$hHUkCTELrqYd53hQDudL2S$BMxMPVgw7uAYf3gimkH071PcQejXGXUI+lcNSo23xOw=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "gestor1",
+      "first_name": "",
+      "last_name": "",
+      "email": "gest@gfes.pe",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-05-28T16:38:29.418Z",
+      "doi": "",
+      "celular": "",
+      "groups": [
+        4
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$j84u7Y6WsjiJK6QrefJ0I6$nZzo123+c1qoPvSVXQce1c5AM7Hb4PgkJjnpS18zON0=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "gestorpatrimonio",
+      "first_name": "",
+      "last_name": "",
+      "email": "ges@ee.pe",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-05-28T16:39:20.190Z",
+      "doi": "",
+      "celular": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

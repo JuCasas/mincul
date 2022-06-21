@@ -7,14 +7,29 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <link href="../../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
     <style>
-        leaflet-routing-alternatives-container{
-            display: none; !important;
+        .filtrosBusqueda{
+            margin-left: 6rem;
+            width: 20rem;
         }
     </style>
 {% endblock %}
 
 {% block body %}
+    <div class="filtrosBusqueda">
+        <div class="row">
+            <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
+        </div>
+        <br>
+        <div class="row">
+            <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
+        </div>
+        <br>
+        <button id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
+    </div>
+    <br>
     <div class="col-md-10 offset-md-1" id="map" style="width:100%;height:100vh">
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -28,69 +43,136 @@
 {% block extrajs %}
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh5T6LTIqW_gSbFZITGcZFJkOVHsqqrMY"></script>
     <script>
+        const LATITUD_CENTRO_PERU=-11;
+        const LONGITUD_CENTRO_PERU=-77;
+        const ZOOM_CENTRO_PERU=6;
+
         $(document).ready(function () {
+            
+        });
+        var zoomActual=0;
+        var map = L.map('map').setView([LATITUD_CENTRO_PERU, LONGITUD_CENTRO_PERU],ZOOM_CENTRO_PERU);
+        var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
+        var geocoder = new google.maps.Geocoder();
+        var controlRuta = null;
+        var grupoMarcadores = L.layerGroup().addTo(map);
+        var puntoPartidaIcon = L.icon({
+            iconUrl : '../../static/img/icons/punto-partida.png',
+            iconSize: [24,35]
+        });
+        var puntoLlegadaIcon = L.icon({
+            iconUrl : '../../static/img/icons/punto-llegada.png',
+            iconSize: [24,35]
+        });
+        var institucionesIcon = L.icon({
+            iconUrl : '../../static/img/icons/instituciones.png',
+            iconSize: [30,30]
+        });
+        var patrimonioIcon = L.icon({
+            iconUrl : '../../static/img/icons/patrimonios.png',
+            iconSize: [30,30]
+        });
+        var inmaterialesIcon = L.icon({
+            iconUrl : '../../static/img/icons/inmateriales.png',
+            iconSize: [30,30]
+        })
+        var leyenda = L.control({position: 'bottomleft'});
+        leyenda.onAdd = function (map){
+            var div = L.DomUtil.create('div', 'info leyenda');
+            div.innerHTML +=
+                '<img alt="leyenda" src="../../static/img/icons/leyenda.png" width="550" height="40" />';
+            return div;
+        }
+        leyenda.addTo(map);
+        /*let markerInicio = L.marker([data.puntosRuta[0].lat, data.puntosRuta[0].long], {
+            icon: puntoPartidaIcon,
+            title: data.puntosRuta[0].nombre
+        }).addTo(map).bindPopup('<div>' +
+            '<h3 style="text-align: center">'+data.puntosRuta[0].nombre+'</h3>'+
+            '<img src="'+ data.puntosRuta[0].imagen+'" height="100px" width="300px"/>'+
+            '</div>');
+        let markerLlegada = L.marker([data.puntosRuta[1].lat, data.puntosRuta[1].long], {
+            icon: puntoLlegadaIcon,
+            title: data.puntosRuta[0].nombre
+        }).addTo(map).bindPopup('<div>' +
+            '<h3 style="text-align: center">'+data.puntosRuta[1].nombre+'</h3>'+
+            '<img src="'+ data.puntosRuta[1].imagen+'" height="100px" width="300px"/>'+
+            '</div>');*/
+
+        /*for(let i=1;i<data.puntosRuta.length-1;i++){ //Por si después hay más de un punto de interés en la ruta
+            let marker = L.marker([data.puntosRuta[i].lat, data.puntosRuta[i].long], {
+                icon: puntoLlegadaIcon,
+                title: data.puntosRuta[i].nombre
+            }).addTo(map).bindPopup('<div>' +
+                '<h3 style="text-align: center">'+data.puntosRuta[i].nombre+'</h3>'+
+                '<img src="'+ data.puntosRuta[i].imagen+'" height="100px" width="300px"/>'+
+                '</div>');
+        }*/
+        /*function pruebaRecibirJSON(){
             $.ajax({
                 type: "POST",
-                url: "/mapa_patrimonio/mapa/datos",
+                url: "/mapa_patrimonio/mapa/prueba",
                 data: {
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
                 },
                 success: function (data) {
-                    console.log(data);
-                    console.log(data.puntoMedio);
-                    console.log(data.puntoMedio.lat);
-                    var map = L.map('map').setView([data.puntoMedio.lat, data.puntoMedio.long],data.acercamiento);
-                    var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
-                    var puntoPartidaIcon = L.icon({
-                        iconUrl : '../../static/img/icons/punto-partida.png',
-                        iconSize: [24,35]
-                    });
-                    var puntoLlegadaIcon = L.icon({
-                        iconUrl : '../../static/img/icons/punto-llegada.png',
-                        iconSize: [24,35]
-                    });
-
-                    let markerInicio = L.marker([data.puntosRuta[0].lat, data.puntosRuta[0].long], {
-                        icon: puntoPartidaIcon,
-                        title: data.puntosRuta[0].nombre
-                    }).addTo(map).bindPopup('<div>' +
-                        '<h3 style="text-align: center">'+data.puntosRuta[0].nombre+'</h3>'+
-                        '<img src="'+ data.puntosRuta[0].imagen+'" height="100px" width="300px"/>'+
-                        '</div>');
-                    let markerLlegada = L.marker([data.puntosRuta[1].lat, data.puntosRuta[1].long], {
-                        icon: puntoLlegadaIcon,
-                        title: data.puntosRuta[0].nombre
-                    }).addTo(map).bindPopup('<div>' +
-                        '<h3 style="text-align: center">'+data.puntosRuta[1].nombre+'</h3>'+
-                        '<img src="'+ data.puntosRuta[1].imagen+'" height="100px" width="300px"/>'+
-                        '</div>');
-                    /*for(let i=1;i<data.puntosRuta.length-1;i++){ //Por si después hay más de un punto de interés en la ruta
-                        let marker = L.marker([data.puntosRuta[i].lat, data.puntosRuta[i].long], {
-                            icon: puntoLlegadaIcon,
-                            title: data.puntosRuta[i].nombre
-                        }).addTo(map).bindPopup('<div>' +
-                            '<h3 style="text-align: center">'+data.puntosRuta[i].nombre+'</h3>'+
-                            '<img src="'+ data.puntosRuta[i].imagen+'" height="100px" width="300px"/>'+
-                            '</div>');
-                    }*/
-                    L.Routing.control({
-                        createMarker: function () {
-                            return null;
-                        },
-                        lineOptions : {
-                            addWaypoints: false
-                        },
-
-                        waypoints: [
-                            L.latLng(data.puntosRuta[0].lat, data.puntosRuta[0].long),
-                            L.latLng(data.puntosRuta[1].lat, data.puntosRuta[1].long)
-                        ],
-                        language:'es',
-                    }).addTo(map);
+                    console.log(data);                    
                 }
             });
-        });
-
+        }*/
+        async function obtenerLatitudLongitudConDireccion(direccion){
+            let lat=0;
+            let long=0;
+            await geocoder.geocode({
+                "address": direccion
+            }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    lat=results[0].geometry.location.lat();
+                    long=results[0].geometry.location.lng();
+                }
+            });
+            return [lat, long];
+        }
+        function limpiarMapa(){
+            map.removeControl(controlRuta);
+            grupoMarcadores.clearLayers();
+            controlRuta=null;
+        }
+        async function generarRuta() {
+            if(controlRuta!=null){
+                limpiarMapa();
+            }
+            let direccionPartida = $("#txtDireccionPartida").val();
+            let direccionLlegada = $("#txtDireccionLlegada").val();
+            let latLongPartida = await obtenerLatitudLongitudConDireccion(direccionPartida);
+            let latLongLlegada = await obtenerLatitudLongitudConDireccion(direccionLlegada);
+            let latitudDireccionPartida = latLongPartida[0];
+            let longitudDireccionPartida = latLongPartida[1];
+            let latitudDireccionLlegada = latLongLlegada[0];
+            let longitudDireccionLlegada = latLongLlegada[1];
+            console.log(latitudDireccionPartida,longitudDireccionPartida,latitudDireccionLlegada,longitudDireccionLlegada);
+            let markerInicio = L.marker([latitudDireccionPartida, longitudDireccionPartida], {
+                icon: puntoPartidaIcon,
+                title: "Partida"
+            }).addTo(grupoMarcadores);
+            let markerLlegada = L.marker([latitudDireccionLlegada, longitudDireccionLlegada], {
+                icon: puntoLlegadaIcon,
+                title: "Llegada"
+            }).addTo(grupoMarcadores);
+            controlRuta = L.Routing.control({
+                createMarker: function () { return null; },
+                lineOptions : {
+                    addWaypoints: false
+                },
+                waypoints: [    
+                    L.latLng(latitudDireccionPartida, longitudDireccionPartida),
+                    L.latLng(latitudDireccionLlegada, longitudDireccionLlegada)
+                ],
+                language:'es',
+            }).addTo(map);
+        }
     </script>
+
 {% endblock %}
