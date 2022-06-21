@@ -163,7 +163,8 @@ def detalle_museo(request, pk):
     patrimonios = Patrimonio.objects.filter(institucion_id=pk)
 
     #lista de valoraciones de esos patrimonios
-
+    list_pat = list(Patrimonio.objects.filter(institucion_id=pk).values_list('pk', flat=True))
+    valoraciones = PatrimonioValoracion.objects.filter(patrimonio_id__in=list_pat).filter(estado=2)
 
     #lista de incidentes
 
@@ -175,7 +176,8 @@ def detalle_museo(request, pk):
     context = {"valor": valor,
                "area": area,
                "institucion": institucion,
-               "patrimonios": patrimonios}
+               "patrimonios": patrimonios,
+               "valoraciones": valoraciones}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
 
