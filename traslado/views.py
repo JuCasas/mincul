@@ -130,37 +130,101 @@ def listarPatrimoniosTraslado(request):
 
 
 def entidadEmail(request):
-    print('***********************************************************************************************************')
-    print(request.POST['entidad'])
-    print('***********************************************************************************************************')
+    #print('***********************************************************************************************************')
+    #print(request.POST['entidad'])
+    #print('***********************************************************************************************************')
     entidad = EntidadSolicitante.objects.get(pk=request.POST['entidad']).correo
     return JsonResponse({"email": entidad}, status=200)
 
 
-def validarResolucion(request):
+def validarFechas(request):
+    print("######## VALIDAR FECHAS ##########")
     print(request.POST)
-    print("porblmea probnlema problema")
-    print("porblmea probnlema problema")
-    print("porblmea probnlema problema")
-    print("porblmea probnlema problema")
-    print("porblmea probnlema problema")
-    print("porblmea probnlema problema")
+    fechaRetorno = request.POST['fechaRetornoReal']
+    fechaSalida = request.POST['fechaSalidaReal']
+    if (fechaRetorno > fechaSalida):
+        return JsonResponse(True, status=200, safe=False)
+    else:
+        return JsonResponse(False, status=200, safe=False)
+    print ('#######################')
+
+def existeResolucion(request):
+    print("##############EXISTE RESOLUCION##################")
+    print(request.POST)
+    print("##############$$$$$$$$$$$$$$$$$##################")
     pk = request.POST['idEditar']
-    estado = request.POST['estado']
+    nResActual = SolicitudTraslado.objects.get(pk=pk).numeroResolucion
+    if (nResActual is None):
+        print("FALSE")
+        return JsonResponse({"existe": False}, status=200)
+    else:
+        print("TRUE")
+        return JsonResponse({"existe": True}, status=200)
+
+def existeFechaSalidaProgramada(request):
+    pk = request.POST['idEditar']
+    nFechaSalidaProgramada = SolicitudTraslado.objects.get(pk=pk).fechaSalidaProgramada
+    if (nFechaSalidaProgramada is None):
+        print("FALSE")
+        return JsonResponse({"existe": False}, status=200)
+    else:
+        print("TRUE")
+        return JsonResponse({"existe": True}, status=200)
+
+def existeFechaSalidaReal(request):
+    pk = request.POST['idEditar']
+    nFechaSalidaReal = SolicitudTraslado.objects.get(pk=pk).fechaSalidaReal
+    if (nFechaSalidaReal is None):
+        print("FALSE")
+        return JsonResponse({"existe": False}, status=200)
+    else:
+        print("TRUE")
+        return JsonResponse({"existe": True}, status=200)
+
+def existeFechaRetornoReal(request):
+    pk = request.POST['idEditar']
+    nFechaRetornoReal = SolicitudTraslado.objects.get(pk=pk).fechaRetorno
+    if (nFechaRetornoReal is None):
+        print("FALSE")
+        return JsonResponse({"existe": False}, status=200)
+    else:
+        print("TRUE")
+        return JsonResponse({"existe": True}, status=200)
+
+def validarResolucion(request):
+    print("########3INGRESO A VALIDAR RESOLICION#######")
+    print(request.POST)
+    if (request.POST['estado'] == '1'):
+        return JsonResponse(True, status=200, safe=False)
+    pk = request.POST['PK']
+    #estado = request.POST['estado']
     print(pk)
 
-    existe = False
-    if (estado == 2):
-        if (pk == '0'):
-            existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exists()
-        else:
-            nResActual = SolicitudTraslado.objects.get(pk=pk).numeroResolucion
-            print(nResActual)
-            existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exclude(
+    nResActual = SolicitudTraslado.objects.get(pk=pk).numeroResolucion
+    print("#####################")
+    print("EL NRESACTUAL ES: ")
+    print(nResActual)
+    print("#####################")
+    existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['numResolucion']).exclude(
                 numeroResolucion=nResActual).exists()
 
-    print(existe)
-    return JsonResponse({"existe": existe}, status=200)
+    if existe:
+        return JsonResponse(False, status=200, safe=False)
+    else:
+        return JsonResponse(True, status=200, safe=False)
+
+    #existe = False
+    #if (estado == 2):
+    #    if (pk == '0'):
+    #        existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exists()
+    #    else:
+    #        nResActual = SolicitudTraslado.objects.get(pk=pk).numeroResolucion
+    #        print(nResActual)
+    #        existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exclude(
+    #            numeroResolucion=nResActual).exists()
+
+    #print(existe)
+    return JsonResponse(True, status=200, safe=False)
 
 def eliminarDocumentoTraslado(request):
     traslado = SolicitudTraslado.objects.get(pk=request.POST['traslado'])
@@ -235,18 +299,29 @@ def viewTranfer(request, pk):
 
 
 def editTransfer(request, pk):
+    print(request.POST)
+    print("AAAAAAAAAAAAAAAAAAAA")
+    solicitudTraslado = SolicitudTraslado.objects.get(pk=pk)
+    print("SOLICITUD DE TRASLADO - ESTADO")
+    print(solicitudTraslado.estado)
     if request.POST:
-        solicitudTraslado = SolicitudTraslado.objects.get(pk=pk)
-        solicitudTraslado.entidadSolicitante_id = request.POST['nombreInstitucion']
-        solicitudTraslado.destino = request.POST['destino']
-        solicitudTraslado.nombreExposicion = request.POST['nombreExposicion']
-        solicitudTraslado.pais = request.POST['pais']
-        solicitudTraslado.gestorConservacionTraslados_id = request.POST['comisario']
-        solicitudTraslado.gestorPatrimonio_id = request.POST['comisario']
-        solicitudTraslado.fechaSalidaProgramada = request.POST['fechaSalidaProgramada']
-        # solicitudTraslado.fechaRetornoProgramada = request.POST['fechaRetornoProgramada']
-        if solicitudTraslado.estado == 2:
+        if solicitudTraslado.estado == '1':
+            solicitudTraslado.entidadSolicitante_id = request.POST['nombreInstitucion']
+            solicitudTraslado.destino = request.POST['destino']
+            solicitudTraslado.nombreExposicion = request.POST['nombreExposicion']
+            solicitudTraslado.pais = request.POST['pais']
+            solicitudTraslado.gestorConservacionTraslados_id = request.POST['comisario']
+            solicitudTraslado.gestorPatrimonio_id = request.POST['comisario']
+            solicitudTraslado.fechaSalidaProgramada = request.POST['fechaSalidaProgramada']
+            # solicitudTraslado.fechaRetornoProgramada = request.POST['fechaRetornoProgramada']
+        if solicitudTraslado.estado == '2':
+            #print("DENTRO DEL ESTADO 2")
+            #print(request.POST)
             solicitudTraslado.numeroResolucion = request.POST['nResolucion']
+        if solicitudTraslado.estado == '4':
+            solicitudTraslado.fechaSalidaReal = request.POST['fechaSalidaReal']
+        if solicitudTraslado.estado == '5':
+            solicitudTraslado.fechaRetorno = request.POST['fechaRetornoReal']
         solicitudTraslado.save()
 
         if request.POST['lista']:
@@ -373,6 +448,9 @@ def eliminacionSolicitante(request):
     entidad = EntidadSolicitante.objects.get(doiSolicitante=doi)
     entidad.delete()
     return redirect('/traslado/entidades')
+
+
+
 
 
 def actualizarEstado(request):

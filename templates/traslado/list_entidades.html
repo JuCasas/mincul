@@ -454,7 +454,7 @@
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("telefono", function (value, element) {
-            return this.optional(element) || /^\d{1,20}$/i.test(value);
+            return this.optional(element) || /^\d{7,20}$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
 
@@ -524,7 +524,7 @@
                 },
                 inputTelefono: {
                     required: "Debe ingresar el teléfono de la entidad solicitante",
-                    telefono: "Debe ingresar una cadena de máximo 20 carácteres numéricos"
+                    telefono: "Debe ingresar una cadena de longitud 7 a 20 carácteres numéricos"
                 }
             },
             submitHandler: function (form, e) {
@@ -629,7 +629,7 @@
                 },
                 inputTelefono2: {
                     required: "Debe ingresar el teléfono de la entidad solicitante",
-                    telefono: "Debe ingresar una cadena de máximo 20 carácteres numéricos",
+                    telefono: "Debe ingresar una cadena de longitud 7 a 20 carácteres numéricos",
                 }
             },
             submitHandler: function (form, e) {
