@@ -48,14 +48,15 @@
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-4 col-lg-4 col-sm-12">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-header">
                             <h5>General</h5>
                         </div>
                         <div class="card-body bg-light">
                             <div class="form-group">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
-                                <select class="form-control" id="tipoTraslado" required>
+                                <select class="form-control" id="tipoTraslado" required
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     <option {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
                                         extranjero
                                     </option>
@@ -70,45 +71,51 @@
                             <div class="form-group">
                                 <label for="pais">País destino:</label>
                                 <select class="form-control selectpicker" id="pais" name="pais"
-                                        data-placeholder='Seleccione pais...' required>
+                                        data-placeholder='Seleccione pais...' required
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% include 'traslado/paises.html' %}
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="ubigeo">Dirección de destino:</label>
                                 <input class="form-control" id="destino" name="destino" type="text"
-                                       value="{{ traslado.destino }}" required>
+                                       value="{{ traslado.destino }}" required
+                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                             </div>
 
                             <div class="form-group ">
                                 <label for="nombreExposicion">Nombre de la Exposición:</label>
                                 <input class="form-control" id="nombreExposicion" name="nombreExposicion"
                                        type="text"
-                                       value="{{ traslado.nombreExposicion }}" required>
+                                       value="{{ traslado.nombreExposicion }}" required
+                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                             </div>
 
                             <div class="form-group">
                                 <label for="comisario">Comisario:</label>
                                 <select class="form-control selectpicker" id="comisario" name="comisario"
-                                        data-placeholder='Seleccione comisario...'>
+                                        data-placeholder='Seleccione comisario...'
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% for c in comisarios %}
                                         <option value="{{ c.pk }}">{{ c.username }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="nResolucion">N° de Resolucion:</label>
-                                <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                                       value="{{ traslado.numeroResolucion }}">
-                            </div>
 
+                            {% if traslado.estado == '2' %}
+                                <div class="form-group">
+                                    <label for="nResolucion">N° de Resolucion:</label>
+                                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                           value="{{ traslado.numeroResolucion }}">
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
                 <div class="col-md-8 col-lg-8 col-sm-12">
                     <div class="row">
                         <div class="col ">
-                            <div class="card">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Entidad solicitante</h5>
                                 </div>
@@ -117,7 +124,8 @@
                                         <label for="nombreInstitucion">Entidad Solicitante</label>
                                         <select class="form-control selectpicker" id="nombreInstitucion"
                                                 name="nombreInstitucion"
-                                                data-placeholder='Seleccione entidad...' onchange="getEmail(this)">
+                                                data-placeholder='Seleccione entidad...' onchange="getEmail(this)"
+                                                {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                             {% for e in entidades %}
                                                 <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
                                             {% endfor %}
@@ -136,7 +144,7 @@
                         </div>
 
                         <div class="col ">
-                            <div class="card">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Fechas</h5>
                                 </div>
@@ -148,66 +156,54 @@
                                                 <input class="form-control" id="fechaSalidaProgramada"
                                                        name="fechaSalidaProgramada" type="date"
                                                        value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
-                                                >
+                                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                             </div>
 
-                                            <div class="form-group">
-                                                <label for="fechaSalidaReal">Fecha de Salida Real:</label>
-                                                <input class="form-control" id="fechaSalidaReal"
-                                                       name="fechaSalidaReal"
-                                                       type="date"
-                                                       value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}">
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="fechaRetornoReal">Fecha de Retorno:</label>
-                                                <input class="form-control" id="fechaRetornoReal"
-                                                       name="fechaRetornoReal" type="date"
-                                                       value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}">
-                                            </div>
-
-                                        </div>
-                                        {% comment %}<div class="col">
-                                                <div class="form-group ">
-                                                    <label for="fechaRetornoProgramada">Retorno
-                                                        Programada: </label>
-                                                    <input class="form-control" id="fechaRetornoProgramada"
-                                                           name="fechaRetornoProgramada" type="date"
-                                                           value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}"
-                                                    >
+                                            {% if traslado.estado == '4' %}
+                                                <div class="form-group">
+                                                    <label for="fechaSalidaReal">Fecha de Salida Real:</label>
+                                                    <input class="form-control" id="fechaSalidaReal"
+                                                           name="fechaSalidaReal"
+                                                           type="date"
+                                                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}">
                                                 </div>
-                                            </div>{% endcomment %}
+                                            {% endif %}
+
+                                            {% if traslado.estado == '5' %}
+                                                <div class="form-group">
+                                                    <label for="fechaRetornoReal">Fecha de Retorno:</label>
+                                                    <input class="form-control" id="fechaRetornoReal"
+                                                           name="fechaRetornoReal" type="date"
+                                                           value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}">
+                                                </div>
+                                            {% endif %}
+                                        </div>
                                     </div>
-
-                                    {% comment %}  <div class="row">
-                                            <div class="col">
-
-
-                                            </div>
-                                            <div class="col">
-
-                                            </div>
-                                        </div>{% endcomment %}
                                 </div>
                             </div>
                         </div>
                     </div>
 
 
-                    <div class="row my-3">
+                    <div class="row mt-3">
                         <div class="col">
-                            <div class="card">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Patrimonios a ser trasladados</h5>
                                 </div>
                                 <div class="form-group col-auto d-flex align-items-end">
                                     <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                                            data-placeholder='Seleccione patrimonio...'>
+                                            data-placeholder='Seleccione patrimonio...'
+                                            {% if traslado.estado != '1' and idEditar != 0 %} hidden {% endif %} >
                                     </select>
+
                                     <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
                                             type="button"
-                                            onclick="agregarPatrimonioTabla()">Agregar
+                                            onclick="agregarPatrimonioTabla()"
+                                            {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}
+                                    >Agregar
                                     </button>
+
                                 </div>
                                 <div class="card-body bg-light">
                                     <table class="table table-responsive-sm">
@@ -247,7 +243,7 @@
                 </div>
             </div>
 
-            <div class="card my-3">
+            <div class="card my-3" {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}>
                 <div class="card-header">
                     <h5>Documentos nuevos:</h5>
                 </div>
@@ -257,37 +253,37 @@
                         <div class="fallback">
                             <input type="file" name="file" multiple>
                         </div>
-                        {#                        <div class="dz-message" data-dz-message><img class="mr-2"#}
-                        {#                                                                     src="{% static 'img/icons/cloud-upload.svg' %}"#}
-                        {#                                                                     width="25" alt="">Suelta tus archivos aquí#}
-                        {#                        </div>#}
-                        {#                        <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">#}
-                        {#                            <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger">#}
-                        {#                                <img#}
-                        {#                                        class="dz-image" src="..." alt="..." data-dz-thumbnail>#}
-                        {#                                <div class="media-body d-flex flex-between-center">#}
-                        {#                                    <div>#}
-                        {#                                        <h6 data-dz-name></h6>#}
-                        {#                                        <div class="d-flex align-items-center">#}
-                        {#                                            <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>#}
-                        {#                                            <div class="dz-progress"><span class="dz-upload"#}
-                        {#                                                                           data-dz-uploadprogress=""></span>#}
-                        {#                                            </div>#}
-                        {#                                        </div>#}
-                        {#                                    </div>#}
-                        {#                                    <div class="dropdown text-sans-serif">#}
-                        {#                                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"#}
-                        {#                                                type="button" data-toggle="dropdown" aria-haspopup="true"#}
-                        {#                                                aria-expanded="false"><span class="fas fa-ellipsis-h"></span>#}
-                        {#                                        </button>#}
-                        {#                                        <div class="dropdown-menu dropdown-menu-right border py-0">#}
-                        {#                                            <div class="bg-white py-2"><a class="dropdown-item" href="#!"#}
-                        {#                                                                          data-dz-remove>Remove File </a></div>#}
-                        {#                                        </div>#}
-                        {#                                    </div>#}
-                        {#                                </div>#}
-                        {#                            </div>#}
-                        {#                        </div>#}
+                        {% comment %}                             <div class="dz-message" data-dz-message><img class="mr-2"
+                                                                                             src="{% static 'img/icons/cloud-upload.svg' %}"
+                                                                                             width="25" alt="">Suelta tus archivos aquí
+                                                </div>
+                                                <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
+                                                    <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger">
+                                                        <img
+                                                                class="dz-image" src="..." alt="..." data-dz-thumbnail>
+                                                        <div class="media-body d-flex flex-between-center">
+                                                            <div>
+                                                                <h6 data-dz-name></h6>
+                                                                <div class="d-flex align-items-center">
+                                                                    <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>
+                                                                    <div class="dz-progress"><span class="dz-upload"
+                                                                                                   data-dz-uploadprogress=""></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="dropdown text-sans-serif">
+                                                                <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none"
+                                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
+                                                                        aria-expanded="false"><span class="fas fa-ellipsis-h"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-right border py-0">
+                                                                    <div class="bg-white py-2"><a class="dropdown-item" href="#!"
+                                                                                                  data-dz-remove>Remove File </a></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>{% endcomment %}
                     </div>
                 </div>
             </div>
@@ -302,9 +298,7 @@
                         <div class="row">
                             {% for documento in documentos %}
                                 <div class="col-2">
-
                                     <div class="card mx-1">
-
 
                                         <div class="card-header p-2 d-flex justify-content-end">
                                             <button class="close float-none" type="button" aria-label="Close"
@@ -325,9 +319,7 @@
                                             </div>
                                         </a>
 
-
                                     </div>
-
                                 </div>
                             {% endfor %}
                         </div>
@@ -399,11 +391,8 @@
                     </div>
                 </div>
             </div>
-
-
             </form>
         </div>
-
     </div>
 
     <div class="modal fade" id="modalFecha" tabindex="-1" role="dialog" aria-labelledby="modalFechaLabel"
@@ -519,7 +508,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="inputDetalle">
                                 <label for="detalleRechazo">Detalle:</label>
                                 <textarea class="form-control" id="detalleRechazo" name="detalleRechazo"
                                           rows="3" required></textarea>
@@ -578,7 +567,8 @@
 
 
     <!-- Ver detalle de rechazo -->
-    <div class="modal fade" id="modalEliminarDocumento" tabindex="-1" role="dialog" aria-labelledby="modalEliminarDocumentoLabel"
+    <div class="modal fade" id="modalEliminarDocumento" tabindex="-1" role="dialog"
+         aria-labelledby="modalEliminarDocumentoLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -606,8 +596,8 @@
     <script src="{% static 'lib/jquery-validation/jquery.validate.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
-    <script>
 
+    <script>
 
         let patrimoniosLista = [];
         var objeto;
@@ -618,9 +608,9 @@
 
             objeto = btn;
 
-            var botones = '<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>'+
-                    '<button class="btn btn-primary btn-sm" type="button" onclick="eliminaDocumento('+pk+')" data-dismiss="modal">Confirmar</button>';
-            var texto = '<p>Desea eliminar el archivo "'+archivo+'"</p>';
+            var botones = '<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>' +
+                '<button class="btn btn-primary btn-sm" type="button" onclick="eliminaDocumento(' + pk + ')" data-dismiss="modal">Confirmar</button>';
+            var texto = '<p>Desea eliminar el archivo "' + archivo + '"</p>';
 
             $("#nombreModal").html(texto);
             $("#botonesModal").html(botones);
@@ -671,7 +661,8 @@
                         position: 'bottom-right',
                         hideAfter: 3000,
                     })
-                }});
+                }
+            });
         }
 
 
@@ -726,7 +717,11 @@
                 e.preventDefault();
                 if ($("#formAgregar").valid()) {
                     var patrimoniosEvaluar = ValidarPatrimonio();
-                    var nResolucion = ValidarResolucion();
+                    var nResolucion = false;
+                    if ("{{ traslado.estado }}" === '1') {
+                        nResolucion = ValidarResolucion();
+                    }
+
                     //TODO FIX
                     {#var fechasCorrectas = ValidarFechas();#}
                     var fechasCorrectas = true;
@@ -752,7 +747,8 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                             nResolucion: $("#nResolucion").val(),
                             operacion: '{{ operacion }}',
-                            idEditar: '{{ idEditar }}'
+                            idEditar: '{{ idEditar }}',
+                            estado: '{{ estado }}',
                         },
                         success: function (response) {
                             let resultado = response['existe'];
@@ -784,7 +780,7 @@
 
         $(document).ready(function () {
 
-            if ("{{ traslado.estado}}" === 2) {
+            if ("{{ traslado.estado}}" === '2') {
                 validar_campo_detalle();
             }
 
@@ -808,7 +804,12 @@
 
             $("#agr").on('click', function () {
                 if ($("#formAgregar").valid()) {
-                    var nResolucion = ValidarResolucion();
+
+                    var nResolucion = false;
+                    if ("{{ traslado.estado }}" === '1') {
+                        nResolucion = ValidarResolucion();
+                    }
+
                     var patrimoniosEvaluar = ValidarPatrimonio();
                     {#var fechasCorrectas = ValidarFechas();#}
                     //TODO FIX
@@ -836,7 +837,9 @@
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         nResolucion: $("#nResolucion").val(),
                         operacion: '{{ operacion }}',
-                        idEditar: '{{ idEditar }}'
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
                     },
                     success: function (response) {
                         let resultado = response['existe'];
@@ -887,7 +890,7 @@
                                 text: item.nombreTituloDemoninacion,
                                 tipoPatrimonio: item.tipoPatrimonio,
                                 categoria: item.categoria,
-                                estado:item.estado,
+                                estado: item.estado,
                             };
                         });
                         return {results: data};
@@ -901,8 +904,10 @@
 
         function set_validate() {
             if ($("#estadoSolicitud").val() === "3") {
+                $("#inputDetalle").show();
                 $("#detalleRechazo").attr('required', true);
                 console.log("Campo detalle requerido");
+
                 var settings = $('#formularioActualizarEstado').validate().settings;
                 console.log(settings);
                 $.extend(settings, {
@@ -921,6 +926,7 @@
                 console.log("Campo detalle no requerido");
 
                 $("#detalleRechazo").attr('required', false);
+                $("#inputDetalle").hide();
                 var settings = $('#formularioActualizarEstado').validate().settings;
                 console.log(settings);
 

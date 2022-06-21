@@ -91,7 +91,7 @@ def addTransfer(request):
                                                                  'fechaSalidaProgramada'],
                                                              # fechaRetornoProgramada=request.POST[
                                                              #     'fechaRetornoProgramada'],
-                                                             numeroResolucion=request.POST['nResolucion']
+                                                             # numeroResolucion=request.POST['nResolucion']
                                                              )
         if request.POST['lista']:
             patrimoniosSolicitados = list(request.POST['lista'].split(","))
@@ -108,13 +108,15 @@ def addTransfer(request):
         comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
         patrimonios = Patrimonio.objects.filter()
         operacion = "agregar"
+        estado = 0
         idEditar = 0
 
         context = {
             'entidades': entidades,
             'comisarios': comisarios,
             'operacion': operacion,
-            'idEditar': idEditar
+            'idEditar': idEditar,
+            'estado': estado
         }
         return render(request, 'traslado/transfer_add.html', context)
 
@@ -138,15 +140,25 @@ def entidadEmail(request):
 def validarResolucion(request):
     print(request.POST)
     print("porblmea probnlema problema")
+    print("porblmea probnlema problema")
+    print("porblmea probnlema problema")
+    print("porblmea probnlema problema")
+    print("porblmea probnlema problema")
+    print("porblmea probnlema problema")
     pk = request.POST['idEditar']
+    estado = request.POST['estado']
     print(pk)
-    if (pk == '0'):
-        existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exists()
-    else:
-        nResActual = SolicitudTraslado.objects.get(pk=pk).numeroResolucion
-        print(nResActual)
-        existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exclude(
-            numeroResolucion=nResActual).exists()
+
+    existe = False
+    if (estado == 2):
+        if (pk == '0'):
+            existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exists()
+        else:
+            nResActual = SolicitudTraslado.objects.get(pk=pk).numeroResolucion
+            print(nResActual)
+            existe = SolicitudTraslado.objects.filter(numeroResolucion=request.POST['nResolucion']).exclude(
+                numeroResolucion=nResActual).exists()
+
     print(existe)
     return JsonResponse({"existe": existe}, status=200)
 
@@ -233,7 +245,8 @@ def editTransfer(request, pk):
         solicitudTraslado.gestorPatrimonio_id = request.POST['comisario']
         solicitudTraslado.fechaSalidaProgramada = request.POST['fechaSalidaProgramada']
         # solicitudTraslado.fechaRetornoProgramada = request.POST['fechaRetornoProgramada']
-        solicitudTraslado.numeroResolucion = request.POST['nResolucion']
+        if solicitudTraslado.estado == 2:
+            solicitudTraslado.numeroResolucion = request.POST['nResolucion']
         solicitudTraslado.save()
 
         if request.POST['lista']:
@@ -269,6 +282,7 @@ def editTransfer(request, pk):
             estadosEditables = [('6', 'Finalizar')]
 
         operacion = 'editar'
+        estado = traslado.estado
         idEditar = pk
         context = {
             'traslado': traslado,
@@ -280,7 +294,8 @@ def editTransfer(request, pk):
             'estadosEditables': estadosEditables,
             'operacion': operacion,
             'idEditar': idEditar,
-            'lista': lista
+            'lista': lista,
+            'estado': estado
         }
 
         return render(request, 'traslado/transfer_add.html', context)
@@ -409,13 +424,11 @@ def actualizarEstado2(request):
         nuevo_estado = '2'
     elif (traslado.estado == '4'):
         nuevo_estado = '5'
-        print('>>>>>>>>>>>>>>>>>Dentro ed actualizar esatdo de patrimonios a inactivo>>>>>>>>>>>>>>>>>>>>>>>>>')
         for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
             patrimonio.estado = '2'  # estado no disponible
             patrimonio.save()
     elif (traslado.estado == '5'):
         nuevo_estado = '6'
-        print('>>>>>>>>>>>>>>>>>Dentro ed actualizar esatdo de patrimonios a inactivo>>>>>>>>>>>>>>>>>>>>>>>>>')
         for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
             patrimonio.estado = '1'  # estado disponible
             patrimonio.save()

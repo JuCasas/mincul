@@ -17,7 +17,6 @@ class Institucion(models.Model):
     documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
-
 class Propietario(models.Model):
     ESTADOS = (
         ('1', 'Activo'),
@@ -91,7 +90,7 @@ class Patrimonio (models.Model):
     nombreTituloDemoninacion = models.CharField(max_length=30)
     # datacion = models.DateField(default=datetime.now, blank=True, null=True, verbose_name='datacion')
     codigo = models.CharField(max_length=200)
-    direccion = models.CharField(max_length=200)
+    direccion = models.CharField(max_length=200,null=True)
     departamento = models.CharField(max_length=100)
     provincia = models.CharField(max_length=100)
     distrito = models.CharField(max_length=100)
@@ -100,12 +99,12 @@ class Patrimonio (models.Model):
     #ubicacion = models.MultiPolygonField(geography=True, default=Point(0.0, 0.0))
     # https: // raphael - leger.medium.com / django - handle - latitude - and -longitude - 54
     # a4bb2f6e3b
-    descripcion = models.CharField(max_length=200)
-    observacion = models.CharField(max_length=200)
+    descripcion = models.CharField(max_length=4000,null=True)
+    observacion = models.CharField(max_length=500)
     tipoPatrimonio = models.CharField(max_length=2, choices=TIPO, default='1')
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     institucion = models.ForeignKey(Institucion,null=True, on_delete=models.CASCADE)
-    gestor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    gestor = models.ForeignKey(settings.AUTH_USER_MODEL,null=True, on_delete=models.CASCADE)
     propietarios = models.ManyToManyField(Propietario)
     responsables = models.ManyToManyField(Responsable)
     documentos = models.ManyToManyField(Documento)
@@ -363,29 +362,23 @@ class PatrimonioMaterialInMueble(models.Model):
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
 
 class PatrimonioInMaterial(models.Model):
-    ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
-    )
-    TIPO = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2'),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
-    )
-    SUBTIPO = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2'),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
+    TIPOINMATERIAL = (
+        ('1', 'Artístico'),
+        ('2', 'Eventos'),
+        ('3', 'Fiestas'),
+        ('4', 'Artesanía y Artes'),
+        ('5', 'Creencias Populares'),
+        ('6', 'Ferias y Mercados'),
+        ('7', 'Gastronomía'),
+        ('8', 'Músicas y Danzas'),
     )
     TIPOINGRESO = (
         ('1', 'Gratuito'),
         ('2', 'Pagado'),
         ('3', 'No información'),
     )
-    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
-    subtipo = models.CharField(max_length=2, choices=SUBTIPO, default='1')
+    tipoInmaterial = models.CharField(max_length=2, choices=TIPOINMATERIAL, default='1')
+    subtipo = models.CharField(max_length=100, null=True)
     particularidades = models.CharField(max_length=200, null=True, blank=True)
     tipoIngreso = models.CharField(max_length=2, choices=TIPOINGRESO, default='1')
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
