@@ -296,37 +296,32 @@ def listTasks(request, pk):
 
 @api_view(('POST',))
 def addActivity(request, pk):
-  codigo = "ACT00"
-  nombre = request.POST['nombre']
-  descripcion = request.POST['descripcion']
-  fechaInicio = datetime.datetime.strptime(request.POST['fechaInicio'], "%Y-%m-%d").date()
-  fechaFin = datetime.datetime.strptime(request.POST['fechaFin'], "%Y-%m-%d").date()
-  patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
-  proyecto = ProyectoConservacion.objects.get(pk=pk)
-  actividad = Actividad.objects.create(
-    codigo=codigo,
-    nombre=nombre,
-    descripcion=descripcion,
-    fechaInicio=fechaInicio,
-    fechaFin=fechaFin,
-    presupuesto=0.00,
-    gastoTotal=0.00,
-    proyecto=proyecto,
-    patrimonio=patrimonio)
-  proyecto.cantidadAct = Actividad.objects.filter(proyecto=proyecto).filter(estado='1').count()
-  proyecto.save()
-  # print()
-  # fechaInicio = datetime.date.today()
-  # fechaFin = datetime.date.today()
-  # tipo = int((request.POST['tipoPlan']))
-  # project = ProyectoConservacion.objects.create(
-  #     codigo = codigo,
-  #     nombre=nombre,
-  #     tipoProyecto=tipo,
-  #     fechaInicio=fechaInicio,
-  #     fechaFin=fechaFin)
-  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
-
+  try:
+    nombre = request.POST['nombre']
+    descripcion = request.POST['descripcion']
+    fechaInicio = datetime.datetime.strptime(request.POST['fechaInicio'], "%Y-%m-%d").date()
+    fechaFin = datetime.datetime.strptime(request.POST['fechaFin'], "%Y-%m-%d").date()
+    patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
+    proyecto = ProyectoConservacion.objects.get(pk=pk)
+    actividad = Actividad.objects.create(
+      nombre=nombre,
+      descripcion=descripcion,
+      fechaInicio=fechaInicio,
+      fechaFin=fechaFin,
+      presupuesto=0.00,
+      gastoTotal=0.00,
+      proyecto=proyecto,
+      patrimonio=patrimonio)
+    actividad.codigo = "ACT" + str(actividad.id).zfill(5)
+    actividad.save()
+    proyecto.cantidadAct = Actividad.objects.filter(proyecto=proyecto).filter(estado='1').count()
+    proyecto.save()
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  except Exception as e:
+    result = dict()
+    result['success'] = False
+    result['message'] = str(e)  # or custom message
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 @api_view(('GET',))
 def addTaskView(request, pk):
