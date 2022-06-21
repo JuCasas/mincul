@@ -3,7 +3,7 @@
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
-    <link href="../../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
+    <link href="{% static 'lib/raty-js/jquery.raty.css' %}" rel="stylesheet">
     <style>
         .standar-img{
             min-height: 20rem;
@@ -40,9 +40,7 @@
                     <div>
                         <img class="img-fluid w-100"
                              style="height: 320px; object-fit: fill; border-radius: 3px"
-                                {#                                         src="../static/img/generic/4-caral.jpg"#}
-                             src={{ valor.url }}
-                             alt="Card image"/>
+                             src={{ valor.url }}/>
                     </div>
                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
                         <p class="card-text "
@@ -115,10 +113,9 @@
                         {% for v in valoraciones %}
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="my-0 font-weight-bold">{{ v.patrimonio.nombreTituloDemoninacion }}</p>
-                                    <p class="my-0">{{ v.nombre }}</p>
+                                    <p class="my-0 font-weight-bold">{{ v.nombre }}</p>
                                 </div>
-                                <div class="col-8 pb-3">
+                                <div class="col-8 pb-0">
                                     {% if v.valoracion >= 1 %}
                                         <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                                     {% else %}
@@ -157,9 +154,9 @@
                             <table id="incidentesLista" class="table table-sm table-dashboard no-wrap mb-0 fs--1 w-100">
                                 <thead class="bg-200">
                                 <tr>
-                                  <th class="sort ">Código</th>
-                                  <th class="sort">Descripción</th>
-                                  <th class="sort">Fecha de Registro</th>
+                                  <th class="sort" style="width: 15%">Código</th>
+                                  <th class="sort" style="width: 65%">Descripción</th>
+                                  <th class="sort" style="width: 20%">Fecha de Registro</th>
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white">
@@ -242,6 +239,43 @@
                         <span class="sr-only">Siguiente</span>
                      </a>
                 </div>
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title text-black">Valora a {{ institucion.nombre }}:</h5>
+                        <form class="form-validation" method="post" action="{% url 'valor_museo' pk=institucion.pk %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="form-name">Nombre:</label>
+                                <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
+                                      title="Campo requerido">*</abbr>
+                                <input class="form-control" type="text" name="name" placeholder="Nombre y Apellido..." required id="form-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="form-email">¿Cual es tu correo electrónico?:</label>
+                                <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
+                                      title="Campo requerido">*</abbr>
+                                <input class="form-control" type="email" name="email" placeholder="Correo electrónico..." required id="form-email">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-form-message">Cuentanos tu experiencia:</label>
+                                <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
+                                      title="Campo requerido">*</abbr>
+                                <textarea class="form-control" rows="3" required id="contact-form-message" name="comment"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="row pl-3 pt-lg-3">
+                                    <div class="pt-1 mr-3">
+                                        <label for="value">Puntuación:</label>
+                                    </div>
+                                    <div class="raty"></div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-block" type="submit">Guardar</button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -252,17 +286,10 @@
 
 {% block extrajs %}
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
-    <script src="../../static/lib/raty-js/jquery.raty.js"></script>
+    <script src="{% static 'lib/raty-js/jquery.raty.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'lib/datatables/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'lib/datatables-bs4/dataTables.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'lib/datatables.net-responsive/dataTables.responsive.js' %}"></script>
-    <script src="{% static 'lib/datatables.net-responsive-bs4/responsive.bootstrap4.js' %}"></script>
-    <script src="{% static 'lib/datatables-buttons/dataTables.buttons.min.js' %}"></script>
-    <script src="{% static 'lib/datatables-buttons/buttons.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'lib/datatables-buttons/buttons.flash.min.js' %}"></script>
-    <script src="{% static 'lib/datatables-buttons/jszip.min.js' %}"></script>
-    <script src="{% static 'lib/datatables-buttons/buttons.html5.min.js' %}"></script>
     <script src="{% static 'lib/owl.carousel/owl.carousel.js' %}"></script>
     <script>
         $(document).ready(function () {

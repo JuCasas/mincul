@@ -16,6 +16,7 @@ class Institucion(models.Model):
     long = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+    url = models.CharField(max_length=1024, null=True, blank=True)
 
 class Propietario(models.Model):
     ESTADOS = (
