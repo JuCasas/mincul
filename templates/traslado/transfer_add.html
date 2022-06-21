@@ -782,7 +782,7 @@
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("alphanumericNombreExpo", function (value, element) {
-            return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
+            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\s\w\-]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("regexResolucion", function (value, element) {
@@ -790,7 +790,7 @@
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("regexDestino", function (value, element) {
-            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\s+\.]+$/i.test(value);
+            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\w\s+\.]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("validarFechas", function (value, element) {
