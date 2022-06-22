@@ -222,7 +222,8 @@ def detalle_museo(request, pk):
                "institucion": institucion,
                "patrimonios": patrimonios,
                "valoraciones": valoraciones,
-               "incidentes": incidentes}
+               "incidentes": incidentes,
+               'afectaciones': [c[1] for c in Incidente.AFECTACION]}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
 
@@ -237,6 +238,26 @@ def valor_museo(request,pk):
         valoracion.valoracion = request.POST.get("score")
         valoracion.save()
         send_email(request, valoracion.pk)
+    return HttpResponseRedirect(reverse(detalle_museo, args=[pk]))
+
+def incidete_museo(request,pk):
+    if request.POST:
+        zona = PuntoGeografico.objects.get(institucion_id=pk)
+        incidente = Incidente.objects.create()
+
+        for c in Incidente.AFECTACION:
+            if c[1] == request.POST.get("tipo"):
+                incidente.tipoAfectacion = c[0]
+                break
+
+        incidente.fechaOcurrencia = request.POST.get("fecha")
+        incidente.descripcion = request.POST.get("descripcion")
+        incidente.nombre = request.POST.get("nombre")
+        incidente.correo = request.POST.get("email")
+        incidente.telefono = request.POST.get("telefono")
+        incidente.zona_id = zona.id
+        incidente.codigo = "INCD" + str(incidente.id).zfill(6)
+        incidente.save()
     return HttpResponseRedirect(reverse(detalle_museo, args=[pk]))
 
 @method_decorator(csrf_exempt)
