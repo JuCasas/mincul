@@ -17,7 +17,7 @@ from authentication.models import User
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
-    ActividadTuristica, Responsable, PuntoGeografico
+    ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio
 from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
@@ -63,8 +63,31 @@ def patrimonio_list(request):
                 #patrimonio.save()
                 if int(cat.tipo) == 1:
                     print('Inmaterial')
+
                 elif int(cat.tipo) == 2:
                     print('Inmueble')
+                    inmueble = PatrimonioMaterialInMueble()
+
+                    inmueble.tipoIngreso = pat['tipoIngreso']
+                    inmueble.epocaPropicia = pat['epocaPropicia']
+
+                    for actividad in pat['actividades']:
+                        act = ActividadTuristica()
+                        act.descripcion = actividad['actividad']
+                        act.categoria = actividad['tipo']
+                        act.tipo = actividad['tipo']
+                        act.observacion = actividad['observacion']
+                        act.patrimonio = patrimonio
+                        act.save()
+
+                    for servicio in pat['servicios']:
+                        serv = Servicio()
+                        serv.categoria = servicio['servicio']
+                        serv.tipo = servicio['tipoServicio']
+                        serv.observacion = servicio['observacion']
+                        serv.patrimonio = patrimonio
+                        serv.save()
+
                 elif int(cat.tipo) == 3:
                     print('Mueble')
 

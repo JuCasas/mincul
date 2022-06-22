@@ -131,7 +131,7 @@ class Servicio(models.Model):
         ('3', 'Estado 3'),
         ('4', 'Estado 4'),
     )
-    categoria = models.CharField(max_length=2, choices=CATEGORIA, default='1')
+    categoria = models.CharField(max_length=100, default='1')
     tipo = models.CharField(max_length=2, choices=TIPO, default='1')
     observacion = models.CharField(max_length=200)
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
@@ -156,8 +156,8 @@ class ActividadTuristica(models.Model):
         ('4', 'Categoría 4'),
     )
     descripcion = models.CharField(max_length=100, null=True, blank=True)
-    categoria = models.CharField(max_length=2, choices=CATEGORIA, default='1')
-    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    categoria = models.CharField(max_length=100, default='1')
+    tipo = models.CharField(max_length=100, default='1')
     observacion = models.CharField(max_length=200, null=True, blank=True)
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
