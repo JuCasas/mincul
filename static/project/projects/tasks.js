@@ -118,7 +118,8 @@ $("#btnEditarNivel").on('click', function () {
   }
 });
 
-$("form[name='formProyecto']").on('submit', function (e) {
+$("form[name='formTarea']").on('submit', function (e) {
+  console.log("aqui llegue")
   if ($("#formProyecto").valid()) {
     let $this = $(this);
     let type = $('#type').val();
