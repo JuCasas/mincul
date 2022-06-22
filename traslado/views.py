@@ -513,10 +513,12 @@ def actualizarEstado(request):
     correo = traslado.entidadSolicitante.correo
     asunto: "Estado de solicitud"
 
+    print("NUEVO ESTADO >>>>>>", nuevo_estado)
+
     if (nuevo_estado == '3' or nuevo_estado == '4'):
         send_form_email(asunto, correo, mensaje)
 
-    return JsonResponse({}, status=200)
+    return JsonResponse({'nuevo_estado': nuevo_estado}, status=200)
 
 
 def actualizarEstado2(request):

@@ -238,7 +238,7 @@
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
                                                 <td>{{ patrimonio.get_estado_display }}</td>
 
-                                                {% if  estado  == '1' or estado == '0'  %}
+                                                {% if  estado  == '1' or estado == '0' %}
                                                     <td>
                                                         <button class="btn" href="#" type="button"
                                                                 onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
@@ -326,18 +326,18 @@
                                         {% endif %}
 
 
-                                            <div class="card-body p-0" style="transform: rotate(0);">
-                                                <div>
-                                                    <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
-                                                </div>
-                                                <a class="notification notification-flush bg-0 stretched-link"
-                                                   href="{{ media_path }}{{ documento.documento.url }}" download></a>
+                                        <div class="card-body p-0" style="transform: rotate(0);">
+                                            <div>
+                                                <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
                                             </div>
-                                            <div class="card-footer p-2" style="transform: rotate(0);">
-                                                <a class="notification notification-flush bg-0 stretched-link"
-                                                   href="{{ media_path }}{{ documento.documento.url }}" download></a>
-                                                <h6>{{ documento.documento.filename }}</h6>
-                                            </div>
+                                            <a class="notification notification-flush bg-0 stretched-link"
+                                               href="{{ media_path }}{{ documento.documento.url }}" download></a>
+                                        </div>
+                                        <div class="card-footer p-2" style="transform: rotate(0);">
+                                            <a class="notification notification-flush bg-0 stretched-link"
+                                               href="{{ media_path }}{{ documento.documento.url }}" download></a>
+                                            <h6>{{ documento.documento.filename }}</h6>
+                                        </div>
 
 
                                     </div>
@@ -410,9 +410,9 @@
                                href="{% url 'list_transfers' %}">Volver</a>
                         </div>
                         {% if traslado.estado != '6' %}
-                        <div class="flex-column">
-                            <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
-                        </div>
+                            <div class="flex-column">
+                                <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
@@ -1026,17 +1026,17 @@
                     var fechasCorrectas = true;
                     if (!nResolucion && fechasCorrectas & patrimoniosEvaluar) {
                         console.log("Todo Bien Juan!");
-                        if ("{{ traslado.estado }}" === '2'){
+                        if ("{{ traslado.estado }}" === '2') {
                             registrarNumResolucion();
                         }
-                        if ("{{ traslado.estado }}" === '4'){
+                        if ("{{ traslado.estado }}" === '4') {
                             registrarFechaSalidaReal();
                         }
-                        if ("{{ traslado.estado }}" === '5'){
+                        if ("{{ traslado.estado }}" === '5') {
                             console.log("REGISTRAR FECHA DE RETORNO REAL");
                             registrarFechaRetornoReal();
                         }
-                        if ("{{ operacion }}" === 'agregar' || ("{{ operacion }}" === 'editar' && "{{ estado }}" === '1' )){
+                        if ("{{ operacion }}" === 'agregar' || ("{{ operacion }}" === 'editar' && "{{ estado }}" === '1')) {
                             $("#formAgregar").submit();
                         }
 
@@ -1051,7 +1051,7 @@
                 return false;
             });
 
-            function registrarFechaRetornoReal(){
+            function registrarFechaRetornoReal() {
                 return $.ajax({
                     type: 'POST',
                     url: "{% url 'registrarFechaRetornoReal'%}",
@@ -1438,15 +1438,53 @@
                         detalle_rechazo: $("#detalleRechazo").val()
                     },
                     success: function (response) {
-                        $("#estadoSolicitud").empty();
-                        $("#detalleRechazo").empty();
-                        $('#actualizarEstado').hide()
 
-                        location.reload();
+                        $("#actualizarEstado").modal('hide')
+
+                        var instance = JSON.parse(response["nuevo_estado"]);
+                        console.log('nuevo estado', instance);
+
+                        nuevo_estado = instance.toString();
+                        console.log(typeof(nuevo_estado))
+
+                        $("#estadoSolicitud").val(nuevo_estado).change();
+
+                        if (instance == '3') {
+                            $.toast({
+                                text: 'Se rechazó la solicitúd con éxito',
+                                icon: 'success',
+                                loader: false,        // Change it to false to disable loader
+                                bgColor: '#B7E6CA',  // To change the background
+                                textColor: '#000000',
+                                position: 'bottom-right',
+                                hideAfter: 3000,
+                            })
+                        };
+
+                        if (instance == '4') {
+                             $.toast({
+                                text: 'Se aprobó la solicitúd con éxito',
+                                icon: 'success',
+                                loader: false,        // Change it to false to disable loader
+                                bgColor: '#B7E6CA',  // To change the background
+                                textColor: '#000000',
+                                position: 'bottom-right',
+                                hideAfter: 3000,
+                            })
+
+                        };
 
                     },
                     error: function (response) {
-                        alert(response["responseJSON"]["error"]);
+                        $.toast({
+                            text: 'Ocurrió un error inesperado',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#c67a71',
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
                     }
                 });
             }
