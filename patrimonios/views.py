@@ -128,7 +128,8 @@ def patrimonio_edit(request,pk):
 
 def detalle(request, pk):
     valor = Patrimonio.objects.get(pk=pk)
-    valoraciones = PatrimonioValoracion.objects.filter(patrimonio_id=pk).filter(estado=2)
+    zona = PuntoGeografico.objects.get(patrimonio_id=pk)
+    valoraciones = PatrimonioValoracion.objects.filter(zona=zona).filter(estado=2)
     puntuacion=0
     for v in valoraciones:
         puntuacion = v.valoracion + puntuacion
