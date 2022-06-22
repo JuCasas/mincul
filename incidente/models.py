@@ -10,10 +10,20 @@ class Incidente(models.Model):
         ('1', 'Activo'),
         ('2', 'Inactivo'),
     ]
-    AFECTACION = [
-        ('0', 'Leve'),
-        ('1', 'Urgente'),
-    ]
+    AFECTACION = (
+        ('1', 'Invasión/Ocupación Ilegal/Ampliación de Invasión'),
+        ('2', 'Deterioro de patrimonio por efectos de la persona'),
+        ('3','Deterioro de patrimonio por efectos de la naturaleza'),
+        ('4','Destrucción en zonas arqueológicas'),
+        ('5','Destrucción de casonas'),
+        ('6','Huaquería'),
+        ('7','Otros'),
+    )
+    STATUS = (
+        ('1', 'No Asignado'),
+        ('2', 'Asignado'),
+    )
+    codigo = models.CharField(max_length=10, null=True)
     tipoAfectacion = models.CharField(max_length=2, choices=AFECTACION, default='1', null=True, blank=True)
     fechaOcurrencia = models.DateField(blank=True, null=True, verbose_name='fechaOcurrencia')
     descripcion = models.CharField(max_length=200, null=True)
@@ -25,6 +35,7 @@ class Incidente(models.Model):
     zona = models.ForeignKey(PuntoGeografico, on_delete=models.CASCADE, null=True)
     documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
+    status = models.CharField(max_length=2, choices=STATUS, default='1', null=True, blank=True)
 
 class Valoracion(models.Model):
     ESTADOS = [

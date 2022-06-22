@@ -4,6 +4,8 @@
 {% block extrastyle %}
   <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
   <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
   <style>
       #cover-spin {
           position: fixed;
@@ -134,7 +136,7 @@
       <h5 class="mb-2 mb-md-0 text-black">General</h5>
     </div>
     <div class="card-body cbody px-5 py-4">
-      <form role="form" id="formTarea">
+      <form id="formTareas" name="formTareas">
         {% csrf_token %}
 
         <div class="row">
@@ -153,30 +155,28 @@
         </div>
         <div class="row">
           <div class="form-group col-lg-4 col-sm-12">
-            <label for="fechaInicio">Fecha de Inicio:</label>
-            <input class="form-control" id="fechaInicio" name="fechaInicio" type="date">
+            <label for="fechaRegistro">Fecha de Inicio:</label>
+            <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date">
           </div>
           <div class="form-group col-lg-4 col-sm-12">
-            <label for="fechaFin">Fecha de Fin:</label>
-            <input class="form-control" id="fechaFin" name="fechaFin" type="date">
+            <label for="fecha">Fecha de Fin:</label>
+            <input class="form-control" id="fecha" name="fecha" type="date">
           </div>
           <div class="form-group col-lg-4 col-sm-12">
-            <label for="nombre">Presupuesto:</label>
-            <input class="form-control" id="nombre" name="nombre" type="text"
+            <label for="presupuesto">Presupuesto:</label>
+            <input class="form-control" id="presupuesto" name="presupuesto" type="text"
                    placeholder="S/">
           </div>
         </div>
-        <div class="row">
-          <div class="form-group  row justify-content-end mt-2 mr-1">
-            <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+
+          <div class="form-group  row justify-content-end mt-2 mr-0">
+            <a href="{% url 'listTasks' pk=activity.id %}" class="btn second mr-3 d-flex align-items-center">Cancelar</a>
             <div>
-              <button type="submit" class="btn btn-primary btn-block"><span
-                  class="glyphicon glyphicon-ok"></span> Crear Tarea
+              <button type="submit" class="btn btn-primary btn-block">
+                  <span class="glyphicon glyphicon-ok"></span> Crear Tarea
               </button>
             </div>
           </div>
-        </div>
-
 
       </form>
     </div>
@@ -189,24 +189,127 @@
 {% block extrajs %}
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
   <script>
-    $("#formTarea").on('submit', function (e) {
-      console.log("aqui llegue")
-      $.ajax({
-        url: '/conservacion/actividades/' + $("idActivity").val() + '/tareas/add/',
-        method: "POST",
-        data: {
-          'nombre': $("#nombre").val(),
+
+    jQuery.validator.addMethod("alphanumeric", function (value, element) {
+        return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
+      }, "Letters, numbers, and underscores only please");
+
+    jQuery.validator.addMethod("minDate", function(value, element) {
+    if ($("#fecha").val() > $("#fechaRegistro").val())
+        return true;
+    return false;
+    }, "La fecha de fin no puede ser inferior a la fecha inicio");
+
+    jQuery.validator.addMethod("maxDate", function(value, element) {
+    if ($("#fecha").val() > $("#fechaRegistro").val())
+        return true;
+    return false;
+    }, "La fecha de inicio no puede ser superior a la fecha fin");
+
+    $("form[name='formTareas']").validate({
+        rules: {
+          nombre: {
+            required: true,
+            maxlength: 50,
+            alphanumeric: true
+          },
+            descripcion: {
+            required: true,
+            maxlength: 200,
+          },
+            presupuesto: {
+            required: true,
+            number: true,
+            min: 0
+          },
+            fechaRegistro: {
+            required: true,
+            date: true,
+            maxDate: true
+          },
+            fecha: {
+            required: true,
+            date: true,
+            minDate: true
+          },
         },
-        success: function (response) {
-          console.log("ENTRO")
+        messages: {
+          nombre: {
+            required: "Debe ingresar el nombre de la tarea",
+            maxlength: "El nombre no debe tener más de 50 caracteres",
+            alphanumeric: "El nombre solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
+          },
+          descripcion: {
+            required: "Debe ingresar la descripción de la tarea",
+            maxlength: "La descripción no debe tener más de 200 caracteres",
+          },
+            presupuesto: {
+            required: "Debe ingresar el presupuesto de la tarea",
+            number: "El presupuesto solo acepta números",
+            min: "El presupuesto no puede ser negativo"
+          },
+            fechaRegistro: {
+            required: "Debe ingresar la fecha de inicio de la tarea",
+            //max: "La fecha de inicio no puede ser superior a la fecha fin"
+          },
+            fecha: {
+            required: "Debe ingresar la fecha de fin de la tarea",
+            //min: "La fecha de fin no puede ser inferior a la fecha inicio"
+          },
         },
-        error: function (error) {
-          console.log(error)
+        submitHandler: function (form, e) {
+          e.preventDefault();
+          $('#cover-spin').show(0)
+          $.ajax({
+            url: '/conservacion/actividades/' + $('#idActivity').val() + '/tareas/add/',
+            method: "POST",
+            data: {
+                'nombre': $("#nombre").val(),
+                'descripcion': $("#descripcion").val(),
+                'fechaRegistro': $("#fechaRegistro").val(),
+                'fecha': $("#fecha").val(),
+                'presupuesto': $("#presupuesto").val(),
+            },
+            success: function (response) {
+              $('#cover-spin').hide()
+              if (response["success"] !== undefined) {
+                $.toast({
+                  text: 'No se pudo crear la tarea',
+                  icon: 'warning',
+                  loader: false,        // Change it to false to disable loader
+                  bgColor: '#c67a71',
+                  textColor: '#000000',
+                  position: 'bottom-right',
+                  hideAfter: 3000,
+                })
+              } else {
+                 $("#nombre").val(null)
+                 $("#descripcion").val(null)
+                 $("#fechaRegistro").val(null)
+                 $("#fecha").val(null)
+                 $("#presupuesto").val(null)
+                $.toast({
+                  text: 'Tarea creada con éxito',
+                  icon: 'success',
+                  loader: false,        // Change it to false to disable loader
+                  bgColor: '#B7E6CA',  // To change the background
+                  textColor: '#000000',
+                  position: 'bottom-right',
+                  hideAfter: 3000,
+                })
+              }
+            },
+            error: function (error) {
+              $('#cover-spin').hide()
+              console.log(error)
+            }
+          });
+          return false;
         }
-
-
       });
-    });
   </script>
 {% endblock %}

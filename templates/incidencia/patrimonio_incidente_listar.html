@@ -101,10 +101,10 @@
 
       .form-control {
           background-color: white !important;
-          cursor: pointer!important;
+          cursor: pointer !important;
       }
 
-        span.select2-selection.select2-selection--single {
+      span.select2-selection.select2-selection--single {
           display: flex !important;
           align-items: center !important;
       }
@@ -154,11 +154,11 @@
     <div class="card-body row">
       <div class="col-md-6 col-sm-12">
 
-      <div class="row align-items-center justify-content-between">
-        <div class="col-md-6 d-flex">
-          <h5 class="mb-2 mb-sm-0 text-black mr-4">Incidentes</h5>
+        <div class="row align-items-center justify-content-between">
+          <div class="col-md-6 d-flex">
+            <h5 class="mb-2 mb-sm-0 text-black mr-4">Incidentes</h5>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -174,24 +174,24 @@
           </div>
         </div>
 
-      <div class="form-group col-sm-3 mb-0">
+        <div class="form-group col-sm-3 mb-0">
           <select class="selectpicker form-control" id="zona" name="zona">
           </select>
           <span class="fas fa-chevron-down inputIcon inputIcon2 mr-3"></span>
         </div>
 
         <div class="form-group col-sm-3 mb-0">
-          <select class="form-control" id="status_filter">
+          <select class="form-control" id="type_filter">
             <option value="" selected>Tipos</option>
-            {% for mykey,myvalue in status_choices %}
+            {% for mykey,myvalue in typeIncidents %}
               <option value="{{ mykey }}">{{ myvalue }}</option>
             {% endfor %}
           </select>
         </div>
         <div class="form-group col-sm-2 mb-0">
-          <select class="form-control" id="type_filter">
+          <select class="form-control" id="status_filter">
             <option value="" selected>Estados</option>
-            {% for mykey,myvalue in typeProjects %}
+            {% for mykey,myvalue in status_choices %}
               <option value="{{ mykey }}">{{ myvalue }}</option>
             {% endfor %}
           </select>
@@ -206,8 +206,7 @@
         <thead class="bg-200">
         <tr>
           <th class="sort ">Código</th>
-          <th class="sort">Descripción</th>
-            <th class="sort">Zona</th>
+          <th class="sort">Zona</th>
           <th class="sort">Tipo de Afectación</th>
           <th class="sort">Informante</th>
           <th class="sort">Fecha de Registro</th>
@@ -241,7 +240,7 @@
                        placeholder="informante" disabled>
               </div>
             </div>
-              <div class="row">
+            <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="patrimonio">Tipo del incidente:</label>
                 <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
@@ -249,7 +248,7 @@
                 </select>
               </div>
             </div>
-              <div class="row">
+            <div class="row">
               <div class="form-group col-lg-6 col-sm-12">
                 <label for="fechaInicio">Fecha del incidente:</label>
                 <input class="form-control" id="fecha" name="fecha" type="date" required disabled>
@@ -273,7 +272,7 @@
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="descripcion">Descripcion:</label>
                 <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
-                          placeholder="Descripción de la Actividad" ></textarea>
+                          placeholder="Descripción de la Actividad"></textarea>
               </div>
             </div>
             <div class="row">
@@ -314,7 +313,9 @@
         <div class="modal-body px-9">
           <div class="row justify-content-between">
             <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
-            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Retirar <Asignación></Asignación></button>
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Retirar
+              <Asignación></Asignación>
+            </button>
           </div>
         </div>
       </div>
@@ -330,36 +331,143 @@
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
   <script src="{% static 'project/projects/incidents.js' %}"></script>
   <script>
-    $(document).ready(function () {
-      $('#zona').prepend('<option selected=""></option>').select2({
-        ajax: {
-          url: '/conservacion/proyectos/zonas',
-          datatype: 'json',
-          delay: 250,
-          data: function (params) {
-            return {
-              search: params.term || '',
-              page: params.page || 1
-            };
+    let types = {
+      '1': 'Invasión/Ocupación Ilegal/Ampliación de Invasión',
+      '2': 'Deterioro de patrimonio por efectos de la persona',
+      '3': 'Deterioro de patrimonio por efectos de la naturaleza',
+      '4': 'Destrucción en zonas arqueológicas',
+      '5': 'Destrucción de casonas',
+      '6': 'Huaquería',
+      '7': 'Otros',
+    };
+    let table = $('#tabla_autores').DataTable({
+      "searching": false,
+      "serverSide": true,
+      "processing": true,
+      "lengthChange": false,
+      "pageLength": 10,
+      "scrollX": true,
+      "ajax": function (data, callback, settings) {
+        let order_column = data.order[0].column
+        let order = data.order[0].dir
+
+        $.ajax({
+          url: '',
+          type: 'get',
+          data: {
+            length: data.length,
+            start: data.start,
+            search_value: $('#search').val(),
+            type_filter: $('#type_filter').val(),
+            status_filter: $('#status_filter').val(),
+            zone_filter: $('#zona').val(),
+            order_column: order_column,
+            order: order
           },
-          processResults: function (data, params) {
-            params.page = params.page || 1;
-            console.log(data.items)
-            return {
-              results: $.map(data.items, function (obj, index) {
-                return {id: obj.id, text: obj.nombreTituloDemoninacion};
-              }),
-              pagination: {
-                more: (params.page * 10) < data.total_count
-              }
-            }
+          success: function (data, textStatus, jQxhr) {
+            console.log(data)
+            callback({
+              recordsTotal: data.recordsTotal,
+              recordsFiltered: data.recordsFiltered,
+              data: data.data
+            });
+          },
+          error: function (jqXhr, textStatus, errorThrown) {
+          }
+        });
+      },
+      "columns": [
+        {"data": "codigo"},
+        {"data": "zona"},
+        {
+          "data": "tipoAfectacion", render: function (data, type, row) {
+            return types[data]
           }
         },
-        placeholder: "Zona",
-        allowClear: true,
-        cache: false
-      });
-
+        {"data": "nombre"},
+        {"data": "fechaRegistro"},
+        {
+          "data": "status", render: function (data, type, row) {
+            if (data == '1') {
+              resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "No Asignado" + '</span>'
+            } else if (data == '2') {
+              resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Asignado" + '</span>'
+            }
+            return resp;
+          }
+        },
+        {
+          "data": null,
+          "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+              '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+              '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+        }
+      ],
+      "language": {
+        "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sZeroRecords": "No se encontraron resultados",
+        "sEmptyTable": "Ningún dato disponible en esta tabla",
+        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sSearch": "Buscar:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+          "sFirst": "Primero",
+          "sLast": "Último",
+          "sNext": "Siguiente",
+          "sPrevious": "Anterior"
+        },
+        "oAria": {
+          "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+          "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+      },
     });
+
+      $(document).ready(function () {
+        $('#zona').select2({
+          ajax: {
+            url: '/incidente/zonas/',
+            datatype: 'json',
+            delay: 250,
+            data: function (params) {
+              return {
+                search: params.term || '',
+                page: params.page || 1
+              };
+            },
+            processResults: function (data, params) {
+              params.page = params.page || 1;
+              console.log(data.items)
+              return {
+                results: $.map(data.items, function (obj, index) {
+                  return {id: obj.id, text: obj.nombre};
+                }),
+                pagination: {
+                  more: (params.page * 10) < data.total_count
+                }
+              }
+            }
+          },
+          placeholder: "Patrimonio",
+          allowClear: true,
+          cache: false
+        });
+
+        $('#zona').on("select2:clear", function (evt) {
+          $(this).on("select2:opening.cancelOpen", function (evt) {
+            evt.preventDefault();
+
+            $(this).off("select2:opening.cancelOpen");
+          });
+        });
+
+
+      });
   </script>
 {% endblock %}

@@ -76,6 +76,8 @@ class Tarea(models.Model):
         ('1', 'Activo'),
         ('2', 'Inactivo'),
     )
+    codigo = models.CharField(max_length=8, null=True)
+    nombre = models.CharField(max_length=50, null=True)
     descripcion = models.CharField(max_length=200)
     gasto = models.FloatField(blank=True, null=True)
     presupuesto = models.FloatField(blank=True, null=True)

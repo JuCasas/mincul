@@ -17,7 +17,7 @@ from authentication.models import User
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
-    ActividadTuristica, Responsable, PuntoGeografico
+    ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio
 from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
@@ -30,7 +30,7 @@ def patrimonio_list(request):
         # beautify = json.dumps(data, indent=4)
         # print(beautify)
         for pat in data:
-            if len(Patrimonio.objects.filter(nombreTituloDemoninacion=pat['nombre']))==0:
+            if len(Patrimonio.objects.filter(nombreTituloDemoninacion=pat['nombre'])) == 0:
                 patrimonio = Patrimonio()
                 patrimonio.nombreTituloDemoninacion = pat['nombre']
                 patrimonio.codigo = pat['codigo']
@@ -57,11 +57,39 @@ def patrimonio_list(request):
                     resp.correo = pat['responsable']['correo']
                     resp.telefono = pat['responsable']['telefono']
                     resp.fecha = datetime.strptime(pat['responsable']['fecha'],"%d/%m/%Y")
-                    resp.save()
-                patrimonio.save()
-                patrimonio.responsables.add(resp)
-                patrimonio.save()
-                print(patrimonio.nombreTituloDemoninacion)
+                    #resp.save()
+                #patrimonio.save()
+                #patrimonio.responsables.add(resp)
+                #patrimonio.save()
+                if int(cat.tipo) == 1:
+                    print('Inmaterial')
+
+                elif int(cat.tipo) == 2:
+                    print('Inmueble')
+                    inmueble = PatrimonioMaterialInMueble()
+
+                    inmueble.tipoIngreso = pat['tipoIngreso']
+                    inmueble.epocaPropicia = pat['epocaPropicia']
+
+                    for actividad in pat['actividades']:
+                        act = ActividadTuristica()
+                        act.descripcion = actividad['actividad']
+                        act.categoria = actividad['tipo']
+                        act.tipo = actividad['tipo']
+                        act.observacion = actividad['observacion']
+                        act.patrimonio = patrimonio
+                        act.save()
+
+                    for servicio in pat['servicios']:
+                        serv = Servicio()
+                        serv.categoria = servicio['servicio']
+                        serv.tipo = servicio['tipoServicio']
+                        serv.observacion = servicio['observacion']
+                        serv.patrimonio = patrimonio
+                        serv.save()
+
+                elif int(cat.tipo) == 3:
+                    print('Mueble')
 
     context = {
         'patrimonios': Patrimonio.objects.all()
@@ -153,6 +181,7 @@ def detalle(request, pk):
         incidente.telefono = request.POST.get("telefono")
         incidente.zona_id = zona.id
         #zona=PuntoGeografico.objects.get(patrimonio_id=pk)
+        incidente.codigo = "INCD" + str(incidente.id).zfill(6)
         incidente.save()
         return HttpResponseRedirect(reverse(detalle, args=[pk]))
 
@@ -193,7 +222,8 @@ def detalle_museo(request, pk):
                "institucion": institucion,
                "patrimonios": patrimonios,
                "valoraciones": valoraciones,
-               "incidentes": incidentes}
+               "incidentes": incidentes,
+               'afectaciones': [c[1] for c in Incidente.AFECTACION]}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
 
@@ -208,6 +238,26 @@ def valor_museo(request,pk):
         valoracion.valoracion = request.POST.get("score")
         valoracion.save()
         send_email(request, valoracion.pk)
+    return HttpResponseRedirect(reverse(detalle_museo, args=[pk]))
+
+def incidete_museo(request,pk):
+    if request.POST:
+        zona = PuntoGeografico.objects.get(institucion_id=pk)
+        incidente = Incidente.objects.create()
+
+        for c in Incidente.AFECTACION:
+            if c[1] == request.POST.get("tipo"):
+                incidente.tipoAfectacion = c[0]
+                break
+
+        incidente.fechaOcurrencia = request.POST.get("fecha")
+        incidente.descripcion = request.POST.get("descripcion")
+        incidente.nombre = request.POST.get("nombre")
+        incidente.correo = request.POST.get("email")
+        incidente.telefono = request.POST.get("telefono")
+        incidente.zona_id = zona.id
+        incidente.codigo = "INCD" + str(incidente.id).zfill(6)
+        incidente.save()
     return HttpResponseRedirect(reverse(detalle_museo, args=[pk]))
 
 @method_decorator(csrf_exempt)

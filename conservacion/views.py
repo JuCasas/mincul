@@ -1,12 +1,13 @@
 import datetime
 
+from authentication.models import User
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from conservacion.models import ProyectoConservacion, Actividad, Tarea
 from conservacion.serializers import ProyectoConservacionSerializer, ActividadSerializer, TareaSerializer, \
-  PatrimonioSerializer
+  PatrimonioSerializer, ConservadorSerializer
 from patrimonios.models import Patrimonio
 
 
@@ -131,6 +132,16 @@ def listPatrimonys_Project(request):
   result['total_count'] = count
   return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
+@api_view(('GET',))
+def addConservador(request):
+  queryset = User.objects.all()
+  count = queryset.count()
+  serializer = ConservadorSerializer(queryset, many=True)
+  result = dict()
+  result['items']= serializer.data
+  result['total_count'] = count
+  return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 @api_view(('GET',))
 def listProjects(request, **kwargs):
@@ -293,7 +304,6 @@ def listTasks(request, pk):
     }
     return render(request, 'proyectoConservacion/task_list.html', context)
 
-
 @api_view(('POST',))
 def addActivity(request, pk):
   try:
@@ -323,6 +333,32 @@ def addActivity(request, pk):
     result['message'] = str(e)  # or custom message
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+@api_view(('POST',))
+def editActivity(request, pk, pkActividad):
+  try:
+    print("######")
+    print(request.POST)
+    actividad = Actividad.objects.get(pk=pkActividad)
+    actividad.nombre = request.POST['nombre']
+    actividad.descripcion = request.POST['descripcion']
+    actividad.fechaInicio = datetime.datetime.strptime(request.POST['fechaInicio'], "%Y-%m-%d").date()
+    actividad.fechaFin = datetime.datetime.strptime(request.POST['fechaFin'], "%Y-%m-%d").date()
+    #actividad.patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
+    actividad.save()
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  except Exception as e:
+    result = dict()
+    result['success'] = False
+    result['message'] = str(e)  # or custom message
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('POST',))
+def deleteActivity(request, pk, pkActividad):
+  actividad = Actividad.objects.get(pk=pkActividad)
+  actividad.estado = '2'
+  actividad.save()
+  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 @api_view(('GET',))
 def addTaskView(request, pk):
   context = {
@@ -333,21 +369,21 @@ def addTaskView(request, pk):
 
 @api_view(('POST',))
 def addTask(request, pk):
-  codigo = "ACT00"
   nombre = request.POST['nombre']
   descripcion = request.POST['descripcion']
   presupuesto = request.POST['presupuesto']
-  gasto = request.POST['gasto']
   fechaRegistro = datetime.datetime.strptime(request.POST['fechaRegistro'], "%Y-%m-%d").date()
   fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
   actividad = Actividad.objects.get(pk=pk)
-  tarea = ProyectoConservacion.objects.create(
-    codigo=codigo,
+  print(type(presupuesto))
+  tarea = Tarea.objects.create(
     nombre=nombre,
     descripcion=descripcion,
-    presupuesto=presupuesto,
-    gasto=gasto,
+    presupuesto=float(presupuesto),
+    gasto=0.00,
     fechaRegistro=fechaRegistro,
     fecha=fecha,
     actividad=actividad)
+  tarea.codigo = "A" + str(tarea.id).zfill(3)
+  tarea.save()
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
