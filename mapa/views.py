@@ -1,12 +1,77 @@
 from django.shortcuts import render
 from patrimonios.models import Patrimonio
-from patrimonios.models import  Categoria
+from patrimonios.models import Categoria
 from patrimonios.models import Institucion
+from patrimonios.models import PatrimonioMaterialMueble
+from patrimonios.models import PatrimonioEtnografico
+from patrimonios.models import PatrimonioIndustrial
+from patrimonios.models import PatrimonioArqueologico
+from patrimonios.models import PatrimonioPaleontologico
+from patrimonios.models import PatrimonioHistoricoArtistico
 from django.http import JsonResponse
 # Create your views here.
 
 def ficha(request,my_id):
     patrimonio=Patrimonio.objects.get(id=my_id)
+    if patrimonio.tipoPatrimonio == "3":
+        patrimonioMueble = PatrimonioMaterialMueble.objects.get(patrimonio=patrimonio)
+        materialesSecundarios = patrimonioMueble.materialesSecundarios.all()
+        tecnicasAcabado = patrimonioMueble.tecnicasAcabado.all()
+        tecnicasDecoracion = patrimonioMueble.tecnicasDecoracion.all()
+        tecnicasManufactura = patrimonioMueble.tecnicasManifactura.all()
+        materialesSecundariosString =''
+        tecnicasAcabadoString = ''
+        tecnicasDecoracionString = ''
+        tecnicasManufacturaString = ''
+        i=0
+        for e in materialesSecundarios:
+            if i == 0:
+                materialesSecundariosString = e.descripcion
+            else:
+                materialesSecundariosString = materialesSecundariosString + ', ' + e.descripcion
+            i += 1
+        i = 0
+        for e in tecnicasAcabado:
+            if i == 0:
+                tecnicasAcabadoString = e.descripcion
+            else:
+                tecnicasAcabadoString = tecnicasAcabadoString + ', ' + e.descripcion
+            i += 1
+        i = 0
+        for e in tecnicasDecoracion:
+            if i == 0:
+                tecnicasDecoracionString = e.descripcion
+            else:
+                tecnicasDecoracionString = tecnicasDecoracionString + ', ' + e.descripcion
+            i += 1
+        i = 0
+        for e in tecnicasManufactura:
+            if i == 0:
+                tecnicasManufacturaString = e.descripcion
+            else:
+                tecnicasManufacturaString = tecnicasManufacturaString + ', ' + e.descripcion
+            i += 1
+        dataCategoria =  None
+        if (patrimonio.categoria.pk == 6):
+            dataCategoria = PatrimonioArqueologico.objects.get(patrimonioMueble=patrimonioMueble)
+        if (patrimonio.categoria.pk == 7):
+            dataCategoria = PatrimonioHistoricoArtistico.objects.get(patrimonioMueble=patrimonioMueble)
+        if (patrimonio.categoria.pk == 8):
+            dataCategoria = PatrimonioEtnografico.objects.get(patrimonioMueble=patrimonioMueble)
+        if (patrimonio.categoria.pk == 9):
+            dataCategoria = PatrimonioPaleontologico.objects.get(patrimonioMueble=patrimonioMueble)
+        if (patrimonio.categoria.pk == 10):
+            dataCategoria = PatrimonioIndustrial.objects.get(patrimonioMueble=patrimonioMueble)
+        context = {
+            'patrimony': patrimonio,
+            'patrimonioMuebleData': patrimonioMueble,
+            'materialesSecundarios':materialesSecundariosString,
+            'tecnicasAcabado': tecnicasAcabadoString,
+            'tecnicasDecoracion': tecnicasDecoracionString,
+            'tecnicasManufactura': tecnicasManufacturaString,
+            'dataCategoria':dataCategoria
+        }
+        return render(request, 'map/ficha.html', context)
     context={
         'patrimony':patrimonio
     }
