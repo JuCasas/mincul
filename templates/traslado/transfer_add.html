@@ -224,7 +224,7 @@
                                             <th scope="col">Clasificación</th>
                                             <th scope="col">Tipo de bien</th>
                                             <th scope="col">Estado</th>
-                                            {% if  estado  == '1' or estado == '0' %}
+                                            {% if  estado  == '1' or estado == '0' or operacion == "agregar" %}
                                                 <th scope="col">Acciones</th>
                                             {% endif %}
                                         </tr>
@@ -238,7 +238,7 @@
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
                                                 <td>{{ patrimonio.get_estado_display }}</td>
 
-                                                {% if  estado  == '1' or estado == '0' %}
+                                                {% if  estado  == '1' or estado == '0'  %}
                                                     <td>
                                                         <button class="btn" href="#" type="button"
                                                                 onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
