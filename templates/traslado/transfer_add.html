@@ -1036,7 +1036,7 @@
                             console.log("REGISTRAR FECHA DE RETORNO REAL");
                             registrarFechaRetornoReal();
                         }
-                        if ("{{ operacion }}" === 'agregar'){
+                        if ("{{ operacion }}" === 'agregar' || ("{{ operacion }}" === 'editar' && "{{ estado }}" === '1' )){
                             $("#formAgregar").submit();
                         }
 
