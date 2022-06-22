@@ -30,7 +30,7 @@ def patrimonio_list(request):
         # beautify = json.dumps(data, indent=4)
         # print(beautify)
         for pat in data:
-            if len(Patrimonio.objects.filter(nombreTituloDemoninacion=pat['nombre']))==0:
+            if len(Patrimonio.objects.filter(nombreTituloDemoninacion=pat['nombre'])) == 0:
                 patrimonio = Patrimonio()
                 patrimonio.nombreTituloDemoninacion = pat['nombre']
                 patrimonio.codigo = pat['codigo']
@@ -57,11 +57,16 @@ def patrimonio_list(request):
                     resp.correo = pat['responsable']['correo']
                     resp.telefono = pat['responsable']['telefono']
                     resp.fecha = datetime.strptime(pat['responsable']['fecha'],"%d/%m/%Y")
-                    resp.save()
-                patrimonio.save()
-                patrimonio.responsables.add(resp)
-                patrimonio.save()
-                print(patrimonio.nombreTituloDemoninacion)
+                    #resp.save()
+                #patrimonio.save()
+                #patrimonio.responsables.add(resp)
+                #patrimonio.save()
+                if int(cat.tipo) == 1:
+                    print('Inmaterial')
+                elif int(cat.tipo) == 2:
+                    print('Inmueble')
+                elif int(cat.tipo) == 3:
+                    print('Mueble')
 
     context = {
         'patrimonios': Patrimonio.objects.all()
