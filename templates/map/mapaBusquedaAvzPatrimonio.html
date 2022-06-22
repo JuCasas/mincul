@@ -148,6 +148,38 @@
                                 </div>
                             </div>
                         {% endfor %}
+                        {% for i in instituciones %}
+                        <div class="card mb-5" style="padding: 10px;margin-top: 10px;">
+                            <div class="position-relative">
+                                <div>
+                                    <img class="img-fluid w-100"
+                                         style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
+                                         src="{{ i.url }}"
+                                         alt="Card image"/>
+                                </div>
+                                <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                                    <p class="card-text "
+                                       style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
+                                        {{ i.nombre}}</p>
+                                </div>
+                            </div>
+                            <div class="card-body pt-2 pb-2">
+                                <p class="mb-0 " style="font-size: 15px"> Institución </p>
+                                {% comment %}
+                                <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                        value="[{{ p.lat }}, {{ p.long }}]" name="btn-ver-mapa">
+                                            Ver en el mapa
+                                </button>
+                                {% endcomment %}
+                                <a href="{% url 'detalle_museo' pk=i.pk %}">
+                                    <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
+                                            style="font-size: 10px">
+                                                Ver detalle
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
                     {% endif %}
                 </div>
             </nav>
@@ -190,10 +222,10 @@
             popupAnchor: [-1,-39]
         });
 
-        {% if patrimonio0 %}
+        {% if patrimonio0 != None%}
             let markerInicio = L.marker([{{patrimonio0.lat}}, {{patrimonio0.long}}], {
                 icon:myIcon,
-                title: "{{ patrimonio0.nombreTituloDemoninacion }}"
+                title: "{{ resultado0.nombreTituloDemoninacion }}"
             }).addTo(map).bindPopup("<div>" +
                 "<p>" + "{{ patrimonio0.nombreTituloDemoninacion }}" +"</p>"  +
                 "<img width='300' src='" +
@@ -201,6 +233,18 @@
                 "'/>" +
             "</div>").openPopup()
             map.flyTo([{{ patrimonio0.lat }}, {{patrimonio0.long}}],14);
+        {% endif %}
+        {% if institucion0 != None %}
+            let markerInicio = L.marker([{{institucion0.lat}}, {{institucion0.long}}], {
+                icon:myIcon,
+                title: "{{ institucion0.nombre }}"
+            }).addTo(map).bindPopup("<div>" +
+                "<p>" + "{{ institucion0.nombre }}" +"</p>"  +
+                "<img width='300' src='" +
+                "{{ institucion0.url }}" +
+                "'/>" +
+            "</div>").openPopup()
+            map.flyTo([{{ institucion0.lat }}, {{institucion0.long}}],14);
         {% endif %}
     </script>
     <!--Advanced search script-->

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from patrimonios.models import Patrimonio
 from patrimonios.models import  Categoria
+from patrimonios.models import Institucion
 from django.http import JsonResponse
 # Create your views here.
 
@@ -22,12 +23,28 @@ def mapaPatrimonioSimple(request):
                 or patrimonioNombre != "" or patrimonioNombre != " ":
             patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre)
             if len(patrimonios) > 0:
-                patrimonio0 = patrimonios[0]
+                instituciones = []
+                patriInmueble = []
+                for p in patrimonios:
+                    if int(p.tipoPatrimonio) == 3:
+                        insti = Institucion.objects.get(pk=p.institucion.pk)
+                        if insti not in instituciones:
+                            instituciones.append(insti)
+                    if int(p.tipoPatrimonio) == 2:
+                        patriInmueble.append(p)
+                patrimonio0 = None
+                institucion0 = None
+                if len(patriInmueble)>0:
+                    patrimonio0 = patriInmueble[0]
+                if len(instituciones)>0:
+                    institucion0 = instituciones[0]
                 success=1
                 context = {
-                    'patrimonios': patrimonios,
+                    'patrimonios': patriInmueble,
+                    'instituciones':instituciones,
                     'patrimonio0': patrimonio0,
-                    'lensearch':len(patrimonios),
+                    'institucion0':institucion0,
+                    'lensearch':len(patriInmueble)+len(instituciones),
                     'success':success
                 }
                 return render(request, 'map/mapaBusquedaSimplePatrimonio.html', context)
@@ -99,14 +116,30 @@ def mapaPatrimonioAvanzado(request):
                                 dis.append(p)
                         patrimonios=dis
                 if(len(patrimonios)>0):
+                    instituciones = []
+                    patriInmueble = []
+                    for p in patrimonios:
+                        if int(p.tipoPatrimonio) == 3:
+                            insti = Institucion.objects.get(pk=p.institucion.pk)
+                            if insti not in instituciones:
+                                instituciones.append(insti)
+                        if int(p.tipoPatrimonio) == 2:
+                            patriInmueble.append(p)
+                    patrimonio0 = None
+                    institucion0 = None
+                    if len(patriInmueble) > 0:
+                        patrimonio0 = patriInmueble[0]
+                    if len(instituciones) > 0:
+                        institucion0 = instituciones[0]
                     success = 1
-                    patrimonio0 = patrimonios[0]
                     context = {
                         'categorias': categorias,
                         'departamentos': departamentos,
-                        'patrimonios': patrimonios,
+                        'patrimonios': patriInmueble,
+                        'instituciones':instituciones,
                         'patrimonio0': patrimonio0,
-                        'lensearch': len(patrimonios),
+                        'institucion0':institucion0,
+                        'lensearch': len(patriInmueble)+len(instituciones),
                         'success': success
                     }
                     return render(request, 'map/mapaBusquedaAvzPatrimonio.html', context)
