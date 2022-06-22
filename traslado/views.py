@@ -123,7 +123,7 @@ def addTransfer(request):
 
 def listarPatrimoniosTraslado(request):
     filtro = request.GET['q']
-    patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=filtro)
+    patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=filtro, estado='1')
     serializer = PatrimonioSerializer((patrimonios), many=True)
     ser_instance = json.dumps(serializer.data)
     return JsonResponse({"patrimoniosAjax": ser_instance}, status=200)
@@ -170,6 +170,30 @@ def existeFechaSalidaProgramada(request):
     else:
         print("TRUE")
         return JsonResponse({"existe": True}, status=200)
+
+def registrarNumResolucion(request):
+    trasladoPK = request.POST['idEditar']
+    nResolucion = request.POST['nResolucion']
+    traslado = SolicitudTraslado.objects.get(pk=trasladoPK)
+    traslado.numeroResolucion = nResolucion
+    traslado.save()
+    return JsonResponse({}, status=200)
+
+def registrarFechaSalidaReal(request):
+    trasladoPK = request.POST['idEditar']
+    fechaSalidaReal = request.POST['fechaSalidaReal']
+    traslado = SolicitudTraslado.objects.get(pk=trasladoPK)
+    traslado.fechaSalidaReal = fechaSalidaReal
+    traslado.save()
+    return JsonResponse({}, status=200)
+
+def registrarFechaRetornoReal(request):
+    trasladoPK = request.POST['idEditar']
+    fechaRetornoReal = request.POST['fechaRetornoReal']
+    traslado = SolicitudTraslado.objects.get(pk=trasladoPK)
+    traslado.fechaRetorno = fechaRetornoReal
+    traslado.save()
+    return JsonResponse({}, status=200)
 
 def existeFechaSalidaReal(request):
     pk = request.POST['idEditar']

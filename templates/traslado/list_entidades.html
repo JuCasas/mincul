@@ -273,7 +273,9 @@
                                 <input type="text" class="form-control" id="inputTelefono" name="inputTelefono">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Agregar Entidad</button>
+                        <div class="row justify-content-end mr-0">
+                            <button type="submit" class="btn btn-primary">Agregar Entidad</button>
+                        </div>
                     </form>
                 </div>
                 {#          <div class="modal-footer">#}
@@ -445,6 +447,10 @@
             return this.optional(element) || /^(\d{8}|\d{11}|\d{12})+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
+        jQuery.validator.addMethod("alphanumericNombreEntidad", function (value, element) {
+            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\s\w\-]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
         jQuery.validator.addMethod("alphanumericNombreEnti", function (value, element) {
             return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
@@ -455,6 +461,10 @@
 
         jQuery.validator.addMethod("telefono", function (value, element) {
             return this.optional(element) || /^\d{7,20}$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+         jQuery.validator.addMethod("regexDestino", function (value, element) {
+            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\w\s+\.]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
 
@@ -479,7 +489,7 @@
                 },
                 inputNombre: {
                     required: true,
-                    alphanumericNombreEnti: true,
+                    alphanumericNombreEntidad: true,
                     maxlength: 100,
                 },
                 inputCorreo: {
@@ -491,7 +501,7 @@
                 },
                 inputDireccion: {
                     required: true,
-                    alphanumeric: true,
+                    regexDestino: true,
                 },
                 inputTelefono: {
                     required: true,
@@ -506,7 +516,7 @@
                 },
                 inputNombre: {
                     required: "Debe ingresar el nombre de la entidad solicitante",
-                    alphanumericNombreEnti: "El nombre solo debe contener carácteres alfanuméricos incluido" +
+                    alphanumericNombreEntidad: "El nombre solo debe contener carácteres alfanuméricos incluido" +
                         " guión(-) y guión bajo (_)",
                     maxlength: "El nombre de la entidad no debe tener más de 100 caracteres",
 
@@ -517,7 +527,7 @@
                 },
                 inputDireccion: {
                     required: "Debe ingresar la dirección de la entidad solicitante",
-                    alphanumeric: "La dirección solo puede contener caracteres alfanuméricos"
+                    regexDestino: "La dirección solo puede contener caracteres alfanuméricos"
                 },
                 inputPais: {
                     required: "Debe ingresar el país de la entidad solicitante",
@@ -582,7 +592,7 @@
                 },
                 inputNombre2: {
                     required: true,
-                    alphanumericNombreEnti: true,
+                    alphanumericNombreEntidad: true,
                     maxlength: 100,
                 },
                 inputCorreo2: {
@@ -594,7 +604,7 @@
                 },
                 inputDireccion2: {
                     required: true,
-                    alphanumeric: "La dirección solo puede contener caracteres alfanuméricos"
+                    regexDestino: "La dirección solo puede contener caracteres alfanuméricos"
                 },
                 inputTelefono2: {
                     required: true,
@@ -609,7 +619,7 @@
                 },
                 inputNombre2: {
                     required: "Debe ingresar el nombre de la entidad solicitante",
-                    alphanumericNombreEnti: "El nombre solo debe contener carácteres alfanuméricos incluido" +
+                    alphanumericNombreEntidad: "El nombre solo debe contener carácteres alfanuméricos incluido" +
                         " guión(-) y guión bajo (_)",
                     maxlength: "El nombre de la entidad no debe tener más de 100 caracteres",
                 },
@@ -619,6 +629,7 @@
                 },
                 inputDireccion2: {
                     required: "Debe ingresar la dirección de la entidad solicitante",
+                    regexDestino: "Debe ingresar la dirección de la entidad solicitante",
                 },
                 inputPais2: {
                     required: "Debe ingresar el país de la entidad solicitante",

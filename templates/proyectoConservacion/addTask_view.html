@@ -88,24 +88,24 @@
 
       .form-control {
           background-color: white !important;
-          cursor: pointer!important;
+          cursor: pointer !important;
       }
 
       .second {
-        background-color: white!important;
-        color: #2B2D42!important;
-        border-color: #8d8e99 !important;
-        border-radius: 12px!important;
-        height: 36px!important;
-        font-size: 12px!important;
+          background-color: white !important;
+          color: #2B2D42 !important;
+          border-color: #8d8e99 !important;
+          border-radius: 12px !important;
+          height: 36px !important;
+          font-size: 12px !important;
       }
 
-      .cbody{
-          background-color: #F9FAFD!important;
+      .cbody {
+          background-color: #F9FAFD !important;
       }
 
-      input:disabled{
-          background-color: #D2D2D2!important;
+      input:disabled {
+          background-color: #D2D2D2 !important;
       }
 
   </style>
@@ -113,11 +113,12 @@
 {% endblock %}
 
 {% block body %}
-  <input type="hidden" value="{{ activity.id }}" id="idProject">
+  <input type="hidden" value="{{ activity.id }}" id="idActivity">
   <div class="card mb-3">
     <div class="card-body">
-        <div class="row justify-content-between align-items-center">
-        <a class="nav-link py-0" href="{% url 'listTasks' pk=activity.id %}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Tareas</a>
+      <div class="row justify-content-between align-items-center">
+        <a class="nav-link py-0" href="{% url 'listTasks' pk=activity.id %}"><span class="fas fa-angle-left mr-2"
+                                                                                   data-fa-transform="shrink-3"></span>Tareas</a>
       </div>
 
       <div class="row justify-content-between align-items-center">
@@ -129,57 +130,57 @@
   </div>
 
   <div class="card mb-3">
-  <div class="card-header">
-        <h5 class="mb-2 mb-md-0 text-black">General</h5>
+    <div class="card-header">
+      <h5 class="mb-2 mb-md-0 text-black">General</h5>
     </div>
     <div class="card-body cbody px-5 py-4">
-        <form role="form" id="formTarea">
-            {% csrf_token %}
+      <form role="form" id="formTarea">
+        {% csrf_token %}
 
-            <div class="row">
-              <div class="form-group col-lg-12 col-sm-12">
-                <label for="nombre">Nombre:</label>
-                <input class="form-control" id="nombre" name="nombre" type="text" required
-                       placeholder="Nombre de la Actividad">
-              </div>
+        <div class="row">
+          <div class="form-group col-lg-12 col-sm-12">
+            <label for="nombre">Nombre:</label>
+            <input class="form-control" id="nombre" name="nombre" type="text"
+                   placeholder="Nombre de la Actividad">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-lg-12 col-sm-12">
+            <label for="descripcion">Descripcion:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" type="text"
+                      placeholder="Descripción de la Actividad"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-lg-4 col-sm-12">
+            <label for="fechaInicio">Fecha de Inicio:</label>
+            <input class="form-control" id="fechaInicio" name="fechaInicio" type="date">
+          </div>
+          <div class="form-group col-lg-4 col-sm-12">
+            <label for="fechaFin">Fecha de Fin:</label>
+            <input class="form-control" id="fechaFin" name="fechaFin" type="date">
+          </div>
+          <div class="form-group col-lg-4 col-sm-12">
+            <label for="nombre">Presupuesto:</label>
+            <input class="form-control" id="nombre" name="nombre" type="text"
+                   placeholder="S/">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group  row justify-content-end mt-2 mr-1">
+            <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+            <div>
+              <button type="submit" class="btn btn-primary btn-block"><span
+                  class="glyphicon glyphicon-ok"></span> Crear Tarea
+              </button>
             </div>
-            <div class="row">
-              <div class="form-group col-lg-12 col-sm-12">
-                <label for="descripcion">Descripcion:</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
-                          placeholder="Descripción de la Actividad"></textarea>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-lg-4 col-sm-12">
-                <label for="fechaInicio">Fecha de Inicio:</label>
-                <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required>
-              </div>
-              <div class="form-group col-lg-4 col-sm-12">
-                <label for="fechaFin">Fecha de Fin:</label>
-                <input class="form-control" id="fechaFin" name="fechaFin" type="date" required>
-              </div>
-                <div class="form-group col-lg-4 col-sm-12">
-                <label for="nombre">Presupuesto:</label>
-                <input class="form-control" id="nombre" name="nombre" type="text" required
-                       placeholder="S/">
-              </div>
-            </div>
+          </div>
+        </div>
 
 
-          </form>
+      </form>
     </div>
   </div>
-
-  <div class="row justify-content-end mt-2 mr-1">
-                <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
-              <div >
-                <input type="hidden" id="type" name="type" value="">
-                <button type="submit" class="btn btn-primary btn-block"><span
-                    class="glyphicon glyphicon-ok"></span> Crear Tarea
-                </button>
-              </div>
-            </div>
 
   <div id="cover-spin"></div>
 
@@ -188,5 +189,24 @@
 {% block extrajs %}
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'project/projects/tasks.js' %}"></script>
+  <script>
+    $("#formTarea").on('submit', function (e) {
+      console.log("aqui llegue")
+      $.ajax({
+        url: '/conservacion/actividades/' + $("idActivity").val() + '/tareas/add/',
+        method: "POST",
+        data: {
+          'nombre': $("#nombre").val(),
+        },
+        success: function (response) {
+          console.log("ENTRO")
+        },
+        error: function (error) {
+          console.log(error)
+        }
+
+
+      });
+    });
+  </script>
 {% endblock %}

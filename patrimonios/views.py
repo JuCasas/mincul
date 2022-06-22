@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 
 from django.core.mail import EmailMultiAlternatives
+from django.db.models.lookups import In
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import get_template
@@ -16,7 +17,8 @@ from authentication.models import User
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
-    ActividadTuristica, Responsable
+    ActividadTuristica, Responsable, PuntoGeografico
+from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
 
@@ -126,15 +128,35 @@ def patrimonio_edit(request,pk):
 
 def detalle(request, pk):
     valor = Patrimonio.objects.get(pk=pk)
-    valoraciones = PatrimonioValoracion.objects.filter(patrimonio_id=pk).filter(estado=2)
+    zona = PuntoGeografico.objects.get(patrimonio_id=pk)
+    valoraciones = PatrimonioValoracion.objects.filter(zona=zona).filter(estado=2)
     puntuacion=0
     for v in valoraciones:
         puntuacion = v.valoracion + puntuacion
     if len(valoraciones):
         puntuacion=puntuacion/len(valoraciones)
-    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones}
+    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones,
+               'afectaciones': [c[1] for c in Incidente.AFECTACION]}
 
-    if request.POST:
+    if request.POST.get("accion") == "incidente":
+        print(request.POST)
+        incidente = Incidente.objects.create()
+        zona = PuntoGeografico.objects.get(patrimonio_id=pk)
+        for c in Incidente.AFECTACION:
+            if c[1] == request.POST.get("tipo"):
+                incidente.tipoAfectacion = c[0]
+                break
+        incidente.fechaOcurrencia = request.POST.get("fecha")
+        incidente.descripcion = request.POST.get("descripcion")
+        incidente.nombre = request.POST.get("nombre")
+        incidente.correo = request.POST.get("email")
+        incidente.telefono = request.POST.get("telefono")
+        incidente.zona_id = zona.id
+        #zona=PuntoGeografico.objects.get(patrimonio_id=pk)
+        incidente.save()
+        return HttpResponseRedirect(reverse(detalle, args=[pk]))
+
+    if request.POST.get("accion") == "valoracion":
         print(request.POST)
         valoracion = PatrimonioValoracion.objects.create()
         valoracion.patrimonio_id = pk;
@@ -161,25 +183,32 @@ def detalle_museo(request, pk):
     institucion = Institucion.objects.get(pk=pk)
     #lista de patrimonio dentro del museo
     patrimonios = Patrimonio.objects.filter(institucion_id=pk)
-
-    #lista de valoraciones de esos patrimonios
-    list_pat = list(Patrimonio.objects.filter(institucion_id=pk).values_list('pk', flat=True))
-    valoraciones = PatrimonioValoracion.objects.filter(patrimonio_id__in=list_pat).filter(estado=2)
-
+    #lista de valoraciones general de la institucion
+    valoraciones = PatrimonioValoracion.objects.filter(zona__institucion_id=pk).filter(estado=2)
     #lista de incidentes
-
-
-
-
-
+    incidentes = Incidente.objects.filter(zona__institucion_id=pk)
 
     context = {"valor": valor,
                "area": area,
                "institucion": institucion,
                "patrimonios": patrimonios,
-               "valoraciones": valoraciones}
+               "valoraciones": valoraciones,
+               "incidentes": incidentes}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
+
+def valor_museo(request,pk):
+    if request.POST:
+        zona = PuntoGeografico.objects.get(institucion_id=pk)
+        valoracion = PatrimonioValoracion.objects.create()
+        valoracion.zona = zona
+        valoracion.nombre = request.POST.get("name")
+        valoracion.correo = request.POST.get("email")
+        valoracion.comentario = request.POST.get("comment")
+        valoracion.valoracion = request.POST.get("score")
+        valoracion.save()
+        send_email(request, valoracion.pk)
+    return HttpResponseRedirect(reverse(detalle_museo, args=[pk]))
 
 @method_decorator(csrf_exempt)
 def send_email(request, pk):
@@ -213,9 +242,7 @@ def send_email(request, pk):
 
 def email_confirmation(request, pk):
     valor = PatrimonioValoracion.objects.get(pk=pk)
-    print('Hola')
     valor.estado = 2
-    print(valor.estado)
     valor.save()
     context = {'valor':valor}
     return render(request, 'patrimonio/email_confirmation.html', context)

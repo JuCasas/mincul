@@ -104,10 +104,14 @@
 
                             {% if traslado.estado == '2' or traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
                                 <div class="form-group">
-                                    <label for="nResolucion">N° de Resolucion:</label>
+                                    <label for="nResolucion">N° de Resolución:</label>
                                     <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                            {% if traslado.numeroResolucion != null %}
                                            value="{{ traslado.numeroResolucion }}"
-                                            {% if traslado.estado != '2' and idEditar != 0 %}disabled{% endif %}>
+                                            {% else %}
+                                           placeholder="Ingrese Número de Resolución"
+                                            {% endif %}
+                                           {% if traslado.estado != '2' and idEditar != 0 %}disabled{% endif %}>
                                 </div>
                             {% endif %}
                         </div>
@@ -167,17 +171,17 @@
                                                            name="fechaSalidaReal"
                                                            type="date"
                                                            value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}"
-                                                            {% if traslado.estado != '4' and idEditar != 0 %}disabled{% endif %}>
+                                                           {% if traslado.estado != '4' and idEditar != 0 %}disabled{% endif %}>
                                                 </div>
                                             {% endif %}
 
-                                            {% if traslado.estado == '5' or traslado.estado == '6'%}
+                                            {% if traslado.estado == '5' or traslado.estado == '6' %}
                                                 <div class="form-group">
                                                     <label for="fechaRetornoReal">Fecha de Retorno real:</label>
                                                     <input class="form-control" id="fechaRetornoReal"
                                                            name="fechaRetornoReal" type="date"
                                                            value="{{ traslado.fechaRetorno|date:'Y-m-d' }}"
-                                                    {% if traslado.estado != '5' and idEditar != 0 %}disabled{% endif %}>
+                                                           {% if traslado.estado != '5' and idEditar != 0 %}disabled{% endif %}>
                                                 </div>
                                             {% endif %}
                                         </div>
@@ -194,20 +198,23 @@
                                 <div class="card-header">
                                     <h5>Patrimonios a ser trasladados</h5>
                                 </div>
-                                <div class="form-group col-auto d-flex align-items-end">
-                                    <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                                            data-placeholder='Seleccione patrimonio...'
-                                            {% if traslado.estado != '1' and idEditar != 0 %} hidden {% endif %} >
-                                    </select>
+                                {% if  estado  == '1' or estado == '0' or operacion == 'agregar' %}
+                                    <div class="form-group col-auto d-flex align-items-end">
+                                        <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
+                                                data-placeholder='Seleccione patrimonio...'
+                                                {% if traslado.estado != '1' and idEditar != 0 %} hidden {% endif %} >
+                                        </select>
 
-                                    <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
-                                            type="button"
-                                            onclick="agregarPatrimonioTabla()"
-                                            {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}
-                                    >Agregar
-                                    </button>
+                                        <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
+                                                type="button"
+                                                onclick="agregarPatrimonioTabla()"
+                                                {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}
+                                        >Agregar
+                                        </button>
 
-                                </div>
+                                    </div>
+                                {% endif %}
+
                                 <div class="card-body bg-light">
                                     <table class="table table-responsive-sm">
                                         <thead class="thead-dark">
@@ -217,7 +224,9 @@
                                             <th scope="col">Clasificación</th>
                                             <th scope="col">Tipo de bien</th>
                                             <th scope="col">Estado</th>
-                                            <th scope="col">Acciones</th>
+                                            {% if  estado  == '1' or estado == '0' %}
+                                                <th scope="col">Acciones</th>
+                                            {% endif %}
                                         </tr>
                                         </thead>
                                         <tbody id="patrimonioAgregar">
@@ -228,12 +237,16 @@
                                                 <td>{{ patrimonio.categoria.nombre }}</td>
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
                                                 <td>{{ patrimonio.get_estado_display }}</td>
-                                                <td>
-                                                    <button class="btn" href="#" type="button"
-                                                            onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
-                                                        <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
-                                                    </button>
-                                                </td>
+
+                                                {% if  estado  == '1' or estado == '0' %}
+                                                    <td>
+                                                        <button class="btn" href="#" type="button"
+                                                                onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
+                                                            <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
+                                                        </button>
+                                                    </td>
+                                                {% endif %}
+
                                             </tr>
                                         {% endfor %}
 
@@ -300,27 +313,32 @@
                     <div class="card-body bg-light">
                         <div class="row">
                             {% for documento in documentos %}
-                                <div class="col-2">
+                                <div class="col-lg-2 col-md-auto col-sm-auto">
                                     <div class="card mx-1">
 
-                                        <div class="card-header p-2 d-flex justify-content-end">
-                                            <button class="close float-none" type="button" aria-label="Close"
-                                                    onclick="abrirModalEliminar(this,{{ documento.documento.pk }}, '{{ documento.documento.filename }}')">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                        </div>
+                                        {% if  estado  == '1' or estado == '0' %}
+                                            <div class="card-header p-2 d-flex justify-content-end">
+                                                <button class="close float-none" type="button" aria-label="Close"
+                                                        onclick="abrirModalEliminar(this,{{ documento.documento.pk }}, '{{ documento.documento.filename }}')">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                        {% endif %}
 
-                                        <a class="notification notification-flush bg-0 "
-                                           href="{{ media_path }}{{ documento.documento.url }}" download>
-                                            <div class="card-body p-0">
+
+                                            <div class="card-body p-0" style="transform: rotate(0);">
                                                 <div>
                                                     <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
                                                 </div>
+                                                <a class="notification notification-flush bg-0 stretched-link"
+                                                   href="{{ media_path }}{{ documento.documento.url }}" download></a>
                                             </div>
-                                            <div class="card-footer p-2">
+                                            <div class="card-footer p-2" style="transform: rotate(0);">
+                                                <a class="notification notification-flush bg-0 stretched-link"
+                                                   href="{{ media_path }}{{ documento.documento.url }}" download></a>
                                                 <h6>{{ documento.documento.filename }}</h6>
                                             </div>
-                                        </a>
+
 
                                     </div>
                                 </div>
@@ -339,7 +357,7 @@
                             <div class="row mx-3">
                                 <div class="col-2 flex-center mt-auto mb-auto ">
                                     {% if operacion != 'agregar' %}
-                                    <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
+                                        <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
                                     {% endif %}
                                 </div>
                                 <div class="col-3">
@@ -364,8 +382,9 @@
                                 {% if operacion == "editar" %}
                                     {% if traslado.estado == '1' or traslado.estado == '2' or traslado.estado == '4' or  traslado.estado == '5' %}
                                         <div class="col-3 p-0">
-                                            <button id="actualizar" class="btn btn-primary mx-1" type="button" data-toggle="modal"
-                                                    >
+                                            <button id="actualizar" class="btn btn-primary mx-1" type="button"
+                                                    data-toggle="modal"
+                                            >
                                                 Actualizar estado
                                             </button>
                                         </div>
@@ -388,11 +407,13 @@
                     <div class="d-flex flex-row justify-content-end mt-5">
                         <div class="flex-column">
                             <a class="btn btn-primary mr-3 mb-1" type="button"
-                               href="{% url 'list_transfers' %}">Cancelar</a>
+                               href="{% url 'list_transfers' %}">Volver</a>
                         </div>
+                        {% if traslado.estado != '6' %}
                         <div class="flex-column">
                             <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -476,7 +497,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalNumResolucion" tabindex="-1" role="dialog" aria-labelledby="modalNumResolucionLabel"
+    <div class="modal fade" id="modalNumResolucion" tabindex="-1" role="dialog"
+         aria-labelledby="modalNumResolucionLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -619,7 +641,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalFechaSalidaProgramada" tabindex="-1" role="dialog" aria-labelledby="modalFechaSalidaProgramada"
+    <div class="modal fade" id="modalFechaSalidaProgramada" tabindex="-1" role="dialog"
+         aria-labelledby="modalFechaSalidaProgramada"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -671,7 +694,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalFechaRetornoReal" tabindex="-1" role="dialog" aria-labelledby="modalFechaRetornoReal"
+    <div class="modal fade" id="modalFechaRetornoReal" tabindex="-1" role="dialog"
+         aria-labelledby="modalFechaRetornoReal"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -786,7 +810,7 @@
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("regexResolucion", function (value, element) {
-            return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-[SM][TC]+$/i.test(value);
+            return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-ST\/MC+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("regexDestino", function (value, element) {
@@ -803,11 +827,21 @@
             return (fechaFin > fechaIni);
         }, "Letters, numbers, and underscores only please");
 
+        jQuery.validator.addMethod("validarFechasDos", function (value, element) {
+            var fechainicial = document.getElementById("fechaSalidaProgramada").value;
+            var fechafinal = document.getElementById("fechaSalidaReal").value;
+
+            var fechaIni = new Date(fechainicial);
+            var fechaFin = new Date(fechafinal);
+
+            return (fechaFin >= fechaIni);
+        }, "Letters, numbers, and underscores only please");
+
         jQuery.validator.addMethod("validarFechaMayor", function (value, element) {
             var fechaSalidaProgramada = document.getElementById("fechaSalidaProgramada").value;
 
             var fechaIni = new Date();
-            fechaIni.setHours(0,0,0,0);
+            fechaIni.setHours(0, 0, 0, 0);
             console.log(fechaIni)
             var fechaFin = new Date(fechaSalidaProgramada);
 
@@ -835,7 +869,7 @@
                             'numResolucion': function () {
                                 return $("#nResolucion").val();
                             },
-                            'PK':"{{ idEditar }}",
+                            'PK': "{{ idEditar }}",
                             'estado': "{{traslado.estado}}",
                         },
                         dataType: 'json'
@@ -843,17 +877,18 @@
                     required: true,
                     regexResolucion: true
                 },
-                fechaRetornoReal:{
+                fechaRetornoReal: {
                     validarFechas: true,
                     required: true,
                 },
-                fechaSalidaProgramada:{
+                fechaSalidaProgramada: {
                     required: true,
                     validarFechaMayor: true,
                 },
-                fechaSalidaReal:{
+                fechaSalidaReal: {
                     required: true,
-                    validarFechaMayor:true
+                    validarFechaMayor: true,
+                    validarFechasDos: true,
                 }
             },
             messages: {
@@ -874,17 +909,18 @@
                         " (un número de 6 dígitos, el año actual y las letras “ST/MC”) separadas por un guion. ",
                     remote: "Este número de resolución ya se encuentra registrado"
                 },
-                fechaRetornoReal:{
-                    validarFechas: "La fecha de retorno debe suceder después de la fecha real",
+                fechaRetornoReal: {
+                    validarFechas: "La fecha de retorno real debe ser posterior a la fecha de salida real",
                     required: "Debe ingresar una fecha de retorno real"
                 },
-                fechaSalidaProgramada:{
+                fechaSalidaProgramada: {
                     required: "Ingrese una fecha de salida programada",
                     validarFechaMayor: "Ingrese una fecha posterior a la actual"
                 },
-                fechaSalidaReal:{
+                fechaSalidaReal: {
                     required: "Ingrese una fecha de salida real",
-                    validarFechaMayor: "Ingrese una fecha posterior a la actual"
+                    validarFechaMayor: "Ingrese una fecha posterior a la actual",
+                    validarFechasDos: "La fecha de salida real debe ser igual o posterior a la programada"
                 }
             },
             submitHandler: function (form, e) {
@@ -977,6 +1013,7 @@
             ;
 
             $("#agr").on('click', function () {
+                console.log("ME GUARDO**************")
                 if ($("#formAgregar").valid()) {
                     var nResolucion = false;
                     if ("{{ traslado.estado }}" === '1') {
@@ -989,7 +1026,20 @@
                     var fechasCorrectas = true;
                     if (!nResolucion && fechasCorrectas & patrimoniosEvaluar) {
                         console.log("Todo Bien Juan!");
-                        $("#formAgregar").submit();
+                        if ("{{ traslado.estado }}" === '2'){
+                            registrarNumResolucion();
+                        }
+                        if ("{{ traslado.estado }}" === '4'){
+                            registrarFechaSalidaReal();
+                        }
+                        if ("{{ traslado.estado }}" === '5'){
+                            console.log("REGISTRAR FECHA DE RETORNO REAL");
+                            registrarFechaRetornoReal();
+                        }
+                        if ("{{ operacion }}" === 'agregar' || ("{{ operacion }}" === 'editar' && "{{ estado }}" === '1' )){
+                            $("#formAgregar").submit();
+                        }
+
                     } else if (!patrimoniosEvaluar) {
                         $("#modalPatrimonios").modal('show');
                     } else if (!fechasCorrectas) {
@@ -1001,6 +1051,115 @@
                 return false;
             });
 
+            function registrarFechaRetornoReal(){
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'registrarFechaRetornoReal'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        fechaRetornoReal: $("#fechaRetornoReal").val(),
+                        idEditar: '{{ idEditar }}',
+                    },
+                    success: function (response) {
+                        $.toast({
+                            text: 'Fecha de Retorno Real guardado con éxito.',
+                            icon: 'success',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#B7E6CA',  // To change the background
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    },
+                    error: function (response) {
+                        console.log(response);
+                        $.toast({
+                            text: 'Ocurrió un error inesperado',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#c67a71',
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    }
+                });
+            }
+
+            function registrarFechaSalidaReal() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'registrarFechaSalidaReal'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        fechaSalidaReal: $("#fechaSalidaReal").val(),
+                        idEditar: '{{ idEditar }}',
+                    },
+                    success: function (response) {
+                        $.toast({
+                            text: 'Fecha de Salida Real guardado con éxito.',
+                            icon: 'success',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#B7E6CA',  // To change the background
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    },
+                    error: function (response) {
+                        console.log(response);
+                        $.toast({
+                            text: 'Ocurrió un error inesperado',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#c67a71',
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    }
+                });
+            }
+
+            function registrarNumResolucion() {
+                console.log("DENTRO DE REGISTRAR NUM RESOLUCION");
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'registrarNumResolucion'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        idEditar: '{{ idEditar }}',
+                    },
+                    success: function (response) {
+                        $.toast({
+                            text: 'Resolución guardado con éxito.',
+                            icon: 'success',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#B7E6CA',  // To change the background
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    },
+                    error: function (response) {
+                        console.log(response);
+                        $.toast({
+                            text: 'Ocurrió un error inesperado',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#c67a71',
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    }
+                });
+            }
+
             $("#actualizar").on('click', function () {
                 var existeResolucion = false;
                 var existeFechaSalidaProgramada = false;
@@ -1009,12 +1168,11 @@
 
                 if ("{{ traslado.estado }}" === '1') {
                     existeFechaSalidaProgramada = ExisteFechaSalidaProgramada();
-                    if (!existeFechaSalidaProgramada){
+                    if (!existeFechaSalidaProgramada) {
 
                         $("#modalFechaSalidaProgramada").modal('show');
-                    }
-                    else {
-                       $("#actualizarEstado").modal('show');
+                    } else {
+                        $("#actualizarEstado").modal('show');
                     }
                 }
 
@@ -1022,8 +1180,7 @@
                     existeResolucion = ExisteResolucion();
                     if (!existeResolucion) {
                         $("#modalNumResolucion").modal('show');
-                    }
-                    else {
+                    } else {
                         $("#actualizarEstado").modal('show');
                     }
                 }
@@ -1032,8 +1189,7 @@
                     existeFechaSalidaReal = ExisteFechaSalidaReal();
                     if (!existeFechaSalidaReal) {
                         $("#modalFechaSalidaReal").modal('show');
-                    }
-                    else {
+                    } else {
                         $("#actualizarEstado").modal('show');
                     }
                 }
@@ -1042,8 +1198,7 @@
                     existeFechaRetornoReal = ExisteFechaRetornoReal();
                     if (!existeFechaRetornoReal) {
                         $("#modalFechaRetornoReal").modal('show');
-                    }
-                    else {
+                    } else {
                         $("#actualizarEstado").modal('show');
                     }
                 }
@@ -1051,7 +1206,7 @@
                 return false;
             });
 
-            function ExisteFechaSalidaProgramada(){
+            function ExisteFechaSalidaProgramada() {
                 return $.ajax({
                     type: 'POST',
                     url: "{% url 'existeFechaSalidaProgramada'%}",
@@ -1144,6 +1299,7 @@
             }
 
             function ValidarResolucion() {
+                console.log("ME EJECUTO RESOLUCION");
                 return $.ajax({
                     type: 'POST',
                     url: "{% url 'validarResolucion'%}",
@@ -1352,18 +1508,30 @@
             if (!patrimoniosLista.includes(patrimonioAgregar[0].id)) {
                 patrimoniosLista.push(patrimonioAgregar[0].id);
                 $("#lista").val(patrimoniosLista);
-                data = '<tr>' +
-                    '<td>' + patrimonioAgregar[0].id + '</td>' +
-                    ' <td>' + patrimonioAgregar[0].text + '</td>' +
-                    '<td>' + patrimonioAgregar[0].categoria + '</td>' +
-                    '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
-                    '<td>' + patrimonioAgregar[0].estado + '</td>' +
-                    '<td>' +
-                    '<button class="btn" href="#" type="button" onclick="eliminarPatrimonio(this,' + patrimonioAgregar[0].id + ')">' +
-                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                    '</button>' +
-                    '</td>' +
-                    '</tr>';
+
+                if (("{{ estado }}" === '1') || ("{{ estado }}" === '0')) {
+                    data = '<tr>' +
+                        '<td>' + patrimonioAgregar[0].id + '</td>' +
+                        ' <td>' + patrimonioAgregar[0].text + '</td>' +
+                        '<td>' + patrimonioAgregar[0].categoria + '</td>' +
+                        '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
+                        '<td>' + patrimonioAgregar[0].estado + '</td>' +
+                        '<td>' +
+                        '<button class="btn" href="#" type="button" onclick="eliminarPatrimonio(this,' + patrimonioAgregar[0].id + ')">' +
+                        '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
+                        '</button>' +
+                        '</td>' +
+                        '</tr>';
+                } else {
+                    data = '<tr>' +
+                        '<td>' + patrimonioAgregar[0].id + '</td>' +
+                        ' <td>' + patrimonioAgregar[0].text + '</td>' +
+                        '<td>' + patrimonioAgregar[0].categoria + '</td>' +
+                        '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
+                        '<td>' + patrimonioAgregar[0].estado + '</td>' +
+                        '</tr>';
+                }
+
                 $("#patrimonioAgregar").append(data);
                 console.log("Agregado");
                 console.log(patrimoniosLista);

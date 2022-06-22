@@ -174,6 +174,66 @@
                   </div>
                 </div>
             <div class="col-4">
+                <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title text-black">Registar Incidente</h5>
+
+                            <form id="incidente_form" method="post" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <label for="tipo">Seleccione el tipo de afectación:</label>
+                                <select class="form-control" id="tipoAfectacion" name="tipo"
+                                        data-placeholder='Tipo de afectación'>
+                                  {% for a in afectaciones %}
+                                    <option data="{{ a }}" value={{ a }}>{{ a }}</option>
+                                  {% endfor %}
+                                </select>
+
+                                <label for="fecha">¿Cuándo sucedió el hecho?</label>
+                                <input type="date" name="fecha" class="form-control">
+
+                                <label for="descripcion">Descripción:</label>
+                                <textarea name="descripcion" class="form-control" style="height: 8em" placeholder="Descripción..."></textarea>
+
+                                <label for="descripcion">Evidencia: peso máximo 50 mb</label>
+
+                                <input type="file" id="actual-btn" hidden multiple/>
+
+                                <label for="actual-btn" class="btn btn-primary mr-1 mb-1 form-control" type="button">Adjuntar Archivos</label>
+                                <span id="file-chosen-0" class="form-control">No se eligió ningún archivo</span>
+                                <span id="file-chosen-1" class="form-control" hidden></span>
+                                <span id="file-chosen-2" class="form-control" hidden></span>
+                                <script>
+                                    const actualBtn = document.getElementById('actual-btn');
+                                    actualBtn.addEventListener('change', function(){
+                                        console.log(actualBtn.files)
+                                        console.log(actualBtn.files.length)
+                                        for(var i=1; i<3; i++){
+                                            const fileChosen  = document.getElementById('file-chosen-' + i);
+                                            fileChosen.hidden = true;
+                                        }
+                                        for(var i=0; i<actualBtn.files.length; i++){
+                                            const fileChosen  = document.getElementById('file-chosen-' + i);
+                                            fileChosen.textContent = this.files[i].name;
+                                            fileChosen.hidden = false;
+                                        }
+                                    })
+                                </script>
+
+                                <label for="nombre">¿Cómo te llamas?</label>
+                                <input name="nombre" class="form-control" placeholder="Nombre y Apellido...">
+
+                                <label for="email">¿Cual es tu correo electrónico?</label>
+                                <input name="email" class="form-control" placeholder="Correo electrónico...">
+
+                                <label for="telefono">¿Cual es tu teléfono?</label>
+                                <input name="telefono" class="form-control" placeholder="Teléfono...">
+                            </form>
+
+                            <button class="btn btn-dark mt-4 mr-1 mb-1 w-100" type="submit" form="incidente_form" name="accion" value="incidente">Registar Incidente</button>
+                        </div>
+                </div>
+
+
                     <div class="card mt-4">
                         <div class="card-body">
                             <h5 class="card-title text-black">Valora la ciudad sagrada de Caral:</h5>
@@ -204,6 +264,7 @@
                         </div>
                     </div>
             </div>
+
         </div>
 
     </div>

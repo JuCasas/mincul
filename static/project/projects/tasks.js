@@ -118,39 +118,7 @@ $("#btnEditarNivel").on('click', function () {
   }
 });
 
-$("form[name='formProyecto']").on('submit', function (e) {
-  if ($("#formProyecto").valid()) {
-    let $this = $(this);
-    let type = $('#type').val();
-    let method = '';
-    let url = '/conservacion/actividades/';
-    if (type == 'new') {
-      // new
-      url = url + 'add/';
-      method = 'POST';
-    } else {
-      // edit
-      url = url + 'edit/' + id + '/';
-      method = 'POST';
-    }
-    $('#cover-spin').show(0)
-    $.ajax({
-      url: url,
-      method: method,
-      data: $this.serialize(),
 
-      success: function (response) {
-        $('#cover-spin').hide()
-        $('#myModal').modal('hide')
-        $("#tabla_autores").DataTable().draw();
-      },
-      error: function (error) {
-        $('#cover-spin').hide()
-        console.log(error)
-      }
-    });
-  }
-});
 
 $('#confirm').on('click', '#delete', function (e) {
   $('#cover-spin').show(0)
