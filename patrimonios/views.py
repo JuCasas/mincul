@@ -128,15 +128,35 @@ def patrimonio_edit(request,pk):
 
 def detalle(request, pk):
     valor = Patrimonio.objects.get(pk=pk)
-    valoraciones = PatrimonioValoracion.objects.filter(patrimonio_id=pk).filter(estado=2)
+    zona = PuntoGeografico.objects.get(patrimonio_id=pk)
+    valoraciones = PatrimonioValoracion.objects.filter(zona=zona).filter(estado=2)
     puntuacion=0
     for v in valoraciones:
         puntuacion = v.valoracion + puntuacion
     if len(valoraciones):
         puntuacion=puntuacion/len(valoraciones)
-    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones}
+    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones,
+               'afectaciones': [c[1] for c in Incidente.AFECTACION]}
 
-    if request.POST:
+    if request.POST.get("accion") == "incidente":
+        print(request.POST)
+        incidente = Incidente.objects.create()
+        zona = PuntoGeografico.objects.get(patrimonio_id=pk)
+        for c in Incidente.AFECTACION:
+            if c[1] == request.POST.get("tipo"):
+                incidente.tipoAfectacion = c[0]
+                break
+        incidente.fechaOcurrencia = request.POST.get("fecha")
+        incidente.descripcion = request.POST.get("descripcion")
+        incidente.nombre = request.POST.get("nombre")
+        incidente.correo = request.POST.get("email")
+        incidente.telefono = request.POST.get("telefono")
+        incidente.zona_id = zona.id
+        #zona=PuntoGeografico.objects.get(patrimonio_id=pk)
+        incidente.save()
+        return HttpResponseRedirect(reverse(detalle, args=[pk]))
+
+    if request.POST.get("accion") == "valoracion":
         print(request.POST)
         valoracion = PatrimonioValoracion.objects.create()
         valoracion.patrimonio_id = pk;
