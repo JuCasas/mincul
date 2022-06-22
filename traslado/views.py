@@ -496,6 +496,7 @@ def actualizarEstado(request):
     mensaje = ''
 
     asunto = ''
+    patrimonios = traslado.patrimonios.all()
     if (nuevo_estado == '3'):
         asunto = 'Aprobación de solicitud de traslado ' + traslado.numeroResolucion
         traslado.detalleRechazo = detalle_rechazo
@@ -503,6 +504,9 @@ def actualizarEstado(request):
     elif (nuevo_estado == '4'):
         asunto = 'Desaprobación de solicitud de traslado ' + traslado.numeroResolucion
         mensaje = 'Su solicitud de traslado ha sido aceptada de manera satisfactoria'
+        for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
+            patrimonio.estado = '2'  # estado no disponible
+            patrimonio.save()
 
     traslado.save()
 
@@ -526,9 +530,7 @@ def actualizarEstado2(request):
         nuevo_estado = '2'
     elif (traslado.estado == '4'):
         nuevo_estado = '5'
-        for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
-            patrimonio.estado = '2'  # estado no disponible
-            patrimonio.save()
+
     elif (traslado.estado == '5'):
         nuevo_estado = '6'
         for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
