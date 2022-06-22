@@ -361,18 +361,17 @@ def addTask(request, pk):
   nombre = request.POST['nombre']
   descripcion = request.POST['descripcion']
   presupuesto = request.POST['presupuesto']
-  gasto = request.POST['gasto']
   fechaRegistro = datetime.datetime.strptime(request.POST['fechaRegistro'], "%Y-%m-%d").date()
   fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
   actividad = Actividad.objects.get(pk=pk)
   tarea = ProyectoConservacion.objects.create(
     nombre=nombre,
     descripcion=descripcion,
-    presupuesto=0.00,
+    presupuesto=presupuesto,
     gasto=0.00,
     fechaRegistro=fechaRegistro,
     fecha=fecha,
     actividad=actividad)
-  tarea.codigo = "TASK" + str(tarea.id).zfill(6)
+  tarea.codigo = "A" + str(tarea.id).zfill(3)
   tarea.save()
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)

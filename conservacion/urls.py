@@ -17,6 +17,6 @@ urlpatterns = [
     path('proyectos/<pk>/actividades/delete/<pkActividad>',views.deleteActivity, name='deleteActivity'),
     path('actividades/<pk>/tareas/',views.listTasks, name='listTasks'),
     path('proyectos/patrimonios/',views.listPatrimonys_Project, name='listPatrimonys_Project'),
-    path('actividades/<pk>/tareas/addView/',views.addTaskView, name='addTaskView'),
+    path('actividades/<pk>/tareas/add/view/',views.addTaskView, name='addTaskView'),
     path('actividades/<pk>/tareas/add/',views.addTask, name='addTask'),
 ]
