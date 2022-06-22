@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from incidente.models import Incidente
-from incidente.serializers import IncidenteSerializer
+from incidente.serializers import IncidenteSerializer, PuntoGeograficoSerializer
 from patrimonios.models import Patrimonio, Institucion, PuntoGeografico
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -48,67 +48,88 @@ def query_incidents_by_args(**kwargs):
     'total': total,
   }
 
+
 @api_view(('GET',))
 def patrimonio_incidente_listar(request):
-    if request.is_ajax():
-        incident = query_incidents_by_args(**request.GET)
-        for inc in incident['items']:
-          print(inc.zona.nombre)
-        serializer = IncidenteSerializer((incident['items']),many=True)
-        result = dict()
-        result['data'] = serializer.data
-        result['recordsTotal'] = incident['total']
-        result['recordsFiltered'] = incident['count']
-        return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
-    else:
-        return render(request, 'incidencia/patrimonio_incidente_listar.html')
+  if request.is_ajax():
+    incident = query_incidents_by_args(**request.GET)
+    for inc in incident['items']:
+      print(inc.zona.nombre)
+    serializer = IncidenteSerializer((incident['items']), many=True)
+    result = dict()
+    result['data'] = serializer.data
+    result['recordsTotal'] = incident['total']
+    result['recordsFiltered'] = incident['count']
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  else:
+    context = {
+      'status_choices': Incidente.STATUS,
+      'typeIncidents': Incidente.AFECTACION
+    }
+    return render(request, 'incidencia/patrimonio_incidente_listar.html',context=context)
 
 
 def incidente_reporte_listar(request, patrimonio_pk):
+  context = {
+    'incidentes': Incidente.objects.filter(patrimonio_id=patrimonio_pk),
+    'patrimonio_pk': patrimonio_pk
+  }
 
-    context = {
-        'incidentes': Incidente.objects.filter(patrimonio_id=patrimonio_pk),
-        'patrimonio_pk': patrimonio_pk
-    }
+  return render(request, 'incidencia/incidente_reporte_listar.html', context=context)
 
-    return render(request, 'incidencia/incidente_reporte_listar.html', context=context)
 
 def incidente_reporte_agregar(request, patrimonio_pk):
+  if request.POST:
+    print(request.POST)
+    incidente = Incidente.objects.create()
+    incidente.detalle = request.POST.get("detalle")
+    incidente.fechaRegistro = request.POST.get("fecha_reporte")
+    incidente.descripcion = request.POST.get("descripcion")
+    incidente.patrimonio_id = patrimonio_pk
+    incidente.save()
+    return HttpResponseRedirect(reverse(incidente_reporte_listar, kwargs={'patrimonio_pk': patrimonio_pk}))
 
-    if request.POST:
-        print(request.POST)
-        incidente = Incidente.objects.create()
-        incidente.detalle = request.POST.get("detalle")
-        incidente.fechaRegistro = request.POST.get("fecha_reporte")
-        incidente.descripcion = request.POST.get("descripcion")
-        incidente.patrimonio_id = patrimonio_pk
-        incidente.save()
-        return HttpResponseRedirect(reverse(incidente_reporte_listar, kwargs={'patrimonio_pk':patrimonio_pk}))
+  return render(request, 'incidencia/incidente_reporte_agregar.html')
 
-    return render(request, 'incidencia/incidente_reporte_agregar.html')
 
 def incidente_reporte_modificar(request, patrimonio_pk, incidente_pk):
+  context = {
+    'incidente': Incidente.objects.get(id=incidente_pk)
+  }
 
-    context = {
-        'incidente': Incidente.objects.get(id=incidente_pk)
-    }
+  if request.POST:
+    incidente = Incidente.objects.get(pk=incidente_pk)
+    incidente.detalle = request.POST.get("detalle")
+    incidente.fechaRegistro = request.POST.get("fecha_reporte")
+    incidente.descripcion = request.POST.get("descripcion")
+    incidente.patrimonio_id = patrimonio_pk
+    incidente.save()
+    return HttpResponseRedirect(
+      reverse(incidente_reporte, kwargs={'patrimonio_pk': patrimonio_pk, 'incidente_pk': incidente_pk}))
 
-    if request.POST:
-        incidente = Incidente.objects.get(pk=incidente_pk)
-        incidente.detalle = request.POST.get("detalle")
-        incidente.fechaRegistro = request.POST.get("fecha_reporte")
-        incidente.descripcion = request.POST.get("descripcion")
-        incidente.patrimonio_id = patrimonio_pk
-        incidente.save()
-        return HttpResponseRedirect(reverse(incidente_reporte, kwargs={'patrimonio_pk':patrimonio_pk, 'incidente_pk':incidente_pk}))
-
-    return render(request, 'incidencia/incidente_reporte_modificar.html', context)
+  return render(request, 'incidencia/incidente_reporte_modificar.html', context)
 
 
 def incidente_reporte(request, patrimonio_pk, incidente_pk):
+  context = {
+    'incidente': Incidente.objects.get(id=incidente_pk)
+  }
 
-    context = {
-        'incidente': Incidente.objects.get(id=incidente_pk)
-    }
+  return render(request, 'incidencia/incidente_reporte.html', context=context)
 
-    return render(request, 'incidencia/incidente_reporte.html', context=context)
+
+@api_view(('GET',))
+def listar_zonas(request):
+  length = 10
+  search = request.GET['search']
+  page = int(request.GET['page'][0])
+  start = (page - 1) * length
+  end = start + length
+  queryset = PuntoGeografico.objects.filter(nombre__icontains=search).order_by('nombre')
+  count = queryset.count()
+  queryset = queryset[start:end]
+  serializer = PuntoGeograficoSerializer(queryset, many=True)
+  result = dict()
+  result['items'] = serializer.data
+  result['total_count'] = count
+  return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from incidente.models import Incidente
-
+from patrimonios.models import PuntoGeografico
 
 
 class IncidenteSerializer(serializers.ModelSerializer):
@@ -12,5 +12,10 @@ class IncidenteSerializer(serializers.ModelSerializer):
         fields = ['id','codigo','nombre','zona','tipoAfectacion','fechaRegistro','status']
 
     def get_zona(self, obj):
-            return obj.zona.id
+        return obj.zona.nombre
 
+class PuntoGeograficoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PuntoGeografico
+        fields = ['id','nombre']
