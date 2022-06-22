@@ -337,26 +337,38 @@ class PatrimonioMaterialInMueble(models.Model):
         ('1', 'Activo'),
         ('2', 'Inactivo'),
     )
-    TIPO = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2'),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
-    )
-    SUBTIPO = (
-        ('1', 'Estado 1'),
-        ('2', 'Estado 2'),
-        ('3', 'Estado 3'),
-        ('4', 'Estado 4'),
+    TIPOINMUEBLE = (
+        ('1', 'Arquitectura y Espacios Urbanos'),
+        ('2', 'Lugares Históricos'),
+        ('3', 'Museos y otros'),
+        ('4', 'Pueblos'),
+        ('5', 'Sitios Arqueológicos'),
+        ('6', 'Centros Científicos y Técnicos'),
+        ('7', 'Explotaciones Industriales'),
+        ('8', 'Explotaciones Mineras'),
+        ('9', 'Caídas de agua'),
+        ('10', 'Cavidades naturales'),
+        ('11', 'Costas'),
+        ('12', 'Zonas paisajísticas'),
+        ('13', 'a. Montañas'),
+        ('14', 'b. Planicies'),
+        ('15', 'c. Valles'),
+        ('16', 'd. Quebradas'),
+        ('17', 'e. Cañones'),
+        ('18', 'g. Cuerpo de Agua'),
+        ('19', 'j. Manantiales'),
+        ('20', 'n. Áreas Protegidas'),
+        ('21', 'o. Otros'),
     )
     TIPOINGRESO = (
-        ('1', 'Gratuito'),
+        ('1', 'Libre'),
         ('2', 'Pagado'),
-        ('3', 'Estado 3'),
-        ('4', 'No información'),
+        ('3', 'Semi-restringido'),
+        ('4', 'Restringido'),
+        ('5', 'No información'),
     )
-    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
-    subtipo = models.CharField(max_length=2, choices=SUBTIPO, default='1')
+    tipoInmueble = models.CharField(max_length=2, choices=TIPOINMUEBLE, default='1')
+    subtipo = models.CharField(max_length=100, null=True)
     particularidades = models.CharField(max_length=200, null=True, blank=True)
     tipoIngreso = models.CharField(max_length=2, choices=TIPOINGRESO, default='1')
     estadoActual = models.CharField(max_length=200)
@@ -374,9 +386,11 @@ class PatrimonioInMaterial(models.Model):
         ('8', 'Músicas y Danzas'),
     )
     TIPOINGRESO = (
-        ('1', 'Gratuito'),
+        ('1', 'Libre'),
         ('2', 'Pagado'),
-        ('3', 'No información'),
+        ('3', 'Semi-restringido'),
+        ('4', 'Restringido'),
+        ('5', 'No información'),
     )
     tipoInmaterial = models.CharField(max_length=2, choices=TIPOINMATERIAL, default='1')
     subtipo = models.CharField(max_length=100, null=True)
@@ -391,7 +405,7 @@ class EpocaVisita(models.Model):
     )
     epocaPropicia = models.CharField(max_length=100, null=True, blank=True)
     especificacion = models.CharField(max_length=100, null=True, blank=True)
-    horaVisita = models.TimeField(auto_now_add=True, blank=True)
+    horaVisita = models.CharField(max_length=200, null=True)
     observaciones = models.CharField(max_length=100, null=True, blank=True)
     patrimonioMaterialInMueble = models.ForeignKey(PatrimonioMaterialInMueble, on_delete=models.CASCADE)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
