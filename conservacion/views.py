@@ -364,10 +364,11 @@ def addTask(request, pk):
   fechaRegistro = datetime.datetime.strptime(request.POST['fechaRegistro'], "%Y-%m-%d").date()
   fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
   actividad = Actividad.objects.get(pk=pk)
+  print(presupuesto)
   tarea = ProyectoConservacion.objects.create(
     nombre=nombre,
     descripcion=descripcion,
-    presupuesto=presupuesto,
+    presupuesto=float(presupuesto),
     gasto=0.00,
     fechaRegistro=fechaRegistro,
     fecha=fecha,
