@@ -20,7 +20,7 @@
         method = 'POST';
       } else {
         // edit
-        url = url + 'edit/' + id + '/';
+        url = url + $('#idProject').val()+ '/actividades/edit/' + id;
         method = 'POST';
       }
 
@@ -38,44 +38,6 @@
         }
       });
     });
-
-$('#tabla_autores tbody').on('click', 'button', function () {
-  console.log(this)
-  let data = table.row($(this).parents('tr')).data();
-  let class_name = $(this).attr('class');
-
-  id = data['id'];
-  console.log(data)
-
-  if (class_name == 'btn btn-edit') {
-    // EDIT button
-    $('#nombre').val(data['nombre']);
-    $('#descripcion').val(data['descripcion']);
-    var patrimonio = (data['patrimonio']).toString();
-    $('#patrimonio').val(patrimonio);
-    fechaInicio = data['fechaInicio']
-    var partsInicio = fechaInicio.split("/");
-    var dtInicio = new Date(parseInt(partsInicio[2], 10),
-        parseInt(partsInicio[1], 10) - 1,
-        parseInt(partsInicio[0], 10));
-    var currentDateInicio = dtInicio.toISOString().slice(0, 10);
-    $('#fechaInicio').val(currentDateInicio);
-    fechaFin = data['fechaFin']
-    var partsFfin = fechaFin.split("/");
-    var dtFin = new Date(parseInt(partsFfin[2], 10),
-        parseInt(partsFfin[1], 10) - 1,
-        parseInt(partsFfin[0], 10));
-    var currentDateFin = dtFin.toISOString().slice(0, 10);
-    $('#fechaFin').val(currentDateFin);
-    $('#type').val('edit');
-    $('#modal_title').text('Editar Actividad');
-    $("#modalActividad").modal();
-  } else {
-    // DELETE button
-    $('#modalActividad').text('DELETE');
-    $("#confirm").modal();
-  }
-});
 
 let table = $('#tabla_autores').DataTable({
   "searching": false,
@@ -179,27 +141,32 @@ $('#exampleFormControlSelect3').change(function () {
 $('#tabla_autores tbody').on('click', 'button', function () {
   let data = table.row($(this).parents('tr')).data();
   let class_name = $(this).attr('class');
-
+  console.log(data)
   id = data['id'];
-  idProyectos = data['id'];
 
   if (class_name == 'btn btn-edit') {
     // EDIT button
     $('#nombre').val(data['nombre']);
-    $('#codigo').val(data['codigo']);
-    let opt = parseInt(data['tipoProyecto'])
-    $("#tipoPlan").val(opt)
-    fecha = data['fechaInicio']
-    var parts = fecha.split("/");
-    var dt = new Date(parseInt(parts[2], 10),
-        parseInt(parts[1], 10) - 1,
-        parseInt(parts[0], 10));
-    var currentDate = dt.toISOString().slice(0, 10);
-    $('#fechaRegistro').val(currentDate);
-    $('#fechaRegistro').prop("disabled", true);
+    $('#descripcion').val(data['descripcion']);
+    let opt = parseInt(data['patrimonio'])
+    $('#patrimonio').val(opt)
+    fechaInicio = data['fechaInicio']
+    var partsInicio = fechaInicio.split("/");
+    var dtInicio = new Date(parseInt(partsInicio[2], 10),
+        parseInt(partsInicio[1], 10) - 1,
+        parseInt(partsInicio[0], 10));
+    var currentDateInicio = dtInicio.toISOString().slice(0, 10);
+    $('#fechaInicio').val(currentDateInicio);
+    fechaFin = data['fechaFin']
+    var partsFfin = fechaFin.split("/");
+    var dtFin = new Date(parseInt(partsFfin[2], 10),
+        parseInt(partsFfin[1], 10) - 1,
+        parseInt(partsFfin[0], 10));
+    var currentDateFin = dtFin.toISOString().slice(0, 10);
+    $('#fechaFin').val(currentDateFin);
     $('#type').val('edit');
-    $('#modal_title').text('Editar Proyecto');
-    $("#myModal").modal();
+    $('#modal_title').text('Editar Actividad');
+    $("#modalActividad").modal();
   } else if (class_name == 'btn btn-show') {
     window.location.pathname = "/conservacion/actividades/" + id + "/tareas/";
   } else {
@@ -207,19 +174,38 @@ $('#tabla_autores tbody').on('click', 'button', function () {
     $('#modal_title').text('DELETE');
     $("#confirm").modal();
   }
-
-
 });
 
-
-
 $('#confirm').on('click', '#delete', function (e) {
+  $('#cover-spin').show(0)
   $.ajax({
-    url: '/conservacion/proyectos/delete/' + id + '/',
+    url: '/conservacion/proyectos/' + $('#idProject').val() + '/actividades/delete/' + id,
     method: 'POST',
     success: function (response) {
-      $('#confirm').modal('hide')
-      $("#tabla_autores").DataTable().draw();
+      $('#cover-spin').hide()
+      if (response["success"] !== undefined) {
+        $.toast({
+          text: 'No se pudo eliminar la actividad',
+          icon: 'warning',
+          loader: false,        // Change it to false to disable loader
+          bgColor: '#c67a71',
+            textColor: '#000000',
+          position: 'bottom-right',
+          hideAfter: 3000,
+        })
+      } else {
+        $('#myModal').modal('hide')
+        $("#tabla_autores").DataTable().draw();
+        $.toast({
+          text: 'Actividad eliminada con éxito',
+          icon: 'success',
+          loader: false,        // Change it to false to disable loader
+          bgColor: '#B7E6CA',  // To change the background
+          textColor: '#000000',
+          position: 'bottom-right',
+          hideAfter: 3000,
+        })
+      }
     },
     error: function (error) {
       console.log(error)

@@ -293,7 +293,6 @@ def listTasks(request, pk):
     }
     return render(request, 'proyectoConservacion/task_list.html', context)
 
-
 @api_view(('POST',))
 def addActivity(request, pk):
   try:
@@ -322,6 +321,32 @@ def addActivity(request, pk):
     result['success'] = False
     result['message'] = str(e)  # or custom message
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('POST',))
+def editActivity(request, pk, pkActividad):
+  try:
+    print("######")
+    print(request.POST)
+    actividad = Actividad.objects.get(pk=pkActividad)
+    actividad.nombre = request.POST['nombre']
+    actividad.descripcion = request.POST['descripcion']
+    actividad.fechaInicio = datetime.datetime.strptime(request.POST['fechaInicio'], "%Y-%m-%d").date()
+    actividad.fechaFin = datetime.datetime.strptime(request.POST['fechaFin'], "%Y-%m-%d").date()
+    #actividad.patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
+    actividad.save()
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+  except Exception as e:
+    result = dict()
+    result['success'] = False
+    result['message'] = str(e)  # or custom message
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('POST',))
+def deleteActivity(request, pk, pkActividad):
+  actividad = Actividad.objects.get(pk=pkActividad)
+  actividad.estado = '2'
+  actividad.save()
+  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 @api_view(('GET',))
 def addTaskView(request, pk):
