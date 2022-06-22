@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.core import serializers
 from django.http import HttpResponse
 
 
@@ -11,11 +12,11 @@ from patrimonios.models import Patrimonio
 
 
 def datos(request):
-    context = {
-        'patrimonios': Patrimonio.objects.all()
-    }
-
-    return JsonResponse(context, status=200)
+    print(request)
+    print(request.POST)
+    print(request.POST["latitudIni"])
+    context = list(Patrimonio.objects.values())
+    return JsonResponse({'data':context,'instituciones':None}, status=200, safe=False)
 
 def index(request):
     ########################################################################################################################

@@ -27,6 +27,9 @@
             <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
         </div>
         <br>
+        <div>100m <input type="range" min="100" max="2000" value="600" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
+        <input type="number" min="100" max="2000" value="600" class="" id="inputDispersion" disabled/></div>
+        <br>
         <button id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
     </div>
     <br>
@@ -48,16 +51,16 @@
         const LATITUD_CENTRO_PERU=-11;
         const LONGITUD_CENTRO_PERU=-77;
         const ZOOM_CENTRO_PERU=6;
+        const LATITUD_METROS=111100;
+        const LONGITUD_METROS=110400;//no es exacto, pero como perú está cerca de la línea ecuatorial, es aproximado
 
-        $(document).ready(function () {
-            
-        });
         var zoomActual=0;
         var map = L.map('map').setView([LATITUD_CENTRO_PERU, LONGITUD_CENTRO_PERU],ZOOM_CENTRO_PERU);
         var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
         var geocoder = new google.maps.Geocoder();
         var controlRuta = null;
         var grupoMarcadores = L.layerGroup().addTo(map);
+        var patrimoniosCercanos = null;
         var puntoPartidaIcon = L.icon({
             iconUrl : '../../static/img/icons/punto-partida.png',
             iconSize: [24,35]
@@ -86,42 +89,16 @@
             return div;
         }
         leyenda.addTo(map);
-        /*let markerInicio = L.marker([data.puntosRuta[0].lat, data.puntosRuta[0].long], {
-            icon: puntoPartidaIcon,
-            title: data.puntosRuta[0].nombre
-        }).addTo(map).bindPopup('<div>' +
-            '<h3 style="text-align: center">'+data.puntosRuta[0].nombre+'</h3>'+
-            '<img src="'+ data.puntosRuta[0].imagen+'" height="100px" width="300px"/>'+
-            '</div>');
-        let markerLlegada = L.marker([data.puntosRuta[1].lat, data.puntosRuta[1].long], {
-            icon: puntoLlegadaIcon,
-            title: data.puntosRuta[0].nombre
-        }).addTo(map).bindPopup('<div>' +
-            '<h3 style="text-align: center">'+data.puntosRuta[1].nombre+'</h3>'+
-            '<img src="'+ data.puntosRuta[1].imagen+'" height="100px" width="300px"/>'+
-            '</div>');*/
 
-        /*for(let i=1;i<data.puntosRuta.length-1;i++){ //Por si después hay más de un punto de interés en la ruta
-            let marker = L.marker([data.puntosRuta[i].lat, data.puntosRuta[i].long], {
-                icon: puntoLlegadaIcon,
-                title: data.puntosRuta[i].nombre
-            }).addTo(map).bindPopup('<div>' +
-                '<h3 style="text-align: center">'+data.puntosRuta[i].nombre+'</h3>'+
-                '<img src="'+ data.puntosRuta[i].imagen+'" height="100px" width="300px"/>'+
-                '</div>');
-        }*/
-        /*function pruebaRecibirJSON(){
-            $.ajax({
-                type: "POST",
-                url: "/mapa_patrimonio/mapa/prueba",
-                data: {
-                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
-                },
-                success: function (data) {
-                    console.log(data);                    
-                }
-            });
-        }*/
+        var dispersion = $('#sliderDispersion').val();
+        $('#sliderDispersion').change(function(){
+            if($('#sliderDispersion').val()!=dispersion){
+                dispersion=$('#sliderDispersion').val();
+                let inputDispersion=document.getElementById('inputDispersion');
+                inputDispersion.value=dispersion;
+            }
+        })
+        
         async function obtenerLatitudLongitudConDireccion(direccion){
             let lat=0;
             let long=0;
@@ -139,6 +116,59 @@
             map.removeControl(controlRuta);
             grupoMarcadores.clearLayers();
             controlRuta=null;
+            patrimoniosCercanos=null;
+        }
+        async function obtenerPatrimoniosCercanos(lat1,long1,lat2,long2){
+            return $.ajax({
+                type: "POST",
+                url: "/mapa_patrimonio/mapa/datos",
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    latitudIni:lat1,
+                    longitudIni:long1,
+                    latitudFin:lat2,
+                    longitudFin:long2,
+                },
+            });
+        }
+        function crearDivPatrimonio(patrimonioDatos){
+            return '<div>' + '<h3 style="text-align: center">'+patrimonioDatos.nombreTituloDemoninacion+'</h3>'+
+                '<img src="'+ patrimonioDatos.url+'" height="100px" width="300px"/>'+'</div>';
+        }
+        function anadirPatrimoniosCercanos(){
+            for(let i=0;i<patrimoniosCercanos.data.length;i++){
+                if(patrimoniosCercanos.data[i].tipoPatrimonio==1){//inmaterial
+                    let markerInicio = L.marker([patrimoniosCercanos.data[i].lat, patrimoniosCercanos.data[i].long], {
+                        icon: inmaterialesIcon,
+                        title: patrimoniosCercanos.data[i].nombreTituloDemoninacion,
+                    }).addTo(grupoMarcadores).bindPopup(crearDivPatrimonio(patrimoniosCercanos.data[i]));
+                }else if(patrimoniosCercanos.data[i].tipoPatrimonio==2){//material inmueble
+                    let markerInicio = L.marker([patrimoniosCercanos.data[i].lat, patrimoniosCercanos.data[i].long], {
+                        icon: patrimonioIcon,
+                        title: patrimoniosCercanos.data[i].nombreTituloDemoninacion,
+                    }).addTo(grupoMarcadores).bindPopup(crearDivPatrimonio(patrimoniosCercanos.data[i]));
+                }else{//ver lo de agruparlos en institución
+                    
+                }
+            }
+        }
+        async function generarRutaDispersion(lat1,long1,lat2,long2){
+            let patrimoniosEnDispersion=[];
+            for(let i=0;i<patrimoniosCercanos.data.length;i++){
+                
+            }
+            controlRuta = L.Routing.control({
+                createMarker: function () { return null; },
+                lineOptions : {
+                    addWaypoints: false
+                },
+                waypoints: [    
+                    L.latLng(lat1, long1),
+                    L.latLng(lat2, long2),
+                    L.latLng(-12.0983342, -76.9799472),
+                ],
+                language:'es',
+            }).addTo(map);
         }
         async function generarRuta() {
             if(controlRuta!=null){
@@ -153,6 +183,11 @@
             let latitudDireccionLlegada = latLongLlegada[0];
             let longitudDireccionLlegada = latLongLlegada[1];
             console.log(latitudDireccionPartida,longitudDireccionPartida,latitudDireccionLlegada,longitudDireccionLlegada);
+            await obtenerPatrimoniosCercanos(latitudDireccionPartida,longitudDireccionPartida,latitudDireccionLlegada,longitudDireccionLlegada).
+                then(datos=>{
+                    patrimoniosCercanos=datos;
+                });
+            console.log(patrimoniosCercanos);
             let markerInicio = L.marker([latitudDireccionPartida, longitudDireccionPartida], {
                 icon: puntoPartidaIcon,
                 title: "Partida"
@@ -161,17 +196,8 @@
                 icon: puntoLlegadaIcon,
                 title: "Llegada"
             }).addTo(grupoMarcadores);
-            controlRuta = L.Routing.control({
-                createMarker: function () { return null; },
-                lineOptions : {
-                    addWaypoints: false
-                },
-                waypoints: [    
-                    L.latLng(latitudDireccionPartida, longitudDireccionPartida),
-                    L.latLng(latitudDireccionLlegada, longitudDireccionLlegada)
-                ],
-                language:'es',
-            }).addTo(map);
+            await anadirPatrimoniosCercanos();
+            await generarRutaDispersion(latitudDireccionPartida,longitudDireccionPartida,latitudDireccionLlegada,longitudDireccionLlegada);
         }
     </script>
 
