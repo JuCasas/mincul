@@ -39,7 +39,8 @@ def mapaPatrimonioAvanzado(request):
     dep = Patrimonio.objects.all().distinct('departamento')
     departamentos = []
     for d in dep:
-        departamentos.append(d.departamento)
+        departamentos.append({'id_representativo':d.pk,
+                              'nombreDepartamento':d.departamento})
     success=-1
     if request.POST:
         patrimonioNombre = request.POST['patrimonio_name']
@@ -62,30 +63,39 @@ def mapaPatrimonioAvanzado(request):
                     patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,
                                                             categoria_id=catId)
                 if len(patrimonios)>0:
-                    if(patrimoniodepartamento == "Departamento"):
+                    patriId = int(patrimoniodepartamento)
+                    if(patriId == -1):
                         pass
                     else:
+                        patri = Patrimonio.objects.get(id=patriId)
+                        patriDepa = patri.departamento
                         deps = []
                         for p in patrimonios:
-                            if (p.departamento==patrimoniodepartamento):
+                            if (p.departamento==patriDepa):
                                 deps.append(p)
                         patrimonios=deps
                 if len(patrimonios)>0:
-                    if(patrimonioprovincia=="Provincia"):
+                    provId = int(patrimonioprovincia)
+                    if(provId == -1):
                         pass
                     else:
+                        patri = Patrimonio.objects.get(id=provId)
+                        patriProv = patri.provincia
                         prov = []
                         for p in patrimonios:
-                            if (p.provincia==patrimonioprovincia):
+                            if (p.provincia==patriProv):
                                 prov.append(p)
                         patrimonios=prov
                 if (len(patrimonios)>0):
-                    if(patrimoniodistrito=="Distrito"):
+                    distId=int(patrimoniodistrito)
+                    if(distId == -1):
                         pass
                     else:
                         dis = []
+                        patri = Patrimonio.objects.get(id=distId)
+                        patriDis = patri.distrito
                         for p in patrimonios:
-                            if (p.distrito==patrimoniodistrito):
+                            if (p.distrito==patriDis):
                                 dis.append(p)
                         patrimonios=dis
                 if(len(patrimonios)>0):
@@ -107,14 +117,34 @@ def mapaPatrimonioAvanzado(request):
     }
     return render(request, 'map/mapaBusquedaAvzPatrimonio.html',context)
 
-def mapaPunto(request,pk):
-    patrimonio=Patrimonio.objects.get(id=pk)
+def provinciaJson(request,id_representativo):
+    provincias = []
+    id_representativo = int(id_representativo)
+    if id_representativo != -1:
+        patrimonioEjemplo = Patrimonio.objects.get(id=id_representativo)
+        dep = patrimonioEjemplo.departamento
+        prov = Patrimonio.objects.filter(departamento__exact=dep).distinct('provincia')
+        for p in prov:
+            provincias.append({'id_representativo': p.pk,
+                              'nombreProvincia': p.provincia})
     context = {
-        'patrimony':{
-            'nombreTituloDenominacion':patrimonio.nombreTituloDemoninacion,
-            'lat':patrimonio.lat,
-            'long':patrimonio.long
-        }
+        'provincias': provincias
+    }
+    print(context)
+    return JsonResponse(context, status=200)
+
+def distritoJson(request,id_representativo):
+    distritos = []
+    id_representativo = int(id_representativo)
+    if id_representativo!=-1:
+        patrimonioEjemplo=Patrimonio.objects.get(id=id_representativo)
+        prov = patrimonioEjemplo.provincia
+        dis = Patrimonio.objects.filter(provincia__exact=prov).distinct('distrito')
+        for d in dis:
+            distritos.append({'id_representativo': d.pk,
+                              'nombreDistrito': d.distrito})
+    context = {
+        'distritos':distritos
     }
     print(context)
     return JsonResponse(context, status=200)

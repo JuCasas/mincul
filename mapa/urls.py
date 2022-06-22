@@ -6,5 +6,6 @@ urlpatterns = [
     path('ficha/<my_id>/',views.ficha,name='ficha'),
     path('buscarpatrimoniosimple',views.mapaPatrimonioSimple,name='mapaPatrimonioSimple'),
     path('buscarpatrimonioavanzado',views.mapaPatrimonioAvanzado,name='mapaPatrimonioAvanzado'),
-    path('punto/<pk>', views.mapaPunto, name='mapaPunto')
+    path('provinciajson/<id_representativo>', views.provinciaJson, name='provinciaJson'),
+    path('distritojson/<id_representativo>', views.distritoJson, name='distritoJson'),
 ]
