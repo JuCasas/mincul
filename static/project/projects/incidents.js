@@ -16,13 +16,15 @@ let table = $('#tabla_autores').DataTable({
       data: {
           length: data.length,
           start: data.start,
-          // search_value: $('#search').val(),
-          // type_filter: $('#type_filter').val(),
-          // status_filter: $('#status_filter').val(),
-          // order_column: order_column,
-          // order: order
+          search_value: $('#search').val(),
+          type_filter: $('#type_filter').val(),
+          status_filter: $('#status_filter').val(),
+          zone_filter: $('#zona').val(),
+          order_column: order_column,
+          order: order
       },
       success: function (data, textStatus, jQxhr) {
+        console.log(data)
         callback({
             recordsTotal: data.recordsTotal,
             recordsFiltered: data.recordsFiltered,
@@ -35,10 +37,10 @@ let table = $('#tabla_autores').DataTable({
   },
   "columns": [
     {"data": "codigo"},
-    {"data": "descripcion"},
+    {"data": "zona"},
     {"data": "tipoAfectacion"},
-    {"data": "informante"},
-    {"data": "fecha"},
+    {"data": "nombre"},
+    {"data": "fechaRegistro"},
     {
       "data": "status", render: function (data, type, row) {
         if (data == '0') {

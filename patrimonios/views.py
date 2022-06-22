@@ -181,6 +181,7 @@ def detalle(request, pk):
         incidente.telefono = request.POST.get("telefono")
         incidente.zona_id = zona.id
         #zona=PuntoGeografico.objects.get(patrimonio_id=pk)
+        incidente.codigo = "INCD" + str(incidente.id).zfill(6)
         incidente.save()
         return HttpResponseRedirect(reverse(detalle, args=[pk]))
 
