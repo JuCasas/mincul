@@ -17,7 +17,7 @@ from authentication.models import User
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
-    ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio
+    ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio, EpocaVisita
 from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
@@ -67,9 +67,17 @@ def patrimonio_list(request):
                 elif int(cat.tipo) == 2:
                     print('Inmueble')
                     inmueble = PatrimonioMaterialInMueble()
-
+                    inmueble.subtipo = pat['subtipo']
                     inmueble.tipoIngreso = pat['tipoIngreso']
-                    inmueble.epocaPropicia = pat['epocaPropicia']
+                    #inmueble.save()
+
+                    epoca = EpocaVisita()
+                    epoca.epocaPropicia = pat['epocaPropicia']['epoca']
+                    epoca.especificacion = pat['epocaPropicia']['especificacion']
+                    epoca.horaVisita = pat['epocaPropicia']['horaVisita']
+                    epoca.observaciones = pat['epocaPropicia']['observaciones']
+                    #epoca.patrimonioMaterialInMueble = inmueble
+                    #epoca.save()
 
                     for actividad in pat['actividades']:
                         act = ActividadTuristica()
@@ -78,7 +86,7 @@ def patrimonio_list(request):
                         act.tipo = actividad['tipo']
                         act.observacion = actividad['observacion']
                         act.patrimonio = patrimonio
-                        act.save()
+                        #act.save()
 
                     for servicio in pat['servicios']:
                         serv = Servicio()
@@ -86,7 +94,7 @@ def patrimonio_list(request):
                         serv.tipo = servicio['tipoServicio']
                         serv.observacion = servicio['observacion']
                         serv.patrimonio = patrimonio
-                        serv.save()
+                        #serv.save()
 
                 elif int(cat.tipo) == 3:
                     print('Mueble')
