@@ -1,12 +1,13 @@
 import datetime
 
+from authentication.models import User
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from conservacion.models import ProyectoConservacion, Actividad, Tarea
 from conservacion.serializers import ProyectoConservacionSerializer, ActividadSerializer, TareaSerializer, \
-  PatrimonioSerializer
+  PatrimonioSerializer, ConservadorSerializer
 from patrimonios.models import Patrimonio
 
 
@@ -131,6 +132,16 @@ def listPatrimonys_Project(request):
   result['total_count'] = count
   return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
+@api_view(('GET',))
+def addConservador(request):
+  queryset = User.objects.all()
+  count = queryset.count()
+  serializer = ConservadorSerializer(queryset, many=True)
+  result = dict()
+  result['items']= serializer.data
+  result['total_count'] = count
+  return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 @api_view(('GET',))
 def listProjects(request, **kwargs):
