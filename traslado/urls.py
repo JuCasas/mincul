@@ -19,11 +19,14 @@ urlpatterns = [
     path('eliminacionSolicitante/',views.eliminacionSolicitante,name='eliminacionSolicitante'),
     path('emailEntidad/',views.entidadEmail,name='entidadEmail'),
     path('validarResolucion/',views.validarResolucion,name='validarResolucion'),
+    path('registrarNumResolucion/',views.registrarNumResolucion,name='registrarNumResolucion'),
+    path('registrarFechaSalidaReal/',views.registrarFechaSalidaReal,name='registrarFechaSalidaReal'),
+    path('registrarFechaRetornoReal/',views.registrarFechaRetornoReal,name='registrarFechaRetornoReal'),
     path('eliminarDocumentoTraslado/',views.eliminarDocumentoTraslado,name='eliminarDocumentoTraslado'),
     path('validarDOI/',views.validarDOI,name="validarDOI"),
     path('validarFechas/',views.validarFechas,name="validarFechas"),
     path('existeResolucion/',views.existeResolucion,name="existeResolucion"),
     path ('existeFechaSalidaProgramada/',views.existeFechaSalidaProgramada,name="existeFechaSalidaProgramada"),
     path ('existeFechaSalidaReal/',views.existeFechaSalidaReal,name="existeFechaSalidaReal"),
-    path ('existeFechaRetornoReal/',views.existeFechaRetornoReal,name="existeFechaRetornoReal")
+    path ('existeFechaRetornoReal/',views.existeFechaRetornoReal,name="existeFechaRetornoReal"),
 ]

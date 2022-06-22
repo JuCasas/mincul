@@ -171,6 +171,30 @@ def existeFechaSalidaProgramada(request):
         print("TRUE")
         return JsonResponse({"existe": True}, status=200)
 
+def registrarNumResolucion(request):
+    trasladoPK = request.POST['idEditar']
+    nResolucion = request.POST['nResolucion']
+    traslado = SolicitudTraslado.objects.get(pk=trasladoPK)
+    traslado.numeroResolucion = nResolucion
+    traslado.save()
+    return JsonResponse({}, status=200)
+
+def registrarFechaSalidaReal(request):
+    trasladoPK = request.POST['idEditar']
+    fechaSalidaReal = request.POST['fechaSalidaReal']
+    traslado = SolicitudTraslado.objects.get(pk=trasladoPK)
+    traslado.fechaSalidaReal = fechaSalidaReal
+    traslado.save()
+    return JsonResponse({}, status=200)
+
+def registrarFechaRetornoReal(request):
+    trasladoPK = request.POST['idEditar']
+    fechaRetornoReal = request.POST['fechaRetornoReal']
+    traslado = SolicitudTraslado.objects.get(pk=trasladoPK)
+    traslado.fechaRetorno = fechaRetornoReal
+    traslado.save()
+    return JsonResponse({}, status=200)
+
 def existeFechaSalidaReal(request):
     pk = request.POST['idEditar']
     nFechaSalidaReal = SolicitudTraslado.objects.get(pk=pk).fechaSalidaReal

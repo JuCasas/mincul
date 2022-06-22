@@ -198,7 +198,7 @@
                                 <div class="card-header">
                                     <h5>Patrimonios a ser trasladados</h5>
                                 </div>
-                                {% if  estado  == '1' or estado == '0' %}
+                                {% if  estado  == '1' or estado == '0' or operacion == 'agregar' %}
                                     <div class="form-group col-auto d-flex align-items-end">
                                         <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
                                                 data-placeholder='Seleccione patrimonio...'
@@ -407,11 +407,13 @@
                     <div class="d-flex flex-row justify-content-end mt-5">
                         <div class="flex-column">
                             <a class="btn btn-primary mr-3 mb-1" type="button"
-                               href="{% url 'list_transfers' %}">Cancelar</a>
+                               href="{% url 'list_transfers' %}">Volver</a>
                         </div>
+                        {% if traslado.estado != '6' %}
                         <div class="flex-column">
                             <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -908,7 +910,7 @@
                     remote: "Este número de resolución ya se encuentra registrado"
                 },
                 fechaRetornoReal: {
-                    validarFechas: "La fecha de retorno debe suceder después de la fecha real",
+                    validarFechas: "La fecha de retorno real debe ser posterior a la fecha de salida real",
                     required: "Debe ingresar una fecha de retorno real"
                 },
                 fechaSalidaProgramada: {
@@ -1011,6 +1013,7 @@
             ;
 
             $("#agr").on('click', function () {
+                console.log("ME GUARDO**************")
                 if ($("#formAgregar").valid()) {
                     var nResolucion = false;
                     if ("{{ traslado.estado }}" === '1') {
@@ -1023,7 +1026,20 @@
                     var fechasCorrectas = true;
                     if (!nResolucion && fechasCorrectas & patrimoniosEvaluar) {
                         console.log("Todo Bien Juan!");
-                        $("#formAgregar").submit();
+                        if ("{{ traslado.estado }}" === '2'){
+                            registrarNumResolucion();
+                        }
+                        if ("{{ traslado.estado }}" === '4'){
+                            registrarFechaSalidaReal();
+                        }
+                        if ("{{ traslado.estado }}" === '5'){
+                            console.log("REGISTRAR FECHA DE RETORNO REAL");
+                            registrarFechaRetornoReal();
+                        }
+                        if ("{{ operacion }}" === 'agregar'){
+                            $("#formAgregar").submit();
+                        }
+
                     } else if (!patrimoniosEvaluar) {
                         $("#modalPatrimonios").modal('show');
                     } else if (!fechasCorrectas) {
@@ -1034,6 +1050,115 @@
                 }
                 return false;
             });
+
+            function registrarFechaRetornoReal(){
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'registrarFechaRetornoReal'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        fechaRetornoReal: $("#fechaRetornoReal").val(),
+                        idEditar: '{{ idEditar }}',
+                    },
+                    success: function (response) {
+                        $.toast({
+                            text: 'Fecha de Retorno Real guardado con éxito.',
+                            icon: 'success',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#B7E6CA',  // To change the background
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    },
+                    error: function (response) {
+                        console.log(response);
+                        $.toast({
+                            text: 'Ocurrió un error inesperado',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#c67a71',
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    }
+                });
+            }
+
+            function registrarFechaSalidaReal() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'registrarFechaSalidaReal'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        fechaSalidaReal: $("#fechaSalidaReal").val(),
+                        idEditar: '{{ idEditar }}',
+                    },
+                    success: function (response) {
+                        $.toast({
+                            text: 'Fecha de Salida Real guardado con éxito.',
+                            icon: 'success',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#B7E6CA',  // To change the background
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    },
+                    error: function (response) {
+                        console.log(response);
+                        $.toast({
+                            text: 'Ocurrió un error inesperado',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#c67a71',
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    }
+                });
+            }
+
+            function registrarNumResolucion() {
+                console.log("DENTRO DE REGISTRAR NUM RESOLUCION");
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'registrarNumResolucion'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        idEditar: '{{ idEditar }}',
+                    },
+                    success: function (response) {
+                        $.toast({
+                            text: 'Resolución guardado con éxito.',
+                            icon: 'success',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#B7E6CA',  // To change the background
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    },
+                    error: function (response) {
+                        console.log(response);
+                        $.toast({
+                            text: 'Ocurrió un error inesperado',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#c67a71',
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    }
+                });
+            }
 
             $("#actualizar").on('click', function () {
                 var existeResolucion = false;
@@ -1174,6 +1299,7 @@
             }
 
             function ValidarResolucion() {
+                console.log("ME EJECUTO RESOLUCION");
                 return $.ajax({
                     type: 'POST',
                     url: "{% url 'validarResolucion'%}",
