@@ -108,6 +108,37 @@
                 </div>
 
                 <div class="card bg-light mb-3">
+                      <div class="card-body">
+                            <div class="card-title mb-0">Incidentes reportados</div>
+                            <table id="incidentesLista" class="table table-sm table-dashboard no-wrap mb-0 fs--1 w-100">
+                                <thead class="bg-200">
+                                <tr>
+                                  <th class="sort" style="width: 15%">Código</th>
+                                  <th class="sort" style="width: 65%">Descripción</th>
+                                  <th class="sort" style="width: 20%">Fecha de Registro</th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white">
+                                {% for inci in incidentes %}
+                                    <tr>
+                                        <td class="align-middle">
+                                            {{ inci.codigo}}
+                                        </td>
+                                        <td class="align-middle">
+                                            {{ inci.descripcion|default:'-' }}
+                                        </td>
+                                        <td class="align-middle">
+                                            {{ inci.fechaOcurrencia|date:'d/m/Y'|default:'-'}}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                      </div>
+                </div>
+
+
+                <div class="card bg-light mb-3">
                     <div class="card-body">
                         <div class="card-title">Valoraciones</div>
                         {% for v in valoraciones %}
@@ -146,36 +177,6 @@
                             </div>
                         {% endfor %}
                     </div>
-                </div>
-
-                <div class="card bg-light">
-                      <div class="card-body">
-                            <div class="card-title mb-0">Incidentes reportados</div>
-                            <table id="incidentesLista" class="table table-sm table-dashboard no-wrap mb-0 fs--1 w-100">
-                                <thead class="bg-200">
-                                <tr>
-                                  <th class="sort" style="width: 15%">Código</th>
-                                  <th class="sort" style="width: 65%">Descripción</th>
-                                  <th class="sort" style="width: 20%">Fecha de Registro</th>
-                                </tr>
-                                </thead>
-                                <tbody class="bg-white">
-                                {% for inci in incidentes %}
-                                    <tr>
-                                        <td class="align-middle">
-                                            {{ inci.codigo}}
-                                        </td>
-                                        <td class="align-middle">
-                                            {{ inci.descripcion|default:'-' }}
-                                        </td>
-                                        <td class="align-middle">
-                                            {{ inci.fechaOcurrencia|date:'d/m/Y'|default:'-'}}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                      </div>
                 </div>
 
             </div>
