@@ -37,9 +37,9 @@ let table = $('#tabla_autores').DataTable({
     {"data": "nombre"},
     {"data": "descripcion"},
     {"data": "presupuesto"},
-    {"data": "gastoTotal"},
-    {"data": "fechaInicio"},
-    {"data": "fechaFin"},
+    {"data": "gasto"},
+    {"data": "fechaRegistro"},
+    {"data": "fecha"},
     {
       "data": null,
       "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
@@ -82,7 +82,6 @@ $('#tabla_autores tbody').on('click', 'button', function () {
   let class_name = $(this).attr('class');
 
   id = data['id'];
-
   if (class_name == 'btn btn-edit') {
     // EDIT button
     $('#nombre').val(data['nombre']);
@@ -118,8 +117,6 @@ $("#btnEditarNivel").on('click', function () {
   }
 });
 
-
-
 $('#confirm').on('click', '#delete', function (e) {
   $('#cover-spin').show(0)
   $.ajax({
@@ -136,7 +133,6 @@ $('#confirm').on('click', '#delete', function (e) {
     }
   });
 });
-
 
 $('#new').on('click', function (e) {
   $('#codigo').val('');

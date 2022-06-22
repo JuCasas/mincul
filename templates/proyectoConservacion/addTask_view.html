@@ -153,30 +153,28 @@
         </div>
         <div class="row">
           <div class="form-group col-lg-4 col-sm-12">
-            <label for="fechaInicio">Fecha de Inicio:</label>
-            <input class="form-control" id="fechaInicio" name="fechaInicio" type="date">
+            <label for="fechaRegistro">Fecha de Inicio:</label>
+            <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date">
           </div>
           <div class="form-group col-lg-4 col-sm-12">
-            <label for="fechaFin">Fecha de Fin:</label>
-            <input class="form-control" id="fechaFin" name="fechaFin" type="date">
+            <label for="fecha">Fecha de Fin:</label>
+            <input class="form-control" id="fecha" name="fecha" type="date">
           </div>
           <div class="form-group col-lg-4 col-sm-12">
-            <label for="nombre">Presupuesto:</label>
-            <input class="form-control" id="nombre" name="nombre" type="text"
+            <label for="presupuesto">Presupuesto:</label>
+            <input class="form-control" id="presupuesto" name="presupuesto" type="text"
                    placeholder="S/">
           </div>
         </div>
-        <div class="row">
-          <div class="form-group  row justify-content-end mt-2 mr-1">
-            <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+
+          <div class="form-group  row justify-content-end mt-2 mr-0">
+            <a href="{% url 'listTasks' pk=activity.id %}" class="btn second mr-3 d-flex align-items-center">Cancelar</a>
             <div>
               <button type="submit" class="btn btn-primary btn-block"><span
                   class="glyphicon glyphicon-ok"></span> Crear Tarea
               </button>
             </div>
           </div>
-        </div>
-
 
       </form>
     </div>
@@ -190,13 +188,22 @@
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
   <script>
+
+    jQuery.validator.addMethod("alphanumeric", function (value, element) {
+        return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
+      }, "Letters, numbers, and underscores only please");
+
     $("#formTarea").on('submit', function (e) {
       console.log("aqui llegue")
       $.ajax({
         url: '/conservacion/actividades/' + $("idActivity").val() + '/tareas/add/',
         method: "POST",
         data: {
-          'nombre': $("#nombre").val(),
+            'nombre': $("#nombre").val(),
+            'descripcion': $("#descripcion").val(),
+            'fechaRegistro': $("#fechaRegistro").val(),
+            'fecha': $("#fecha").val(),
+            'presupuesto': $("#presupuesto").val(),
         },
         success: function (response) {
           console.log("ENTRO")

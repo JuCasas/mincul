@@ -358,7 +358,6 @@ def addTaskView(request, pk):
 
 @api_view(('POST',))
 def addTask(request, pk):
-  codigo = "ACT00"
   nombre = request.POST['nombre']
   descripcion = request.POST['descripcion']
   presupuesto = request.POST['presupuesto']
@@ -367,12 +366,13 @@ def addTask(request, pk):
   fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
   actividad = Actividad.objects.get(pk=pk)
   tarea = ProyectoConservacion.objects.create(
-    codigo=codigo,
     nombre=nombre,
     descripcion=descripcion,
-    presupuesto=presupuesto,
-    gasto=gasto,
+    presupuesto=0.00,
+    gasto=0.00,
     fechaRegistro=fechaRegistro,
     fecha=fecha,
     actividad=actividad)
+  tarea.codigo = "TASK" + str(tarea.id).zfill(6)
+  tarea.save()
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
