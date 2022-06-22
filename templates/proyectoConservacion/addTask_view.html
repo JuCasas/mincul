@@ -198,6 +198,18 @@
         return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
       }, "Letters, numbers, and underscores only please");
 
+    jQuery.validator.addMethod("minDate", function(value, element) {
+    if ($("#fecha").val() > $("#fechaRegistro").val())
+        return true;
+    return false;
+    }, "La fecha de fin no puede ser inferior a la fecha inicio");
+
+    jQuery.validator.addMethod("maxDate", function(value, element) {
+    if ($("#fecha").val() > $("#fechaRegistro").val())
+        return true;
+    return false;
+    }, "La fecha de inicio no puede ser superior a la fecha fin");
+
     $("form[name='formTareas']").validate({
         rules: {
           nombre: {
@@ -208,16 +220,21 @@
             descripcion: {
             required: true,
             maxlength: 200,
-            alphanumeric: true
           },
             presupuesto: {
             required: true,
+            number: true,
+            min: 0
           },
             fechaRegistro: {
             required: true,
+            date: true,
+            maxDate: true
           },
             fecha: {
             required: true,
+            date: true,
+            minDate: true
           },
         },
         messages: {
@@ -229,16 +246,19 @@
           descripcion: {
             required: "Debe ingresar la descripción de la tarea",
             maxlength: "La descripción no debe tener más de 200 caracteres",
-            alphanumeric: "La descripción solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
           },
             presupuesto: {
             required: "Debe ingresar el presupuesto de la tarea",
+            number: "El presupuesto solo acepta números",
+            min: "El presupuesto no puede ser negativo"
           },
             fechaRegistro: {
             required: "Debe ingresar la fecha de inicio de la tarea",
+            //max: "La fecha de inicio no puede ser superior a la fecha fin"
           },
             fecha: {
             required: "Debe ingresar la fecha de fin de la tarea",
+            //min: "La fecha de fin no puede ser inferior a la fecha inicio"
           },
         },
         submitHandler: function (form, e) {
@@ -267,6 +287,11 @@
                   hideAfter: 3000,
                 })
               } else {
+                 $("#nombre").val(null)
+                 $("#descripcion").val(null)
+                 $("#fechaRegistro").val(null)
+                 $("#fecha").val(null)
+                 $("#presupuesto").val(null)
                 $.toast({
                   text: 'Tarea creada con éxito',
                   icon: 'success',
