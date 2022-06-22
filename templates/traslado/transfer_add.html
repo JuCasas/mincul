@@ -390,7 +390,7 @@
                                         </div>
                                     {% endif %}
 
-                                    {% if traslado.estado == '3' %}
+                                    {% if traslado.estado == '3' and operacion == 'editar' %}
                                         <div class="col-3 p-0">
                                             <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
                                                     data-target="#verDetalleRechazo">

@@ -235,13 +235,14 @@
                         </span>
                                 </div>
 
-
-                                        <div class="col-3 p-0">
-                                            <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
-                                                    data-target="#verDetalleRechazo">
-                                                Ver detalle de rechazo
-                                            </button>
-                                        </div>
+                                {% if traslado.estado == '3' and operacion == 'editar' %}
+                                    <div class="col-3 p-0">
+                                        <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
+                                                data-target="#verDetalleRechazo">
+                                            Ver detalle de rechazo
+                                        </button>
+                                    </div>
+                                {% endif %}
 
                             </div>
                         </div>
@@ -259,7 +260,7 @@
         </div>
     </div>
 
- <!-- Ver detalle de rechazo -->
+    <!-- Ver detalle de rechazo -->
     <div class="modal fade" id="verDetalleRechazo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
