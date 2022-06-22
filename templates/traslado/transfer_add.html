@@ -106,7 +106,7 @@
                                 <div class="form-group">
                                     <label for="nResolucion">N° de Resolución:</label>
                                     <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                                            {% if traslado.numeroResolucion != null %}
+                                            {% if traslado.numeroResolucion %}
                                            value="{{ traslado.numeroResolucion }}"
                                             {% else %}
                                            placeholder="Ingrese Número de Resolución"
@@ -224,7 +224,7 @@
                                             <th scope="col">Clasificación</th>
                                             <th scope="col">Tipo de bien</th>
                                             <th scope="col">Estado</th>
-                                            {% if  estado  == '1' or estado == '0' %}
+                                            {% if  estado  == '1' or estado == '0' or operacion == "agregar" %}
                                                 <th scope="col">Acciones</th>
                                             {% endif %}
                                         </tr>
@@ -238,7 +238,7 @@
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
                                                 <td>{{ patrimonio.get_estado_display }}</td>
 
-                                                {% if  estado  == '1' or estado == '0' %}
+                                                {% if  estado  == '1' or estado == '0'  %}
                                                     <td>
                                                         <button class="btn" href="#" type="button"
                                                                 onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
@@ -390,7 +390,7 @@
                                         </div>
                                     {% endif %}
 
-                                    {% if traslado.estado == '3' %}
+                                    {% if traslado.estado == '3' and operacion == 'editar' %}
                                         <div class="col-3 p-0">
                                             <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
                                                     data-target="#verDetalleRechazo">
