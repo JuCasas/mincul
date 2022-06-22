@@ -39,6 +39,43 @@
       });
     });
 
+$('#tabla_autores tbody').on('click', 'button', function () {
+  console.log(this)
+  let data = table.row($(this).parents('tr')).data();
+  let class_name = $(this).attr('class');
+
+  id = data['id'];
+  console.log(data)
+
+  if (class_name == 'btn btn-edit') {
+    // EDIT button
+    $('#nombre').val(data['nombre']);
+    $('#descripcion').val(data['descripcion']);
+    var patrimonio = (data['patrimonio']).toString();
+    $('#patrimonio').val(patrimonio);
+    fechaInicio = data['fechaInicio']
+    var partsInicio = fechaInicio.split("/");
+    var dtInicio = new Date(parseInt(partsInicio[2], 10),
+        parseInt(partsInicio[1], 10) - 1,
+        parseInt(partsInicio[0], 10));
+    var currentDateInicio = dtInicio.toISOString().slice(0, 10);
+    $('#fechaInicio').val(currentDateInicio);
+    fechaFin = data['fechaFin']
+    var partsFfin = fechaFin.split("/");
+    var dtFin = new Date(parseInt(partsFfin[2], 10),
+        parseInt(partsFfin[1], 10) - 1,
+        parseInt(partsFfin[0], 10));
+    var currentDateFin = dtFin.toISOString().slice(0, 10);
+    $('#fechaFin').val(currentDateFin);
+    $('#type').val('edit');
+    $('#modal_title').text('Editar Actividad');
+    $("#modalActividad").modal();
+  } else {
+    // DELETE button
+    $('#modalActividad').text('DELETE');
+    $("#confirm").modal();
+  }
+});
 
 let table = $('#tabla_autores').DataTable({
   "searching": false,

@@ -102,11 +102,16 @@
                                 </select>
                             </div>
 
-                            {% if traslado.estado == '2' %}
+                            {% if traslado.estado == '2' or traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
                                 <div class="form-group">
-                                    <label for="nResolucion">N° de Resolucion:</label>
+                                    <label for="nResolucion">N° de Resolución:</label>
                                     <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                                           value="{{ traslado.numeroResolucion }}">
+                                            {% if traslado.numeroResolucion != null %}
+                                           value="{{ traslado.numeroResolucion }}"
+                                            {% else %}
+                                           placeholder="Ingrese Número de Resolución"
+                                            {% endif %}
+                                           {% if traslado.estado != '2' and idEditar != 0 %}disabled{% endif %}>
                                 </div>
                             {% endif %}
                         </div>
@@ -152,29 +157,31 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group">
-                                                <label for="fechaSalidaProgramada">Fecha Salida Programada: </label>
+                                                <label for="fechaSalidaProgramada">Fecha de Salida Programada: </label>
                                                 <input class="form-control" id="fechaSalidaProgramada"
                                                        name="fechaSalidaProgramada" type="date"
                                                        value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
                                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                             </div>
 
-                                            {% if traslado.estado == '4' %}
+                                            {% if traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
                                                 <div class="form-group">
                                                     <label for="fechaSalidaReal">Fecha de Salida Real:</label>
                                                     <input class="form-control" id="fechaSalidaReal"
                                                            name="fechaSalidaReal"
                                                            type="date"
-                                                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}">
+                                                           value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}"
+                                                           {% if traslado.estado != '4' and idEditar != 0 %}disabled{% endif %}>
                                                 </div>
                                             {% endif %}
 
-                                            {% if traslado.estado == '5' %}
+                                            {% if traslado.estado == '5' or traslado.estado == '6' %}
                                                 <div class="form-group">
-                                                    <label for="fechaRetornoReal">Fecha de Retorno:</label>
+                                                    <label for="fechaRetornoReal">Fecha de Retorno real:</label>
                                                     <input class="form-control" id="fechaRetornoReal"
                                                            name="fechaRetornoReal" type="date"
-                                                           value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}">
+                                                           value="{{ traslado.fechaRetorno|date:'Y-m-d' }}"
+                                                           {% if traslado.estado != '5' and idEditar != 0 %}disabled{% endif %}>
                                                 </div>
                                             {% endif %}
                                         </div>
@@ -191,20 +198,23 @@
                                 <div class="card-header">
                                     <h5>Patrimonios a ser trasladados</h5>
                                 </div>
-                                <div class="form-group col-auto d-flex align-items-end">
-                                    <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                                            data-placeholder='Seleccione patrimonio...'
-                                            {% if traslado.estado != '1' and idEditar != 0 %} hidden {% endif %} >
-                                    </select>
+                                {% if  estado  == '1' or estado == '0' %}
+                                    <div class="form-group col-auto d-flex align-items-end">
+                                        <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
+                                                data-placeholder='Seleccione patrimonio...'
+                                                {% if traslado.estado != '1' and idEditar != 0 %} hidden {% endif %} >
+                                        </select>
 
-                                    <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
-                                            type="button"
-                                            onclick="agregarPatrimonioTabla()"
-                                            {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}
-                                    >Agregar
-                                    </button>
+                                        <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
+                                                type="button"
+                                                onclick="agregarPatrimonioTabla()"
+                                                {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}
+                                        >Agregar
+                                        </button>
 
-                                </div>
+                                    </div>
+                                {% endif %}
+
                                 <div class="card-body bg-light">
                                     <table class="table table-responsive-sm">
                                         <thead class="thead-dark">
@@ -214,7 +224,9 @@
                                             <th scope="col">Clasificación</th>
                                             <th scope="col">Tipo de bien</th>
                                             <th scope="col">Estado</th>
-                                            <th scope="col">Acciones</th>
+                                            {% if  estado  == '1' or estado == '0' %}
+                                                <th scope="col">Acciones</th>
+                                            {% endif %}
                                         </tr>
                                         </thead>
                                         <tbody id="patrimonioAgregar">
@@ -225,12 +237,16 @@
                                                 <td>{{ patrimonio.categoria.nombre }}</td>
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
                                                 <td>{{ patrimonio.get_estado_display }}</td>
-                                                <td>
-                                                    <button class="btn" href="#" type="button"
-                                                            onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
-                                                        <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
-                                                    </button>
-                                                </td>
+
+                                                {% if  estado  == '1' or estado == '0' %}
+                                                    <td>
+                                                        <button class="btn" href="#" type="button"
+                                                                onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
+                                                            <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
+                                                        </button>
+                                                    </td>
+                                                {% endif %}
+
                                             </tr>
                                         {% endfor %}
 
@@ -297,27 +313,32 @@
                     <div class="card-body bg-light">
                         <div class="row">
                             {% for documento in documentos %}
-                                <div class="col-2">
+                                <div class="col-lg-2 col-md-auto col-sm-auto">
                                     <div class="card mx-1">
 
-                                        <div class="card-header p-2 d-flex justify-content-end">
-                                            <button class="close float-none" type="button" aria-label="Close"
-                                                    onclick="abrirModalEliminar(this,{{ documento.documento.pk }}, '{{ documento.documento.filename }}')">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                        </div>
+                                        {% if  estado  == '1' or estado == '0' %}
+                                            <div class="card-header p-2 d-flex justify-content-end">
+                                                <button class="close float-none" type="button" aria-label="Close"
+                                                        onclick="abrirModalEliminar(this,{{ documento.documento.pk }}, '{{ documento.documento.filename }}')">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                        {% endif %}
 
-                                        <a class="notification notification-flush bg-0 "
-                                           href="{{ media_path }}{{ documento.documento.url }}" download>
-                                            <div class="card-body p-0">
+
+                                            <div class="card-body p-0" style="transform: rotate(0);">
                                                 <div>
                                                     <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
                                                 </div>
+                                                <a class="notification notification-flush bg-0 stretched-link"
+                                                   href="{{ media_path }}{{ documento.documento.url }}" download></a>
                                             </div>
-                                            <div class="card-footer p-2">
+                                            <div class="card-footer p-2" style="transform: rotate(0);">
+                                                <a class="notification notification-flush bg-0 stretched-link"
+                                                   href="{{ media_path }}{{ documento.documento.url }}" download></a>
                                                 <h6>{{ documento.documento.filename }}</h6>
                                             </div>
-                                        </a>
+
 
                                     </div>
                                 </div>
@@ -335,7 +356,9 @@
                         <div class="col-11">
                             <div class="row mx-3">
                                 <div class="col-2 flex-center mt-auto mb-auto ">
-                                    <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
+                                    {% if operacion != 'agregar' %}
+                                        <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
+                                    {% endif %}
                                 </div>
                                 <div class="col-3">
                                 <span class="btn
@@ -359,8 +382,9 @@
                                 {% if operacion == "editar" %}
                                     {% if traslado.estado == '1' or traslado.estado == '2' or traslado.estado == '4' or  traslado.estado == '5' %}
                                         <div class="col-3 p-0">
-                                            <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
-                                                    data-target="#actualizarEstado">
+                                            <button id="actualizar" class="btn btn-primary mx-1" type="button"
+                                                    data-toggle="modal"
+                                            >
                                                 Actualizar estado
                                             </button>
                                         </div>
@@ -463,6 +487,33 @@
                 </div>
                 <div class="modal-footer">
                     <button id="btnModalErrorPatrimonio" class="btn btn-primary btn-sm" type="button"
+                            data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNumResolucion" tabindex="-1" role="dialog"
+         aria-labelledby="modalNumResolucionLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalNumResolucionLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorModalNumResolucion" name="formErrorModalNumResolucion">
+                        <div class="form-group">
+                            Debe registar y guardar el Número de Resolución antes de cambiar de estado.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorNumREsolucion" class="btn btn-primary btn-sm" type="button"
                             data-dismiss="modal">
                         Cerrar
                     </button>
@@ -588,6 +639,88 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalFechaSalidaProgramada" tabindex="-1" role="dialog"
+         aria-labelledby="modalFechaSalidaProgramada"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFechaSalidaProgramadaLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorModalFechaSalidaProgramada" name="formErrorModalFechaSalidaProgramada">
+                        <div class="form-group">
+                            Debe registar y guardar la Fecha de Salida Programada antes de cambiar de estado.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorFechaSalidaProgramada" class="btn btn-primary btn-sm" type="button"
+                            data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalFechaSalidaReal" tabindex="-1" role="dialog" aria-labelledby="modalFechaSalidaReal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFechaSalidaRealLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorModalFechaSalidaReal" name="formErrorModalFechaSalidaReal">
+                        <div class="form-group">
+                            Debe registar y guardar la Fecha de Salida Real antes de cambiar de estado.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorFechaSalidaReal" class="btn btn-primary btn-sm" type="button"
+                            data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalFechaRetornoReal" tabindex="-1" role="dialog"
+         aria-labelledby="modalFechaRetornoReal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFechaRetornoRealLabel">Aviso</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formErrorModalFechaRetornoReal" name="formErrorModalFechaRetornoReal">
+                        <div class="form-group">
+                            Debe registar y guardar la Fecha de Retorno Real antes de cambiar de estado.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalErrorFechaRetornoReal" class="btn btn-primary btn-sm" type="button"
+                            data-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 {% endblock %}
 
 {% block extrajs %}
@@ -671,11 +804,46 @@
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("alphanumericNombreExpo", function (value, element) {
-            return this.optional(element) || /^[\w\-\s\-]+$/i.test(value);
+            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\s\w\-]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         jQuery.validator.addMethod("regexResolucion", function (value, element) {
-            return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-[SM][TC]+$/i.test(value);
+            return this.optional(element) || /[0-9][0-9][0-9][0-9][0-9][0-9]+-[1-2][0-9][0-9][0-9]+-ST\/MC+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+        jQuery.validator.addMethod("regexDestino", function (value, element) {
+            return this.optional(element) || /^[a-z\u00E0-\u00FC\-\w\s+\.]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+        jQuery.validator.addMethod("validarFechas", function (value, element) {
+            var fechainicial = document.getElementById("fechaSalidaReal").value;
+            var fechafinal = document.getElementById("fechaRetornoReal").value;
+
+            var fechaIni = new Date(fechainicial);
+            var fechaFin = new Date(fechafinal);
+
+            return (fechaFin > fechaIni);
+        }, "Letters, numbers, and underscores only please");
+
+        jQuery.validator.addMethod("validarFechasDos", function (value, element) {
+            var fechainicial = document.getElementById("fechaSalidaProgramada").value;
+            var fechafinal = document.getElementById("fechaSalidaReal").value;
+
+            var fechaIni = new Date(fechainicial);
+            var fechaFin = new Date(fechafinal);
+
+            return (fechaFin >= fechaIni);
+        }, "Letters, numbers, and underscores only please");
+
+        jQuery.validator.addMethod("validarFechaMayor", function (value, element) {
+            var fechaSalidaProgramada = document.getElementById("fechaSalidaProgramada").value;
+
+            var fechaIni = new Date();
+            fechaIni.setHours(0, 0, 0, 0);
+            console.log(fechaIni)
+            var fechaFin = new Date(fechaSalidaProgramada);
+
+            return (fechaFin > fechaIni);
         }, "Letters, numbers, and underscores only please");
 
         $("form[name='formAgregar']").validate({
@@ -683,7 +851,7 @@
                 destino: {
                     required: true,
                     maxlength: 100,
-                    alphanumeric: true
+                    regexDestino: true
                 },
                 nombreExposicion: {
                     required: true,
@@ -691,27 +859,67 @@
                     alphanumericNombreExpo: true
                 },
                 nResolucion: {
+                    remote: {
+                        url: "{% url 'validarResolucion'%}",
+                        type: "POST",
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            'numResolucion': function () {
+                                return $("#nResolucion").val();
+                            },
+                            'PK': "{{ idEditar }}",
+                            'estado': "{{traslado.estado}}",
+                        },
+                        dataType: 'json'
+                    },
                     required: true,
                     regexResolucion: true
                 },
+                fechaRetornoReal: {
+                    validarFechas: true,
+                    required: true,
+                },
+                fechaSalidaProgramada: {
+                    required: true,
+                    validarFechaMayor: true,
+                },
+                fechaSalidaReal: {
+                    required: true,
+                    validarFechaMayor: true,
+                    validarFechasDos: true,
+                }
             },
             messages: {
                 destino: {
                     required: "Debe ingresar el destino del traslado",
                     maxlength: "El destino no debe tener más de 100 caracteres",
-                    alphanumeric: "El destino solo debe contener carácteres alfanuméricos"
+                    regexDestino: "El destino solo debe contener carácteres alfanuméricos"
                 },
                 nombreExposicion: {
                     required: "Debe ingresar el nombre de la Exposición",
                     maxlength: "El nombre de la exposición no debe tener más de 100 caracteres",
-                    alphanumericNombreExpo: "El destino solo debe contener carácteres alfanuméricos incluido" +
+                    alphanumericNombreExpo: "El nombre de la exposición solo debe contener carácteres alfanuméricos incluido" +
                         " guión(-) y guión bajo (_)"
                 },
                 nResolucion: {
                     required: "Debe ingresar el número de Resolución",
                     regexResolucion: "El número de resolución debe ser una cadena conformada por 3 campos" +
-                        " (un número de 6 dígitos, el año actual y las letras “ST/MC”) separadas por un guion. "
+                        " (un número de 6 dígitos, el año actual y las letras “ST/MC”) separadas por un guion. ",
+                    remote: "Este número de resolución ya se encuentra registrado"
                 },
+                fechaRetornoReal: {
+                    validarFechas: "La fecha de retorno debe suceder después de la fecha real",
+                    required: "Debe ingresar una fecha de retorno real"
+                },
+                fechaSalidaProgramada: {
+                    required: "Ingrese una fecha de salida programada",
+                    validarFechaMayor: "Ingrese una fecha posterior a la actual"
+                },
+                fechaSalidaReal: {
+                    required: "Ingrese una fecha de salida real",
+                    validarFechaMayor: "Ingrese una fecha posterior a la actual",
+                    validarFechasDos: "La fecha de salida real debe ser igual o posterior a la programada"
+                }
             },
             submitHandler: function (form, e) {
                 e.preventDefault();
@@ -804,7 +1012,6 @@
 
             $("#agr").on('click', function () {
                 if ($("#formAgregar").valid()) {
-
                     var nResolucion = false;
                     if ("{{ traslado.estado }}" === '1') {
                         nResolucion = ValidarResolucion();
@@ -827,6 +1034,144 @@
                 }
                 return false;
             });
+
+            $("#actualizar").on('click', function () {
+                var existeResolucion = false;
+                var existeFechaSalidaProgramada = false;
+                var existeFechaSalidaReal = false;
+                var existeFechaRetornoReal = false;
+
+                if ("{{ traslado.estado }}" === '1') {
+                    existeFechaSalidaProgramada = ExisteFechaSalidaProgramada();
+                    if (!existeFechaSalidaProgramada) {
+
+                        $("#modalFechaSalidaProgramada").modal('show');
+                    } else {
+                        $("#actualizarEstado").modal('show');
+                    }
+                }
+
+                if ("{{ traslado.estado }}" === '2') {
+                    existeResolucion = ExisteResolucion();
+                    if (!existeResolucion) {
+                        $("#modalNumResolucion").modal('show');
+                    } else {
+                        $("#actualizarEstado").modal('show');
+                    }
+                }
+
+                if ("{{ traslado.estado }}" === '4') {
+                    existeFechaSalidaReal = ExisteFechaSalidaReal();
+                    if (!existeFechaSalidaReal) {
+                        $("#modalFechaSalidaReal").modal('show');
+                    } else {
+                        $("#actualizarEstado").modal('show');
+                    }
+                }
+
+                if ("{{ traslado.estado }}" === '5') {
+                    existeFechaRetornoReal = ExisteFechaRetornoReal();
+                    if (!existeFechaRetornoReal) {
+                        $("#modalFechaRetornoReal").modal('show');
+                    } else {
+                        $("#actualizarEstado").modal('show');
+                    }
+                }
+
+                return false;
+            });
+
+            function ExisteFechaSalidaProgramada() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'existeFechaSalidaProgramada'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        operacion: '{{ operacion }}',
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
+            }
+
+            function ExisteResolucion() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'existeResolucion'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        operacion: '{{ operacion }}',
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
+            }
+
+            function ExisteFechaSalidaReal() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'existeFechaSalidaReal'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        operacion: '{{ operacion }}',
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
+            }
+
+            function ExisteFechaRetornoReal() {
+                return $.ajax({
+                    type: 'POST',
+                    url: "{% url 'existeFechaRetornoReal'%}",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        nResolucion: $("#nResolucion").val(),
+                        operacion: '{{ operacion }}',
+                        idEditar: '{{ idEditar }}',
+                        estado: '{{ estado }}',
+
+                    },
+                    success: function (response) {
+                        let resultado = response['existe'];
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response);
+                    }
+                }).responseJSON['existe'];
+            }
 
             function ValidarResolucion() {
                 return $.ajax({
@@ -1037,18 +1382,30 @@
             if (!patrimoniosLista.includes(patrimonioAgregar[0].id)) {
                 patrimoniosLista.push(patrimonioAgregar[0].id);
                 $("#lista").val(patrimoniosLista);
-                data = '<tr>' +
-                    '<td>' + patrimonioAgregar[0].id + '</td>' +
-                    ' <td>' + patrimonioAgregar[0].text + '</td>' +
-                    '<td>' + patrimonioAgregar[0].categoria + '</td>' +
-                    '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
-                    '<td>' + patrimonioAgregar[0].estado + '</td>' +
-                    '<td>' +
-                    '<button class="btn" href="#" type="button" onclick="eliminarPatrimonio(this,' + patrimonioAgregar[0].id + ')">' +
-                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                    '</button>' +
-                    '</td>' +
-                    '</tr>';
+
+                if (("{{ estado }}" === '1') || ("{{ estado }}" === '0')) {
+                    data = '<tr>' +
+                        '<td>' + patrimonioAgregar[0].id + '</td>' +
+                        ' <td>' + patrimonioAgregar[0].text + '</td>' +
+                        '<td>' + patrimonioAgregar[0].categoria + '</td>' +
+                        '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
+                        '<td>' + patrimonioAgregar[0].estado + '</td>' +
+                        '<td>' +
+                        '<button class="btn" href="#" type="button" onclick="eliminarPatrimonio(this,' + patrimonioAgregar[0].id + ')">' +
+                        '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
+                        '</button>' +
+                        '</td>' +
+                        '</tr>';
+                } else {
+                    data = '<tr>' +
+                        '<td>' + patrimonioAgregar[0].id + '</td>' +
+                        ' <td>' + patrimonioAgregar[0].text + '</td>' +
+                        '<td>' + patrimonioAgregar[0].categoria + '</td>' +
+                        '<td>' + patrimonioAgregar[0].tipoPatrimonio + '</td>' +
+                        '<td>' + patrimonioAgregar[0].estado + '</td>' +
+                        '</tr>';
+                }
+
                 $("#patrimonioAgregar").append(data);
                 console.log("Agregado");
                 console.log(patrimoniosLista);

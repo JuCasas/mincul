@@ -16,6 +16,7 @@ class Institucion(models.Model):
     long = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+    url = models.CharField(max_length=1024, null=True, blank=True)
 
 class Propietario(models.Model):
     ESTADOS = (
@@ -383,18 +384,6 @@ class PatrimonioInMaterial(models.Model):
     tipoIngreso = models.CharField(max_length=2, choices=TIPOINGRESO, default='1')
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
 
-class PatrimonioValoracion(models.Model):
-    ESTADOS = (
-        ('1', 'Pendiente'),
-        ('2', 'Aceptado'),
-    )
-    patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE, null=True)
-    nombre = models.CharField(default='', max_length=60)
-    correo = models.CharField(default='', max_length=60)
-    valoracion = models.IntegerField(default=0)
-    comentario = models.CharField(default='', max_length=250)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
-
 class EpocaVisita(models.Model):
     ESTADOS = (
         ('1', 'Activo'),
@@ -407,7 +396,6 @@ class EpocaVisita(models.Model):
     patrimonioMaterialInMueble = models.ForeignKey(PatrimonioMaterialInMueble, on_delete=models.CASCADE)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
-
 class PuntoGeografico(models.Model):
   TIPO = (
     ('1', 'Patrimonio'),
@@ -418,6 +406,17 @@ class PuntoGeografico(models.Model):
   institucion = models.ForeignKey(Institucion, on_delete=models.CASCADE, null=True)
   tipo = models.CharField(max_length=2, choices=TIPO)
 
+class PatrimonioValoracion(models.Model):
+    ESTADOS = (
+        ('1', 'Pendiente'),
+        ('2', 'Aceptado'),
+    )
+    nombre = models.CharField(default='', max_length=60)
+    correo = models.CharField(default='', max_length=60)
+    valoracion = models.IntegerField(default=0)
+    comentario = models.CharField(default='', max_length=250)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
+    zona = models.ForeignKey(PuntoGeografico, on_delete=models.CASCADE, null=True)
 
 # @receiver(post_save, sender=Institucion)
 # def crear_punto_geografico_tipo_institucion(sender, instance, **kwargs):

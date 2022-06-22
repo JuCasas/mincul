@@ -21,7 +21,7 @@ class ActividadSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = Actividad
-        fields = ['id','codigo','nombre','descripcion','fechaInicio','fechaFin','status']
+        fields = ['id','codigo','nombre','descripcion','fechaInicio','fechaFin','status', "patrimonio"]
 
 class TareaSerializer (serializers.ModelSerializer):
 

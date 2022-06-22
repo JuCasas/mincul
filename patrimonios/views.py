@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 
 from django.core.mail import EmailMultiAlternatives
+from django.db.models.lookups import In
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import get_template
@@ -16,7 +17,8 @@ from authentication.models import User
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
-    ActividadTuristica, Responsable
+    ActividadTuristica, Responsable, PuntoGeografico
+from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
 
@@ -161,23 +163,32 @@ def detalle_museo(request, pk):
     institucion = Institucion.objects.get(pk=pk)
     #lista de patrimonio dentro del museo
     patrimonios = Patrimonio.objects.filter(institucion_id=pk)
-
-    #lista de valoraciones de esos patrimonios
-
-
+    #lista de valoraciones general de la institucion
+    valoraciones = PatrimonioValoracion.objects.filter(zona__institucion_id=pk).filter(estado=2)
     #lista de incidentes
-
-
-
-
-
+    incidentes = Incidente.objects.filter(zona__institucion_id=pk)
 
     context = {"valor": valor,
                "area": area,
                "institucion": institucion,
-               "patrimonios": patrimonios}
+               "patrimonios": patrimonios,
+               "valoraciones": valoraciones,
+               "incidentes": incidentes}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
+
+def valor_museo(request,pk):
+    if request.POST:
+        zona = PuntoGeografico.objects.get(institucion_id=pk)
+        valoracion = PatrimonioValoracion.objects.create()
+        valoracion.zona = zona
+        valoracion.nombre = request.POST.get("name")
+        valoracion.correo = request.POST.get("email")
+        valoracion.comentario = request.POST.get("comment")
+        valoracion.valoracion = request.POST.get("score")
+        valoracion.save()
+        send_email(request, valoracion.pk)
+    return HttpResponseRedirect(reverse(detalle_museo, args=[pk]))
 
 @method_decorator(csrf_exempt)
 def send_email(request, pk):
@@ -211,9 +222,7 @@ def send_email(request, pk):
 
 def email_confirmation(request, pk):
     valor = PatrimonioValoracion.objects.get(pk=pk)
-    print('Hola')
     valor.estado = 2
-    print(valor.estado)
     valor.save()
     context = {'valor':valor}
     return render(request, 'patrimonio/email_confirmation.html', context)

@@ -25,8 +25,8 @@
 
         <div class="card-body bg-light">
             <div class="row">
-                <div class="col-4">
-                    <div class="card">
+                <div class="col-md-4 col-lg-4 col-sm-12 ">
+                    <div class="card h-100">
                         <div class="card-header">
                             <h5>General</h5>
                         </div>
@@ -71,16 +71,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-md-8 col-lg-8 col-sm-12">
                     <div class="row">
                         <div class="col">
-                            <div class="card">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Entidad solicitante</h5>
                                 </div>
                                 <div class="card-body bg-light">
                                     <div class="form-group">
-                                        <label for="nombreInstitucion">Nombre: </label>
+                                        <label for="nombreInstitucion">Entidad Solicitante: </label>
                                         <select class="form-control" id="nombreInstitucion"
                                                 name="nombreInstitucion" disabled>
                                             {% for e in entidades %}
@@ -91,7 +91,7 @@
                                     </div>
 
                                     <div class="form-group ">
-                                        <label for="nombreExposicion">Correo:</label>
+                                        <label for="nombreExposicion">Correo de la entidad solicitante:</label>
                                         <input class="form-control" id="correoEntidadSolicitante"
                                                name="correoEntidadSolicitante"
                                                type="text"
@@ -111,20 +111,10 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group">
-                                                <label for="fechaSalidaProgramada">Salida Programada: </label>
+                                                <label for="fechaSalidaProgramada">Fecha de Salida Programada: </label>
                                                 <input class="form-control" id="fechaSalidaProgramada"
                                                        name="fechaSalidaProgramada" type="date"
                                                        value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
-                                                       disabled>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group ">
-                                                <label for="fechaRetornoProgramada">Retorno
-                                                    Programada: </label>
-                                                <input class="form-control" id="fechaRetornoProgramada"
-                                                       name="fechaRetornoProgramada" type="date"
-                                                       value="{{ traslado.fechaRetornoProgramada|date:'Y-m-d' }}"
                                                        disabled>
                                             </div>
                                         </div>
@@ -133,7 +123,7 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group">
-                                                <label for="fechaSalidaReal">Salida Real:</label>
+                                                <label for="fechaSalidaReal">Fecha de Salida Real:</label>
                                                 <input class="form-control" id="fechaSalidaReal" name="fechaSalidaReal"
                                                        type="date"
                                                        value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
@@ -142,10 +132,10 @@
                                         </div>
                                         <div class="col">
                                             <div class="form-group">
-                                                <label for="fechaRetornoReal">Retorno Real:</label>
+                                                <label for="fechaRetornoReal">Fecha de Retorno Real:</label>
                                                 <input class="form-control" id="fechaRetornoReal"
                                                        name="fechaRetornoReal" type="date"
-                                                       value="{{ traslado.fechaRetornoReal|date:'Y-m-d' }}" disabled>
+                                                       value="{{ traslado.fechaRetorno|date:'Y-m-d' }}" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -153,20 +143,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row my-3">
+                    <div class="row mt-3">
                         <div class="col">
-                            <div class="card">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Patrimonios a ser trasladados</h5>
                                 </div>
                                 <div class="card-body bg-light">
-                                    <table class="table table-striped">
-                                        <thead>
+                                    <table class="table table-responsive-sm">
+                                        <thead class="thead-dark">
                                         <tr>
-                                            <th scope="col">Código</th>
+                                            <th scope="col">#</th>
                                             <th scope="col">Patrimonio</th>
                                             <th scope="col">Clasificación</th>
                                             <th scope="col">Tipo de bien</th>
+                                            <th scope="col">Estado</th>
 
                                         </tr>
                                         </thead>
@@ -175,8 +166,9 @@
                                             <tr>
                                                 <td>{{ patrimonio.pk }}</td>
                                                 <td>{{ patrimonio.nombreTituloDemoninacion }}</td>
-                                                <td>{{ patrimonio.get_categoria_display }}</td>
+                                                <td>{{ patrimonio.categoria.nombre }}</td>
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
+                                                <td>{{ patrimonio.get_estado_display }}</td>
 
                                             </tr>
                                         {% endfor %}
@@ -216,16 +208,17 @@
                 </div>
             </div>
 
-            <div class="row mt-5">
-                <div class="col-11">
-                    <div class="row">
-                        <div class="col-1">
-                            <h5>Estado: </h5>
-                        </div>
-
-                        <div class="col-2">
-                            <span class="btn
-                                {% if traslado.estado == '1' %}
+            <div class="row">
+                <div class="col-8">
+                    <div class="row mt-5">
+                        <div class="col-11">
+                            <div class="row mx-3">
+                                <div class="col-2 flex-center mt-auto mb-auto ">
+                                    <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
+                                </div>
+                                <div class="col-3">
+                        <span class="btn
+                        {% if traslado.estado == '1' %}
                                     btn-warning
                                 {% elif traslado.estado == '2' %}
                                     btn-info
@@ -234,23 +227,58 @@
                                 {% elif traslado.estado == '4' %}
                                     btn-success
                                 {% elif traslado.estado == '5' %}
-                                    btn-secondary
-                                {% elif traslado.estado == '6' %}
                                     btn-dark
+                                {% elif traslado.estado == '6' %}
+                                    btn-light
                                 {% endif %} ">
-                                    {{ traslado.get_estado_display }}
-                                </span>
+                            {{ traslado.get_estado_display }}
+                        </span>
+                                </div>
+
+
+                                        <div class="col-3 p-0">
+                                            <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
+                                                    data-target="#verDetalleRechazo">
+                                                Ver detalle de rechazo
+                                            </button>
+                                        </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-1 align-items-end">
-                    <a class="btn btn-primary mr-3 mb-1" type="button" href="{% url 'list_transfers' %}">Volver</a>
+                <div class="col-4">
+                    <div class="d-flex flex-row justify-content-end mt-5">
+                        <div class="flex-column">
+                            <a class="btn btn-primary mr-3 mb-1" type="button"
+                               href="{% url 'list_transfers' %}">Volver</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+ <!-- Ver detalle de rechazo -->
+    <div class="modal fade" id="verDetalleRechazo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalle de rechazo</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ traslado.detalleRechazo }}</p>
+                </div>
 
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
