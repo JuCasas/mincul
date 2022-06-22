@@ -65,7 +65,12 @@
                             <div class="form-group">
                                 <label for="nResolucion">N° de Resolucion:</label>
                                 <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                                       value="{{ traslado.numeroResolucion }}" disabled>
+                                        {% if traslado.numeroResolucion %}
+                                           value="{{ traslado.numeroResolucion }}"
+                                            {% else %}
+                                           placeholder="Aun no se ha registrado el número de resolución"
+                                            {% endif %}
+                                       disabled>
                             </div>
 
                         </div>
