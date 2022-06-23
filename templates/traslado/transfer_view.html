@@ -47,7 +47,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="destino">Dirección de destino:</label>
-                                <input class="form-control" id="destino" name="destino" type="text" value="{{ traslado.destino }}" disabled>
+                                <input class="form-control" id="destino" name="destino" type="text"
+                                       value="{{ traslado.destino }}" disabled>
                             </div>
 
                             <div class="form-group ">
@@ -65,10 +66,10 @@
                                 <label for="nResolucion">N° de Resolucion:</label>
                                 <input class="form-control" id="nResolucion" name="nResolucion" type="text"
                                         {% if traslado.numeroResolucion %}
-                                           value="{{ traslado.numeroResolucion }}"
-                                            {% else %}
-                                           placeholder="Aun no se ha registrado el número de resolución"
-                                            {% endif %}
+                                       value="{{ traslado.numeroResolucion }}"
+                                        {% else %}
+                                       placeholder="Aun no se ha registrado el número de resolución"
+                                        {% endif %}
                                        disabled>
                             </div>
 
@@ -127,30 +128,35 @@
                                     <div class="row">
 
                                         {% if traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="fechaSalidaReal">Fecha de Salida Real:</label>
-                                                <input class="form-control" id="fechaSalidaReal" name="fechaSalidaReal"
-                                                       type="date"
-                                                       value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
-                                            </div>
-
-                                        </div>
+                                            {% if traslado.fechaSalidaReal %}
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="fechaSalidaReal">Fecha de Salida Real:</label>
+                                                        <input class="form-control" id="fechaSalidaReal"
+                                                               name="fechaSalidaReal"
+                                                               type="date"
+                                                               value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}"
+                                                               disabled>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
                                         {% endif %}
 
-                                     {% if traslado.estado == '5' or traslado.estado == '6' %}
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="fechaRetornoReal">Fecha de Retorno:</label>
-                                                <input class="form-control" id="fechaRetornoReal"
-                                                       name="fechaRetornoReal" type="date"
-                                                       value="{{ traslado.fechaRetorno|date:'Y-m-d' }}" disabled>
-                                            </div>
-                                        </div>
-                                    {% endif %}
+
+                                        {% if traslado.estado == '5' or traslado.estado == '6' %}
+                                            {% if traslado.fechaRetorno %}
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="fechaRetornoReal">Fecha de Retorno:</label>
+                                                        <input class="form-control" id="fechaRetornoReal"
+                                                               name="fechaRetornoReal" type="date"
+                                                               value="{{ traslado.fechaRetorno|date:'Y-m-d' }}"
+                                                               disabled>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
                                     </div>
-
-
 
 
                                 </div>
