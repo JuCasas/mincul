@@ -189,7 +189,7 @@ def patrimonio_list(request):
                     print('Mueble')
 
     context = {
-        'patrimonios': Patrimonio.objects.all()
+        'patrimonios': Patrimonio.objects.filter(estado=1)
     }
 
     return render(request, 'patrimonio/patrimony_list.html', context=context)
