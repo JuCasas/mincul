@@ -97,7 +97,7 @@
                                         data-placeholder='Seleccione comisario...'
                                         {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% for c in comisarios %}
-                                        <option value="{{ c.pk }}">{{ c.username }}</option>
+                                        <option value="{{ c.pk }}">{{ c.first_name }} {{ c.last_name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
