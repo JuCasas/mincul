@@ -83,7 +83,7 @@
     "model": "patrimonios.categoria",
     "pk": 9,
     "fields": {
-      "nombre": "Plaeontologico",
+      "nombre": "Paleontologico",
       "tipo": "3",
       "estado": "1"
     }
