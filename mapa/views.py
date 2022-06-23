@@ -89,7 +89,7 @@ def mapaPatrimonioSimple(request):
         patrimonioNombre.lstrip()
         if len(patrimonioNombre)>0 :
             success = 0
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1")
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
             if len(patrimonios) > 0:
                 instituciones = []
                 patri = []
@@ -124,8 +124,8 @@ def mapaPatrimonioSimple(request):
     return render(request, 'map/mapaBusquedaSimplePatrimonio.html',{'success':success})
 
 def mapaPatrimonioAvanzado(request):
-    categorias = Categoria.objects.all()
-    dep = Patrimonio.objects.filter(estado="1").distinct('departamento')
+    categorias = Categoria.objects.filter()
+    dep = Patrimonio.objects.filter(estado="1").distinct('departamento').exclude(tipoPatrimonio="1")
     departamentos = []
     for d in dep:
         departamentos.append({'id_representativo':d.pk,
@@ -142,12 +142,12 @@ def mapaPatrimonioAvanzado(request):
         #The following conditional must be checked before dev and prod
         if len(patrimonioNombre)>0 :
             success=0
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1")
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
             if len(patrimonios) > 0:
                 if(patrimonioCategoria=="Categoría"):
                     pass
                 else:
-                    cats = Categoria.objects.get(nombre__contains=patrimonioCategoria)
+                    cats = Categoria.objects.get(nombre__iexact=patrimonioCategoria)
                     catId = cats.pk
                     patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,
                                                             categoria_id=catId)

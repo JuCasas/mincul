@@ -241,7 +241,7 @@
                 "{{ patrimonio0.url }}" +
                 "'/>" +
             "</div>").openPopup()
-            map.flyTo([{{ patrimonio0.patrimonio.lat }}, {{patrimonio0.patrimonio.long}}],14);
+            map.flyTo([{{ patrimonio0.patrimonio.lat }}, {{patrimonio0.patrimonio.long}}],15);
         {% endif %}
         {% if institucion0 != None and patrimonio0 is None %}
             let markerInicio = L.marker([{{institucion0.institucion.lat}}, {{institucion0.institucion.long}}], {
@@ -253,7 +253,7 @@
                 "{{ institucion0.url }}" +
                 "'/>" +
             "</div>").openPopup()
-            map.flyTo([{{ institucion0.institucion.lat }}, {{institucion0.institucion.long}}],14);
+            map.flyTo([{{ institucion0.institucion.lat }}, {{institucion0.institucion.long}}],18);
         {% endif %}
     </script>
     <!--script for flying to other results-->
@@ -283,7 +283,7 @@
                             url +
                             "'/>" +
                         "</div>").openPopup()
-                        map.flyTo([ lat, long],14);
+                        map.flyTo([ lat, long],15);
                     },
                     error: function (error){
                         console.log(error)
@@ -308,7 +308,7 @@
                             url +
                             "'/>" +
                         "</div>").openPopup()
-                        map.flyTo([ lat, long],14);
+                        map.flyTo([ lat, long],18);
                     },
                     error: function (error){
                         console.log(error)
