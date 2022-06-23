@@ -110,7 +110,7 @@
                                         <p> Se encontraron {{  lensearch }} patrimonios o instituciones asociadas</p>
                                     {% endif %}
                                 {% else %}
-
+                                    <!--Nothing-->
                                 {% endif %}
                             </div>
                         </div>
@@ -131,8 +131,11 @@
                                     </div>
                                 </div>
                                 <div class="card-body pt-2 pb-2">
-                                    <p class="mb-0 " style="font-size: 15px"> Patrimonio Cultural de la
-                                        humanidad </p>
+                                    {% if p.tipoPatrimonio == "1" %}
+                                    <p class="mb-0 " style="font-size: 15px"> Patrimonio Inmaterial </p>
+                                    {% else %}
+                                        <p class="mb-0 " style="font-size: 15px"> Patrimonio Material Inmueble </p>
+                                    {% endif %}
                                     {% comment %}
                                     <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
                                             value="[{{ p.lat }}, {{ p.long }}]" name="btn-ver-mapa">

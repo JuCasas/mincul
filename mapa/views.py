@@ -89,27 +89,27 @@ def mapaPatrimonioSimple(request):
             patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre)
             if len(patrimonios) > 0:
                 instituciones = []
-                patriInmueble = []
+                patri = []
                 for p in patrimonios:
                     if int(p.tipoPatrimonio) == 3:
                         insti = Institucion.objects.get(pk=p.institucion.pk)
                         if insti not in instituciones:
                             instituciones.append(insti)
-                    if int(p.tipoPatrimonio) == 2:
-                        patriInmueble.append(p)
+                    else:
+                        patri.append(p)
                 patrimonio0 = None
                 institucion0 = None
-                if len(patriInmueble)>0:
-                    patrimonio0 = patriInmueble[0]
+                if len(patri)>0:
+                    patrimonio0 = patri[0]
                 if len(instituciones)>0:
                     institucion0 = instituciones[0]
                 success=1
                 context = {
-                    'patrimonios': patriInmueble,
+                    'patrimonios': patri,
                     'instituciones':instituciones,
                     'patrimonio0': patrimonio0,
                     'institucion0':institucion0,
-                    'lensearch':len(patriInmueble)+len(instituciones),
+                    'lensearch':len(patri)+len(instituciones),
                     'success':success
                 }
                 return render(request, 'map/mapaBusquedaSimplePatrimonio.html', context)
@@ -182,29 +182,29 @@ def mapaPatrimonioAvanzado(request):
                         patrimonios=dis
                 if(len(patrimonios)>0):
                     instituciones = []
-                    patriInmueble = []
+                    patrimons = []
                     for p in patrimonios:
                         if int(p.tipoPatrimonio) == 3:
                             insti = Institucion.objects.get(pk=p.institucion.pk)
                             if insti not in instituciones:
                                 instituciones.append(insti)
-                        if int(p.tipoPatrimonio) == 2:
-                            patriInmueble.append(p)
+                        else:
+                            patrimons.append(p)
                     patrimonio0 = None
                     institucion0 = None
-                    if len(patriInmueble) > 0:
-                        patrimonio0 = patriInmueble[0]
+                    if len(patrimons) > 0:
+                        patrimonio0 = patrimons[0]
                     if len(instituciones) > 0:
                         institucion0 = instituciones[0]
                     success = 1
                     context = {
                         'categorias': categorias,
                         'departamentos': departamentos,
-                        'patrimonios': patriInmueble,
+                        'patrimonios': patrimons,
                         'instituciones':instituciones,
                         'patrimonio0': patrimonio0,
                         'institucion0':institucion0,
-                        'lensearch': len(patriInmueble)+len(instituciones),
+                        'lensearch': len(patrimons)+len(instituciones),
                         'success': success
                     }
                     return render(request, 'map/mapaBusquedaAvzPatrimonio.html', context)

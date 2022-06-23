@@ -14,12 +14,12 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="card mb-3 bg-card-gradient">
-                    {% if patrimony.tipoPatrimonio == "2" %}
-                        <button class="btn-primary text-white" onclick="location.href='/patrimonios/detalle/{{ patrimony.id }}'">
+                    {% if patrimony.tipoPatrimonio == "3" %}
+                        <button class="btn-primary text-white" onclick="location.href='/patrimonios/detalle/area/{{ patrimony.institucion.id }}'">
                             Volver
                         </button>
                     {% else %}
-                        <button class="btn-primary text-white" onclick="location.href='/patrimonios/detalle/area/{{ patrimony.institucion.id }}'">
+                        <button class="btn-primary text-white" onclick="location.href='/patrimonios/detalle/{{ patrimony.id }}'">
                             Volver
                         </button>
                     {% endif %}
@@ -221,7 +221,7 @@
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
                                             <!--Tiene autor solo si no es Inmueble-->
-                                            {% if patrimony.tipoPatrimonio != "2" %}
+                                            {% if patrimony.tipoPatrimonio == "3" %}
                                                 Tiene autor
                                             {% else %}
                                                 --
