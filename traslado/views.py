@@ -309,6 +309,7 @@ def viewTranfer(request, pk):
     # Nota, se debe considerar los patrominos del traslado
     patrimonios = traslado.patrimonios.all()
     documentos = DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
+    comisario = User.objects.get(pk = traslado.gestorConservacionTraslados.pk)
 
     context = {
         'traslado': traslado,
@@ -316,7 +317,8 @@ def viewTranfer(request, pk):
         'comisarios': comisarios,
         'patrimonios': patrimonios,
         'documentos': documentos,
-        'media_path': media_path
+        'media_path': media_path,
+        'comisario': comisario,
     }
 
     return render(request, 'traslado/transfer_view.html', context)
