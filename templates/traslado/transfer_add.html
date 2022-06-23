@@ -105,7 +105,7 @@
                             {% if traslado.estado == '2' or traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
                                 <div class="form-group">
                                     <label for="nResolucion">N° de Resolución:</label>
-                                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                    <input class="form-control" id="nResolucion" name="nResolucion" maxlength="17" type="text"
                                             {% if traslado.numeroResolucion %}
                                            value="{{ traslado.numeroResolucion }}"
                                             {% else %}
