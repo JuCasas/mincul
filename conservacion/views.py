@@ -375,7 +375,6 @@ def addTask(request, pk):
   fechaRegistro = datetime.datetime.strptime(request.POST['fechaRegistro'], "%Y-%m-%d").date()
   fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
   actividad = Actividad.objects.get(pk=pk)
-  print(type(presupuesto))
   tarea = Tarea.objects.create(
     nombre=nombre,
     descripcion=descripcion,
@@ -387,3 +386,23 @@ def addTask(request, pk):
   tarea.codigo = "A" + str(tarea.id).zfill(3)
   tarea.save()
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('POST',))
+def editTask(request, pk):
+  tarea = Tarea.objects.get(pk=pk)
+  tarea.nombre = request.POST['nombre']
+  tarea.descripcion = request.POST['descripcion']
+  tarea.presupuesto = request.POST['presupuesto']
+  tarea.fechaRegistro = datetime.datetime.strptime(request.POST['fechaRegistro'], "%Y-%m-%d").date()
+  tarea.fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
+  tarea.estado = request.POST['estado']
+  tarea.save()
+  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('GET',))
+def editTaskView(request, pk):
+    context = {
+      'task': Tarea.objects.get(pk=pk),
+      'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
+    }
+    return render(request, 'proyectoConservacion/editTask_view.html', context)

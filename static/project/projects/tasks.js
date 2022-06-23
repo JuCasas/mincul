@@ -83,30 +83,13 @@ $('#tabla_autores tbody').on('click', 'button', function () {
 
   id = data['id'];
   if (class_name == 'btn btn-edit') {
-    // EDIT button
-    $('#nombre').val(data['nombre']);
-    $('#codigo').val(data['codigo']);
-    let opt = parseInt(data['tipoProyecto'])
-    $("#tipoPlan").val(opt)
-    fecha = data['fechaInicio']
-    var parts = fecha.split("/");
-    var dt = new Date(parseInt(parts[2], 10),
-        parseInt(parts[1], 10) - 1,
-        parseInt(parts[0], 10));
-    var currentDate = dt.toISOString().slice(0, 10);
-    $('#fechaRegistro').val(currentDate);
-    $('#fechaRegistro').prop("disabled", true);
-    $('#type').val('edit');
-    $('#modal_title').text('Editar Tarea');
-    $("#myModal").modal();
+    window.location.pathname = "/conservacion/tareas/editView/" + id + "/";
   } else if (class_name == 'btn btn-show') {
     window.location.pathname = "/conservacion/actividades/" + id + "/tareas/";
   } else {
     // DELETE button
-    $('#modal_title').text('DELETE');
     $("#confirm").modal();
   }
-
 
 });
 

@@ -17,7 +17,7 @@ $('#tabla_autores tbody').on('click', 'button', function () {
   id = data['id'];
 
   if (class_name == 'btn btn-edit') {
-    $("#modalIncidente").modal();
+    $("#confirm").modal();
   } else if (class_name == 'btn btn-show') {
     $('#cover-spin').show(0)
     $.ajax({
@@ -51,7 +51,6 @@ $('#tabla_autores tbody').on('click', 'button', function () {
     });
   } else {
     // DELETE button
-    $('#modal_title').text('DELETE');
-    $("#confirm").modal();
+    $("#del").modal();
   }
 });
