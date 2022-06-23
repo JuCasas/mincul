@@ -90,7 +90,7 @@
                                 {% endif %}
                                 {% comment %}
                                 <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
-                                        value="[{{ p.lat }}, {{ p.long }}]" name="btn-ver-mapa">
+                                        value="[{{ p.lat }}, {{ p.long }}]" id="btn-ver-mapa">
                                             Ver en el mapa
                                 </button>
                                 {% endcomment %}
@@ -122,7 +122,7 @@
                                 <p class="mb-0 " style="font-size: 15px"> Institución </p>
                                 {% comment %}
                                 <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
-                                        value="[{{ p.lat }}, {{ p.long }}]" name="btn-ver-mapa">
+                                        value="[{{ i.lat }}, {{ i.long }}]" id="btn-ver-mapa">
                                             Ver en el mapa
                                 </button>
                                 {% endcomment %}
@@ -180,7 +180,7 @@
         {% if patrimonio0 != None%}
             let markerInicio = L.marker([{{patrimonio0.lat}}, {{patrimonio0.long}}], {
                 icon:myIcon,
-                title: "{{ resultado0.nombreTituloDemoninacion }}"
+                title: "{{ patrimonio0.nombreTituloDemoninacion }}"
             }).addTo(map).bindPopup("<div>" +
                 "<p>" + "{{ patrimonio0.nombreTituloDemoninacion }}" +"</p>"  +
                 "<img width='300' src='" +
@@ -189,7 +189,7 @@
             "</div>").openPopup()
             map.flyTo([{{ patrimonio0.lat }}, {{patrimonio0.long}}],14);
         {% endif %}
-        {% if institucion0 != None %}
+        {% if institucion0 != None and patrimonio0 is None %}
             let markerInicio = L.marker([{{institucion0.lat}}, {{institucion0.long}}], {
                 icon:myIcon,
                 title: "{{ institucion0.nombre }}"
@@ -201,6 +201,13 @@
             "</div>").openPopup()
             map.flyTo([{{ institucion0.lat }}, {{institucion0.long}}],14);
         {% endif %}
+    </script>
+    <script>
+    const btnVerMapa = document.getElementById('btn-ver-mapa');
+    btnVerMapa.addEventListener('click',ev => {
+        console.log(ev.target.value);
+    })
+
     </script>
     {% comment %}
     <script>
