@@ -3,11 +3,13 @@
 
 {% block extrastyle %}
     <link href="../static/lib/flatpickr/flatpickr.min.css" rel="stylesheet">
-    <link href="../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
 
     <link href="../static/lib/leaflet/leaflet.css" rel="stylesheet">
     <link href="../static/lib/leaflet.markercluster/MarkerCluster.css" rel="stylesheet">
     <link href="../static/lib/leaflet.markercluster/MarkerCluster.Default.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
     <style></style>
 {% endblock %}
 
@@ -27,11 +29,13 @@
             <div class="navbar-vertical-content">
                 <div class="row" style="padding-bottom: 3px">
                     <div class="col">
-                        <form id="form_buscar" method="post" action={% url 'mapaPatrimonioSimple' %} >
+                        <form id="form_buscar" method="post" action="{% url 'mapaPatrimonioSimple' %}"
+                                 name = "formBuscar">
                             {% csrf_token %}
                             <div class="position-relative" style="padding: 10px;">
                                 <label for="txtBuscar"></label>
-                                <input name="patrimonio_name" class="form-control" id="txtBuscar" placeholder="Buscar patrimonio...">
+                                <input name="patrimonio_name" class="form-control" id="txtBuscar"
+                                       placeholder="Buscar patrimonio..." required>
                             </div>
                             <div class="text-right" style="padding: 10px">
                                 <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioAvanzado' %}">
@@ -162,7 +166,7 @@
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
     <!-- ruta entre puntos -->
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-
+    <!--Script mapa-->
     <script>
         // leaflet map with osm tilelayer
         var map = L.map('map').setView([-9.40, -75.00], 5);
@@ -261,5 +265,11 @@
             }
         })
     });
+    </script>
+    <!--script verificadores-->
+    <script>
+    jQuery.validator.addMethod("regexPatrimonio",function(value, element){
+        return this.optional(element) || /[a-z\u00E0-\u00FC\-\w\s+\.]+$/i.test(value);
+    }, "Letters, numbers, and underscores only please");
     </script>
 {% endblock %}

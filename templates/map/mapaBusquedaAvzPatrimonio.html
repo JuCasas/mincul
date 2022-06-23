@@ -3,11 +3,13 @@
 
 {% block extrastyle %}
     <link href="../static/lib/flatpickr/flatpickr.min.css" rel="stylesheet">
-    <link href="../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
 
     <link href="../static/lib/leaflet/leaflet.css" rel="stylesheet">
     <link href="../static/lib/leaflet.markercluster/MarkerCluster.css" rel="stylesheet">
     <link href="../static/lib/leaflet.markercluster/MarkerCluster.Default.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
     <style></style>
 {% endblock %}
 
@@ -41,7 +43,8 @@
                                     <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
-                                                <select class="form-control" id="formSelectCategoría" style="padding:3px" name="select_categoria">
+                                                <select class="form-control" id="formSelectCategoría" style="padding:3px"
+                                                        name="select_categoria">
                                                     <option>Categoría</option>
                                                     {% for cat in categorias %}
                                                         <option> {{ cat.nombre }} </option>
@@ -53,7 +56,8 @@
                                     <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
-                                                <select class="form-control" id="formSelectDepartamento" style="padding:3px" name="select_departamento">
+                                                <select class="form-control" id="formSelectDepartamento" style="padding:3px"
+                                                        name="select_departamento">
                                                     <option value="-1" >Departamento</option>
                                                     {%  for dep in departamentos %}
                                                       <option value="{{ dep.id_representativo }}"> {{ dep.nombreDepartamento }}</option>
@@ -65,7 +69,8 @@
                                     <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
-                                                <select class="form-control" id="formSelectProvincia" style="padding:3px"name="select_provincia">
+                                                <select class="form-control" id="formSelectProvincia" style="padding:3px"
+                                                        name="select_provincia">
                                                   <option selected value="-1" id="provinciaText">Provincia</option>
                                                 </select>
                                             </div>
@@ -74,7 +79,8 @@
                                     <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
-                                                <select class="form-control" id="formSelectDistrito" style="padding:3px"name="select_distrito">
+                                                <select class="form-control" id="formSelectDistrito" style="padding:3px"
+                                                        name="select_distrito">
                                                   <option selected value="-1" id="distritoText">Distrito</option>
                                                 </select>
                                             </div>
@@ -250,67 +256,6 @@
             map.flyTo([{{ institucion0.institucion.lat }}, {{institucion0.institucion.long}}],14);
         {% endif %}
     </script>
-    <!--Advanced search script-->
-    <script>
-    const departamentoInput =  document.getElementById('formSelectDepartamento');
-    const provinciaInput =  document.getElementById('formSelectProvincia');
-    const distritoDataBox = document.getElementById('formSelectDistrito')
-
-    const provinciaTexto = document.getElementById('provinciaText')
-    const distritoTexto = document.getElementById('distritoText')
-
-    departamentoInput.addEventListener("change", ev => {
-        const selectedDepartamentoId = ev.target.value;
-        provinciaInput.innerHTML=""
-        provinciaTexto.textContent="Provincia"
-        provinciaTexto.setAttribute('value','-1')
-        provinciaInput.appendChild(provinciaTexto)
-        distritoDataBox.innerHTML=""
-        distritoTexto.textContent="Distrito"
-        distritoTexto.setAttribute('value','-1')
-        distritoDataBox.appendChild(distritoTexto)
-        $.ajax({
-            type:'GET',
-            url: `/mapa/provinciajson/${selectedDepartamentoId}`,
-            success: function (response){
-                const provinciaData = response.provincias
-                provinciaData.map(item => {
-                    const option = document.createElement('option')
-                    option.textContent = item.nombreProvincia
-                    option.setAttribute('value',item.id_representativo)
-                    provinciaInput.appendChild(option)
-                })
-            },
-            error: function (error){
-                console.log(error)
-            }
-        })
-    });
-
-    provinciaInput.addEventListener('change',ev => {
-        const selectedProvinciaId = ev.target.value;
-        distritoDataBox.innerHTML=""
-        distritoTexto.textContent="Distrito"
-        distritoTexto.setAttribute('value','-1')
-        distritoDataBox.appendChild(distritoTexto)
-        $.ajax({
-            type:'GET',
-            url: `/mapa/distritojson/${selectedProvinciaId}`,
-            success: function (response){
-                const distritoData = response.distritos
-                distritoData.map(item => {
-                    const option = document.createElement('option')
-                    option.textContent = item.nombreDistrito
-                    option.setAttribute('value',item.id_representativo)
-                    distritoDataBox.appendChild(option)
-                })
-            },
-            error: function (error){
-                console.log(error)
-            }
-        })
-    })
-    </script>
     <!--script for flying to other results-->
     <script>
     document.querySelectorAll('.mr-1').forEach(item =>{
@@ -372,5 +317,70 @@
             }
         })
     });
+    </script>
+    <!--Advanced search script-->
+    <script>
+    const departamentoInput =  document.getElementById('formSelectDepartamento');
+    const provinciaInput =  document.getElementById('formSelectProvincia');
+    const distritoDataBox = document.getElementById('formSelectDistrito')
+
+    const provinciaTexto = document.getElementById('provinciaText')
+    const distritoTexto = document.getElementById('distritoText')
+
+    departamentoInput.addEventListener("change", ev => {
+        const selectedDepartamentoId = ev.target.value;
+        provinciaInput.innerHTML=""
+        provinciaTexto.textContent="Provincia"
+        provinciaTexto.setAttribute('value','-1')
+        provinciaInput.appendChild(provinciaTexto)
+        distritoDataBox.innerHTML=""
+        distritoTexto.textContent="Distrito"
+        distritoTexto.setAttribute('value','-1')
+        distritoDataBox.appendChild(distritoTexto)
+        $.ajax({
+            type:'GET',
+            url: `/mapa/provinciajson/${selectedDepartamentoId}`,
+            success: function (response){
+                const provinciaData = response.provincias
+                provinciaData.map(item => {
+                    const option = document.createElement('option')
+                    option.textContent = item.nombreProvincia
+                    option.setAttribute('value',item.id_representativo)
+                    provinciaInput.appendChild(option)
+                })
+            },
+            error: function (error){
+                console.log(error)
+            }
+        })
+    });
+
+    provinciaInput.addEventListener('change',ev => {
+        const selectedProvinciaId = ev.target.value;
+        distritoDataBox.innerHTML=""
+        distritoTexto.textContent="Distrito"
+        distritoTexto.setAttribute('value','-1')
+        distritoDataBox.appendChild(distritoTexto)
+        $.ajax({
+            type:'GET',
+            url: `/mapa/distritojson/${selectedProvinciaId}`,
+            success: function (response){
+                const distritoData = response.distritos
+                distritoData.map(item => {
+                    const option = document.createElement('option')
+                    option.textContent = item.nombreDistrito
+                    option.setAttribute('value',item.id_representativo)
+                    distritoDataBox.appendChild(option)
+                })
+            },
+            error: function (error){
+                console.log(error)
+            }
+        })
+    })
+    </script>
+    <!--Requirements of search camps script-->
+    <script>
+
     </script>
 {% endblock %}

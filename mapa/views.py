@@ -87,10 +87,9 @@ def mapaPatrimonioSimple(request):
         patrimonioNombre = request.POST['patrimonio_name']
         patrimonioNombre.rstrip()
         patrimonioNombre.lstrip()
-        success=0
-        if patrimonioNombre != '' or patrimonioNombre != None or patrimonioNombre != ' '\
-                or patrimonioNombre != "" or patrimonioNombre != " ":
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre)
+        if len(patrimonioNombre)>0 :
+            success = 0
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1")
             if len(patrimonios) > 0:
                 instituciones = []
                 patri = []
@@ -126,7 +125,7 @@ def mapaPatrimonioSimple(request):
 
 def mapaPatrimonioAvanzado(request):
     categorias = Categoria.objects.all()
-    dep = Patrimonio.objects.all().distinct('departamento')
+    dep = Patrimonio.objects.filter(estado="1").distinct('departamento')
     departamentos = []
     for d in dep:
         departamentos.append({'id_representativo':d.pk,
@@ -140,10 +139,10 @@ def mapaPatrimonioAvanzado(request):
         patrimoniodistrito = request.POST['select_distrito']
         patrimonioNombre.rstrip()
         patrimonioNombre.lstrip()
-        success=0
-        if patrimonioNombre != '' or patrimonioNombre != None or patrimonioNombre != ' '\
-            or patrimonioNombre != "" or patrimonioNombre != " ":
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre)
+        #The following conditional must be checked before dev and prod
+        if len(patrimonioNombre)>0 :
+            success=0
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1")
             if len(patrimonios) > 0:
                 if(patrimonioCategoria=="Categoría"):
                     pass
@@ -233,7 +232,7 @@ def provinciaJson(request,id_representativo):
     if id_representativo != -1:
         patrimonioEjemplo = Patrimonio.objects.get(id=id_representativo)
         dep = patrimonioEjemplo.departamento
-        prov = Patrimonio.objects.filter(departamento__exact=dep).distinct('provincia')
+        prov = Patrimonio.objects.filter(departamento__exact=dep,estado="1").distinct('provincia')
         for p in prov:
             provincias.append({'id_representativo': p.pk,
                               'nombreProvincia': p.provincia})
@@ -249,7 +248,7 @@ def distritoJson(request,id_representativo):
     if id_representativo!=-1:
         patrimonioEjemplo=Patrimonio.objects.get(id=id_representativo)
         prov = patrimonioEjemplo.provincia
-        dis = Patrimonio.objects.filter(provincia__exact=prov).distinct('distrito')
+        dis = Patrimonio.objects.filter(provincia__exact=prov,estado="1").distinct('distrito')
         for d in dis:
             distritos.append({'id_representativo': d.pk,
                               'nombreDistrito': d.distrito})
