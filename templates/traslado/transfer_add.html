@@ -55,15 +55,15 @@
                         <div class="card-body bg-light">
                             <div class="form-group">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
-                                <select class="form-control" id="tipoTraslado" required
-                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
-                                    <option {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
+                                <select class="form-control selectpicker" id="tipoTraslado" name="tipoTraslado" required
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %} onchange="validarPais()">
+                                    <option value="1" {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
                                         extranjero
                                     </option>
-                                    <option {% if traslado.tipoTraslado == '2' %} selected {% endif %}>Exponsición
+                                    <option value="2" {% if traslado.tipoTraslado == '2' %} selected {% endif %}>Exposición
                                         nacional
                                     </option>
-                                    <option {% if traslado.tipoTraslado == '3' %} selected {% endif %}>Misión
+                                    <option value="3" {% if traslado.tipoTraslado == '3' %} selected {% endif %}>Misión
                                         Diplomática
                                     </option>
                                 </select>
@@ -97,7 +97,7 @@
                                         data-placeholder='Seleccione comisario...'
                                         {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% for c in comisarios %}
-                                        <option value="{{ c.pk }}">{{ c.username }}</option>
+                                        <option value="{{ c.pk }}">{{ c.first_name }} {{ c.last_name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -105,7 +105,7 @@
                             {% if traslado.estado == '2' or traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
                                 <div class="form-group">
                                     <label for="nResolucion">N° de Resolución:</label>
-                                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                    <input class="form-control" id="nResolucion" name="nResolucion" maxlength="17" type="text"
                                             {% if traslado.numeroResolucion %}
                                            value="{{ traslado.numeroResolucion }}"
                                             {% else %}
@@ -313,7 +313,7 @@
                     <div class="card-body bg-light">
                         <div class="row">
                             {% for documento in documentos %}
-                                <div class="col-lg-2 col-md-auto col-sm-auto">
+                                <div class="col-lg-2 col-md-auto col-sm-auto mt-3">
                                     <div class="card mx-1">
 
                                         {% if  estado  == '1' or estado == '0' %}
@@ -328,7 +328,7 @@
 
                                         <div class="card-body p-0" style="transform: rotate(0);">
                                             <div>
-                                                <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
+                                                <img class="img-fluid" src="{% static 'img/icons/icono-archivo.jpg' %}">
                                             </div>
                                             <a class="notification notification-flush bg-0 stretched-link"
                                                href="{{ media_path }}{{ documento.documento.url }}" download></a>
@@ -707,7 +707,7 @@
                 <div class="modal-body">
                     <form id="formErrorModalFechaRetornoReal" name="formErrorModalFechaRetornoReal">
                         <div class="form-group">
-                            Debe registar y guardar la Fecha de Retorno Real antes de cambiar de estado.
+                            Debe registar y guardar la Fecha de Retorno antes de cambiar de estado.
                         </div>
                     </form>
                 </div>
@@ -910,8 +910,8 @@
                     remote: "Este número de resolución ya se encuentra registrado"
                 },
                 fechaRetornoReal: {
-                    validarFechas: "La fecha de retorno real debe ser posterior a la fecha de salida real",
-                    required: "Debe ingresar una fecha de retorno real"
+                    validarFechas: "La fecha de retorno debe ser posterior a la fecha de salida real",
+                    required: "Debe ingresar una fecha de retorno"
                 },
                 fechaSalidaProgramada: {
                     required: "Ingrese una fecha de salida programada",
@@ -1063,7 +1063,7 @@
                     },
                     success: function (response) {
                         $.toast({
-                            text: 'Fecha de Retorno Real guardado con éxito.',
+                            text: 'Fecha de retorno guardado con éxito.',
                             icon: 'success',
                             loader: false,        // Change it to false to disable loader
                             bgColor: '#B7E6CA',  // To change the background
@@ -1099,7 +1099,7 @@
                     },
                     success: function (response) {
                         $.toast({
-                            text: 'Fecha de Salida Real guardado con éxito.',
+                            text: 'Fecha de salida real guardado con éxito.',
                             icon: 'success',
                             loader: false,        // Change it to false to disable loader
                             bgColor: '#B7E6CA',  // To change the background
@@ -1420,6 +1420,17 @@
                 $("#detallarRechazo").show();
             } else {
                 $("#detallarRechazo").hide();
+            }
+        }
+        function validarPais() {
+
+            var tipo = $("#tipoTraslado").val();
+            if (tipo === '2'){
+                $("#pais").val("Perú").change();
+                {#$("#pais").attr('disabled', 'disabled');#}
+            }else {
+                $("#pais").val("Afganistán").change();
+                {#$("#pais").removeAttr('disabled');#}
             }
         }
 

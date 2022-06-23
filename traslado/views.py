@@ -85,6 +85,7 @@ def addTransfer(request):
                                                              destino=request.POST['destino'],
                                                              nombreExposicion=request.POST['nombreExposicion'],
                                                              pais=request.POST['pais'],
+                                                             tipoTraslado=request.POST['tipoTraslado'],
                                                              gestorConservacionTraslados_id=request.POST['comisario'],
                                                              gestorPatrimonio_id=request.POST['comisario'],
                                                              fechaSalidaProgramada=request.POST[
@@ -309,6 +310,7 @@ def viewTranfer(request, pk):
     # Nota, se debe considerar los patrominos del traslado
     patrimonios = traslado.patrimonios.all()
     documentos = DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
+    comisario = User.objects.get(pk = traslado.gestorConservacionTraslados.pk)
 
     context = {
         'traslado': traslado,
@@ -316,7 +318,8 @@ def viewTranfer(request, pk):
         'comisarios': comisarios,
         'patrimonios': patrimonios,
         'documentos': documentos,
-        'media_path': media_path
+        'media_path': media_path,
+        'comisario': comisario,
     }
 
     return render(request, 'traslado/transfer_view.html', context)
@@ -331,6 +334,7 @@ def editTransfer(request, pk):
     if request.POST:
         if solicitudTraslado.estado == '1':
             solicitudTraslado.entidadSolicitante_id = request.POST['nombreInstitucion']
+            solicitudTraslado.tipoTraslado = request.POST['tipoTraslado']
             solicitudTraslado.destino = request.POST['destino']
             solicitudTraslado.nombreExposicion = request.POST['nombreExposicion']
             solicitudTraslado.pais = request.POST['pais']
