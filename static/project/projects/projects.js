@@ -152,14 +152,6 @@ $('#tabla_autores tbody').on('click', 'button', function () {
 
 });
 
-$("#btnEditarNivel").on('click', function () {
-  if ($("#formEditarNivel").valid()) {
-    editarNivel(pkEditarN);
-    $("#editarNivel").modal('hide');
-  }
-});
-
-
 $('#confirm').on('click', '#delete', function (e) {
   $('#cover-spin').show(0)
   $.ajax({

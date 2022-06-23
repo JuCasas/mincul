@@ -12,7 +12,7 @@ urlpatterns = [
     path('', views.login, name='login'),
     path('patrimonios/', include('patrimonios.urls')),
     path('conservacion/', include('conservacion.urls')),
-    path('incidente/', include('incidente.urls')),
+    path('incidentes/', include('incidente.urls')),
     path('reportes/', include('reportes.urls')),
     path('traslado/', include('traslado.urls')),
     path('auth/', include('authentication.urls')),

@@ -60,6 +60,7 @@ def patrimonio_incidente_listar(request):
     result['data'] = serializer.data
     result['recordsTotal'] = incident['total']
     result['recordsFiltered'] = incident['count']
+    print(type(result))
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
   else:
     context = {
@@ -67,6 +68,14 @@ def patrimonio_incidente_listar(request):
       'typeIncidents': Incidente.AFECTACION
     }
     return render(request, 'incidencia/patrimonio_incidente_listar.html',context=context)
+
+@api_view(('GET',))
+def incidente_detalle(request,pk):
+  incidente = Incidente.objects.filter(pk=int(pk))
+  serializer = IncidenteSerializer(incidente,many=True)
+  result = dict()
+  result['data'] = serializer.data
+  return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 
 def incidente_reporte_listar(request, patrimonio_pk):
