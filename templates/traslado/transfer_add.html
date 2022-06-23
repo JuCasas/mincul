@@ -56,11 +56,11 @@
                             <div class="form-group">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
                                 <select class="form-control selectpicker" id="tipoTraslado" name="tipoTraslado" required
-                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %} onchange="validarPais()">
                                     <option value="1" {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
                                         extranjero
                                     </option>
-                                    <option value="2" {% if traslado.tipoTraslado == '2' %} selected {% endif %}>Exponsición
+                                    <option value="2" {% if traslado.tipoTraslado == '2' %} selected {% endif %}>Exposición
                                         nacional
                                     </option>
                                     <option value="3" {% if traslado.tipoTraslado == '3' %} selected {% endif %}>Misión
@@ -1420,6 +1420,17 @@
                 $("#detallarRechazo").show();
             } else {
                 $("#detallarRechazo").hide();
+            }
+        }
+        function validarPais() {
+
+            var tipo = $("#tipoTraslado").val();
+            if (tipo === '2'){
+                $("#pais").val("Perú").change();
+                {#$("#pais").attr('disabled', 'disabled');#}
+            }else {
+                $("#pais").val("Afganistán").change();
+                {#$("#pais").removeAttr('disabled');#}
             }
         }
 
