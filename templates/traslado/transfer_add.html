@@ -55,15 +55,15 @@
                         <div class="card-body bg-light">
                             <div class="form-group">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
-                                <select class="form-control" id="tipoTraslado" required
+                                <select class="form-control selectpicker" id="tipoTraslado" name="tipoTraslado" required
                                         {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
-                                    <option {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
+                                    <option value="1" {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
                                         extranjero
                                     </option>
-                                    <option {% if traslado.tipoTraslado == '2' %} selected {% endif %}>Exponsición
+                                    <option value="2" {% if traslado.tipoTraslado == '2' %} selected {% endif %}>Exponsición
                                         nacional
                                     </option>
-                                    <option {% if traslado.tipoTraslado == '3' %} selected {% endif %}>Misión
+                                    <option value="3" {% if traslado.tipoTraslado == '3' %} selected {% endif %}>Misión
                                         Diplomática
                                     </option>
                                 </select>

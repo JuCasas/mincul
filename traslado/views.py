@@ -85,6 +85,7 @@ def addTransfer(request):
                                                              destino=request.POST['destino'],
                                                              nombreExposicion=request.POST['nombreExposicion'],
                                                              pais=request.POST['pais'],
+                                                             tipoTraslado=request.POST['tipoTraslado'],
                                                              gestorConservacionTraslados_id=request.POST['comisario'],
                                                              gestorPatrimonio_id=request.POST['comisario'],
                                                              fechaSalidaProgramada=request.POST[
@@ -333,6 +334,7 @@ def editTransfer(request, pk):
     if request.POST:
         if solicitudTraslado.estado == '1':
             solicitudTraslado.entidadSolicitante_id = request.POST['nombreInstitucion']
+            solicitudTraslado.tipoTraslado = request.POST['tipoTraslado']
             solicitudTraslado.destino = request.POST['destino']
             solicitudTraslado.nombreExposicion = request.POST['nombreExposicion']
             solicitudTraslado.pais = request.POST['pais']
