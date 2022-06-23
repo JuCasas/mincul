@@ -222,8 +222,8 @@
   </div>
 
   <!-- NEW and EDIT Modal -->
-  <div class="modal fade" id="modalActividad" role="dialog">
-    <div class="modal-dialog mw-100 w-50">
+  <div class="modal fade" id="modalIncidente" role="dialog">
+    <div class="modal-dialog mw-100 w-25">
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -243,13 +243,13 @@
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="patrimonio">Tipo del incidente:</label>
-                <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
-                  <option value="" selected="selected">Otros</option>
+                <select class="form-control selectpicker" id="tipo" name="tipo" disabled>
+                  <option value="first" selected="selected">Otros</option>
                 </select>
               </div>
             </div>
             <div class="row">
-              <div class="form-group col-lg-6 col-sm-12">
+              <div class="form-group col-lg-12 col-sm-12">
                 <label for="fechaInicio">Fecha del incidente:</label>
                 <input class="form-control" id="fecha" name="fecha" type="date" required disabled>
               </div>
@@ -257,14 +257,14 @@
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="nombre">Correo Electrónico:</label>
-                <input class="form-control" id="informante" name="informante" type="text" required
+                <input class="form-control" id="correo" name="correo" type="text" required
                        placeholder="correo" disabled>
               </div>
             </div>
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="nombre">Teléfono:</label>
-                <input class="form-control" id="informante" name="informante" type="text" required
+                <input class="form-control" id="telefono" name="telefono" type="text" required
                        placeholder="teléfono" disabled>
               </div>
             </div>
@@ -272,14 +272,14 @@
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="descripcion">Descripcion:</label>
                 <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
-                          placeholder="Descripción de la Actividad"></textarea>
+                          placeholder="Descripción de la Actividad" disabled></textarea>
               </div>
             </div>
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="patrimonio">Estado:</label>
-                <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
-                  <option value="" selected="selected">Asignado</option>
+                <select class="form-control selectpicker" id="status" name="status" disabled>
+                  <option value="first" selected="selected">Asignado</option>
                 </select>
               </div>
             </div>
@@ -340,6 +340,10 @@
       '6': 'Huaquería',
       '7': 'Otros',
     };
+    let status_filter = {
+      '1': 'No Asignado',
+      '2': 'Asignado',
+    };
     let table = $('#tabla_autores').DataTable({
       "searching": false,
       "serverSide": true,
@@ -397,10 +401,16 @@
           }
         },
         {
-          "data": null,
-          "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-              '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-              '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+          "data": "status", render: function (data, type, row) {
+
+            let resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>'
+            if (data == '1') {
+              resp = resp + '&nbsp;&nbsp' +
+                  '<button type="button" class="btn btn-edit"><i class="fas fa-check"></i></button>' + '&nbsp;&nbsp' +
+                  '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+            }
+            return resp;
+          }
         }
       ],
       "language": {
@@ -429,45 +439,45 @@
       },
     });
 
-      $(document).ready(function () {
-        $('#zona').select2({
-          ajax: {
-            url: '/incidente/zonas/',
-            datatype: 'json',
-            delay: 250,
-            data: function (params) {
-              return {
-                search: params.term || '',
-                page: params.page || 1
-              };
-            },
-            processResults: function (data, params) {
-              params.page = params.page || 1;
-              console.log(data.items)
-              return {
-                results: $.map(data.items, function (obj, index) {
-                  return {id: obj.id, text: obj.nombre};
-                }),
-                pagination: {
-                  more: (params.page * 10) < data.total_count
-                }
+    $(document).ready(function () {
+      $('#zona').select2({
+        ajax: {
+          url: '/incidentes/zonas/',
+          datatype: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term || '',
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            console.log(data.items)
+            return {
+              results: $.map(data.items, function (obj, index) {
+                return {id: obj.id, text: obj.nombre};
+              }),
+              pagination: {
+                more: (params.page * 10) < data.total_count
               }
             }
-          },
-          placeholder: "Patrimonio",
-          allowClear: true,
-          cache: false
-        });
-
-        $('#zona').on("select2:clear", function (evt) {
-          $(this).on("select2:opening.cancelOpen", function (evt) {
-            evt.preventDefault();
-
-            $(this).off("select2:opening.cancelOpen");
-          });
-        });
-
-
+          }
+        },
+        placeholder: "Zona",
+        allowClear: true,
+        cache: false
       });
+
+      $('#zona').on("select2:clear", function (evt) {
+        $(this).on("select2:opening.cancelOpen", function (evt) {
+          evt.preventDefault();
+
+          $(this).off("select2:opening.cancelOpen");
+        });
+      });
+
+
+    });
   </script>
 {% endblock %}

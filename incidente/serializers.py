@@ -9,7 +9,7 @@ class IncidenteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Incidente
-        fields = ['id','codigo','nombre','zona','tipoAfectacion','fechaRegistro','status']
+        fields = ['id','codigo','nombre','correo','telefono','descripcion','zona','tipoAfectacion','fechaRegistro','status']
 
     def get_zona(self, obj):
         return obj.zona.nombre
