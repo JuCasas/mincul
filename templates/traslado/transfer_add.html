@@ -313,7 +313,7 @@
                     <div class="card-body bg-light">
                         <div class="row">
                             {% for documento in documentos %}
-                                <div class="col-lg-2 col-md-auto col-sm-auto">
+                                <div class="col-lg-2 col-md-auto col-sm-auto mt-3">
                                     <div class="card mx-1">
 
                                         {% if  estado  == '1' or estado == '0' %}
@@ -328,7 +328,7 @@
 
                                         <div class="card-body p-0" style="transform: rotate(0);">
                                             <div>
-                                                <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
+                                                <img class="img-fluid" src="{% static 'img/icons/icono-archivo.jpg' %}">
                                             </div>
                                             <a class="notification notification-flush bg-0 stretched-link"
                                                href="{{ media_path }}{{ documento.documento.url }}" download></a>
