@@ -17,7 +17,8 @@ from authentication.models import User
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
-    ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio, EpocaVisita
+    ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio, EpocaVisita, \
+    FuenteBibliografica
 from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
@@ -32,61 +33,54 @@ def patrimonio_list(request):
         for pat in data:
             if len(Patrimonio.objects.filter(nombreTituloDemoninacion=pat['nombre'])) == 0:
                 patrimonio = Patrimonio()
-                patrimonio.nombreTituloDemoninacion = pat['nombre']
-                patrimonio.codigo = pat['codigo']
                 patrimonio.departamento = pat['departamento']
                 patrimonio.provincia = pat['provincia']
                 patrimonio.distrito = pat['distrito']
-                patrimonio.lat = pat['latitud']
-                patrimonio.long = pat['longitud']
                 patrimonio.descripcion = pat['descripcion']
                 patrimonio.observacion = pat['observaciones']
 
                 cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
+
                 patrimonio.tipoPatrimonio = int(cat.tipo)
                 patrimonio.categoria = cat
+                patrimonio.save()
 
-                resp = Responsable.objects.filter(nombre=pat['responsable']['nombreResponsable'])
-                if len(resp) > 0:
-                    resp = Responsable.objects.get(nombre=pat['responsable']['nombreResponsable'])
-                else:
-                    resp = Responsable()
-                    resp.institucion = pat['responsable']['institucionLlenadoFicha']
-                    resp.nombre = pat['responsable']['nombreResponsable']
-                    resp.cargo = pat['responsable']['cargo']
-                    resp.correo = pat['responsable']['correo']
-                    resp.telefono = pat['responsable']['telefono']
-                    resp.fecha = datetime.strptime(pat['responsable']['fecha'],"%d/%m/%Y")
-                    #resp.save()
-                #patrimonio.save()
-                #patrimonio.responsables.add(resp)
-                #patrimonio.save()
                 if int(cat.tipo) == 1:
-                    print('Inmaterial')
+                    patrimonio.nombreTituloDemoninacion = pat['nombre']
+                    patrimonio.codigo = pat['codigo']
+                    if pat['latitud'] != '':
+                        patrimonio.lat = pat['latitud']
+                    if pat['longitud'] != '':
+                        patrimonio.long = pat['longitud']
 
-                elif int(cat.tipo) == 2:
-                    print('Inmueble')
-                    inmueble = PatrimonioMaterialInMueble()
-                    inmueble.subtipo = pat['subtipo']
-                    inmueble.tipoIngreso = pat['tipoIngreso']
-                    #inmueble.save()
+                    resp = Responsable.objects.filter(nombre=pat['responsable']['nombreResponsable'])
+                    if len(resp) > 0:
+                        resp = Responsable.objects.get(nombre=pat['responsable']['nombreResponsable'])
+                    else:
+                        resp = Responsable()
+                        resp.institucion = pat['responsable']['institucionLlenadoFicha']
+                        resp.nombre = pat['responsable']['nombreResponsable']
+                        resp.cargo = pat['responsable']['cargo']
+                        resp.correo = pat['responsable']['correo']
+                        resp.telefono = pat['responsable']['telefono']
+                        resp.fecha = datetime.strptime(pat['responsable']['fecha'], "%d/%m/%Y")
+                        resp.save()
+                    patrimonio.save()
+                    patrimonio.responsables.add(resp)
+                    patrimonio.save()
 
-                    epoca = EpocaVisita()
-                    epoca.epocaPropicia = pat['epocaPropicia']['epoca']
-                    epoca.especificacion = pat['epocaPropicia']['especificacion']
-                    epoca.horaVisita = pat['epocaPropicia']['horaVisita']
-                    epoca.observaciones = pat['epocaPropicia']['observaciones']
-                    #epoca.patrimonioMaterialInMueble = inmueble
-                    #epoca.save()
+                    fuente = FuenteBibliografica()
+                    fuente.referencia = pat['responsable']['fuentesBiblio']
+                    fuente.patrimonio = patrimonio
+                    fuente.save()
 
                     for actividad in pat['actividades']:
                         act = ActividadTuristica()
                         act.descripcion = actividad['actividad']
-                        act.categoria = actividad['tipo']
                         act.tipo = actividad['tipo']
                         act.observacion = actividad['observacion']
                         act.patrimonio = patrimonio
-                        #act.save()
+                        act.save()
 
                     for servicio in pat['servicios']:
                         serv = Servicio()
@@ -94,7 +88,102 @@ def patrimonio_list(request):
                         serv.tipo = servicio['tipoServicio']
                         serv.observacion = servicio['observacion']
                         serv.patrimonio = patrimonio
-                        #serv.save()
+                        serv.save()
+
+                    inmaterial = PatrimonioInMaterial()
+                    for key, name in dict(PatrimonioInMaterial.tipoInmaterial.field.choices).items():
+                        if name == pat['tipo']:
+                            inmaterial.tipoInmaterial = int(key)
+                            break
+                    inmaterial.subtipo = pat['subtipo']
+                    inmaterial.particularidades = pat['particularidades']
+                    inmaterial.patrimonio = patrimonio
+
+                    if pat['tipoIngreso'] != {}:
+                        inmaterial.tipoIngreso = pat['tipoIngreso']['tipo']
+                        for ent in pat['tipoIngreso']['observaciones']:
+                            entrada = Entrada()
+                            entrada.descripcion = ent[0]
+                            entrada.precio = ent[1]
+                            entrada.patrimonio = patrimonio
+                            entrada.save()
+
+                    inmaterial.save()
+
+                elif int(cat.tipo) == 2:
+                    patrimonio.nombreTituloDemoninacion = pat['nombre']
+                    patrimonio.codigo = pat['codigo']
+                    if pat['latitud'] != '':
+                        patrimonio.lat = pat['latitud']
+                    if pat['longitud'] != '':
+                        patrimonio.long = pat['longitud']
+
+                    resp = Responsable.objects.filter(nombre=pat['responsable']['nombreResponsable'])
+                    if len(resp) > 0:
+                        resp = Responsable.objects.get(nombre=pat['responsable']['nombreResponsable'])
+                    else:
+                        resp = Responsable()
+                        resp.institucion = pat['responsable']['institucionLlenadoFicha']
+                        resp.nombre = pat['responsable']['nombreResponsable']
+                        resp.cargo = pat['responsable']['cargo']
+                        resp.correo = pat['responsable']['correo']
+                        resp.telefono = pat['responsable']['telefono']
+                        resp.fecha = datetime.strptime(pat['responsable']['fecha'], "%d/%m/%Y")
+                        resp.save()
+                    patrimonio.save()
+                    patrimonio.responsables.add(resp)
+                    patrimonio.save()
+
+                    fuente = FuenteBibliografica()
+                    fuente.referencia = pat['responsable']['fuentesBiblio']
+                    fuente.patrimonio = patrimonio
+                    fuente.save()
+
+                    for actividad in pat['actividades']:
+                        act = ActividadTuristica()
+                        act.descripcion = actividad['actividad']
+                        act.tipo = actividad['tipo']
+                        act.observacion = actividad['observacion']
+                        act.patrimonio = patrimonio
+                        act.save()
+
+                    for servicio in pat['servicios']:
+                        serv = Servicio()
+                        serv.categoria = servicio['servicio']
+                        serv.tipo = servicio['tipoServicio']
+                        serv.observacion = servicio['observacion']
+                        serv.patrimonio = patrimonio
+                        serv.save()
+
+                    inmueble = PatrimonioMaterialInMueble()
+                    for key,name in dict(PatrimonioMaterialInMueble.tipoInmueble.field.choices).items():
+                        if name == pat['tipo']:
+                            inmueble.tipoInmueble = int(key)
+                            break
+                    inmueble.subtipo = pat['subtipo']
+                    inmueble.particularidades = pat['particularidades']
+                    inmueble.estadoActual = pat['estadoActual']
+                    inmueble.patrimonio = patrimonio
+
+                    if pat['tipoIngreso'] != {}:
+                        inmueble.tipoIngreso = pat['tipoIngreso']['tipo']
+                        for ent in pat['tipoIngreso']['observaciones']:
+                            entrada = Entrada()
+                            entrada.descripcion = ent[0]
+                            entrada.precio = ent[1]
+                            entrada.patrimonio = patrimonio
+                            entrada.save()
+
+                    inmueble.save()
+
+                    if pat['epocaPropicia'] != {}:
+                        epoca = EpocaVisita()
+                        epoca.epocaPropicia = pat['epocaPropicia']['epoca']
+                        epoca.especificacion = pat['epocaPropicia']['especificacion']
+                        epoca.horaVisita = pat['epocaPropicia']['horaVisita']
+                        epoca.observaciones = pat['epocaPropicia']['observaciones']
+                        epoca.patrimonioMaterialInMueble = inmueble
+                        epoca.save()
 
                 elif int(cat.tipo) == 3:
                     print('Mueble')
