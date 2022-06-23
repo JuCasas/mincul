@@ -1,33 +1,136 @@
 from django.shortcuts import render
 from patrimonios.models import Patrimonio
+from patrimonios.models import Categoria
+from patrimonios.models import Institucion
+from patrimonios.models import PatrimonioMaterialMueble
+from patrimonios.models import PatrimonioEtnografico
+from patrimonios.models import PatrimonioIndustrial
+from patrimonios.models import PatrimonioArqueologico
+from patrimonios.models import PatrimonioPaleontologico
+from patrimonios.models import PatrimonioHistoricoArtistico
+from mincul_app.models import Documento
 from django.http import JsonResponse
 # Create your views here.
 
 def ficha(request,my_id):
     patrimonio=Patrimonio.objects.get(id=my_id)
+    urlPatrimonio = Documento.objects.filter(patrimonio=patrimonio).order_by('id')
+    if patrimonio.tipoPatrimonio == "3":
+        patrimonioMueble = PatrimonioMaterialMueble.objects.get(patrimonio=patrimonio)
+        materialesSecundarios = patrimonioMueble.materialesSecundarios.all()
+        tecnicasAcabado = patrimonioMueble.tecnicasAcabado.all()
+        tecnicasDecoracion = patrimonioMueble.tecnicasDecoracion.all()
+        tecnicasManufactura = patrimonioMueble.tecnicasManifactura.all()
+        materialesSecundariosString =''
+        tecnicasAcabadoString = ''
+        tecnicasDecoracionString = ''
+        tecnicasManufacturaString = ''
+        i=0
+        for e in materialesSecundarios:
+            if i == 0:
+                materialesSecundariosString = e.descripcion
+            else:
+                materialesSecundariosString = materialesSecundariosString + ', ' + e.descripcion
+            i += 1
+        i = 0
+        for e in tecnicasAcabado:
+            if i == 0:
+                tecnicasAcabadoString = e.descripcion
+            else:
+                tecnicasAcabadoString = tecnicasAcabadoString + ', ' + e.descripcion
+            i += 1
+        i = 0
+        for e in tecnicasDecoracion:
+            if i == 0:
+                tecnicasDecoracionString = e.descripcion
+            else:
+                tecnicasDecoracionString = tecnicasDecoracionString + ', ' + e.descripcion
+            i += 1
+        i = 0
+        for e in tecnicasManufactura:
+            if i == 0:
+                tecnicasManufacturaString = e.descripcion
+            else:
+                tecnicasManufacturaString = tecnicasManufacturaString + ', ' + e.descripcion
+            i += 1
+        dataCategoria =  None
+        if (patrimonio.categoria.pk == 6):
+            dataCategoria = PatrimonioArqueologico.objects.get(patrimonioMueble=patrimonioMueble)
+        if (patrimonio.categoria.pk == 7):
+            dataCategoria = PatrimonioHistoricoArtistico.objects.get(patrimonioMueble=patrimonioMueble)
+        if (patrimonio.categoria.pk == 8):
+            dataCategoria = PatrimonioEtnografico.objects.get(patrimonioMueble=patrimonioMueble)
+        if (patrimonio.categoria.pk == 9):
+            dataCategoria = PatrimonioPaleontologico.objects.get(patrimonioMueble=patrimonioMueble)
+        if (patrimonio.categoria.pk == 10):
+            dataCategoria = PatrimonioIndustrial.objects.get(patrimonioMueble=patrimonioMueble)
+        context = {
+            'patrimony': patrimonio,
+            'patrimonioMuebleData': patrimonioMueble,
+            'materialesSecundarios':materialesSecundariosString,
+            'tecnicasAcabado': tecnicasAcabadoString,
+            'tecnicasDecoracion': tecnicasDecoracionString,
+            'tecnicasManufactura': tecnicasManufacturaString,
+            'dataCategoria':dataCategoria,
+            'urlPatrimonio':urlPatrimonio[0].url
+        }
+        return render(request, 'map/ficha.html', context)
     context={
-        'patrimony':patrimonio
+        'patrimony':patrimonio,
+        'urlPatrimonio':urlPatrimonio[0].url
     }
     return render(request,'map/ficha.html',context)
 
 def mapaPatrimonioSimple(request):
+    success=-1
     if request.POST:
         patrimonioNombre = request.POST['patrimonio_name']
         patrimonioNombre.rstrip()
         patrimonioNombre.lstrip()
-        if patrimonioNombre != '' or patrimonioNombre != None or patrimonioNombre != ' '\
-                or patrimonioNombre != "" or patrimonioNombre != " ":
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre)
+        if len(patrimonioNombre)>0 :
+            success = 0
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
             if len(patrimonios) > 0:
-                patrimonio0 = patrimonios[0]
+                instituciones = []
+                patri = []
+                for p in patrimonios:
+                    if int(p.tipoPatrimonio) == 3:
+                        insti = Institucion.objects.get(pk=p.institucion.pk)
+                        if insti not in instituciones:
+                            instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                            instituciones.append({'institucion': insti,
+                                                  'url':instiUrl[0].url})
+                    else:
+                        urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
+                        patri.append({'patrimonio':p,
+                                      'url':urlPatrimonio[0].url})
+                patrimonio0 = None
+                institucion0 = None
+                if len(patri)>0:
+                    patrimonio0 = patri[0]
+                if len(instituciones)>0:
+                    institucion0 = instituciones[0]
+                success=1
                 context = {
-                    'patrimonios': patrimonios,
-                    'patrimonio0': patrimonio0
+                    'patrimonios': patri,
+                    'instituciones':instituciones,
+                    'patrimonio0': patrimonio0,
+                    'institucion0':institucion0,
+                    'lensearch':len(patri)+len(instituciones),
+                    'success':success
                 }
                 return render(request, 'map/mapaBusquedaSimplePatrimonio.html', context)
-    return render(request, 'map/mapaBusquedaSimplePatrimonio.html')
+            return render(request, 'map/mapaBusquedaSimplePatrimonio.html', {'success':success})
+    return render(request, 'map/mapaBusquedaSimplePatrimonio.html',{'success':success})
 
 def mapaPatrimonioAvanzado(request):
+    categorias = Categoria.objects.filter()
+    dep = Patrimonio.objects.filter(estado="1").distinct('departamento').exclude(tipoPatrimonio="1")
+    departamentos = []
+    for d in dep:
+        departamentos.append({'id_representativo':d.pk,
+                              'nombreDepartamento':d.departamento})
+    success=-1
     if request.POST:
         patrimonioNombre = request.POST['patrimonio_name']
         patrimonioCategoria = request.POST['select_categoria']
@@ -36,69 +139,155 @@ def mapaPatrimonioAvanzado(request):
         patrimoniodistrito = request.POST['select_distrito']
         patrimonioNombre.rstrip()
         patrimonioNombre.lstrip()
-        if patrimonioNombre != '' or patrimonioNombre != None or patrimonioNombre != ' '\
-            or patrimonioNombre != "" or patrimonioNombre != " ":
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre)
-            patriNom=[]
-            patriDep=[]
-            patriProv=[]
-            patriDis=[]
+        #The following conditional must be checked before dev and prod
+        if len(patrimonioNombre)>0 :
+            success=0
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
             if len(patrimonios) > 0:
-                for p in patrimonios:
-                    if p.categoria.pk == 1 and patrimonioCategoria == "Mueble":
-                        patriNom.append(p)
-                    elif p.categoria.pk == 2 and patrimonioCategoria == "Inmueble":
-                        patriNom.append(p)
-                    elif patrimonioCategoria == "Categoría":
-                        patriNom.append(p)
-                if len(patriNom) >0:
-                    for p in patriNom:
-                        if p.departamento == patrimoniodepartamento:
-                            patriDep.append(p)
-                        elif patrimoniodepartamento == "Departamento":
-                            patriDep.append(p)
-                    if len(patriDep)>0:
-                        for p in patriDep:
-                            if p.provincia == patrimonioprovincia:
-                                patriProv.append(p)
-                            elif patrimonioprovincia == 'Provincia':
-                                patriProv.append(p)
-                        if len(patriProv) > 0:
-                            for p in patriProv:
-                                if p.provincia == patrimonioprovincia:
-                                    patriDis.append(p)
-                                elif patrimonioprovincia == 'Provincia':
-                                    patriDis.append(p)
-                            if len(patriDis) > 0:
-                                patriFinal=[]
-                                if patrimoniodistrito!="Distrito":
-                                    for p in patriDis:
-                                        if p.distrito == patrimoniodistrito:
-                                            patriFinal.append(p)
-                                    if len(patriFinal)>0:
-                                        patrimonio0 = patriFinal[0]
-                                        context = {
-                                            'patrimonios': patriFinal,
-                                            'patrimonio0': patrimonio0
-                                        }
-                                        return render(request, 'map/mapaBusquedaAvzPatrimonio.html', context)
-                                else:
-                                    patrimonio0 = patriDis[0]
-                                    context = {
-                                        'patrimonios': patriDis,
-                                        'patrimonio0': patrimonio0
-                                    }
-                                    return render(request, 'map/mapaBusquedaAvzPatrimonio.html',context)
-    return render(request, 'map/mapaBusquedaAvzPatrimonio.html')
-
-def mapaPunto(request,pk):
-    patrimonio=Patrimonio.objects.get(id=pk)
+                if(patrimonioCategoria=="Categoría"):
+                    pass
+                else:
+                    cats = Categoria.objects.get(nombre__iexact=patrimonioCategoria)
+                    catId = cats.pk
+                    patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,
+                                                            categoria_id=catId)
+                if len(patrimonios)>0:
+                    patriId = int(patrimoniodepartamento)
+                    if(patriId == -1):
+                        pass
+                    else:
+                        patri = Patrimonio.objects.get(id=patriId)
+                        patriDepa = patri.departamento
+                        deps = []
+                        for p in patrimonios:
+                            if (p.departamento==patriDepa):
+                                deps.append(p)
+                        patrimonios=deps
+                if len(patrimonios)>0:
+                    provId = int(patrimonioprovincia)
+                    if(provId == -1):
+                        pass
+                    else:
+                        patri = Patrimonio.objects.get(id=provId)
+                        patriProv = patri.provincia
+                        prov = []
+                        for p in patrimonios:
+                            if (p.provincia==patriProv):
+                                prov.append(p)
+                        patrimonios=prov
+                if (len(patrimonios)>0):
+                    distId=int(patrimoniodistrito)
+                    if(distId == -1):
+                        pass
+                    else:
+                        dis = []
+                        patri = Patrimonio.objects.get(id=distId)
+                        patriDis = patri.distrito
+                        for p in patrimonios:
+                            if (p.distrito==patriDis):
+                                dis.append(p)
+                        patrimonios=dis
+                if(len(patrimonios)>0):
+                    instituciones = []
+                    patrimons = []
+                    for p in patrimonios:
+                        if int(p.tipoPatrimonio) == 3:
+                            insti = Institucion.objects.get(pk=p.institucion.pk)
+                            if insti not in instituciones:
+                                instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                instituciones.append({'institucion': insti,
+                                                      'url': instiUrl[0].url})
+                        else:
+                            urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
+                            patrimons.append({'patrimonio': p,
+                                              'url': urlPatrimonio[0].url})
+                    patrimonio0 = None
+                    institucion0 = None
+                    if len(patrimons) > 0:
+                        patrimonio0 = patrimons[0]
+                    if len(instituciones) > 0:
+                        institucion0 = instituciones[0]
+                    success = 1
+                    context = {
+                        'categorias': categorias,
+                        'departamentos': departamentos,
+                        'patrimonios': patrimons,
+                        'instituciones':instituciones,
+                        'patrimonio0': patrimonio0,
+                        'institucion0':institucion0,
+                        'lensearch': len(patrimons)+len(instituciones),
+                        'success': success
+                    }
+                    return render(request, 'map/mapaBusquedaAvzPatrimonio.html', context)
     context = {
-        'patrimony':{
-            'nombreTituloDenominacion':patrimonio.nombreTituloDemoninacion,
-            'lat':patrimonio.lat,
-            'long':patrimonio.long
-        }
+        'categorias': categorias,
+        'departamentos': departamentos,
+        'success':success
+    }
+    return render(request, 'map/mapaBusquedaAvzPatrimonio.html',context)
+
+def provinciaJson(request,id_representativo):
+    provincias = []
+    id_representativo = int(id_representativo)
+    if id_representativo != -1:
+        patrimonioEjemplo = Patrimonio.objects.get(id=id_representativo)
+        dep = patrimonioEjemplo.departamento
+        prov = Patrimonio.objects.filter(departamento__exact=dep,estado="1").distinct('provincia')
+        for p in prov:
+            provincias.append({'id_representativo': p.pk,
+                              'nombreProvincia': p.provincia})
+    context = {
+        'provincias': provincias
     }
     print(context)
     return JsonResponse(context, status=200)
+
+def distritoJson(request,id_representativo):
+    distritos = []
+    id_representativo = int(id_representativo)
+    if id_representativo!=-1:
+        patrimonioEjemplo=Patrimonio.objects.get(id=id_representativo)
+        prov = patrimonioEjemplo.provincia
+        dis = Patrimonio.objects.filter(provincia__exact=prov,estado="1").distinct('distrito')
+        for d in dis:
+            distritos.append({'id_representativo': d.pk,
+                              'nombreDistrito': d.distrito})
+    context = {
+        'distritos':distritos
+    }
+    print(context)
+    return JsonResponse(context, status=200)
+
+def patrimonioJson(request,id_patrimonio):
+    id_patri = int(id_patrimonio)
+    patrimonio = Patrimonio.objects.get(id=id_patri)
+    urlPatri = Documento.objects.filter(patrimonio=patrimonio).order_by('id')
+    urlPatrimonio = (urlPatri[0].url)
+    urlPatrimonio = urlPatrimonio.name
+    nombre = patrimonio.nombreTituloDemoninacion
+    lat = patrimonio.lat
+    long = patrimonio.long
+    context={
+        'nombre':nombre,
+        'lat': lat,
+        'long': long,
+        'url':urlPatrimonio
+    }
+    return JsonResponse(context,status=200)
+
+def institucionJson(request,id_institucion):
+    id_insti = int(id_institucion)
+    institucion = Institucion.objects.get(id=id_insti)
+    urlInsti = Documento.objects.filter(institucion=institucion).order_by('id')
+    urlInstitucion = urlInsti[0].url
+    urlInstitucion = urlInstitucion.name
+    nombre = institucion.nombre
+    lat = institucion.lat
+    long = institucion.long
+    context={
+        'nombre':nombre,
+        'lat': lat,
+        'long': long,
+        'url':urlInstitucion
+    }
+    return JsonResponse(context,status=200)

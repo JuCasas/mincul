@@ -3,11 +3,13 @@
 
 {% block extrastyle %}
     <link href="../static/lib/flatpickr/flatpickr.min.css" rel="stylesheet">
-    <link href="../static/lib/raty-js/jquery.raty.css" rel="stylesheet">
 
     <link href="../static/lib/leaflet/leaflet.css" rel="stylesheet">
     <link href="../static/lib/leaflet.markercluster/MarkerCluster.css" rel="stylesheet">
     <link href="../static/lib/leaflet.markercluster/MarkerCluster.Default.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
     <style></style>
 {% endblock %}
 
@@ -29,7 +31,7 @@
                             <div class="col">
                                 <form id="form_buscar" method="post" action={% url 'mapaPatrimonioAvanzado' %} >
                                     {% csrf_token %}
-                                    <div class="row" style="padding:3px">
+                                    <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
                                                 <label for="txtBuscar"></label>
@@ -38,46 +40,48 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row" style="padding:3px">
+                                    <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
-                                                <select class="form-control" id="formSelectCategoría" style="padding:3px" name="select_categoria">
-                                                  <option>Categoría</option>
-                                                  <option>Mueble</option>
-                                                  <option>Inmueble</option>
+                                                <select class="form-control" id="formSelectCategoría" style="padding:3px"
+                                                        name="select_categoria">
+                                                    <option>Categoría</option>
+                                                    {% for cat in categorias %}
+                                                        <option> {{ cat.nombre }} </option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row" style="padding:3px">
+                                    <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
-                                                <select class="form-control" id="formSelectDepartamento" style="padding:3px" name="select_departamento">
-                                                  <option>Departamento</option>
-                                                  <option>Lima Provincia</option>
-                                                  <option>Ucayali</option>
+                                                <select class="form-control" id="formSelectDepartamento" style="padding:3px"
+                                                        name="select_departamento">
+                                                    <option value="-1" >Departamento</option>
+                                                    {%  for dep in departamentos %}
+                                                      <option value="{{ dep.id_representativo }}"> {{ dep.nombreDepartamento }}</option>
+                                                      {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row" style="padding:3px">
+                                    <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
-                                                <select class="form-control" id="formSelectProvincia" style="padding:3px"name="select_provincia">
-                                                  <option>Provincia</option>
-                                                  <option>Barranca</option>
-                                                  <option>Padre Abad</option>
+                                                <select class="form-control" id="formSelectProvincia" style="padding:3px"
+                                                        name="select_provincia">
+                                                  <option selected value="-1" id="provinciaText">Provincia</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row" style="padding:3px">
+                                    <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
-                                                <select class="form-control" id="formSelectDistrito" style="padding:3px"name="select_distrito">
-                                                  <option>Distrito</option>
-                                                  <option>Supe</option>
-                                                  <option>Padre Abad</option>
+                                                <select class="form-control" id="formSelectDistrito" style="padding:3px"
+                                                        name="select_distrito">
+                                                  <option selected value="-1" id="distritoText">Distrito</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -90,7 +94,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="row" style="padding: 3px">
+                        <div class="row" style="padding-bottom: 3px">
                             <div class="col">
                                 <div class="position-relative" style="padding: 10px;">
                                     <button class="btn-primary text-white" type="submit" form="form_buscar">
@@ -100,39 +104,92 @@
                             </div>
                         </div>
                     </div>
-                    {% for p in patrimonios %}
-                        <div class="card mb-5" style="padding: 10px">
+                    {% if success != -1 %}
+                        <div class="row">
+                            <div class="col">
+                                {% if success == 0 %}
+                                <p>No se encontraron resultados</p>
+                                {% elif success == 1 %}
+                                    {% if lensearch == 1 %}
+                                        <p> Se encontró {{  lensearch }} patrimonio o institución asociada</p>
+                                    {% else %}
+                                        <p> Se encontraron {{  lensearch }} patrimonios o instituciones asociadas</p>
+                                    {% endif %}
+                                {% else %}
+                                    <!--Nothing-->
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% for p in patrimonios %}
+                            <div class="card mb-5" style="padding-bottom: 10px">
+                                <div class="position-relative">
+                                    <div>
+                                        <img class="img-fluid w-100"
+                                             style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
+                                             src="{{ p.url }}"
+                                             alt="Card image"/>
+                                    </div>
+                                    <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                                        <p class="card-text "
+                                           style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
+                                            {{ p.patrimonio.nombreTituloDemoninacion }}</p>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-2 pb-2">
+                                    {% if p.patrimonio.tipoPatrimonio == "1" %}
+                                    <p class="mb-0 " style="font-size: 15px"> Patrimonio Inmaterial </p>
+                                    {% else %}
+                                        <p class="mb-0 " style="font-size: 15px"> Patrimonio Material Inmueble </p>
+                                    {% endif %}
+
+                                    <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                            value="{{ p.patrimonio.id }},1">
+                                                Ver en el mapa
+                                    </button>
+
+                                    <a href="{% url 'detalle' pk=p.patrimonio.pk %}">
+                                        <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
+                                                style="font-size: 10px">
+                                                    Ver Ficha
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% for i in instituciones %}
+                        <div class="card mb-5" style="padding: 10px;margin-top: 10px;">
                             <div class="position-relative">
                                 <div>
                                     <img class="img-fluid w-100"
                                          style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                         src="{{ p.url }}"
+                                         src="{{ i.url }}"
                                          alt="Card image"/>
                                 </div>
                                 <div class="card-img-overlay d-flex align-items-end text-white pb-2">
                                     <p class="card-text "
                                        style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
-                                        {{ p.nombreTituloDemoninacion }}</p>
+                                        {{ i.institucion.nombre}}</p>
                                 </div>
                             </div>
                             <div class="card-body pt-2 pb-2">
-                                <p class="mb-0 " style="font-size: 15px"> Patrimonio Cultural de la
-                                    humanidad </p>
-                                {% comment %}
-                                <button class="btn bg-200 mr-1 mb-1 w-100" type="button"
-                                        style="font-size: 10px">
+                                <p class="mb-0 " style="font-size: 15px"> Institución </p>
+
+                                <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                        value="{{ i.institucion.id }},2">
                                             Ver en el mapa
                                 </button>
-                                {% endcomment %}
-                                <a href="{% url 'detalle' pk=p.pk %}">
+
+                                <a href="{% url 'detalle_museo' pk=i.institucion.pk %}">
                                     <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
                                             style="font-size: 10px">
-                                                Ver Ficha
+                                                Ver detalle
                                     </button>
                                 </a>
                             </div>
                         </div>
                     {% endfor %}
+                    {% endif %}
                 </div>
             </nav>
         </div>
@@ -161,7 +218,7 @@
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
     <!-- ruta entre puntos -->
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-
+    <!--Map script-->
     <script>
         // leaflet map with osm tilelayer
         var map = L.map('map').setView([-9.40, -75.00], 5);
@@ -174,17 +231,156 @@
             popupAnchor: [-1,-39]
         });
 
-        {% if patrimonio0 %}
-            let markerInicio = L.marker([{{patrimonio0.lat}}, {{patrimonio0.long}}], {
+        {% if patrimonio0 != None%}
+            let markerInicio = L.marker([{{patrimonio0.patrimonio.lat}}, {{patrimonio0.patrimonio.long}}], {
                 icon:myIcon,
-                title: "{{ patrimonio0.nombreTituloDemoninacion }}"
+                title: "{{ patrimonio0.patrimonio.nombreTituloDemoninacion }}"
             }).addTo(map).bindPopup("<div>" +
-                "<p>" + "{{ patrimonio0.nombreTituloDemoninacion }}" +"</p>"  +
+                "<p>" + "{{ patrimonio0.patrimonio.nombreTituloDemoninacion }}" +"</p>"  +
                 "<img width='300' src='" +
                 "{{ patrimonio0.url }}" +
                 "'/>" +
             "</div>").openPopup()
-            map.flyTo([{{ patrimonio0.lat }}, {{patrimonio0.long}}],14);
+            map.flyTo([{{ patrimonio0.patrimonio.lat }}, {{patrimonio0.patrimonio.long}}],15);
         {% endif %}
+        {% if institucion0 != None and patrimonio0 is None %}
+            let markerInicio = L.marker([{{institucion0.institucion.lat}}, {{institucion0.institucion.long}}], {
+                icon:myIcon,
+                title: "{{ institucion0.institucion.nombre }}"
+            }).addTo(map).bindPopup("<div>" +
+                "<p>" + "{{ institucion0.institucion.nombre }}" +"</p>"  +
+                "<img width='300' src='" +
+                "{{ institucion0.url }}" +
+                "'/>" +
+            "</div>").openPopup()
+            map.flyTo([{{ institucion0.institucion.lat }}, {{institucion0.institucion.long}}],18);
+        {% endif %}
+    </script>
+    <!--script for flying to other results-->
+    <script>
+    document.querySelectorAll('.mr-1').forEach(item =>{
+        item.addEventListener('click',event=>{
+            var data = event.target.value.split(",");
+            $(".leaflet-popup").remove();
+            $(".leaflet-marker-shadow").remove();
+            $(".leaflet-marker-icon").remove();
+            var dataId = data[0];
+            if (data[1] == '1'){
+                $.ajax({
+                    type:'GET',
+                    url: `/mapa/patrimoniojson/${dataId}`,
+                    success: function (response){
+                        const nombre = response.nombre;
+                        const lat = response.lat;
+                        const long = response.long;
+                        const url = response.url;
+                        let markerInicio = L.marker([lat, long], {
+                            icon:myIcon,
+                            title: nombre
+                        }).addTo(map).bindPopup("<div>" +
+                            "<p>" + nombre +"</p>"  +
+                            "<img width='300' src='" +
+                            url +
+                            "'/>" +
+                        "</div>").openPopup()
+                        map.flyTo([ lat, long],15);
+                    },
+                    error: function (error){
+                        console.log(error)
+                    }
+                })
+            }
+            else{
+                $.ajax({
+                    type:'GET',
+                    url: `/mapa/institucionjson/${dataId}`,
+                    success: function (response){
+                        const nombre = response.nombre;
+                        const lat = response.lat;
+                        const long = response.long;
+                        const url = response.url;
+                        let markerInicio = L.marker([lat, long], {
+                            icon:myIcon,
+                            title: nombre
+                        }).addTo(map).bindPopup("<div>" +
+                            "<p>" + nombre +"</p>"  +
+                            "<img width='300' src='" +
+                            url +
+                            "'/>" +
+                        "</div>").openPopup()
+                        map.flyTo([ lat, long],18);
+                    },
+                    error: function (error){
+                        console.log(error)
+                    }
+                })
+            }
+        })
+    });
+    </script>
+    <!--Advanced search script-->
+    <script>
+    const departamentoInput =  document.getElementById('formSelectDepartamento');
+    const provinciaInput =  document.getElementById('formSelectProvincia');
+    const distritoDataBox = document.getElementById('formSelectDistrito')
+
+    const provinciaTexto = document.getElementById('provinciaText')
+    const distritoTexto = document.getElementById('distritoText')
+
+    departamentoInput.addEventListener("change", ev => {
+        const selectedDepartamentoId = ev.target.value;
+        provinciaInput.innerHTML=""
+        provinciaTexto.textContent="Provincia"
+        provinciaTexto.setAttribute('value','-1')
+        provinciaInput.appendChild(provinciaTexto)
+        distritoDataBox.innerHTML=""
+        distritoTexto.textContent="Distrito"
+        distritoTexto.setAttribute('value','-1')
+        distritoDataBox.appendChild(distritoTexto)
+        $.ajax({
+            type:'GET',
+            url: `/mapa/provinciajson/${selectedDepartamentoId}`,
+            success: function (response){
+                const provinciaData = response.provincias
+                provinciaData.map(item => {
+                    const option = document.createElement('option')
+                    option.textContent = item.nombreProvincia
+                    option.setAttribute('value',item.id_representativo)
+                    provinciaInput.appendChild(option)
+                })
+            },
+            error: function (error){
+                console.log(error)
+            }
+        })
+    });
+
+    provinciaInput.addEventListener('change',ev => {
+        const selectedProvinciaId = ev.target.value;
+        distritoDataBox.innerHTML=""
+        distritoTexto.textContent="Distrito"
+        distritoTexto.setAttribute('value','-1')
+        distritoDataBox.appendChild(distritoTexto)
+        $.ajax({
+            type:'GET',
+            url: `/mapa/distritojson/${selectedProvinciaId}`,
+            success: function (response){
+                const distritoData = response.distritos
+                distritoData.map(item => {
+                    const option = document.createElement('option')
+                    option.textContent = item.nombreDistrito
+                    option.setAttribute('value',item.id_representativo)
+                    distritoDataBox.appendChild(option)
+                })
+            },
+            error: function (error){
+                console.log(error)
+            }
+        })
+    })
+    </script>
+    <!--Requirements of search camps script-->
+    <script>
+
     </script>
 {% endblock %}
