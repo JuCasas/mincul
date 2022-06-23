@@ -127,22 +127,22 @@
                                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
                                         <p class="card-text "
                                            style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
-                                            {{ p.nombreTituloDemoninacion }}</p>
+                                            {{ p.patrimonio.nombreTituloDemoninacion }}</p>
                                     </div>
                                 </div>
                                 <div class="card-body pt-2 pb-2">
-                                    {% if p.tipoPatrimonio == "1" %}
+                                    {% if p.patrimonio.tipoPatrimonio == "1" %}
                                     <p class="mb-0 " style="font-size: 15px"> Patrimonio Inmaterial </p>
                                     {% else %}
                                         <p class="mb-0 " style="font-size: 15px"> Patrimonio Material Inmueble </p>
                                     {% endif %}
-                                    {% comment %}
+
                                     <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
-                                            value="[{{ p.lat }}, {{ p.long }}]" id="btn-ver-mapa">
+                                            value="{{ p.patrimonio.id }},1">
                                                 Ver en el mapa
                                     </button>
-                                    {% endcomment %}
-                                    <a href="{% url 'detalle' pk=p.pk %}">
+
+                                    <a href="{% url 'detalle' pk=p.patrimonio.pk %}">
                                         <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
                                                 style="font-size: 10px">
                                                     Ver Ficha
@@ -163,18 +163,18 @@
                                 <div class="card-img-overlay d-flex align-items-end text-white pb-2">
                                     <p class="card-text "
                                        style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
-                                        {{ i.nombre}}</p>
+                                        {{ i.institucion.nombre}}</p>
                                 </div>
                             </div>
                             <div class="card-body pt-2 pb-2">
                                 <p class="mb-0 " style="font-size: 15px"> Institución </p>
-                                {% comment %}
+
                                 <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
-                                        value="[{{ p.lat }}, {{ p.long }}]" id="btn-ver-mapa">
+                                        value="{{ i.institucion.id }},2">
                                             Ver en el mapa
                                 </button>
-                                {% endcomment %}
-                                <a href="{% url 'detalle_museo' pk=i.pk %}">
+
+                                <a href="{% url 'detalle_museo' pk=i.institucion.pk %}">
                                     <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
                                             style="font-size: 10px">
                                                 Ver detalle
@@ -226,28 +226,28 @@
         });
 
         {% if patrimonio0 != None%}
-            let markerInicio = L.marker([{{patrimonio0.lat}}, {{patrimonio0.long}}], {
+            let markerInicio = L.marker([{{patrimonio0.patrimonio.lat}}, {{patrimonio0.patrimonio.long}}], {
                 icon:myIcon,
-                title: "{{ patrimonio0.nombreTituloDemoninacion }}"
+                title: "{{ patrimonio0.patrimonio.nombreTituloDemoninacion }}"
             }).addTo(map).bindPopup("<div>" +
-                "<p>" + "{{ patrimonio0.nombreTituloDemoninacion }}" +"</p>"  +
+                "<p>" + "{{ patrimonio0.patrimonio.nombreTituloDemoninacion }}" +"</p>"  +
                 "<img width='300' src='" +
                 "{{ patrimonio0.url }}" +
                 "'/>" +
             "</div>").openPopup()
-            map.flyTo([{{ patrimonio0.lat }}, {{patrimonio0.long}}],14);
+            map.flyTo([{{ patrimonio0.patrimonio.lat }}, {{patrimonio0.patrimonio.long}}],14);
         {% endif %}
         {% if institucion0 != None and patrimonio0 is None %}
-            let markerInicio = L.marker([{{institucion0.lat}}, {{institucion0.long}}], {
+            let markerInicio = L.marker([{{institucion0.institucion.lat}}, {{institucion0.institucion.long}}], {
                 icon:myIcon,
-                title: "{{ institucion0.nombre }}"
+                title: "{{ institucion0.institucion.nombre }}"
             }).addTo(map).bindPopup("<div>" +
-                "<p>" + "{{ institucion0.nombre }}" +"</p>"  +
+                "<p>" + "{{ institucion0.institucion.nombre }}" +"</p>"  +
                 "<img width='300' src='" +
                 "{{ institucion0.url }}" +
                 "'/>" +
             "</div>").openPopup()
-            map.flyTo([{{ institucion0.lat }}, {{institucion0.long}}],14);
+            map.flyTo([{{ institucion0.institucion.lat }}, {{institucion0.institucion.long}}],14);
         {% endif %}
     </script>
     <!--Advanced search script-->
@@ -310,6 +310,67 @@
             }
         })
     })
-
+    </script>
+    <!--script for flying to other results-->
+    <script>
+    document.querySelectorAll('.mr-1').forEach(item =>{
+        item.addEventListener('click',event=>{
+            var data = event.target.value.split(",");
+            $(".leaflet-popup").remove();
+            $(".leaflet-marker-shadow").remove();
+            $(".leaflet-marker-icon").remove();
+            var dataId = data[0];
+            if (data[1] == '1'){
+                $.ajax({
+                    type:'GET',
+                    url: `/mapa/patrimoniojson/${dataId}`,
+                    success: function (response){
+                        const nombre = response.nombre;
+                        const lat = response.lat;
+                        const long = response.long;
+                        const url = response.url;
+                        let markerInicio = L.marker([lat, long], {
+                            icon:myIcon,
+                            title: nombre
+                        }).addTo(map).bindPopup("<div>" +
+                            "<p>" + nombre +"</p>"  +
+                            "<img width='300' src='" +
+                            url +
+                            "'/>" +
+                        "</div>").openPopup()
+                        map.flyTo([ lat, long],14);
+                    },
+                    error: function (error){
+                        console.log(error)
+                    }
+                })
+            }
+            else{
+                $.ajax({
+                    type:'GET',
+                    url: `/mapa/institucionjson/${dataId}`,
+                    success: function (response){
+                        const nombre = response.nombre;
+                        const lat = response.lat;
+                        const long = response.long;
+                        const url = response.url;
+                        let markerInicio = L.marker([lat, long], {
+                            icon:myIcon,
+                            title: nombre
+                        }).addTo(map).bindPopup("<div>" +
+                            "<p>" + nombre +"</p>"  +
+                            "<img width='300' src='" +
+                            url +
+                            "'/>" +
+                        "</div>").openPopup()
+                        map.flyTo([ lat, long],14);
+                    },
+                    error: function (error){
+                        console.log(error)
+                    }
+                })
+            }
+        })
+    });
     </script>
 {% endblock %}

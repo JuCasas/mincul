@@ -8,11 +8,13 @@ from patrimonios.models import PatrimonioIndustrial
 from patrimonios.models import PatrimonioArqueologico
 from patrimonios.models import PatrimonioPaleontologico
 from patrimonios.models import PatrimonioHistoricoArtistico
+from mincul_app.models import Documento
 from django.http import JsonResponse
 # Create your views here.
 
 def ficha(request,my_id):
     patrimonio=Patrimonio.objects.get(id=my_id)
+    urlPatrimonio = Documento.objects.filter(patrimonio=patrimonio).order_by('id')
     if patrimonio.tipoPatrimonio == "3":
         patrimonioMueble = PatrimonioMaterialMueble.objects.get(patrimonio=patrimonio)
         materialesSecundarios = patrimonioMueble.materialesSecundarios.all()
@@ -69,11 +71,13 @@ def ficha(request,my_id):
             'tecnicasAcabado': tecnicasAcabadoString,
             'tecnicasDecoracion': tecnicasDecoracionString,
             'tecnicasManufactura': tecnicasManufacturaString,
-            'dataCategoria':dataCategoria
+            'dataCategoria':dataCategoria,
+            'urlPatrimonio':urlPatrimonio[0].url
         }
         return render(request, 'map/ficha.html', context)
     context={
-        'patrimony':patrimonio
+        'patrimony':patrimonio,
+        'urlPatrimonio':urlPatrimonio[0].url
     }
     return render(request,'map/ficha.html',context)
 
@@ -94,9 +98,13 @@ def mapaPatrimonioSimple(request):
                     if int(p.tipoPatrimonio) == 3:
                         insti = Institucion.objects.get(pk=p.institucion.pk)
                         if insti not in instituciones:
-                            instituciones.append(insti)
+                            instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                            instituciones.append({'institucion': insti,
+                                                  'url':instiUrl[0].url})
                     else:
-                        patri.append(p)
+                        urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
+                        patri.append({'patrimonio':p,
+                                      'url':urlPatrimonio[0].url})
                 patrimonio0 = None
                 institucion0 = None
                 if len(patri)>0:
@@ -187,9 +195,13 @@ def mapaPatrimonioAvanzado(request):
                         if int(p.tipoPatrimonio) == 3:
                             insti = Institucion.objects.get(pk=p.institucion.pk)
                             if insti not in instituciones:
-                                instituciones.append(insti)
+                                instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                instituciones.append({'institucion': insti,
+                                                      'url': instiUrl[0].url})
                         else:
-                            patrimons.append(p)
+                            urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
+                            patrimons.append({'patrimonio': p,
+                                              'url': urlPatrimonio[0].url})
                     patrimonio0 = None
                     institucion0 = None
                     if len(patrimons) > 0:
@@ -246,3 +258,37 @@ def distritoJson(request,id_representativo):
     }
     print(context)
     return JsonResponse(context, status=200)
+
+def patrimonioJson(request,id_patrimonio):
+    id_patri = int(id_patrimonio)
+    patrimonio = Patrimonio.objects.get(id=id_patri)
+    urlPatri = Documento.objects.filter(patrimonio=patrimonio).order_by('id')
+    urlPatrimonio = (urlPatri[0].url)
+    urlPatrimonio = urlPatrimonio.name
+    nombre = patrimonio.nombreTituloDemoninacion
+    lat = patrimonio.lat
+    long = patrimonio.long
+    context={
+        'nombre':nombre,
+        'lat': lat,
+        'long': long,
+        'url':urlPatrimonio
+    }
+    return JsonResponse(context,status=200)
+
+def institucionJson(request,id_institucion):
+    id_insti = int(id_institucion)
+    institucion = Institucion.objects.get(id=id_insti)
+    urlInsti = Documento.objects.filter(institucion=institucion).order_by('id')
+    urlInstitucion = urlInsti[0].url
+    urlInstitucion = urlInstitucion.name
+    nombre = institucion.nombre
+    lat = institucion.lat
+    long = institucion.long
+    context={
+        'nombre':nombre,
+        'lat': lat,
+        'long': long,
+        'url':urlInstitucion
+    }
+    return JsonResponse(context,status=200)
