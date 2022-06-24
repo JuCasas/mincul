@@ -188,8 +188,11 @@ def patrimonio_list(request):
                 elif int(cat.tipo) == 3:
                     print('Mueble')
 
+    patrimonios = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
+
     context = {
-        'patrimonios': Patrimonio.objects.filter(estado=1)
+        'patrimonios': patrimonios,
+        'cantidad': len(patrimonios),
     }
 
     return render(request, 'patrimonio/patrimony_list.html', context=context)

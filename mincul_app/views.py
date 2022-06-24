@@ -8,9 +8,13 @@ def template(request):
     return render(request, 'template_auth.html')
 
 def login(request):
+    patrimonios = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
+
     context = {
-        'patrimonios': Patrimonio.objects.filter(estado=1)
+        'patrimonios': patrimonios,
+        'cantidad': len(patrimonios),
     }
+
     return render(request, 'patrimonio/patrimony_list.html', context=context)
 
 def material(request):
