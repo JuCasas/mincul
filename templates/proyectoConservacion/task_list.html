@@ -170,95 +170,13 @@
     </div>
   </div>
 
-  <!-- NEW and EDIT Modal -->
-  <div class="modal fade" id="modalTarea" role="dialog">
-    <div class="modal-dialog mw-100 w-50">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="modal_title"></h4>
-        </div>
-        <div class="modal-body">
-          <form role="form" id="formTarea">
-            {% csrf_token %}
-
-            <div class="row">
-              <div class="form-group col-lg-12 col-sm-12">
-                <label for="nombre">Nombre:</label>
-                <input class="form-control" id="nombre" name="nombre" type="text" required
-                       placeholder="Nombre de la Actividad">
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-lg-12 col-sm-12">
-                <label for="descripcion">Descripcion:</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
-                          placeholder="Descripción de la Actividad"></textarea>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-lg-6 col-sm-12">
-                <label for="fechaInicio">Fecha de Inicio:</label>
-                <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required>
-              </div>
-              <div class="form-group col-lg-6 col-sm-12">
-                <label for="fechaFin">Fecha de Fin:</label>
-                <input class="form-control" id="fechaFin" name="fechaFin" type="date" required>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-lg-12 col-sm-12">
-                <label for="patrimonio">Patrimonio Asociado:</label>
-                <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                        data-placeholder='Seleccione patrimonio...'>
-                  {% for p in patrimonios %}
-                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.nombreTituloDemoninacion }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-            </div>
-
-            <div class="row justify-content-between">
-              <div class="form-group col-9">
-                <label for="conservadores">Conservador(es):</label>
-                <select class="form-control selectpicker" id="conservadores" name="conservadores"
-                        data-placeholder='Seleccione patrimonio...'>
-                  {% for p in patrimonios %}
-                    <option data="{{ p.pk }}" value={{ p.pk }}>{{ p.tituloDemoninacion }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="form-group col-auto d-flex align-items-end">
-                <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
-                        onclick="agregarPatrimonioTabla()">Agregar Conservador
-                </button>
-              </div>
-            </div>
-
-            <div class="row justify-content-end mt-2 mr-1">
-                <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
-              <div >
-                <input type="hidden" id="type" name="type" value="">
-                <button type="submit" class="btn btn-primary btn-block"><span
-                    class="glyphicon glyphicon-ok"></span> Guardar
-                </button>
-              </div>
-            </div>
-
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Delete Modal -->
   <div class="modal fade" id="confirm" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header justify-content-center">
-          <h4 class="modal-title">¿Estás seguro de eliminar el proyecto?</h4>
+          <h4 class="modal-title">¿Estás seguro de eliminar la tarea?</h4>
         </div>
         <div class="modal-body px-9">
           <div class="row justify-content-between">

@@ -108,6 +108,37 @@
                 </div>
 
                 <div class="card bg-light mb-3">
+                      <div class="card-body">
+                            <div class="card-title mb-0">Incidentes reportados</div>
+                            <table id="incidentesLista" class="table table-sm table-dashboard no-wrap mb-0 fs--1 w-100">
+                                <thead class="bg-200">
+                                <tr>
+                                  <th class="sort" style="width: 15%">Código</th>
+                                  <th class="sort" style="width: 65%">Descripción</th>
+                                  <th class="sort" style="width: 20%">Fecha de Registro</th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white">
+                                {% for inci in incidentes %}
+                                    <tr>
+                                        <td class="align-middle">
+                                            {{ inci.codigo}}
+                                        </td>
+                                        <td class="align-middle">
+                                            {{ inci.descripcion|default:'-' }}
+                                        </td>
+                                        <td class="align-middle">
+                                            {{ inci.fechaOcurrencia|date:'d/m/Y'|default:'-'}}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                      </div>
+                </div>
+
+
+                <div class="card bg-light mb-3">
                     <div class="card-body">
                         <div class="card-title">Valoraciones</div>
                         {% for v in valoraciones %}
@@ -146,36 +177,6 @@
                             </div>
                         {% endfor %}
                     </div>
-                </div>
-
-                <div class="card bg-light">
-                      <div class="card-body">
-                            <div class="card-title mb-0">Incidentes reportados</div>
-                            <table id="incidentesLista" class="table table-sm table-dashboard no-wrap mb-0 fs--1 w-100">
-                                <thead class="bg-200">
-                                <tr>
-                                  <th class="sort" style="width: 15%">Código</th>
-                                  <th class="sort" style="width: 65%">Descripción</th>
-                                  <th class="sort" style="width: 20%">Fecha de Registro</th>
-                                </tr>
-                                </thead>
-                                <tbody class="bg-white">
-                                {% for inci in incidentes %}
-                                    <tr>
-                                        <td class="align-middle">
-                                            {{ forloop.counter}}
-                                        </td>
-                                        <td class="align-middle">
-                                            {{ inci.descripcion|default:'-' }}
-                                        </td>
-                                        <td class="align-middle">
-                                            {{ inci.fechaOcurrencia|date:'d/m/Y'|default:'-'}}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                      </div>
                 </div>
 
             </div>
@@ -240,7 +241,7 @@
                      </a>
                 </div>
 
-                <div class="card mt-4">
+                <div class="card mt-3">
                     <div class="card-body">
                         <h5 class="card-title text-black">Valora a {{ institucion.nombre }}:</h5>
                         <form class="form-validation" method="post" action="{% url 'valor_museo' pk=institucion.pk %}">
@@ -275,6 +276,64 @@
                         </form>
                     </div>
                 </div>
+
+
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title text-black">Registar incidente</h5>
+                        <form id="incidente_form" method="post" action="{% url 'incidete_museo' pk=institucion.pk %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="tipo">Seleccione el tipo de afectación:</label>
+                            <select class="form-control" id="tipoAfectacion" name="tipo" data-placeholder='Tipo de afectación'>
+                            {% for a in afectaciones %}
+                                <option data="{{ a }}" value={{ a }}>{{ a }}</option>
+                            {% endfor %}
+                            </select>
+
+                            <label for="fecha">¿Cuándo sucedió el hecho?</label>
+                            <input type="date" name="fecha" class="form-control">
+
+                            <label for="descripcion">Descripción:</label>
+                            <textarea name="descripcion" class="form-control" style="height: 8em" placeholder="Descripción..."></textarea>
+
+                            <label for="descripcion">Evidencia: peso máximo 50 mb</label>
+                            <input type="file" id="actual-btn" hidden multiple/>
+
+                            <label for="actual-btn" class="btn btn-primary mr-1 mb-1 form-control" type="button">Adjuntar Archivos</label>
+                            <span id="file-chosen-0" class="form-control">No se eligió ningún archivo</span>
+                            <span id="file-chosen-1" class="form-control" hidden></span>
+                            <span id="file-chosen-2" class="form-control" hidden></span>
+                            <script>
+                                const actualBtn = document.getElementById('actual-btn');
+                                actualBtn.addEventListener('change', function(){
+                                    console.log(actualBtn.files)
+                                    console.log(actualBtn.files.length)
+                                    for(var i=1; i<3; i++){
+                                        const fileChosen  = document.getElementById('file-chosen-' + i);
+                                        fileChosen.hidden = true;
+                                    }
+                                    for(var i=0; i<actualBtn.files.length; i++){
+                                        const fileChosen  = document.getElementById('file-chosen-' + i);
+                                        fileChosen.textContent = this.files[i].name;
+                                        fileChosen.hidden = false;
+                                    }
+                                })
+                            </script>
+
+                            <label for="nombre">¿Cómo te llamas?</label>
+                            <input name="nombre" class="form-control" placeholder="Nombre y Apellido...">
+
+                            <label for="email">¿Cual es tu correo electrónico?</label>
+                            <input name="email" class="form-control" placeholder="Correo electrónico...">
+
+                            <label for="telefono">¿Cual es tu teléfono?</label>
+                            <input name="telefono" class="form-control" placeholder="Teléfono...">
+                            <button class="btn btn-primary btn-block mt-3" type="submit">Registar Incidente</button>
+                        </form>
+
+                    </div>
+                </div>
+
 
             </div>
         </div>

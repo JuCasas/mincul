@@ -77,7 +77,6 @@
           /* Lowering the shadow */
       }
 
-
       .table.dataTable tbody th, table.dataTable tbody td {
           padding: 8px 10px 8px 18px !important;
       }
@@ -88,6 +87,7 @@
 
       .form-control {
           background-color: white !important;
+          cursor: pointer !important;
       }
 
       .second {
@@ -99,45 +99,46 @@
           font-size: 12px !important;
       }
 
-      .form-control {
-          background-color: white !important;
-          cursor: pointer!important;
+      span.select2-selection.select2-selection--single {
+          display: flex !important;
+          align-items: center !important;
       }
 
-
-      span.select2-selection.select2-selection--single{
-          display: flex!important;
-          align-items: center!important;
+      span.select2-selection__arrow {
+          margin-top: 5px !important;
+          display: none !important;
       }
 
-      span.select2-selection__arrow{
-          margin-top: 5px!important;
+      span.select2-selection__arrow > i.fa.fa-chevron-right:before {
+          content: "\f0fe";
       }
 
-      span.select2-selection__arrow{
-          margin-top: 5px!important;
+      span.select2-selection__arrow {
+          margin-top: 5px !important;
       }
 
-      .select2-selection{
-          height: 36px!important;
-          border-radius: 10px!important;
-          border-color: #D7E1EE!important;
-          align-items: center!important;
+      .select2-selection {
+          height: 36px !important;
+          border-radius: 10px !important;
+          border-color: #D7E1EE !important;
+          align-items: center !important;
       }
 
-      .select2-selection__placeholder{
-          align-items: center!important;
-          font-size: 12px!important;
-          color: #BDC1D2!important;
-      }
-      .back{
-          font-size: 14px!important;
+      .select2-selection__placeholder {
+          align-items: center !important;
+          font-size: 12px !important;
+          color: #BDC1D2 !important;
       }
 
-      input:disabled{
-          background-color: #D2D2D2!important;
+      .inputIcon2 {
+          color: #393e44 !important;
+          font-size: 10px !important;
+          margin-top: 2px;
       }
 
+      input:disabled {
+          background-color: #D2D2D2 !important;
+      }
   </style>
 
 {% endblock %}
@@ -209,7 +210,7 @@
 
   <div class="card mb-3">
     <div class="card-body">
-      <table id="tabla_autores" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
+      <table id="tabla_autores" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-200">
         <thead class="bg-200">
         <tr>
           <th class="sort ">Código</th>

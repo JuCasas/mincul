@@ -55,15 +55,15 @@
                         <div class="card-body bg-light">
                             <div class="form-group">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
-                                <select class="form-control" id="tipoTraslado" required
-                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
-                                    <option {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
+                                <select class="form-control selectpicker" id="tipoTraslado" name="tipoTraslado" required
+                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %} onchange="validarPais()">
+                                    <option value="1" {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
                                         extranjero
                                     </option>
-                                    <option {% if traslado.tipoTraslado == '2' %} selected {% endif %}>Exponsición
+                                    <option value="2" {% if traslado.tipoTraslado == '2' %} selected {% endif %}>Exposición
                                         nacional
                                     </option>
-                                    <option {% if traslado.tipoTraslado == '3' %} selected {% endif %}>Misión
+                                    <option value="3" {% if traslado.tipoTraslado == '3' %} selected {% endif %}>Misión
                                         Diplomática
                                     </option>
                                 </select>
@@ -97,7 +97,7 @@
                                         data-placeholder='Seleccione comisario...'
                                         {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% for c in comisarios %}
-                                        <option value="{{ c.pk }}">{{ c.username }}</option>
+                                        <option value="{{ c.pk }}">{{ c.first_name }} {{ c.last_name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -105,7 +105,7 @@
                             {% if traslado.estado == '2' or traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
                                 <div class="form-group">
                                     <label for="nResolucion">N° de Resolución:</label>
-                                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                    <input class="form-control" id="nResolucion" name="nResolucion" maxlength="17" type="text"
                                             {% if traslado.numeroResolucion %}
                                            value="{{ traslado.numeroResolucion }}"
                                             {% else %}
@@ -177,7 +177,7 @@
 
                                             {% if traslado.estado == '5' or traslado.estado == '6' %}
                                                 <div class="form-group">
-                                                    <label for="fechaRetornoReal">Fecha de Retorno real:</label>
+                                                    <label for="fechaRetornoReal">Fecha de Retorno:</label>
                                                     <input class="form-control" id="fechaRetornoReal"
                                                            name="fechaRetornoReal" type="date"
                                                            value="{{ traslado.fechaRetorno|date:'Y-m-d' }}"
@@ -238,7 +238,7 @@
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
                                                 <td>{{ patrimonio.get_estado_display }}</td>
 
-                                                {% if  estado  == '1' or estado == '0'  %}
+                                                {% if  estado  == '1' or estado == '0' %}
                                                     <td>
                                                         <button class="btn" href="#" type="button"
                                                                 onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
@@ -313,7 +313,7 @@
                     <div class="card-body bg-light">
                         <div class="row">
                             {% for documento in documentos %}
-                                <div class="col-lg-2 col-md-auto col-sm-auto">
+                                <div class="col-lg-2 col-md-auto col-sm-auto mt-3">
                                     <div class="card mx-1">
 
                                         {% if  estado  == '1' or estado == '0' %}
@@ -326,18 +326,18 @@
                                         {% endif %}
 
 
-                                            <div class="card-body p-0" style="transform: rotate(0);">
-                                                <div>
-                                                    <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
-                                                </div>
-                                                <a class="notification notification-flush bg-0 stretched-link"
-                                                   href="{{ media_path }}{{ documento.documento.url }}" download></a>
+                                        <div class="card-body p-0" style="transform: rotate(0);">
+                                            <div>
+                                                <img class="img-fluid" src="{% static 'img/icons/icono-archivo.jpg' %}">
                                             </div>
-                                            <div class="card-footer p-2" style="transform: rotate(0);">
-                                                <a class="notification notification-flush bg-0 stretched-link"
-                                                   href="{{ media_path }}{{ documento.documento.url }}" download></a>
-                                                <h6>{{ documento.documento.filename }}</h6>
-                                            </div>
+                                            <a class="notification notification-flush bg-0 stretched-link"
+                                               href="{{ media_path }}{{ documento.documento.url }}" download></a>
+                                        </div>
+                                        <div class="card-footer p-2" style="transform: rotate(0);">
+                                            <a class="notification notification-flush bg-0 stretched-link"
+                                               href="{{ media_path }}{{ documento.documento.url }}" download></a>
+                                            <h6>{{ documento.documento.filename }}</h6>
+                                        </div>
 
 
                                     </div>
@@ -410,9 +410,9 @@
                                href="{% url 'list_transfers' %}">Volver</a>
                         </div>
                         {% if traslado.estado != '6' %}
-                        <div class="flex-column">
-                            <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
-                        </div>
+                            <div class="flex-column">
+                                <button id="agr" class="btn btn-primary mr-3 mb-1" type="button">Guardar</button>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
@@ -707,7 +707,7 @@
                 <div class="modal-body">
                     <form id="formErrorModalFechaRetornoReal" name="formErrorModalFechaRetornoReal">
                         <div class="form-group">
-                            Debe registar y guardar la Fecha de Retorno Real antes de cambiar de estado.
+                            Debe registar y guardar la Fecha de Retorno antes de cambiar de estado.
                         </div>
                     </form>
                 </div>
@@ -910,8 +910,8 @@
                     remote: "Este número de resolución ya se encuentra registrado"
                 },
                 fechaRetornoReal: {
-                    validarFechas: "La fecha de retorno real debe ser posterior a la fecha de salida real",
-                    required: "Debe ingresar una fecha de retorno real"
+                    validarFechas: "La fecha de retorno debe ser posterior a la fecha de salida real",
+                    required: "Debe ingresar una fecha de retorno"
                 },
                 fechaSalidaProgramada: {
                     required: "Ingrese una fecha de salida programada",
@@ -1026,17 +1026,17 @@
                     var fechasCorrectas = true;
                     if (!nResolucion && fechasCorrectas & patrimoniosEvaluar) {
                         console.log("Todo Bien Juan!");
-                        if ("{{ traslado.estado }}" === '2'){
+                        if ("{{ traslado.estado }}" === '2') {
                             registrarNumResolucion();
                         }
-                        if ("{{ traslado.estado }}" === '4'){
+                        if ("{{ traslado.estado }}" === '4') {
                             registrarFechaSalidaReal();
                         }
-                        if ("{{ traslado.estado }}" === '5'){
+                        if ("{{ traslado.estado }}" === '5') {
                             console.log("REGISTRAR FECHA DE RETORNO REAL");
                             registrarFechaRetornoReal();
                         }
-                        if ("{{ operacion }}" === 'agregar' || ("{{ operacion }}" === 'editar' && "{{ estado }}" === '1' )){
+                        if ("{{ operacion }}" === 'agregar' || ("{{ operacion }}" === 'editar' && "{{ estado }}" === '1')) {
                             $("#formAgregar").submit();
                         }
 
@@ -1051,7 +1051,7 @@
                 return false;
             });
 
-            function registrarFechaRetornoReal(){
+            function registrarFechaRetornoReal() {
                 return $.ajax({
                     type: 'POST',
                     url: "{% url 'registrarFechaRetornoReal'%}",
@@ -1063,7 +1063,7 @@
                     },
                     success: function (response) {
                         $.toast({
-                            text: 'Fecha de Retorno Real guardado con éxito.',
+                            text: 'Fecha de retorno guardado con éxito.',
                             icon: 'success',
                             loader: false,        // Change it to false to disable loader
                             bgColor: '#B7E6CA',  // To change the background
@@ -1099,7 +1099,7 @@
                     },
                     success: function (response) {
                         $.toast({
-                            text: 'Fecha de Salida Real guardado con éxito.',
+                            text: 'Fecha de salida real guardado con éxito.',
                             icon: 'success',
                             loader: false,        // Change it to false to disable loader
                             bgColor: '#B7E6CA',  // To change the background
@@ -1422,6 +1422,17 @@
                 $("#detallarRechazo").hide();
             }
         }
+        function validarPais() {
+
+            var tipo = $("#tipoTraslado").val();
+            if (tipo === '2'){
+                $("#pais").val("Perú").change();
+                {#$("#pais").attr('disabled', 'disabled');#}
+            }else {
+                $("#pais").val("Afganistán").change();
+                {#$("#pais").removeAttr('disabled');#}
+            }
+        }
 
 
         $('#formularioActualizarEstado').validate({
@@ -1438,15 +1449,55 @@
                         detalle_rechazo: $("#detalleRechazo").val()
                     },
                     success: function (response) {
-                        $("#estadoSolicitud").empty();
-                        $("#detalleRechazo").empty();
-                        $('#actualizarEstado').hide()
+
+                        $("#actualizarEstado").modal('hide')
+
+                        var instance = JSON.parse(response["nuevo_estado"]);
+                        console.log('nuevo estado', instance);
+
+                        nuevo_estado = instance.toString();
+                        console.log(typeof(nuevo_estado))
+
+                        $("#estadoSolicitud").val(nuevo_estado).change();
+
+                        if (instance == '3') {
+                            $.toast({
+                                text: 'Se rechazó la solicitúd con éxito',
+                                icon: 'success',
+                                loader: false,        // Change it to false to disable loader
+                                bgColor: '#B7E6CA',  // To change the background
+                                textColor: '#000000',
+                                position: 'bottom-right',
+                                hideAfter: 3000,
+                            })
+                        };
+
+                        if (instance == '4') {
+                             $.toast({
+                                text: 'Se aprobó la solicitúd con éxito',
+                                icon: 'success',
+                                loader: false,        // Change it to false to disable loader
+                                bgColor: '#B7E6CA',  // To change the background
+                                textColor: '#000000',
+                                position: 'bottom-right',
+                                hideAfter: 3000,
+                            })
+
+                        };
 
                         location.reload();
 
                     },
                     error: function (response) {
-                        alert(response["responseJSON"]["error"]);
+                        $.toast({
+                            text: 'Ocurrió un error inesperado',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#c67a71',
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
                     }
                 });
             }

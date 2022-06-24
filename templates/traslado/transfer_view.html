@@ -46,9 +46,9 @@
                                        value="{{ traslado.pais }}" disabled>
                             </div>
                             <div class="form-group">
-                                <label for="ubigeo">Dirección de destino:</label>
+                                <label for="destino">Dirección de destino:</label>
                                 <input class="form-control" id="destino" name="destino" type="text"
-                                       value="Destino" disabled>
+                                       value="{{ traslado.destino }}" disabled>
                             </div>
 
                             <div class="form-group ">
@@ -60,12 +60,17 @@
                             <div class="form-group">
                                 <label for="comisario">Comisario:</label>
                                 <input class="form-control" id="comisario" name="comisario" type="text"
-                                       value="{{ traslado.gestorConservacionTraslados }}" disabled>
+                                       value="{{ comisario.first_name }} {{ comisario.last_name }}" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="nResolucion">N° de Resolucion:</label>
                                 <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                                       value="{{ traslado.numeroResolucion }}" disabled>
+                                        {% if traslado.numeroResolucion %}
+                                       value="{{ traslado.numeroResolucion }}"
+                                        {% else %}
+                                       placeholder="Aun no se ha registrado el número de resolución"
+                                        {% endif %}
+                                       disabled>
                             </div>
 
                         </div>
@@ -103,7 +108,7 @@
                         </div>
 
                         <div class="col">
-                            <div class="card">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h5>Fechas</h5>
                                 </div>
@@ -121,24 +126,39 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="fechaSalidaReal">Fecha de Salida Real:</label>
-                                                <input class="form-control" id="fechaSalidaReal" name="fechaSalidaReal"
-                                                       type="date"
-                                                       value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}" disabled>
-                                            </div>
 
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="fechaRetornoReal">Fecha de Retorno Real:</label>
-                                                <input class="form-control" id="fechaRetornoReal"
-                                                       name="fechaRetornoReal" type="date"
-                                                       value="{{ traslado.fechaRetorno|date:'Y-m-d' }}" disabled>
-                                            </div>
-                                        </div>
+                                        {% if traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
+                                            {% if traslado.fechaSalidaReal %}
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="fechaSalidaReal">Fecha de Salida Real:</label>
+                                                        <input class="form-control" id="fechaSalidaReal"
+                                                               name="fechaSalidaReal"
+                                                               type="date"
+                                                               value="{{ traslado.fechaSalidaReal|date:'Y-m-d' }}"
+                                                               disabled>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+
+
+                                        {% if traslado.estado == '5' or traslado.estado == '6' %}
+                                            {% if traslado.fechaRetorno %}
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="fechaRetornoReal">Fecha de Retorno:</label>
+                                                        <input class="form-control" id="fechaRetornoReal"
+                                                               name="fechaRetornoReal" type="date"
+                                                               value="{{ traslado.fechaRetorno|date:'Y-m-d' }}"
+                                                               disabled>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -194,7 +214,7 @@
                                     <div class="card mx-1">
                                         <div class="card-body p-0">
                                             <div>
-                                                <img class="img-fluid" src="{% static 'img/icons/icono-PDF.png' %}">
+                                                <img class="img-fluid" src="{% static 'img/icons/icono-archivo.jpg' %}">
                                             </div>
                                         </div>
                                         <div class="card-footer p-2">

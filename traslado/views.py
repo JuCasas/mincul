@@ -85,6 +85,7 @@ def addTransfer(request):
                                                              destino=request.POST['destino'],
                                                              nombreExposicion=request.POST['nombreExposicion'],
                                                              pais=request.POST['pais'],
+                                                             tipoTraslado=request.POST['tipoTraslado'],
                                                              gestorConservacionTraslados_id=request.POST['comisario'],
                                                              gestorPatrimonio_id=request.POST['comisario'],
                                                              fechaSalidaProgramada=request.POST[
@@ -309,6 +310,7 @@ def viewTranfer(request, pk):
     # Nota, se debe considerar los patrominos del traslado
     patrimonios = traslado.patrimonios.all()
     documentos = DocumentoPorSolicitud.objects.filter(solicitud_id=traslado.pk)
+    comisario = User.objects.get(pk = traslado.gestorConservacionTraslados.pk)
 
     context = {
         'traslado': traslado,
@@ -316,7 +318,8 @@ def viewTranfer(request, pk):
         'comisarios': comisarios,
         'patrimonios': patrimonios,
         'documentos': documentos,
-        'media_path': media_path
+        'media_path': media_path,
+        'comisario': comisario,
     }
 
     return render(request, 'traslado/transfer_view.html', context)
@@ -331,6 +334,7 @@ def editTransfer(request, pk):
     if request.POST:
         if solicitudTraslado.estado == '1':
             solicitudTraslado.entidadSolicitante_id = request.POST['nombreInstitucion']
+            solicitudTraslado.tipoTraslado = request.POST['tipoTraslado']
             solicitudTraslado.destino = request.POST['destino']
             solicitudTraslado.nombreExposicion = request.POST['nombreExposicion']
             solicitudTraslado.pais = request.POST['pais']
@@ -496,6 +500,7 @@ def actualizarEstado(request):
     mensaje = ''
 
     asunto = ''
+    patrimonios = traslado.patrimonios.all()
     if (nuevo_estado == '3'):
         asunto = 'Aprobación de solicitud de traslado ' + traslado.numeroResolucion
         traslado.detalleRechazo = detalle_rechazo
@@ -503,16 +508,21 @@ def actualizarEstado(request):
     elif (nuevo_estado == '4'):
         asunto = 'Desaprobación de solicitud de traslado ' + traslado.numeroResolucion
         mensaje = 'Su solicitud de traslado ha sido aceptada de manera satisfactoria'
+        for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
+            patrimonio.estado = '2'  # estado no disponible
+            patrimonio.save()
 
     traslado.save()
 
     correo = traslado.entidadSolicitante.correo
     asunto: "Estado de solicitud"
 
+    print("NUEVO ESTADO >>>>>>", nuevo_estado)
+
     if (nuevo_estado == '3' or nuevo_estado == '4'):
         send_form_email(asunto, correo, mensaje)
 
-    return JsonResponse({}, status=200)
+    return JsonResponse({'nuevo_estado': nuevo_estado}, status=200)
 
 
 def actualizarEstado2(request):
@@ -526,9 +536,7 @@ def actualizarEstado2(request):
         nuevo_estado = '2'
     elif (traslado.estado == '4'):
         nuevo_estado = '5'
-        for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud
-            patrimonio.estado = '2'  # estado no disponible
-            patrimonio.save()
+
     elif (traslado.estado == '5'):
         nuevo_estado = '6'
         for patrimonio in patrimonios:  # se actualiza el estado de todos los patrimonios de la solicitud

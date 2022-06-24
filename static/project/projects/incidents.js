@@ -1,85 +1,56 @@
+$('#search').keyup(function () {
+  $('#tabla_autores').DataTable().search($(this).val()).draw();
+})
+$('#status_filter').change(function () {
+  $('#tabla_autores').DataTable().draw();
+});
+$('#type_filter').change(function () {
+  $('#tabla_autores').DataTable().draw();
+});
+$('#zona').change(function () {
+  $('#tabla_autores').DataTable().draw();
+});
 
-let table = $('#tabla_autores').DataTable({
-  "searching": false,
-  "serverSide": true,
-  "processing": true,
-  "lengthChange": false,
-  "pageLength": 10,
-  "scrollX": true,
-  "ajax": function (data, callback, settings) {
-    let order_column = data.order[0].column
-    let order = data.order[0].dir
+$('#tabla_autores tbody').on('click', 'button', function () {
+  let data = table.row($(this).parents('tr')).data();
+  let class_name = $(this).attr('class');
+  id = data['id'];
 
+  if (class_name == 'btn btn-edit') {
+    $("#confirm").modal();
+  } else if (class_name == 'btn btn-show') {
+    $('#cover-spin').show(0)
     $.ajax({
-      url: '',
+      url: '/incidentes/'+ id +'/detalle/',
       type: 'get',
-      data: {
-          length: data.length,
-          start: data.start,
-          // search_value: $('#search').val(),
-          // type_filter: $('#type_filter').val(),
-          // status_filter: $('#status_filter').val(),
-          // order_column: order_column,
-          // order: order
-      },
+      data: {},
       success: function (data, textStatus, jQxhr) {
-        callback({
-            recordsTotal: data.recordsTotal,
-            recordsFiltered: data.recordsFiltered,
-            data: data.data
-        });
+        $('#cover-spin').hide()
+        let incidente = data['data'][0]
+        console.log(incidente)
+        let title = "Incidente " +incidente['codigo']
+        $("#modalIncidente").modal();
+        $('#modal_title').text(title);
+        $('#informante').val(incidente['nombre']);
+        $('select[name=tipo] option:first').html(types[incidente['tipoAfectacion']]);
+        let fecha = incidente['fechaRegistro']
+        var parts = fecha.split("/");
+        var dt = new Date(parseInt(parts[2], 10),
+        parseInt(parts[1], 10) - 1,
+        parseInt(parts[0], 10));
+        var currentDate = dt.toISOString().slice(0, 10);
+        $('#fecha').val(currentDate);
+        $('#correo').val(incidente['correo']);
+        $('#telefono').val(incidente['telefono']);
+        $('#descripcion').val(incidente['descripcion']);
+        $('select[name=status] option:first').html(status_filter[incidente['status']]);
       },
       error: function (jqXhr, textStatus, errorThrown) {
+        $('#cover-spin').hide()
       }
     });
-  },
-  "columns": [
-    {"data": "codigo"},
-    {"data": "descripcion"},
-    {"data": "tipoAfectacion"},
-    {"data": "informante"},
-    {"data": "fecha"},
-    {
-      "data": "status", render: function (data, type, row) {
-        if (data == '0') {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
-        } else if (data == '1') {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrado" + '</span>'
-        } else {
-          resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
-        }
-        return resp;
-      }
-    },
-    {
-      "data": null,
-      "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-          '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-          '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
-    }
-  ],
-  "language": {
-    "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
-    "sLengthMenu": "Mostrar _MENU_ registros",
-    "sZeroRecords": "No se encontraron resultados",
-    "sEmptyTable": "Ningún dato disponible en esta tabla",
-    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-    "sInfoPostFix": "",
-    "sSearch": "Buscar:",
-    "sUrl": "",
-    "sInfoThousands": ",",
-    "sLoadingRecords": "Cargando...",
-    "oPaginate": {
-      "sFirst": "Primero",
-      "sLast": "Último",
-      "sNext": "Siguiente",
-      "sPrevious": "Anterior"
-    },
-    "oAria": {
-      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-    }
-  },
+  } else {
+    // DELETE button
+    $("#del").modal();
+  }
 });

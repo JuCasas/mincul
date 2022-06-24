@@ -2,6 +2,7 @@ from rest_framework import serializers
 from conservacion.models import ProyectoConservacion, Tarea
 from conservacion.models import Actividad
 from patrimonios.models import Patrimonio
+from authentication.models import User
 
 
 class ProyectoConservacionSerializer(serializers.ModelSerializer):
@@ -38,3 +39,9 @@ class PatrimonioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patrimonio
         fields = ['id','nombreTituloDemoninacion']
+
+class ConservadorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id','username']

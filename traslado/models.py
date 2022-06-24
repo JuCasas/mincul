@@ -48,8 +48,9 @@ class SolicitudTraslado(models.Model):
         ('6', 'Finalizada'),
     )
     TIPOS = (
-        ('0', 'Tipo1'),
-        ('1', 'Tipo2'),
+        ('1', 'Exposición en el extranjero'),
+        ('2', 'Exponsición nacional'),
+        ('3', 'Misión Diplomática'),
     )
     nombreExposicion = models.CharField(max_length=200, null=True, blank=True)
     destino = models.CharField(max_length=200, null=True, blank=True)
