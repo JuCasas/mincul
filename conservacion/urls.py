@@ -21,6 +21,7 @@ urlpatterns = [
     path('actividades/<pk>/tareas/add/',views.addTask, name='addTask'),
     path('tareas/edit/<pk>/', views.editTask, name='editTask'),
     path('tareas/editView/<pk>/', views.editTaskView, name='editTaskView'),
+    path('tareas/detailView/<pk>/', views.detailTaskView, name='detailTaskView'),
     path('actividades/conservadores/', views.addConservador, name='addConservador'),
     path('actividades/relaciones/<pk>', views.addRelacion, name='addRelacion'),
 ]

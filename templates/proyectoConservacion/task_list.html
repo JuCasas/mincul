@@ -2,198 +2,331 @@
 {% load static %}
 
 {% block extrastyle %}
-  <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
-  <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
-  <style>
-      #cover-spin {
-          position: fixed;
-          width: 100%;
-          left: 0;
-          right: 0;
-          top: 0;
-          bottom: 0;
-          background-color: rgba(255, 255, 255, 0.7);
-          z-index: 9999;
-          display: none;
-      }
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+    <style>
+        #cover-spin {
+            position: fixed;
+            width: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            display: none;
+        }
 
-      @-webkit-keyframes spin {
-          from {
-              -webkit-transform: rotate(0deg);
-          }
-          to {
-              -webkit-transform: rotate(360deg);
-          }
-      }
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
 
-      @keyframes spin {
-          from {
-              transform: rotate(0deg);
-          }
-          to {
-              transform: rotate(360deg);
-          }
-      }
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-      #cover-spin::after {
-          content: '';
-          display: block;
-          position: absolute;
-          left: 48%;
-          top: 40%;
-          width: 40px;
-          height: 40px;
-          border-style: solid;
-          border-color: black;
-          border-top-color: transparent;
-          border-width: 4px;
-          border-radius: 50%;
-          -webkit-animation: spin .8s linear infinite;
-          animation: spin .8s linear infinite;
-      }
+        #cover-spin::after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 48%;
+            top: 40%;
+            width: 40px;
+            height: 40px;
+            border-style: solid;
+            border-color: black;
+            border-top-color: transparent;
+            border-width: 4px;
+            border-radius: 50%;
+            -webkit-animation: spin .8s linear infinite;
+            animation: spin .8s linear infinite;
+        }
 
-      .btn-1 {
-          text-align: center;
-          float: left;
-          border: 1px solid #2B2D42 !important;
-          background-color: #2B2D42 !important;
-          color: white !important;
-          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-      }
+        .btn-1 {
+            text-align: center;
+            float: left;
+            border: 1px solid #2B2D42 !important;
+            background-color: #2B2D42 !important;
+            color: white !important;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
 
-      .btn-2 {
-          text-align: center;
-          float: left;
-          border: 1px solid floralwhite;
-          background-color: white;
-          color: black;
-          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-      }
+        .btn-2 {
+            text-align: center;
+            float: left;
+            border: 1px solid floralwhite;
+            background-color: white;
+            color: black;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
 
-      .btn-2:hover {
-          transform: scale(0.98);
-          /* Scaling button to 0.98 to its original size */
-          box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-          /* Lowering the shadow */
-      }
+        .btn-2:hover {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+        }
 
 
-      .table.dataTable tbody th, table.dataTable tbody td {
-          padding: 8px 10px 8px 18px !important;
-      }
+        .table.dataTable tbody th, table.dataTable tbody td {
+            padding: 8px 10px 8px 18px !important;
+        }
 
-      .modal-body {
-          background-color: #F7F8FB !important;
-      }
+        .modal-body {
+            background-color: #F7F8FB !important;
+        }
 
-      .form-control {
-          background-color: white !important;
-          cursor: pointer!important;
-      }
+        .form-control {
+            background-color: white !important;
+            cursor: pointer !important;
+        }
 
-      .second {
-        background-color: white!important;
-        color: #2B2D42!important;
-        border-color: #8d8e99 !important;
-        border-radius: 12px!important;
-        height: 36px!important;
-        font-size: 12px!important;
-      }
+        .second {
+            background-color: white !important;
+            color: #2B2D42 !important;
+            border-color: #8d8e99 !important;
+            border-radius: 12px !important;
+            height: 36px !important;
+            font-size: 12px !important;
+        }
 
-      input:disabled{
-          background-color: #D2D2D2!important;
-      }
+        input:disabled {
+            background-color: #D2D2D2 !important;
+        }
 
-  </style>
+    </style>
 
 {% endblock %}
 
 {% block body %}
-  <input type="hidden" value="{{ activity.id }}" id="idProject">
-  <div class="card mb-3">
-    <div class="card-body">
-        <div class="row justify-content-between align-items-center">
-        <a class="nav-link py-0" href="{% url 'listActivities' pk=project.id %}"><span class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Actividades</a>
-      </div>
+    <input type="hidden" value="{{ activity.id }}" id="idProject">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row justify-content-between align-items-center">
+                <a class="nav-link py-0" href="{% url 'listActivities' pk=project.id %}"><span
+                        class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Actividades</a>
+            </div>
 
-      <div class="row justify-content-between align-items-center">
-        <div class="col-md-6">
-          <h5 class="mb-2 mb-md-0 text-black">Tareas de Actividad: {{ activity.nombre }}</h5>
+            <div class="row justify-content-between align-items-center">
+                <div class="col-md-6">
+                    <h5 class="mb-2 mb-md-0 text-black">Tareas de Actividad: {{ activity.nombre }}</h5>
+                </div>
+                <div class="col-md-2">
+                    {% if activity.status == '0' %}
+                        <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
+                    {% elif activity.status == '1' %}
+                        <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
+                    {% else %}
+                        <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class="col-md-2">
-          {% if activity.status == '0' %}
-            <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
-          {% elif activity.status == '1' %}
-            <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
-          {% else %}
-            <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
-          {% endif %}
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="row filterBar justify-content-end mr-0">
-        <div class="form-group col-sm-3 mb-0">
-          <div class="position-relative">
-            <input class="form-control" id="search" type="text" placeholder="Nombre">
-            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
-          </div>
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row filterBar justify-content-end mr-0">
+                <div class="form-group col-sm-3 mb-0">
+                    <div class="position-relative">
+                        <input class="form-control" id="search" type="text" placeholder="Nombre">
+                        <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                    </div>
+                </div>
+                <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" type="button"
+                   href="{% url 'addTaskView' pk=activity.id %}">
+                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
+                </a>
+            </div>
         </div>
-        <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" type="button" href="{% url 'addTaskView' pk=activity.id %}">
-          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
-        </a>
-      </div>
     </div>
-  </div>
 
-  <div class="card mb-3">
-    <div class="card-body">
-      <table id="tabla_autores" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
-        <thead class="bg-200">
-        <tr>
-          <th class="sort ">Código</th>
-          <th class="sort">Nombre</th>
-            <th class="sort">Descripción</th>
-            <th class="sort">Presupuesto</th>
-            <th class="sort">Gasto Total</th>
-          <th class="sort">Fecha de Inicio</th>
-          <th class="sort">Fecha de Fin</th>
-          <th class="sort">Acciones</th>
-        </tr>
-        </thead>
-        <tbody class="bg-white">
+    <div class="card mb-3">
+        <div class="card-body">
+            <table id="tabla_tareas" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
+                <thead class="bg-200">
+                <tr>
+                    <th class="sort ">Código</th>
+                    <th class="sort">Nombre</th>
+                    <th class="sort">Descripción</th>
+                    <th class="sort">Presupuesto</th>
+                    <th class="sort">Gasto Total</th>
+                    <th class="sort">Fecha de Inicio</th>
+                    <th class="sort">Fecha de Fin</th>
+                    <th class="sort">Acciones</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white">
 
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Delete Modal -->
-  <div class="modal fade" id="confirm" role="dialog">
-    <div class="modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header justify-content-center">
-          <h4 class="modal-title">¿Estás seguro de eliminar la tarea?</h4>
+                </tbody>
+            </table>
         </div>
-        <div class="modal-body px-9">
-          <div class="row justify-content-between">
-            <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
-            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div id="cover-spin"></div>
+    <!-- Delete Modal -->
+    <div class="modal fade" id="confirm" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title">¿Estás seguro de eliminar la tarea?</h4>
+                </div>
+                <div class="modal-body px-9">
+                    <div class="row justify-content-between">
+                        <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cover-spin"></div>
 
 {% endblock %}
 
 {% block extrajs %}
-  <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
-  <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'project/projects/tasks.js' %}"></script>
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+    <script>
+
+        let table = $('#tabla_tareas').DataTable({
+            "searching": false,
+            "serverSide": true,
+            "processing": true,
+            "lengthChange": false,
+            "pageLength": 10,
+            "scrollX": true,
+            "ajax": function (data, callback, settings) {
+                let order_column = data.order[0].column
+                let order = data.order[0].dir
+
+                $.ajax({
+                    url: '',
+                    type: 'get',
+                    data: {
+                        length: data.length,
+                        start: data.start,
+                        search_value: $('#search').val(),
+                        type_filter: $('#type_filter').val(),
+                        status_filter: $('#status_filter').val(),
+                        order_column: order_column,
+                        order: order
+                    },
+                    success: function (data, textStatus, jQxhr) {
+                        callback({
+                            recordsTotal: data.recordsTotal,
+                            recordsFiltered: data.recordsFiltered,
+                            data: data.data
+                        });
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                    }
+                });
+            },
+            "columns": [
+                {"data": "codigo"},
+                {"data": "nombre"},
+                {"data": "descripcion"},
+                {"data": "presupuesto"},
+                {"data": "gasto"},
+                {"data": "fechaRegistro"},
+                {"data": "fecha"},
+                {
+                    "data": null,
+                    "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                        '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+                        '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+                }
+            ],
+            "language": {
+                "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+        });
+
+        $('#search').keyup(function () {
+            $('#tabla_tareas').DataTable().search($(this).val()).draw();
+        })
+
+        $('#tabla_tareas tbody').on('click', 'button', function () {
+            let data = table.row($(this).parents('tr')).data();
+            let class_name = $(this).attr('class');
+
+            console.log(data)
+            console.log(class_name)
+            id = data['id'];
+
+            if (class_name == 'btn btn-edit') {
+                window.location.pathname = "/conservacion/tareas/editView/" + id + "/";
+            } else if (class_name == 'btn btn-show') {
+                window.location.pathname = "/conservacion/tareas/detailView/" + id + "/";
+            } else {
+                // DELETE button
+                $("#confirm").modal();
+            }
+        });
+
+
+        $('#confirm').on('click', '#delete', function (e) {
+            $('#cover-spin').show(0)
+            $.ajax({
+                url: '/conservacion/proyectos/delete/' + id + '/',
+                method: 'POST',
+                success: function (response) {
+                    $('#cover-spin').hide()
+                    $('#confirm').modal('hide')
+                    $("#tabla_autores").DataTable().draw();
+                },
+                error: function (error) {
+                    $('#cover-spin').hide()
+                    console.log(error)
+                }
+            });
+        });
+
+        $('#new').on('click', function (e) {
+            $('#codigo').val('');
+            $('#nombre').val('');
+            $('#type').val('new');
+            let today = new Date()
+            today.setDate(today.getDate() - 1);
+            var currentDate = today.toISOString().slice(0, 10);
+            $('#fechaRegistro').val(currentDate);
+            $('#fechaRegistro').prop("disabled", true);
+            $('#modal_title').text('Nueva Tarea');
+            $("#modalTarea").modal();
+        });
+
+
+    </script>
 {% endblock %}

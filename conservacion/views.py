@@ -506,3 +506,12 @@ def editTaskView(request, pk):
         'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
     }
     return render(request, 'proyectoConservacion/editTask_view.html', context)
+
+
+@api_view(('GET',))
+def detailTaskView(request, pk):
+    context = {
+        'task': Tarea.objects.get(pk=pk),
+        'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
+    }
+    return render(request, 'proyectoConservacion/detailTask_view.html', context)
