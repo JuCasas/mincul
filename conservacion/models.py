@@ -64,7 +64,7 @@ class Actividad(models.Model):
     gastoTotal = models.FloatField()
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
     proyecto = models.ForeignKey(ProyectoConservacion, on_delete=models.CASCADE)
-    actividadPrecia = models.ManyToManyField("self", blank=True)
+    relaciones = models.ManyToManyField("self", blank=True)
     documentos = models.ManyToManyField(Documento)
     conservadores = models.ManyToManyField(settings.AUTH_USER_MODEL)
     estado = models.CharField(max_length=2,choices=ESTADOS,default='1',null=True,blank=True)

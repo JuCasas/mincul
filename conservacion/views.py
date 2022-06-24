@@ -1,7 +1,9 @@
 import datetime
 
+from django.http import JsonResponse
+
 from authentication.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -176,6 +178,17 @@ def addConservador(request):
   queryset = User.objects.all()
   count = queryset.count()
   serializer = ConservadorSerializer(queryset, many=True)
+  result = dict()
+  result['items']= serializer.data
+  result['total_count'] = count
+  return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('GET',))
+def addRelacion(request, pk):
+  proyecto = ProyectoConservacion.objects.get(pk=pk)
+  queryset = Actividad.objects.filter(proyecto=proyecto).filter(estado='1')
+  count = queryset.count()
+  serializer = ActividadSerializer(queryset, many=True)
   result = dict()
   result['items']= serializer.data
   result['total_count'] = count
@@ -364,6 +377,17 @@ def addActivity(request, pk):
       gastoTotal=0.00,
       proyecto=proyecto,
       patrimonio=patrimonio)
+
+    if request.POST['conservadoresLista']:
+      conservadores = list(request.POST['conservadoresLista'].split(","))
+      for idConservador in conservadores:
+        actividad.conservadores.add(User.objects.get(pk=idConservador))
+
+    if request.POST['relacionesLista']:
+      relaciones = list(request.POST['relacionesLista'].split(","))
+      for idRelacion in relaciones:
+        actividad.relaciones.add(Actividad.objects.get(pk=idRelacion))
+
     actividad.codigo = "ACT" + str(actividad.id).zfill(5)
     actividad.save()
     proyecto.cantidadAct = Actividad.objects.filter(proyecto=proyecto).filter(estado='1').count()
@@ -385,7 +409,20 @@ def editActivity(request, pk, pkActividad):
     actividad.descripcion = request.POST['descripcion']
     actividad.fechaInicio = datetime.datetime.strptime(request.POST['fechaInicio'], "%Y-%m-%d").date()
     actividad.fechaFin = datetime.datetime.strptime(request.POST['fechaFin'], "%Y-%m-%d").date()
-    #actividad.patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
+    actividad.patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
+
+    actividad.conservadores.clear()
+    if request.POST['conservadoresLista']:
+      conservadores = list(request.POST['conservadoresLista'].split(","))
+      for idConservador in conservadores:
+        actividad.conservadores.add(User.objects.get(pk=idConservador))
+
+    actividad.relaciones.clear()
+    if request.POST['relacionesLista']:
+      relaciones = list(request.POST['relacionesLista'].split(","))
+      for idRelacion in relaciones:
+        actividad.relaciones.add(Actividad.objects.get(pk=idRelacion))
+
     actividad.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
   except Exception as e:

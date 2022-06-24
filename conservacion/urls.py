@@ -22,4 +22,5 @@ urlpatterns = [
     path('tareas/edit/<pk>/', views.editTask, name='editTask'),
     path('tareas/editView/<pk>/', views.editTaskView, name='editTaskView'),
     path('actividades/conservadores/', views.addConservador, name='addConservador'),
+    path('actividades/relaciones/<pk>', views.addRelacion, name='addRelacion'),
 ]
