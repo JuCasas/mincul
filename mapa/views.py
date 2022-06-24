@@ -89,7 +89,8 @@ def mapaPatrimonioSimple(request):
         patrimonioNombre.lstrip()
         if len(patrimonioNombre)>0 :
             success = 0
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
+            #patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1",tipoPatrimonio="2")
             if len(patrimonios) > 0:
                 instituciones = []
                 patri = []
@@ -142,7 +143,8 @@ def mapaPatrimonioAvanzado(request):
         #The following conditional must be checked before dev and prod
         if len(patrimonioNombre)>0 :
             success=0
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
+            #patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1",tipoPatrimonio="2")
             if len(patrimonios) > 0:
                 if(patrimonioCategoria=="Categoría"):
                     pass
@@ -150,7 +152,7 @@ def mapaPatrimonioAvanzado(request):
                     cats = Categoria.objects.get(nombre__iexact=patrimonioCategoria)
                     catId = cats.pk
                     patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,
-                                                            categoria_id=catId)
+                                                            categoria_id=catId,tipoPatrimonio="2")
                 if len(patrimonios)>0:
                     patriId = int(patrimoniodepartamento)
                     if(patriId == -1):
