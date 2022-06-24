@@ -79,6 +79,7 @@ class Tarea(models.Model):
     codigo = models.CharField(max_length=8, null=True)
     nombre = models.CharField(max_length=50, null=True)
     descripcion = models.CharField(max_length=200)
+    responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     gasto = models.FloatField(blank=True, null=True)
     presupuesto = models.FloatField(blank=True, null=True)
     fecha = models.DateField(blank=True, null=True, verbose_name='fecha')
