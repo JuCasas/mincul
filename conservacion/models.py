@@ -73,8 +73,9 @@ class Actividad(models.Model):
 
 class Tarea(models.Model):
     ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
+        ('1', 'Registrada'),
+        ('2', 'En proceso'),
+        ('3', 'Finalizada'),
     )
     codigo = models.CharField(max_length=8, null=True)
     nombre = models.CharField(max_length=50, null=True)
