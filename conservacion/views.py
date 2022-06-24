@@ -8,7 +8,9 @@ from rest_framework.response import Response
 from conservacion.models import ProyectoConservacion, Actividad, Tarea
 from conservacion.serializers import ProyectoConservacionSerializer, ActividadSerializer, TareaSerializer, \
   PatrimonioSerializer, ConservadorSerializer
-from patrimonios.models import Patrimonio
+from patrimonios.models import Patrimonio, Institucion, PuntoGeografico
+from incidente.models import Incidente
+from incidente.serializers import IncidenteSerializer, PuntoGeograficoSerializer
 
 
 def query_projects_by_args(**kwargs):
@@ -106,6 +108,42 @@ def query_tasks_by_args(pk, **kwargs):
   #     queryset = queryset.filter(tipoProyecto=type_filter)
   # if status_filter:
   #     queryset = queryset.filter(status=status_filter)
+
+  count = queryset.count()
+  queryset = queryset[start:start + length]
+  return {
+    'items': queryset,
+    'count': count,
+    'total': total,
+  }
+
+def query_incidents_by_args(**kwargs):
+  length = int(kwargs.get('length', None)[0])
+  start = int(kwargs.get('start', None)[0])
+  search_value = kwargs.get('search_value', None)[0]
+  type_filter = kwargs.get('type_filter', None)[0]
+  status_filter = kwargs.get('status_filter', None)[0]
+  zone_filter = kwargs.get('zone_filter', None)[0]
+  order_column = kwargs.get('order_column', None)[0]
+  order = kwargs.get('order', None)[0]
+  if (len(zone_filter) == 0):
+    queryset = Incidente.objects.filter(estado='1')
+  else:
+    zona = PuntoGeografico.objects.get(pk=int(zone_filter))
+    queryset = Incidente.objects.filter(zona=zona)
+
+  total = queryset.count()
+
+  # order_column = ProyectoConservacion.ORDER_COLUMN_CHOICES[order_column]
+  # if order == 'desc':
+  #   order_column = '-' + order_column
+
+  if search_value:
+    queryset = queryset.filter(codigo__icontains=search_value)
+  if type_filter:
+    queryset = queryset.filter(tipoAfectacion=type_filter)
+  if status_filter:
+    queryset = queryset.filter(status=status_filter)
 
   count = queryset.count()
   queryset = queryset[start:start + length]
@@ -237,17 +275,21 @@ def listActivities(request, pk):
 @api_view(('GET',))
 def listIncidents(request, pk):
   if request.is_ajax():
-    activity = query_activities_by_args(pk, **request.GET)
-    serializer = ActividadSerializer((activity['items']), many=True)
+    incident = query_incidents_by_args(**request.GET)
+    for inc in incident['items']:
+      print(inc.zona.nombre)
+    serializer = IncidenteSerializer((incident['items']), many=True)
     result = dict()
     result['data'] = serializer.data
-    result['recordsTotal'] = activity['total']
-    result['recordsFiltered'] = activity['count']
+    result['recordsTotal'] = incident['total']
+    result['recordsFiltered'] = incident['count']
+    print(type(result))
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
   else:
     context = {
       'project': ProyectoConservacion.objects.get(pk=pk),
-      'patrimonios': Patrimonio.objects.all()
+      'status_choices': Incidente.STATUS,
+      'typeIncidents': Incidente.AFECTACION
     }
     return render(request, 'proyectoConservacion/incident_list.html', context)
 
