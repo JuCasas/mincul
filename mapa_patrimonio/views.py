@@ -16,7 +16,7 @@ def datos(request):
     print(request.POST)
     print(request.POST["latitudIni"])
     context = list(Patrimonio.objects.values())
-    return JsonResponse({'data':context,'instituciones':None}, status=200, safe=False)
+    return JsonResponse({'data':context}, status=200, safe=False)
 
 def index(request):
     ########################################################################################################################

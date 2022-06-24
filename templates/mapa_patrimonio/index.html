@@ -27,9 +27,9 @@
             <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
         </div>
         <br>
-        <div>100m <input type="range" min="100" max="2000" value="600" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
+        <!--<div>100m <input type="range" min="100" max="2000" value="600" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
         <input type="number" min="100" max="2000" value="600" class="" id="inputDispersion" disabled/></div>
-        <br>
+        <br>-->
         <button id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
     </div>
     <br>
@@ -165,7 +165,8 @@
                 waypoints: [    
                     L.latLng(lat1, long1),
                     L.latLng(lat2, long2),
-                    L.latLng(-12.0983342, -76.9799472),
+                    //L.latLng(-12.0983342, -76.9799472),
+                    //.latLng(-12.1093342, -7.0000072),
                 ],
                 language:'es',
             }).addTo(map);
