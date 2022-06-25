@@ -244,25 +244,25 @@
                 <div class="card mt-3">
                     <div class="card-body">
                         <h5 class="card-title text-black">Valora a {{ institucion.nombre }}:</h5>
-                        <form class="form-validation" method="post" action="{% url 'valor_museo' pk=institucion.pk %}">
+                        <form id="valoracion_form" method="post" action="{% url 'valor_museo' pk=institucion.pk %}">
                             {% csrf_token %}
                             <div class="form-group">
                                 <label for="form-name">Nombre:</label>
                                 <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
                                       title="Campo requerido">*</abbr>
-                                <input class="form-control" type="text" name="name" placeholder="Nombre y Apellido..." required id="form-name">
+                                <input class="form-control" type="text" name="name" placeholder="Nombre y Apellido..." id="name">
                             </div>
                             <div class="form-group">
                                 <label for="form-email">¿Cual es tu correo electrónico?:</label>
                                 <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
                                       title="Campo requerido">*</abbr>
-                                <input class="form-control" type="email" name="email" placeholder="Correo electrónico..." required id="form-email">
+                                <input class="form-control" type="email" name="email" placeholder="Correo electrónico..." id="email">
                             </div>
                             <div class="form-group">
                                 <label for="contact-form-message">Cuentanos tu experiencia:</label>
                                 <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
                                       title="Campo requerido">*</abbr>
-                                <textarea class="form-control" rows="3" required id="contact-form-message" name="comment"></textarea>
+                                <textarea class="form-control" rows="3" id="contact-form-message" name="comment" id="comment"></textarea>
                             </div>
                             <div class="form-group">
                                 <div class="row pl-3 pt-lg-3">
@@ -271,8 +271,9 @@
                                     </div>
                                     <div class="raty"></div>
                                 </div>
+                                <p id="errorv" class="text-danger font-weight-medium" style="font-size: 0.83333rem;letter-spacing: 0.02em;filter: none;"></p>
                             </div>
-                            <button class="btn btn-primary btn-block" type="submit">Guardar</button>
+                            <button class="btn btn-primary btn-block" type="submit" onclick="validar()">Guardar</button>
                         </form>
                     </div>
                 </div>
@@ -350,8 +351,65 @@
     <script src="{% static 'lib/datatables/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'lib/datatables-bs4/dataTables.bootstrap4.min.js' %}"></script>
     <script src="{% static 'lib/owl.carousel/owl.carousel.js' %}"></script>
+    <script src="{% static 'lib/jquery-validation/jquery.validate.min.js' %}"></script>
     <script>
+
+        function validar(){
+            let val =  $("input[name*='score']");
+            let err = $("#errorv");
+            if (val.val()==''){
+                val.val(0)
+                err.text("Se debe ingresar una validación")
+            }
+            else{
+                err.text(" ")
+            }
+            console.log(val.val())
+            console.log(err.text())
+        }
+
         $(document).ready(function () {
+            $("form[id='valoracion_form']").validate({
+            rules: {
+                name: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                },
+                comment: {
+                    required: true,
+                },
+                score: {
+                    required: true,
+                },
+            },
+            messages: {
+                name: {
+                    required: "Debe ingresar su nombre",
+                },
+                email: {
+                    required: "Debe ingresar su correo electrónico",
+                    email: "Debe ingresar un formato de correo válido"
+                },
+                comment: {
+                    required: "Debe ingresar un comentario válido",
+                },
+                score: {
+                    required: "Debe ingresar una puntuación",
+                },
+            },
+            submitHandler: function (form, e) {
+                e.preventDefault();
+                if ($("#formAddEntidades").valid()) {
+                    form.submit();
+                }
+                return false;
+            }
+        });
+
+
             $('#incidentesLista').DataTable({
                 dom: "<'d-flex justify-content-end pb-4'B>\n" +
                     "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
