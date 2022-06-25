@@ -20,8 +20,10 @@ class Incidente(models.Model):
         ('7','Otros'),
     )
     STATUS = (
-        ('1', 'No Asignado'),
-        ('2', 'Asignado'),
+        ('1', 'Registrado'),
+        ('2', 'En Proceso'),
+        ('3', 'Resuelto'),
+        ('4', 'Denegado'),
     )
     codigo = models.CharField(max_length=10, null=True)
     tipoAfectacion = models.CharField(max_length=2, choices=AFECTACION, default='1', null=True, blank=True)

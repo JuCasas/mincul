@@ -145,11 +145,11 @@
           background-color: #D2D2D2 !important;
       }
 
-      select:disabled{
+      select:disabled {
           background-color: #D2D2D2 !important;
       }
 
-      textarea:disabled{
+      textarea:disabled {
           background-color: #D2D2D2 !important;
       }
 
@@ -210,7 +210,7 @@
 
   <div class="card mb-3">
     <div class="card-body">
-          <table id="tabla_autores" class="table table-sm table-dashboard data-table mb-0 fs--1 w-100">
+      <table id="tabla_incidentes" class="table table-sm table-dashboard data-table mb-0 fs--1 w-100">
         <thead class="bg-200">
         <tr>
           <th class="sort ">Código</th>
@@ -311,8 +311,8 @@
   </div>
 
 
-    <!-- Confirm Modal -->
-    <div class="modal fade" id="confirm" role="dialog">
+  <!-- Confirm Modal -->
+  <div class="modal fade" id="modalAsociar" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
@@ -320,10 +320,10 @@
           <h4 class="modal-title">Asignar Incidente a Proyecto de Conservación</h4>
         </div>
         <div class="modal-body px-4">
-            <div class="row mb-3">
-                <label for="nombre">Proyecto de conservación:</label>
+          <div class="row mb-3">
+            <label for="nombre">Proyecto de conservación:</label>
             <input class="form-control" id="proyectoAsignacion" name="proyectoAsignacion" type="text" required
-                       placeholder="proyectoAsignacion" disabled value="">
+                   placeholder="proyectoAsignacion" disabled value="">
           </div>
           <div class="row justify-content-center">
             <button type="button" data-dismiss="modal" class="btn second mr-2">Cancelar</button>
@@ -345,10 +345,10 @@
           <h4 class="modal-title">¿Retirar asignación?</h4>
         </div>
         <div class="modal-body px-4">
-            <div class="row mb-3">
-                <label for="nombre">Proyecto de conservación:</label>
+          <div class="row mb-3">
+            <label for="nombre">Proyecto de conservación:</label>
             <input class="form-control" id="proyectoAsignacion" name="proyectoAsignacion" type="text" required
-                       placeholder="proyectoAsignacion" disabled value="">
+                   placeholder="proyectoAsignacion" disabled value="">
           </div>
           <div class="row justify-content-center">
             <button type="button" data-dismiss="modal" class="btn second mr-2">Cancelar</button>
@@ -368,8 +368,9 @@
 {% block extrajs %}
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'project/projects/incidents.js' %}"></script>
   <script>
+
+
     let types = {
       '1': 'Invasión/Ocupación Ilegal/Ampliación de Invasión',
       '2': 'Deterioro de patrimonio por efectos de la persona',
@@ -379,11 +380,69 @@
       '6': 'Huaquería',
       '7': 'Otros',
     };
+
     let status_filter = {
-      '1': 'No Asignado',
-      '2': 'Asignado',
+      '1': {
+        'name': 'Registrado',
+        'class': 'badge-soft-warning',
+      },
+      '2': {
+        'name': 'En Proceso',
+        'class': 'badge-soft-primary',
+      },
+      '3': {
+        'name': 'Resuelto',
+        'class': 'badge-soft-success',
+      },
+      '4': {
+        'name': 'Denegado',
+        'class': 'badge-soft-primary',
+      }
     };
-    let table = $('#tabla_autores').DataTable({
+
+    //Instanciacion de select2 para zonas
+    let zone = $('#zona')
+    zone.select2({
+      ajax: {
+        url: '/incidentes/zonas/',
+        datatype: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            search: params.term || '',
+            page: params.page || 1
+          };
+        },
+        processResults: function (data, params) {
+          params.page = params.page || 1;
+          console.log(data.items)
+          return {
+            results: $.map(data.items, function (obj, index) {
+              return {id: obj.id, text: obj.nombre};
+            }),
+            pagination: {
+              more: (params.page * 10) < data.total_count
+            }
+          }
+        }
+      },
+      placeholder: "Zona",
+      allowClear: true,
+      cache: false
+    });
+
+    //Configuración select2 para zonas
+    zone.on("select2:clear", function (evt) {
+      $(this).on("select2:opening.cancelOpen", function (evt) {
+        evt.preventDefault();
+
+        $(this).off("select2:opening.cancelOpen");
+      });
+    });
+
+
+    //Instanciacion de DataTable para incidentes
+    let table = $('#tabla_incidentes').DataTable({
       "searching": false,
       "serverSide": true,
       "processing": true,
@@ -395,7 +454,7 @@
         let order = data.order[0].dir
 
         $.ajax({
-          url: '',
+          url: '/incidentes',
           type: 'get',
           data: {
             length: data.length,
@@ -408,7 +467,6 @@
             order: order
           },
           success: function (data, textStatus, jQxhr) {
-            console.log(data)
             callback({
               recordsTotal: data.recordsTotal,
               recordsFiltered: data.recordsFiltered,
@@ -431,23 +489,15 @@
         {"data": "fechaRegistro"},
         {
           "data": "status", render: function (data, type, row) {
-            if (data == '1') {
-              resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "No Asignado" + '</span>'
-            } else if (data == '2') {
-              resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Asignado" + '</span>'
-            }
-            return resp;
+            return `<span class="badge badge rounded-capsule d-block ${status_filter[data]['class']}">${status_filter[data]['name']}</span>`
           }
         },
         {
           "data": "status", render: function (data, type, row) {
 
-            let resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>'
-            if (data == '1') {
-              resp = resp + '&nbsp;&nbsp' +
-                  '<button type="button" class="btn btn-edit"><i class="fas fa-check"></i></button>' + '&nbsp;&nbsp' +
-                  '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
-            }
+            let resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                '<button type="button" class="btn btn-check"><i class="fas fa-check"></i></button>' + '&nbsp;&nbsp' +
+                '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
             return resp;
           }
         }
@@ -478,45 +528,70 @@
       },
     });
 
-    $(document).ready(function () {
-      $('#zona').select2({
-        ajax: {
-          url: '/incidentes/zonas/',
-          datatype: 'json',
-          delay: 250,
-          data: function (params) {
-            return {
-              search: params.term || '',
-              page: params.page || 1
-            };
-          },
-          processResults: function (data, params) {
-            params.page = params.page || 1;
-            console.log(data.items)
-            return {
-              results: $.map(data.items, function (obj, index) {
-                return {id: obj.id, text: obj.nombre};
-              }),
-              pagination: {
-                more: (params.page * 10) < data.total_count
-              }
-            }
-          }
-        },
-        placeholder: "Zona",
-        allowClear: true,
-        cache: false
-      });
 
-      $('#zona').on("select2:clear", function (evt) {
-        $(this).on("select2:opening.cancelOpen", function (evt) {
-          evt.preventDefault();
-
-          $(this).off("select2:opening.cancelOpen");
-        });
-      });
-
-
+    //Vinculación de filtros a DataTable
+    $('#search').keyup(function () {
+      table.search($(this).val()).draw();
+    })
+    $('#status_filter').change(function () {
+      table.draw();
     });
+    $('#type_filter').change(function () {
+      table.draw();
+    });
+    zone.change(function () {
+      table.draw();
+    });
+
+    //Programación de opciones en DataTable
+
+    $('#tabla_incidentes tbody').on('click', 'button', function () {
+
+      let data = table.row($(this).parents('tr')).data();
+      let class_name = $(this).attr('class');
+      id = data['id'];
+
+      if (class_name === 'btn btn-check') {
+
+        $("#modalAsociar").modal();
+
+      } else if (class_name === 'btn btn-show') {
+        $('#cover-spin').show(0)
+        $.ajax({
+          url: '/incidentes/' + id + '/detalle/',
+          type: 'get',
+          data: {},
+          success: function (data, textStatus, jQxhr) {
+            $('#cover-spin').hide()
+            let incidente = data['data'][0]
+            console.log(incidente)
+            let title = "Incidente " + incidente['codigo']
+            $("#modalIncidente").modal();
+            $('#modal_title').text(title);
+            $('#informante').val(incidente['nombre']);
+            $('select[name=tipo] option:first').html(types[incidente['tipoAfectacion']]);
+            let fecha = incidente['fechaRegistro']
+            var parts = fecha.split("/");
+            var dt = new Date(parseInt(parts[2], 10),
+                parseInt(parts[1], 10) - 1,
+                parseInt(parts[0], 10));
+            var currentDate = dt.toISOString().slice(0, 10);
+            $('#fecha').val(currentDate);
+            $('#correo').val(incidente['correo']);
+            $('#telefono').val(incidente['telefono']);
+            $('#descripcion').val(incidente['descripcion']);
+            $('select[name=status] option:first').html(status_filter[incidente['status']]);
+          },
+          error: function (jqXhr, textStatus, errorThrown) {
+            $('#cover-spin').hide()
+          }
+        });
+      } else {
+        // DELETE button
+        $("#del").modal();
+      }
+    });
+
+
   </script>
 {% endblock %}
