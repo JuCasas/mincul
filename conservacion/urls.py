@@ -20,6 +20,7 @@ urlpatterns = [
     path('actividades/<pk>/tareas/add/view/',views.addTaskView, name='addTaskView'),
     path('actividades/<pk>/tareas/add/',views.addTask, name='addTask'),
     path('tareas/edit/<pk>/', views.editTask, name='editTask'),
+    path('tareas/updateState/', views.updateTaskState, name='updateTaskState'),
     path('tareas/editView/<pk>/', views.editTaskView, name='editTaskView'),
     path('tareas/detailView/<pk>/', views.detailTaskView, name='detailTaskView'),
     path('actividades/conservadores/', views.addConservador, name='addConservador'),

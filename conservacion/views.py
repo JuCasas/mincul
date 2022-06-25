@@ -461,7 +461,6 @@ def addTaskView(request, pk):
 
 @api_view(('POST',))
 def addTask(request, pk):
-
     print('Request:', request.POST)
 
     nombre = request.POST['nombre']
@@ -515,3 +514,18 @@ def detailTaskView(request, pk):
         'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
     }
     return render(request, 'proyectoConservacion/detailTask_view.html', context)
+
+
+def updateTaskState(request):
+    task_pk = request.POST.get('task_pk')
+    task = Tarea.objects.get(pk=task_pk)
+    nuevo_estado = ''
+
+    if (task.estado == '1'):
+        nuevo_estado = '2'
+    elif (task.estado == '2'):
+        nuevo_estado = '3'
+
+    task.estado = nuevo_estado
+    task.save()
+    return JsonResponse({}, status=200)

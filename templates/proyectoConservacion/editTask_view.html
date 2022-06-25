@@ -194,6 +194,12 @@
                                 {{ task.get_estado_display }}
                             </span>
                             </div>
+                            <div class="col-3 ">
+                                <button id="actualizar" class="btn btn-primary mx-1" type="button"
+                                        data-toggle="modal" data-target="#actualizarEstado">
+                                    Actualizar estado
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -212,6 +218,43 @@
     </div>
 
     <div id="cover-spin"></div>
+
+
+    <div class="modal fade" id="actualizarEstado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar estado</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    {% if task.estado == '1' %}
+                        <p>
+                            A continuación se procederá a actualizar el estado de la tarea a "EN PROCESO".
+                            ¿Esta seguro que desea confirmar esta acción?
+                        </p>
+                    {% endif %}
+
+                    {% if task.estado == '2' %}
+                        <p>
+                            A continuación se procederá a actualizar el estado de la tarea a "FINALIZADA".
+                            ¿Esta seguro que desea confirmar esta acción?
+                        </p>
+                    {% endif %}
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="actualizarEstado()">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
 {% endblock %}
 
@@ -338,5 +381,25 @@
                 return false;
             }
         });
+
+        function actualizarEstado() {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'updateTaskState'%}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    task_pk: {{ task.pk }},
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        }
+
+
+
     </script>
 {% endblock %}
