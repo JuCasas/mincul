@@ -96,7 +96,7 @@ def query_tasks_by_args(pk, **kwargs):
     # order = kwargs.get('order', None)[0]
 
     activity = Actividad.objects.get(pk=pk)
-    queryset = Tarea.objects.filter(actividad=activity).filter(estado='1')
+    queryset = Tarea.objects.filter(actividad=activity).filter()
 
     total = queryset.count()
 
