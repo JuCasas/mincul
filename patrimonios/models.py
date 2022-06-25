@@ -200,7 +200,7 @@ class PatrimonioMaterialMueble(models.Model):
     )
     nroRegistro = models.CharField(max_length=20, null=True)
     asociacion = models.CharField(max_length=200, null=True)
-    tipo = models.CharField(max_length=2, choices=TIPO, default='1')
+    tipoBien = models.CharField(max_length=100, null=True)
     integridad = models.CharField(max_length=50, null=True)
     conservacion = models.CharField(max_length=50, null=True)
     detalleConservacion = models.CharField(max_length=200, null=True)
@@ -221,6 +221,14 @@ class PatrimonioMaterialMueble(models.Model):
     tecnicasAcabado = models.ManyToManyField(TecnicaAcabado)
     materialesSecundarios = models.ManyToManyField(MaterialSecundario)
     patrimonio = models.OneToOneField(Patrimonio, on_delete=models.CASCADE)
+
+class Fabricante(models.Model):
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
+    )
+    nombre = models.CharField(max_length=200, null=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1')
 
 class PatrimonioArqueologico(models.Model):
     material = models.CharField(max_length=100, null=True)
@@ -266,12 +274,12 @@ class PatrimonioPaleontologico(models.Model):
 class PatrimonioIndustrial(models.Model):
     modeloMarca = models.CharField(max_length=50, null=True)
     serie = models.CharField(max_length=50, null=True)
-    fabricante = models.CharField(max_length=200, null=True)
     procedencia = models.CharField(max_length=50, null=True)
     datacion = models.CharField(max_length=50, null=True)
     materialSoporte = models.CharField(max_length=100, null=True)
     fondo = models.FloatField(default=0.0)
     diametro = models.FloatField(default=0.0)
+    fabricantes = models.ManyToManyField(Fabricante)
     patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble, on_delete=models.CASCADE)
 
 class Excavacion(models.Model):

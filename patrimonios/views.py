@@ -18,7 +18,7 @@ from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
     ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio, EpocaVisita, \
-    FuenteBibliografica
+    FuenteBibliografica, PatrimonioPaleontologico, PatrimonioMaterialMueble, PatrimonioIndustrial, Fabricante
 from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
@@ -43,7 +43,7 @@ def patrimonio_list(request):
 
                 patrimonio.tipoPatrimonio = int(cat.tipo)
                 patrimonio.categoria = cat
-                patrimonio.save()
+                #patrimonio.save()
 
                 if int(cat.tipo) == 1:
                     patrimonio.nombreTituloDemoninacion = pat['nombre']
@@ -186,7 +186,61 @@ def patrimonio_list(request):
                         epoca.save()
 
                 elif int(cat.tipo) == 3:
-                    print('Mueble')
+                    mueble = PatrimonioMaterialMueble()
+                    mueble.nroRegistro = pat['nroRegistro']
+                    mueble.asociacion = pat['asociacion']
+                    mueble.integridad = pat['datosTecnicos']['integridad']
+                    mueble.conservacion = pat['datosTecnicos']['conservacion']
+                    mueble.detalleConservacion = pat['datosTecnicos']['detalleConservacion']
+                    mueble.detalleTratamiento = pat['datosTecnicos']['detalleTratamiento']
+                    mueble.alto = pat['dimensionesYPeso']['alto']
+                    mueble.largo = pat['dimensionesYPeso']['largo']
+                    mueble.ancho = pat['dimensionesYPeso']['ancho']
+                    mueble.espesor = pat['dimensionesYPeso']['espesor']
+                    mueble.formaAdquisicion = pat['datosPropiedad']['formaAdquision']
+                    mueble.ubicacionEspecifica = pat['datosUbicacion']['ubicacionEspecifica']
+                    mueble.situacion = pat['datosUbicacion']['situacion']
+                    mueble.codigoPropietario = pat['codigos']['codigoPropietario']
+                    mueble.codigoRegistroAnteriorINC = pat['codigos']['codigoRegistroAnteriorINC']
+                    mueble.codigoInventario = pat['codigos']['codigoInventarioINC']
+                    mueble.otrosCodigos = pat['codigos']['otros']
+
+                    if cat.pk == 9:
+                        print('Paleontologico')
+                        paleo = PatrimonioPaleontologico()
+                        paleo.nombreCientifico = pat['datosIdentificacion']['nombreCientifico']
+                        paleo.reino = pat['datosIdentificacion']['reino']
+                        paleo.phylumDivision = pat['datosIdentificacion']['phylumDivision']
+                        paleo.clase = pat['datosIdentificacion']['clase']
+                        paleo.eraGeologica = pat['datosIdentificacion']['eraGeologica']
+                        paleo.epocaGeologica = pat['datosIdentificacion']['epocaGeologica']
+                        paleo.tipoFosilizacion = pat['datosTecnicos']['tipoFosilizacion']
+                        paleo.tipoMuestra = pat['datosTecnicos']['tipoMuestra']
+                        paleo.patrimonioMueble = mueble
+                        #paleo.save()
+
+                    elif cat.pk == 10:
+                        print('Industrial')
+                        indus = PatrimonioIndustrial()
+                        indus.modeloMarca = pat['datosIdentificacion']['modeloMarca']
+                        indus.serie = pat['datosIdentificacion']['serie']
+                        indus.procedencia = pat['datosIdentificacion']['procedencia']
+                        indus.datacion = pat['datosIdentificacion']['datacion']
+                        indus.materialSoporte = pat['datosTecnicos']['materialSoporte']
+                        indus.fondo = pat['datosTecnicos']['dimensionesYPeso']['fondo']
+                        indus.diametro = pat['datosTecnicos']['dimensionesYPeso']['diametro']
+                        indus.patrimonioMueble = mueble
+                        #indus.save()
+                        for fabricante in pat['datosIdentificacion']['fabricante']:
+                            fab = Fabricante.objects.filter(nombre=fabricante)
+                            if len(fab) > 0:
+                                fab = Fabricante.objects.get(nombre=fabricante)
+                            else:
+                                fab = Fabricante()
+                                fab.nombre = fabricante
+                                #fab.save()
+                            #indus.fabricantes.add(fab)
+                        #indus.save()
 
     patrimonios = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
 
