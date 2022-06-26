@@ -184,7 +184,7 @@
             <div class="row filterBar justify-content-end mr-0">
                 <div class="form-group col-sm-3 mb-0">
                     <div class="position-relative">
-                        <input class="form-control" id="search" type="text" placeholder="Nombre">
+                        <input class="form-control" id="search" type="text" placeholder="Nombre de la actividad">
                         <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
                     </select>
                 </div>
                 <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
-                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Actividad
+                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Crear Actividad
                 </button>
             </div>
         </div>
@@ -282,7 +282,8 @@
                                 <label for="patrimonio">Patrimonio Asociado:</label>
                                 <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
                                     {% for patrimonio in patrimonios %}
-                                    <option value="{{ patrimonio.id  }}" selected="selected">{{ patrimonio.nombreTituloDemoninacion }}</option>
+                                        <option value="{{ patrimonio.id }}"
+                                                selected="selected">{{ patrimonio.nombreTituloDemoninacion }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -385,7 +386,7 @@
                                     </div>
                                 </div>
                             </div>
-                         </div>
+                        </div>
 
 
                         <div class="row justify-content-end mt-2 mr-1">
@@ -430,434 +431,439 @@
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
     <script>
-            let conservadoresLista = [];
-            let relacionesLista = [];
+        let conservadoresLista = [];
+        let relacionesLista = [];
 
-            $('#new').on('click', function (e) {
-              $('#nombre').val('');
-              $('#descripcion').val("");
-              $('#fechaInicio').val("");
-              $('#fechaFin').val("");
-              $('#type').val('new');
-              $('#modal_title').text('Nueva Actividad');
-              $("#modalActividad").modal();
-            });
+        $('#new').on('click', function (e) {
+            $('#nombre').val('');
+            $('#descripcion').val("");
+            $('#fechaInicio').val("");
+            $('#fechaFin').val("");
+            $('#type').val('new');
+            $('#modal_title').text('Nueva Actividad');
+            $("#modalActividad").modal();
+        });
 
-            $('#formActividad').on('submit', function (e) {
-              e.preventDefault();
-              let $this = $(this);
-              var data = $(this).serializeArray();
-              data.push({name: "conservadoresLista", value: conservadoresLista});
-              data.push({name: "relacionesLista", value: relacionesLista});
-              let type = $('#type').val();
-              let method = '';
-              let url = '/conservacion/proyectos/';
-              if (type == 'new') {
+        $('#formActividad').on('submit', function (e) {
+            e.preventDefault();
+            let $this = $(this);
+            var data = $(this).serializeArray();
+            data.push({name: "conservadoresLista", value: conservadoresLista});
+            data.push({name: "relacionesLista", value: relacionesLista});
+            let type = $('#type').val();
+            let method = '';
+            let url = '/conservacion/proyectos/';
+            if (type == 'new') {
                 // new
-                url = url + $('#idProject').val()+ '/actividades/add/';
+                url = url + $('#idProject').val() + '/actividades/add/';
                 method = 'POST';
-              } else {
+            } else {
                 // edit
-                url = url + $('#idProject').val()+ '/actividades/edit/' + id;
+                url = url + $('#idProject').val() + '/actividades/edit/' + id;
                 method = 'POST';
-              }
+            }
 
-              $.ajax({
+            $.ajax({
                 url: url,
                 method: method,
                 data: $.param(data),
                 success: function (response) {
-                  $('#modalActividad').modal('hide')
-                  $("#tabla_autores").DataTable().draw();
+                    $('#modalActividad').modal('hide')
+                    $("#tabla_autores").DataTable().draw();
                 },
                 error: function (error) {
-                  console.log(error)
+                    console.log(error)
                 }
-              });
             });
-
-        let table = $('#tabla_autores').DataTable({
-          "searching": false,
-          "serverSide": true,
-          "processing": true,
-          "lengthChange": false,
-          "pageLength": 10,
-          "scrollX": true,
-          "ajax": function (data, callback, settings) {
-            let order_column = data.order[0].column
-            let order = data.order[0].dir
-
-            $.ajax({
-              url: '',
-              type: 'get',
-              data: {
-                  length: data.length,
-                  start: data.start,
-                  // search_value: $('#search').val(),
-                  // type_filter: $('#type_filter').val(),
-                  // status_filter: $('#status_filter').val(),
-                  // order_column: order_column,
-                  // order: order
-              },
-              success: function (data, textStatus, jQxhr) {
-                callback({
-                    recordsTotal: data.recordsTotal,
-                    recordsFiltered: data.recordsFiltered,
-                    data: data.data
-                });
-              },
-              error: function (jqXhr, textStatus, errorThrown) {
-              }
-            });
-          },
-          "columns": [
-            {"data": "codigo"},
-            {"data": "nombre"},
-            {"data": "fechaInicio"},
-            {"data": "fechaFin"},
-            {
-              "data": "status", render: function (data, type, row) {
-                if (data == '0') {
-                  resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
-                } else if (data == '1') {
-                  resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrado" + '</span>'
-                } else {
-                  resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
-                }
-                return resp;
-              }
-            },
-            {
-              "data": null,
-              "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-                  '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-                  '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
-            }
-          ],
-          "language": {
-            "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
-            "sLengthMenu": "Mostrar _MENU_ registros",
-            "sZeroRecords": "No se encontraron resultados",
-            "sEmptyTable": "Ningún dato disponible en esta tabla",
-            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-            "sInfoPostFix": "",
-            "sSearch": "Buscar:",
-            "sUrl": "",
-            "sInfoThousands": ",",
-            "sLoadingRecords": "Cargando...",
-            "oPaginate": {
-              "sFirst": "Primero",
-              "sLast": "Último",
-              "sNext": "Siguiente",
-              "sPrevious": "Anterior"
-            },
-            "oAria": {
-              "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-            }
-          },
         });
 
+        let table = $('#tabla_autores').DataTable({
+            "searching": false,
+            "serverSide": true,
+            "processing": true,
+            "lengthChange": false,
+            "pageLength": 10,
+            "scrollX": true,
+            "ajax": function (data, callback, settings) {
+                let order_column = data.order[0].column
+                let order = data.order[0].dir
+
+                $.ajax({
+                    url: '',
+                    type: 'get',
+                    data: {
+                        length: data.length,
+                        start: data.start,
+                        search_value: $('#search').val(),
+                        patrimonio_filter: $('#type_filter').val(),
+                        status_filter: $('#status_filter').val(),
+                        order_column: order_column,
+                        order: order
+                    },
+                    success: function (data, textStatus, jQxhr) {
+                        callback({
+                            recordsTotal: data.recordsTotal,
+                            recordsFiltered: data.recordsFiltered,
+                            data: data.data
+                        });
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                    }
+                });
+            },
+            "columns": [
+                {"data": "codigo"},
+                {"data": "nombre"},
+                {"data": "fechaInicio"},
+                {"data": "fechaFin"},
+                {
+                    "data": "status", render: function (data, type, row) {
+                        if (data == '0') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
+                        } else if (data == '1') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrado" + '</span>'
+                        } else {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
+                        }
+                        return resp;
+                    }
+                },
+                {
+                    "data": null,
+                    "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                        '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+                        '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+                }
+            ],
+            "language": {
+                "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+        });
 
 
         $('#search').keyup(function () {
-          $('#tabla_autores').DataTable().search($(this).val()).draw();
+            $('#tabla_autores').DataTable().search($(this).val()).draw();
         })
+
+        $('#status_filter').change(function () {
+            $('#tabla_autores').DataTable().draw();
+        });
+
         $('#exampleFormControlSelect1').change(function () {
-          $('#tabla_autores').DataTable().draw();
+            $('#tabla_autores').DataTable().draw();
         });
         $('#exampleFormControlSelect2').change(function () {
-          $('#tabla_autores').DataTable().draw();
+            $('#tabla_autores').DataTable().draw();
         });
         $('#exampleFormControlSelect3').change(function () {
-          $('#tabla_autores').DataTable().draw();
+            $('#tabla_autores').DataTable().draw();
         });
 
         $('#tabla_autores tbody').on('click', 'button', function () {
-          let data = table.row($(this).parents('tr')).data();
-          let class_name = $(this).attr('class');
+            let data = table.row($(this).parents('tr')).data();
+            let class_name = $(this).attr('class');
 
-          id = data['id'];
+            id = data['id'];
 
-          if (class_name == 'btn btn-edit') {
-            // EDIT button
-            $('#nombre').val(data['nombre']);
-            $('#descripcion').val(data['descripcion']);
-            fechaInicio = data['fechaInicio'];
-            if (typeof fechaInicio === 'string') {
-                var partsInicio = fechaInicio.split("/");
-                var dtInicio = new Date(parseInt(partsInicio[2], 10),
-                    parseInt(partsInicio[1], 10) - 1,
-                    parseInt(partsInicio[0], 10));
-                var currentDateInicio = dtInicio.toISOString().slice(0, 10);
-                $('#fechaInicio').val(currentDateInicio);
-            }
+            if (class_name == 'btn btn-edit') {
+                // EDIT button
+                $('#nombre').val(data['nombre']);
+                $('#descripcion').val(data['descripcion']);
+                fechaInicio = data['fechaInicio'];
+                if (typeof fechaInicio === 'string') {
+                    var partsInicio = fechaInicio.split("/");
+                    var dtInicio = new Date(parseInt(partsInicio[2], 10),
+                        parseInt(partsInicio[1], 10) - 1,
+                        parseInt(partsInicio[0], 10));
+                    var currentDateInicio = dtInicio.toISOString().slice(0, 10);
+                    $('#fechaInicio').val(currentDateInicio);
+                }
 
-            fechaFin = data['fechaFin']
-            if (typeof fechaFin === 'string') {
-                var partsFin = fechaFin.split("/");
-                var dtFin = new Date(parseInt(partsFin[2], 10),
-                    parseInt(partsFin[1], 10) - 1,
-                    parseInt(partsFin[0], 10));
-                var currentDateFin = dtFin.toISOString().slice(0, 10);
-                $('#fechaFin').val(currentDateFin);
-            }
+                fechaFin = data['fechaFin']
+                if (typeof fechaFin === 'string') {
+                    var partsFin = fechaFin.split("/");
+                    var dtFin = new Date(parseInt(partsFin[2], 10),
+                        parseInt(partsFin[1], 10) - 1,
+                        parseInt(partsFin[0], 10));
+                    var currentDateFin = dtFin.toISOString().slice(0, 10);
+                    $('#fechaFin').val(currentDateFin);
+                }
 
-            let tamConservadores =data['conservadores'].length;
-            let conservadores = data['conservadores'];
-            let relaciones = data['relaciones'];
-            let tamRelaciones = relaciones.length;
-            $("#patrimonio").select2("val", data['patrimonio'].toString());
+                let tamConservadores = data['conservadores'].length;
+                let conservadores = data['conservadores'];
+                let relaciones = data['relaciones'];
+                let tamRelaciones = relaciones.length;
+                $("#patrimonio").select2("val", data['patrimonio'].toString());
 
-            $("#conservadorAgregar").empty()
-            for (let i = 0; i < tamConservadores; i++) {
-                conservadoresLista.push(conservadores[i].id);
-                $("#lista").val(conservadoresLista);
-
-                data = '<tr>' +
-                    '<td>' + conservadores[i].codigo + '</td>' +
-                    ' <td>' + conservadores[i].first_name + '</td>' +
-                    '<td>' +
-                    '<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadores[i].id + ')">' +
-                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                    '</button>' +
-                    '</td>' +
-                    '</tr>';
-
-                $("#conservadorAgregar").append(data);
-            }
-
-            $("#relacionAgregar").empty()
-            for (let i = 0; i < tamRelaciones; i++) {
-                relacionesLista.push(relaciones[0].id);
-                $("#lista").val(relacionesLista);
-
-                data = '<tr>' +
-                    '<td>' + relaciones[0].codigo + '</td>' +
-                    ' <td>' + relaciones[0].nombre + '</td>' +
-                    '<td>' +
-                    '<button class="btn" href="#" type="button" onclick="eliminarRelacion(this,' + relaciones[0].id + ')">' +
-                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                    '</button>' +
-                    '</td>' +
-                    '</tr>';
-
-                $("#relacionAgregar").append(data);
-            }
-
-
-
-            $('#type').val('edit');
-            $('#modal_title').text('Editar Actividad');
-            $("#modalActividad").modal();
-          } else if (class_name == 'btn btn-show') {
-            window.location.pathname = "/conservacion/actividades/" + id + "/tareas/";
-          } else {
-            // DELETE button
-            $('#modal_title').text('DELETE');
-            $("#confirm").modal();
-          }
-        });
-
-        $('#confirm').on('click', '#delete', function (e) {
-          $('#cover-spin').show(0)
-          $.ajax({
-            url: '/conservacion/proyectos/' + $('#idProject').val() + '/actividades/delete/' + id,
-            method: 'POST',
-            success: function (response) {
-              $('#cover-spin').hide()
-              if (response["success"] !== undefined) {
-                $.toast({
-                  text: 'No se pudo eliminar la actividad',
-                  icon: 'warning',
-                  loader: false,        // Change it to false to disable loader
-                  bgColor: '#c67a71',
-                    textColor: '#000000',
-                  position: 'bottom-right',
-                  hideAfter: 3000,
-                })
-              } else {
-                $('#myModal').modal('hide')
-                $("#tabla_autores").DataTable().draw();
-                $.toast({
-                  text: 'Actividad eliminada con éxito',
-                  icon: 'success',
-                  loader: false,        // Change it to false to disable loader
-                  bgColor: '#B7E6CA',  // To change the background
-                  textColor: '#000000',
-                  position: 'bottom-right',
-                  hideAfter: 3000,
-                })
-              }
-            },
-            error: function (error) {
-              console.log(error)
-            }
-          });
-        });
-            $('#patrimonio').prepend('<option selected=""></option>').select2({
-                ajax: {
-                    url: '/conservacion/proyectos/patrimonios',
-                    datatype: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term || '',
-                            page: params.page || 1
-                        };
-                    },
-                    processResults: function (data, params) {
-                        params.page = params.page || 1;
-                        console.log(data.items)
-                        return {
-                            results: $.map(data.items, function (obj, index) {
-                                return {id: obj.id, text: obj.nombreTituloDemoninacion};
-                            }),
-                            pagination: {
-                                more: (params.page * 10) < data.total_count
-                            }
-                        }
-                    }
-                },
-                placeholder: "Patrimonio",
-                allowClear: true,
-                cache: false
-            });
-            $('#conservadores').prepend('<option selected=""></option>').select2({
-                ajax: {
-                    url: '/conservacion/actividades/conservadores',
-                    datatype: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term || '',
-                            page: params.page || 1
-                        };
-                    },
-                    processResults: function (data, params) {
-                        params.page = params.page || 1;
-                        console.log(data.items)
-                        return {
-                            results: $.map(data.items, function (obj, index) {
-                                return {id: obj.id, text: obj.username, codigo: obj.codigo, first_name: obj.first_name,
-                                last_name: obj.last_name};
-                            }),
-                            pagination: {
-                                more: (params.page * 10) < data.total_count
-                            }
-                        }
-                    }
-                },
-                placeholder: "Conservador",
-                allowClear: true,
-                cache: false
-            });
-
-            function agregarConservadorTabla() {
-                let conservadorAgregar = $("#conservadores").select2('data');
-                if (!conservadoresLista.includes(conservadorAgregar[0].id)) {
-                    conservadoresLista.push(conservadorAgregar[0].id);
+                $("#conservadorAgregar").empty()
+                for (let i = 0; i < tamConservadores; i++) {
+                    conservadoresLista.push(conservadores[i].id);
                     $("#lista").val(conservadoresLista);
 
                     data = '<tr>' +
-                        '<td>' + conservadorAgregar[0].codigo + '</td>' +
-                        ' <td>' + conservadorAgregar[0].first_name + '</td>' +
+                        '<td>' + conservadores[i].codigo + '</td>' +
+                        ' <td>' + conservadores[i].first_name + '</td>' +
                         '<td>' +
-                        '<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadorAgregar[0].id + ')">' +
+                        '<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadores[i].id + ')">' +
                         '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
                         '</button>' +
                         '</td>' +
                         '</tr>';
 
                     $("#conservadorAgregar").append(data);
-                    console.log("Agregado");
-                    console.log(conservadoresLista);
                 }
-            }
 
-            function eliminarConservador(btn, idEliminar) {
-                var row = btn.parentNode.parentNode;
-                conservadoresLista = jQuery.grep(conservadoresLista, function (value) {
-                    return value != idEliminar;
-                });
-                row.parentNode.removeChild(row);
-                $("#lista").val(conservadoresLista);
-                console.log("Eliminado");
-                console.log(conservadoresLista);
-            }
-
-            $('#relaciones').prepend('<option selected=""></option>').select2({
-                ajax: {
-                    url:  "{% url 'addRelacion' project.id %}",
-                    datatype: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term || '',
-                            page: params.page || 1
-                        };
-                    },
-                    processResults: function (data, params) {
-                        params.page = params.page || 1;
-                        console.log(data.items)
-                        return {
-                            results: $.map(data.items, function (obj, index) {
-                                return {id: obj.id, text: obj.codigo, nombre: obj.nombre};
-                            }),
-                            pagination: {
-                                more: (params.page * 10) < data.total_count
-                            }
-                        }
-                    }
-                },
-                placeholder: "Relacion",
-                allowClear: true,
-                cache: false
-            });
-
-            function agregarRelacionTabla() {
-                let relacionAgregar = $("#relaciones").select2('data');
-                if (!relacionesLista.includes(relacionAgregar[0].id)) {
-                    relacionesLista.push(relacionAgregar[0].id);
+                $("#relacionAgregar").empty()
+                for (let i = 0; i < tamRelaciones; i++) {
+                    relacionesLista.push(relaciones[0].id);
                     $("#lista").val(relacionesLista);
 
                     data = '<tr>' +
-                        '<td>' + relacionAgregar[0].text + '</td>' +
-                        ' <td>' + relacionAgregar[0].nombre + '</td>' +
+                        '<td>' + relaciones[0].codigo + '</td>' +
+                        ' <td>' + relaciones[0].nombre + '</td>' +
                         '<td>' +
-                        '<button class="btn" href="#" type="button" onclick="eliminarRelacion(this,' + relacionAgregar[0].id + ')">' +
+                        '<button class="btn" href="#" type="button" onclick="eliminarRelacion(this,' + relaciones[0].id + ')">' +
                         '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
                         '</button>' +
                         '</td>' +
                         '</tr>';
 
                     $("#relacionAgregar").append(data);
-                    console.log("Agregado");
-                    console.log(relacionesLista);
                 }
-            }
 
-            function eliminarRelacion(btn, idEliminar) {
-                var row = btn.parentNode.parentNode;
-                relacionesLista = jQuery.grep(relacionesLista, function (value) {
-                    return value != idEliminar;
-                });
-                row.parentNode.removeChild(row);
+
+                $('#type').val('edit');
+                $('#modal_title').text('Editar Actividad');
+                $("#modalActividad").modal();
+            } else if (class_name == 'btn btn-show') {
+                window.location.pathname = "/conservacion/actividades/" + id + "/tareas/";
+            } else {
+                // DELETE button
+                $('#modal_title').text('DELETE');
+                $("#confirm").modal();
+            }
+        });
+
+        $('#confirm').on('click', '#delete', function (e) {
+            $('#cover-spin').show(0)
+            $.ajax({
+                url: '/conservacion/proyectos/' + $('#idProject').val() + '/actividades/delete/' + id,
+                method: 'POST',
+                success: function (response) {
+                    $('#cover-spin').hide()
+                    if (response["success"] !== undefined) {
+                        $.toast({
+                            text: 'No se pudo eliminar la actividad',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#c67a71',
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    } else {
+                        $('#myModal').modal('hide')
+                        $("#tabla_autores").DataTable().draw();
+                        $.toast({
+                            text: 'Actividad eliminada con éxito',
+                            icon: 'success',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#B7E6CA',  // To change the background
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    }
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+        $('#patrimonio').prepend('<option selected=""></option>').select2({
+            ajax: {
+                url: '/conservacion/proyectos/patrimonios',
+                datatype: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term || '',
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    console.log(data.items)
+                    return {
+                        results: $.map(data.items, function (obj, index) {
+                            return {id: obj.id, text: obj.nombreTituloDemoninacion};
+                        }),
+                        pagination: {
+                            more: (params.page * 10) < data.total_count
+                        }
+                    }
+                }
+            },
+            placeholder: "Patrimonio",
+            allowClear: true,
+            cache: false
+        });
+        $('#conservadores').prepend('<option selected=""></option>').select2({
+            ajax: {
+                url: '/conservacion/actividades/conservadores',
+                datatype: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term || '',
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    console.log(data.items)
+                    return {
+                        results: $.map(data.items, function (obj, index) {
+                            return {
+                                id: obj.id, text: obj.username, codigo: obj.codigo, first_name: obj.first_name,
+                                last_name: obj.last_name
+                            };
+                        }),
+                        pagination: {
+                            more: (params.page * 10) < data.total_count
+                        }
+                    }
+                }
+            },
+            placeholder: "Conservador",
+            allowClear: true,
+            cache: false
+        });
+
+        function agregarConservadorTabla() {
+            let conservadorAgregar = $("#conservadores").select2('data');
+            if (!conservadoresLista.includes(conservadorAgregar[0].id)) {
+                conservadoresLista.push(conservadorAgregar[0].id);
+                $("#lista").val(conservadoresLista);
+
+                data = '<tr>' +
+                    '<td>' + conservadorAgregar[0].codigo + '</td>' +
+                    ' <td>' + conservadorAgregar[0].first_name + '</td>' +
+                    '<td>' +
+                    '<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadorAgregar[0].id + ')">' +
+                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
+                    '</button>' +
+                    '</td>' +
+                    '</tr>';
+
+                $("#conservadorAgregar").append(data);
+                console.log("Agregado");
+                console.log(conservadoresLista);
+            }
+        }
+
+        function eliminarConservador(btn, idEliminar) {
+            var row = btn.parentNode.parentNode;
+            conservadoresLista = jQuery.grep(conservadoresLista, function (value) {
+                return value != idEliminar;
+            });
+            row.parentNode.removeChild(row);
+            $("#lista").val(conservadoresLista);
+            console.log("Eliminado");
+            console.log(conservadoresLista);
+        }
+
+        $('#relaciones').prepend('<option selected=""></option>').select2({
+            ajax: {
+                url: "{% url 'addRelacion' project.id %}",
+                datatype: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term || '',
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    console.log(data.items)
+                    return {
+                        results: $.map(data.items, function (obj, index) {
+                            return {id: obj.id, text: obj.codigo, nombre: obj.nombre};
+                        }),
+                        pagination: {
+                            more: (params.page * 10) < data.total_count
+                        }
+                    }
+                }
+            },
+            placeholder: "Relacion",
+            allowClear: true,
+            cache: false
+        });
+
+        function agregarRelacionTabla() {
+            let relacionAgregar = $("#relaciones").select2('data');
+            if (!relacionesLista.includes(relacionAgregar[0].id)) {
+                relacionesLista.push(relacionAgregar[0].id);
                 $("#lista").val(relacionesLista);
-                console.log("Eliminado");
+
+                data = '<tr>' +
+                    '<td>' + relacionAgregar[0].text + '</td>' +
+                    ' <td>' + relacionAgregar[0].nombre + '</td>' +
+                    '<td>' +
+                    '<button class="btn" href="#" type="button" onclick="eliminarRelacion(this,' + relacionAgregar[0].id + ')">' +
+                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
+                    '</button>' +
+                    '</td>' +
+                    '</tr>';
+
+                $("#relacionAgregar").append(data);
+                console.log("Agregado");
                 console.log(relacionesLista);
             }
+        }
 
-            $('#modalActividad').on('hide.bs.modal', function () {
-                $("#conservadorAgregar").empty();
-                $("#relacionAgregar").empty();
-                conservadoresLista = [];
-                relacionesLista = [];
-                $("#conservadores").val(null).trigger('change');
-                $("#relaciones").val(null).trigger('change');
-                $("#patrimonio").val(null).trigger('change');
+        function eliminarRelacion(btn, idEliminar) {
+            var row = btn.parentNode.parentNode;
+            relacionesLista = jQuery.grep(relacionesLista, function (value) {
+                return value != idEliminar;
             });
+            row.parentNode.removeChild(row);
+            $("#lista").val(relacionesLista);
+            console.log("Eliminado");
+            console.log(relacionesLista);
+        }
+
+        $('#modalActividad').on('hide.bs.modal', function () {
+            $("#conservadorAgregar").empty();
+            $("#relacionAgregar").empty();
+            conservadoresLista = [];
+            relacionesLista = [];
+            $("#conservadores").val(null).trigger('change');
+            $("#relaciones").val(null).trigger('change');
+            $("#patrimonio").val(null).trigger('change');
+        });
     </script>
 {% endblock %}

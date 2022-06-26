@@ -55,27 +55,28 @@ def query_projects_by_args(**kwargs):
 def query_activities_by_args(pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
-    # search_value = kwargs.get('search_value', None)[0]
-    # type_filter = kwargs.get('type_filter', None)[0]
-    # status_filter = kwargs.get('status_filter', None)[0]
-    # order_column = kwargs.get('order_column', None)[0]
-    # order = kwargs.get('order', None)[0]
+    search_value = kwargs.get('search_value', None)[0]
+    patrimonio_filter = kwargs.get('patrimonio_filter', None)[0]
+    status_filter = kwargs.get('status_filter', None)[0]
+    order_column = kwargs.get('order_column', None)[0]
+    order = kwargs.get('order', None)[0]
 
     project = ProyectoConservacion.objects.get(pk=pk)
     queryset = Actividad.objects.filter(proyecto=project).filter(estado='1')
 
     total = queryset.count()
 
-    # order_column = ProyectoConservacion.ORDER_COLUMN_CHOICES[order_column]
-    # if order == 'desc':
-    #     order_column = '-' + order_column
-    #
-    # if search_value:
-    #     queryset = queryset.filter(nombre__icontains=search_value)
-    # if type_filter:
-    #     queryset = queryset.filter(tipoProyecto=type_filter)
-    # if status_filter:
-    #     queryset = queryset.filter(status=status_filter)
+    order_column = ProyectoConservacion.ORDER_COLUMN_CHOICES[order_column]
+    if order == 'desc':
+        order_column = '-' + order_column
+
+    if search_value:
+        queryset = queryset.filter(nombre__icontains=search_value)
+    if patrimonio_filter:
+        patrimonio = Patrimonio.objects.get(pk=patrimonio_filter)
+        queryset = queryset.filter(patrimonio =patrimonio)
+    if status_filter:
+        queryset = queryset.filter(status=status_filter)
 
     count = queryset.count()
     queryset = queryset[start:start + length]
@@ -284,6 +285,7 @@ def listActivities(request, pk):
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
     else:
         context = {
+                'status_choices': Actividad.STATUS,
             'project': ProyectoConservacion.objects.get(pk=pk),
             'patrimonios': Patrimonio.objects.all()
         }

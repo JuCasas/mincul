@@ -46,6 +46,16 @@ class ProyectoConservacion(models.Model):
     status = models.CharField(max_length=2, choices=STATUS, default='1', null=True, blank=True)
 
 class Actividad(models.Model):
+    ORDER_COLUMN_CHOICES = {
+        '0': 'codigo',
+        '1': 'nombre',
+        '2': '',
+        '3': 'patrimonio__nombreTituloDemoninacion',
+        '4': 'fechaInicio',
+        '5': 'fechaFin',
+        '6': 'status'
+    }
+
     STATUS = (
         ('0', 'En Proceso'),
         ('1','Registrado'),
