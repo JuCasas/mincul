@@ -425,7 +425,7 @@
                     })
                 },
                 error: function (response) {
-                  {% comment %}  alert(response["responseJSON"]["error"]);{% endcomment %}
+                    {% comment %}  alert(response["responseJSON"]["error"]);{% endcomment %}
                     $.toast({
                         text: 'Ocurrió un error inesperado',
                         icon: 'warning',
@@ -453,70 +453,83 @@
                     $("#listarSecciones").empty();
 
                     var secciones = JSON.parse(response['secciones']);
-                    console.log(secciones);
                     var i = 0;
                     var j = 1;
                     var numero = secciones.length;
                     var data = '';
 
-                    for (i = 0; i < numero; i++) {
-                        let n_doc = secciones[i].documentos.length;
-                        console.log(n_doc);
+                    console.log('Secciones: ')
+                    console.log(numero)
+
+                    if (numero == 0) {
                         data += (
-                            '<div class="card mt-3">' +
-                            '    <ul class="list-group list-group-flush">' +
-                            '        <li class="list-group-item">' +
-                            '            <div class="row">' +
-                            '                <div class="col-10">' +
-                            '                    <h5>' + secciones[i].nombre + '</h5>' +
-                            '                </div>' +
-                            '                <div class="col-2">' +
-                            '                    <div class="d-flex flex-row justify-content-end" >' +
-                            '                        <button type="button" class="btn" ><i class="fas fa-edit"></i></button>' +
-                            '                        <button type="button" class="btn" onclick="seccionesEliminar(\'' + secciones[i].nombre + '\',' + secciones[i].id + ')"  ><i class="fas fa-trash"></i>' +
-                            '                        </button>' +
-                            '                    </div>' +
-                            '                </div>' +
-                            '            </div>' +
-                            '        </li>' +
-                            '        <li class="list-group-item">' +
-                            '            <div class="form-group row">' +
-                            '                <label for="descripcion_2"' +
-                            '                       class="col-sm-2 col-form-label">Descripción: </label>' +
-                            '                <div class="col-sm-10">' +
-                            '                <textarea class="form-control" id="descripcion_2" name="descripcion_2" type="text"' +
-                            '                          disabled> ' + secciones[i].contenido +
-                            '                </textarea>' +
-                            '                </div>' +
-                            '            </div>' +
-                            '        </li>' +
-                            '        <li class="list-group-item">' +
-                            '            <div class="form-group row">' +
-                            '                <label for="evidencias_2"' +
-                            '                       class="col-sm-2 col-form-label">Evidencias: </label>' +
-                            '                <div class="col-sm-10">')
 
-
-                        for (j = 0; j < n_doc; j++) {
-                            data += (
-                                '<div class="col-12 mt-2">' +
-                                '    <a class="notification notification-flush bg-0 "' +
-                                '       href=' + secciones[i].documentos[j].url + ' download>' +
-                                '            <h6>' + secciones[i].documentos[j].name + '</h6>' +
-                                '    </a>' +
-                                '    <hr>' +
-                                '</div>'
-                            )
-                        }
-
-                        data += (
-                            '                </div>' +
-                            '            </div>' +
-                            '        </li>' +
-                            '    </ul>' +
+                            '<div class="d-flex flex-row justify-content-center" >' +
+                            '  <h5>' + 'No hay secciones registradas en esta tarea' + '</h5>' +
                             '</div>'
+
                         )
 
+                    } else {
+                        for (i = 0; i < numero; i++) {
+                            let n_doc = secciones[i].documentos.length;
+
+                            data += (
+                                '<div class="card mt-3">' +
+                                '    <ul class="list-group list-group-flush">' +
+                                '        <li class="list-group-item">' +
+                                '            <div class="row">' +
+                                '                <div class="col-10">' +
+                                '                    <h5>' + secciones[i].nombre + '</h5>' +
+                                '                </div>' +
+                                '                <div class="col-2">' +
+                                '                    <div class="d-flex flex-row justify-content-end" >' +
+                                '                        <button type="button" class="btn" ><i class="fas fa-edit"></i></button>' +
+                                '                        <button type="button" class="btn" onclick="seccionesEliminar(\'' + secciones[i].nombre + '\',' + secciones[i].id + ')"  ><i class="fas fa-trash"></i>' +
+                                '                        </button>' +
+                                '                    </div>' +
+                                '                </div>' +
+                                '            </div>' +
+                                '        </li>' +
+                                '        <li class="list-group-item">' +
+                                '            <div class="form-group row">' +
+                                '                <label for="descripcion_2"' +
+                                '                       class="col-sm-2 col-form-label">Descripción: </label>' +
+                                '                <div class="col-sm-10">' +
+                                '                <textarea class="form-control" id="descripcion_2" name="descripcion_2" type="text"' +
+                                '                          disabled> ' + secciones[i].contenido +
+                                '                </textarea>' +
+                                '                </div>' +
+                                '            </div>' +
+                                '        </li>' +
+                                '        <li class="list-group-item">' +
+                                '            <div class="form-group row">' +
+                                '                <label for="evidencias_2"' +
+                                '                       class="col-sm-2 col-form-label">Evidencias: </label>' +
+                                '                <div class="col-sm-10">')
+
+
+                            for (j = 0; j < n_doc; j++) {
+                                data += (
+                                    '<div class="col-12 mt-2">' +
+                                    '    <a class="notification notification-flush bg-0 "' +
+                                    '       href=' + secciones[i].documentos[j].url + ' download>' +
+                                    '            <h6>' + secciones[i].documentos[j].name + '</h6>' +
+                                    '    </a>' +
+                                    '    <hr>' +
+                                    '</div>'
+                                )
+                            }
+
+                            data += (
+                                '                </div>' +
+                                '            </div>' +
+                                '        </li>' +
+                                '    </ul>' +
+                                '</div>'
+                            )
+
+                        }
                     }
 
                     $("#listarSecciones").append(data);
