@@ -1,7 +1,7 @@
 import os
 
 from rest_framework import serializers
-from conservacion.models import ProyectoConservacion, Tarea
+from conservacion.models import ProyectoConservacion, Tarea, Campo
 from conservacion.models import Actividad
 from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
@@ -71,3 +71,12 @@ class ActividadSerializer (serializers.ModelSerializer):
 
     def get_total_conservadores(self, instance):
         return instance.conservadores.count()
+
+
+class SecionSerializer (serializers.ModelSerializer):
+    documentos = DocumentoSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Campo
+        fields = ['documentos','id','nombre','contenido']
+

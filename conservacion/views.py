@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 
 from django.db.models import Count
@@ -11,7 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from conservacion.models import ProyectoConservacion, Actividad, Tarea, Campo
 from conservacion.serializers import ProyectoConservacionSerializer, ActividadSerializer, TareaSerializer, \
-    PatrimonioSerializer, ConservadorSerializer
+    PatrimonioSerializer, ConservadorSerializer, SecionSerializer
 from mincul.settings import MEDIA_URL
 from mincul_app.models import Documento
 from patrimonios.models import Patrimonio, Institucion, PuntoGeografico
@@ -538,9 +539,11 @@ def editTask(request, pk):
 
 @api_view(('GET',))
 def editTaskView(request, pk):
+    media_path = MEDIA_URL
     tarea = Tarea.objects.get(pk=pk)
     secciones = Campo.objects.filter(tarea_id=tarea.pk)
     context = {
+        'media_path': media_path,
         'task': tarea,
         'secciones': secciones,
         'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
@@ -600,5 +603,6 @@ def addSection(request, pk):
 
 def listSections(request, pk):
     secciones = Campo.objects.filter(tarea_id=pk)
-    ser_instance = serializers.serialize('json', secciones)
-    return JsonResponse({"secciones": ser_instance}, status=200)
+    ser_instance = SecionSerializer((secciones), many=True)
+    secciones = json.dumps(ser_instance.data)
+    return JsonResponse({"secciones": secciones}, status=200)
