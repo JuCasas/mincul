@@ -341,6 +341,13 @@ def listPatrimonys(request, pk):
     }
     return render(request, 'proyectoConservacion/patrimonys_list.html', context)
 
+def verifyPatrimony(request,pk):
+    patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
+    proyecto = ProyectoConservacion.objects.get(pk=pk)
+    if(proyecto.patrimonios.filter(pk = patrimonio.pk).exists()):
+        return JsonResponse({"existe": False}, status=200)
+    else:
+        return JsonResponse({"existe": True}, status=200)
 
 @api_view(('GET',))
 def listPatrimonysForProject(request, pk):
