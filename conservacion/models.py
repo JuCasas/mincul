@@ -100,8 +100,11 @@ class Tarea(models.Model):
 
 class Campo(models.Model):
     ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
+        ('1', 'Registrada'),
+        ('2', 'En proceso'),
+        ('3', 'En evaluacion'),
+        ('4', 'Rechazada'),
+        ('5', 'Finalizada'),
     )
     nombre = models.CharField(max_length=200)
     contenido = models.CharField(max_length=200, null=True, blank=True)
