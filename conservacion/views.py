@@ -546,14 +546,19 @@ def addSection(request, pk):
     nombre = request.POST['nombre']
     descripcion = request.POST['descripcion']
 
-    evidencias = request.FILES.get('evidencias')
+    evidencias = request.FILES
 
     campo = Campo.objects.create(nombre=nombre, contenido=descripcion, tarea=tarea)
     campo.save()
 
-    for f in evidencias:
-        documento = Documento.objects.create(url=f)
+    n_files = len(evidencias)
+
+    for i in range(n_files):
+        name = 'files'+str(i)
+        documento = Documento.objects.create(url=request.FILES.get(name))
         campo.documentos.add(documento)
+
+    campo.save()
 
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 

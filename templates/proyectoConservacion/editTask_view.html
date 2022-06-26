@@ -591,8 +591,11 @@
 
 
         let fd = new FormData();
+
         let files = $("#evidencias_1")[0].files
-        fd.append("evidencias", files[0])
+        for (let i = 0, len = files.length; i < len; i++) {
+          fd.append("files" + i,files[i]);
+        }
         fd.append("csrfmiddlewaretoken", "{{ csrf_token }}")
         fd.append("task_pk", {{ task.pk }})
         fd.append("nombre", $("#nombre_1").val())
