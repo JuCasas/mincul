@@ -290,133 +290,131 @@
   <script>
 
 
+    jQuery.validator.addMethod("alphanumeric", function (value, element) {
+      return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
+    }, "Letters, numbers, and underscores only please");
 
-      jQuery.validator.addMethod("alphanumeric", function (value, element) {
-        return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
-      }, "Letters, numbers, and underscores only please");
-
-      $("form[name='formProyecto']").validate({
-        rules: {
-          codigo: {
-            required: true,
-            maxlength: 8,
-            alphanumeric: true
-          },
-          nombre: {
-            required: true,
-            maxlength: 50,
-            alphanumeric: true
-          },
+    $("form[name='formProyecto']").validate({
+      rules: {
+        codigo: {
+          required: true,
+          maxlength: 8,
+          alphanumeric: true
         },
-        messages: {
-          codigo: {
-            required: "Debe ingresar el código del proyecto",
-            maxlength: "El código no debe tener más de 8 caracteres",
-            alphanumeric: "El código solo debe contener carácteres alfanuméricos"
-          },
-          nombre: {
-            required: "Debe ingresar el nombre del proyecto",
-            maxlength: "El nombre no debe tener más de 50 caracteres",
-            alphanumeric: "El nombre solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
-          }
+        nombre: {
+          required: true,
+          maxlength: 50,
+          alphanumeric: true
         },
-        submitHandler: function (form, e) {
-          e.preventDefault();
-          let type = $('#type').val();
-          let method = '';
-          let url = '/conservacion/proyectos/';
-          if (type == 'new') {
-            // new
-            url = url + 'add/';
-            method = 'POST';
-          } else {
-            // edit
-            url = url + 'edit/' + id + '/';
-            method = 'POST';
-          }
-          $('#cover-spin').show(0)
-          $.ajax({
-            url: url,
-            method: method,
-            data: {
-              'codigo': $("#codigo").val(),
-              'nombre': $("#nombre").val(),
-              'tipoPlan': $("#tipoPlan").val()
-            },
-            success: function (response) {
-              $('#cover-spin').hide()
-              if (response["success"] !== undefined) {
-                $.toast({
-                  text: 'El nombre del proyecto ya existe',
-                  icon: 'warning',
-                  loader: false,        // Change it to false to disable loader
-                  bgColor: '#c67a71',
-                  textColor: '#000000',
-                  position: 'bottom-right',
-                  hideAfter: 3000,
-                })
-              } else {
-                $('#myModal').modal('hide')
-                $("#tabla_autores").DataTable().draw();
-                $.toast({
-                  text: 'Proyecto actualizado con éxito',
-                  icon: 'success',
-                  loader: false,        // Change it to false to disable loader
-                  bgColor: '#B7E6CA',  // To change the background
-                  textColor: '#000000',
-                  position: 'bottom-right',
-                  hideAfter: 3000,
-                })
-              }
-            },
-            error: function (error) {
-              $('#cover-spin').hide()
-              console.log(error)
-            }
-          });
-          return false;
+      },
+      messages: {
+        codigo: {
+          required: "Debe ingresar el código del proyecto",
+          maxlength: "El código no debe tener más de 8 caracteres",
+          alphanumeric: "El código solo debe contener carácteres alfanuméricos"
+        },
+        nombre: {
+          required: "Debe ingresar el nombre del proyecto",
+          maxlength: "El nombre no debe tener más de 50 caracteres",
+          alphanumeric: "El nombre solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
         }
-      });
-
-      $(document).ready(function () {
-        $('#patrimonio').select2({
-          ajax: {
-            url: '/conservacion/proyectos/patrimonios',
-            datatype: 'json',
-            delay: 250,
-            data: function (params) {
-              return {
-                search: params.term || '',
-                page: params.page || 1
-              };
-            },
-            processResults: function (data, params) {
-              params.page = params.page || 1;
-              console.log(data.items)
-              return {
-                results: $.map(data.items, function (obj, index) {
-                  return {id: obj.id, text: obj.nombreTituloDemoninacion};
-                }),
-                pagination: {
-                  more: (params.page * 10) < data.total_count
-                }
-              }
+      },
+      submitHandler: function (form, e) {
+        e.preventDefault();
+        let type = $('#type').val();
+        let method = '';
+        let url = '/conservacion/proyectos/';
+        if (type == 'new') {
+          // new
+          url = url + 'add/';
+          method = 'POST';
+        } else {
+          // edit
+          url = url + 'edit/' + id + '/';
+          method = 'POST';
+        }
+        $('#cover-spin').show(0)
+        $.ajax({
+          url: url,
+          method: method,
+          data: {
+            'codigo': $("#codigo").val(),
+            'nombre': $("#nombre").val(),
+            'tipoPlan': $("#tipoPlan").val()
+          },
+          success: function (response) {
+            $('#cover-spin').hide()
+            if (response["success"] !== undefined) {
+              $.toast({
+                text: 'El nombre del proyecto ya existe',
+                icon: 'warning',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#c67a71',
+                textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
+              })
+            } else {
+              $('#myModal').modal('hide')
+              $("#tabla_autores").DataTable().draw();
+              $.toast({
+                text: 'Proyecto actualizado con éxito',
+                icon: 'success',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#B7E6CA',  // To change the background
+                textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
+              })
             }
           },
-          placeholder: "Patrimonio",
-          allowClear: true,
-          cache: false
+          error: function (error) {
+            $('#cover-spin').hide()
+            console.log(error)
+          }
         });
+        return false;
+      }
+    });
 
-        $('#patrimonio').on("select2:clear", function (evt) {
-          $(this).on("select2:opening.cancelOpen", function (evt) {
-            evt.preventDefault();
-
-            $(this).off("select2:opening.cancelOpen");
-          });
-        });
-
-
+    $(document).ready(function () {
+      $('#patrimonio').select2({
+        ajax: {
+          url: '/conservacion/proyectos/patrimonios',
+          datatype: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term || '',
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            return {
+              results: $.map(data.items, function (obj, index) {
+                return {id: obj.id, text: obj.nombreTituloDemoninacion};
+              }),
+              pagination: {
+                more: (params.page * 10) < data.total_count
+              }
+            }
+          }
+        },
+        placeholder: "Patrimonio",
+        allowClear: true,
+        cache: false
       });
+
+      $('#patrimonio').on("select2:clear", function (evt) {
+        $(this).on("select2:opening.cancelOpen", function (evt) {
+          evt.preventDefault();
+
+          $(this).off("select2:opening.cancelOpen");
+        });
+      });
+
+
+    });
   </script>
 {% endblock %}

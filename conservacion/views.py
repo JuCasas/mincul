@@ -167,7 +167,7 @@ def query_incidents_by_args(**kwargs):
 def listPatrimonys_Project(request):
     length = 10
     search = request.GET['search']
-    page = int(request.GET['page'][0])
+    page = int(request.GET['page'])
     start = (page - 1) * length
     end = start + length
     queryset = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=search).exclude(tipoPatrimonio=1).order_by(
