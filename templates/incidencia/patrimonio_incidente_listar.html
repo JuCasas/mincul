@@ -409,6 +409,22 @@
       return dt.toISOString().slice(0, 10);
     }
 
+    //Setear opciones para el toastr
+    function setOptions(type, message, ubication, time) {
+      return {
+        heading: '<b>' + (type === 'error' ? 'Error:' : 'Info:') + '</b>',
+        text: '<span>' + message + '</span>',
+        icon: (type === 'error' ? 'error' : 'success'),
+        loader: true,
+        bgColor: (type === 'error' ? '#e63757' : '#00d27a'),
+        textColor: '#FFFFFF',
+        loaderBg: '#FFFFFF',
+        position: ubication,
+        hideAfter: time * 1000,
+        stack: false,
+      }
+    }
+
     let types = {
       '1': 'Invasión/Ocupación Ilegal/Ampliación de Invasión',
       '2': 'Deterioro de patrimonio por efectos de la persona',
@@ -572,8 +588,8 @@
           "data": "status", render: function (data, type, row) {
 
             let resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-                '<button type="button" class="btn btn-check"' + (data==='3'|| data==='4'?' disabled ':'')+'><i class="fas fa-check"></i></button>' + '&nbsp;&nbsp' +
-                '<button type="button" class="btn btn-delete"'+ (data==='3'|| data==='4'?' disabled ':'')+'><i class="fas fa-trash-alt"></i></button>'
+                '<button type="button" class="btn btn-check"' + (data === '3' || data === '4' ? ' disabled ' : '') + '><i class="fas fa-check"></i></button>' + '&nbsp;&nbsp' +
+                '<button type="button" class="btn btn-delete"' + (data === '3' || data === '4' ? ' disabled ' : '') + '><i class="fas fa-trash-alt"></i></button>'
             return resp;
           }
         },
@@ -692,18 +708,7 @@
     $('#asign').on('click', function (e) {
 
       if (project.val() == null) {
-        $.toast({
-          heading: '<b>Error:</b>',
-          text: '<span>Debe ingresar un Proyecto de Conservación</span>',
-          icon: 'error',
-          loader: true,        // Change it to false to disable loader
-          bgColor: '#e63757',  // To change the background
-          textColor: '#FFFFFF',
-          loaderBg: '#FFFFFF',
-          position: 'top-center',
-          hideAfter: 1000,
-          stack: false,
-        })
+        $.toast(setOptions('error', 'Debe ingresar un Proyecto de Conservación', 'top-center', 1))
       } else {
 
         id = $('#idIncidenteAsignar').val()
@@ -719,39 +724,14 @@
             $('#cover-spin').hide();
             $("#modalAsignar").modal('hide');
             table.draw();
-            $.toast({
-              heading: '<b>Info:</b>',
-              text: '<span>Proyecto asignado exitosamente!</span>',
-              icon: 'success',
-              loader: true,        // Change it to false to disable loader
-              bgColor: '#00d27a',  // To change the background
-              textColor: '#FFFFFF',
-              loaderBg: '#FFFFFF',
-              position: 'top-center',
-              hideAfter: 3000,
-              stack: false,
-            })
-
+            $.toast(setOptions('success', 'Proyecto asignado exitosamente!', 'top-center', 3))
           },
           error: function (error) {
             $('#cover-spin').hide();
-            $.toast({
-              heading: '<b>Error:</b>',
-              text: '<span>Ha ocurrido un error en el servidor</span>',
-              icon: 'error',
-              loader: true,        // Change it to false to disable loader
-              bgColor: '#e63757',  // To change the background
-              textColor: '#FFFFFF',
-              loaderBg: '#FFFFFF',
-              position: 'top-center',
-              hideAfter: 1000,
-              stack: false,
-            })
+            $.toast(setOptions('error', 'Ha ocurrido un error en el servidor', 'top-center', 1))
           }
         });
-
       }
-
     });
 
     //Retirar proyecto a Incidente
@@ -770,34 +750,11 @@
           $('#cover-spin').hide();
           $("#modalRetirar").modal('hide');
           table.draw();
-          $.toast({
-            heading: '<b>Info:</b>',
-            text: '<span>Proyecto retirado exitosamente!</span>',
-            icon: 'success',
-            loader: true,        // Change it to false to disable loader
-            bgColor: '#00d27a',  // To change the background
-            textColor: '#FFFFFF',
-            loaderBg: '#FFFFFF',
-            position: 'top-center',
-            hideAfter: 3000,
-            stack: false,
-          })
-
+          $.toast(setOptions('success', 'Proyecto retirado exitosamente!', 'top-center', 3))
         },
         error: function (error) {
           $('#cover-spin').hide();
-          $.toast({
-            heading: '<b>Error:</b>',
-            text: '<span>Ha ocurrido un error en el servidor</span>',
-            icon: 'error',
-            loader: true,        // Change it to false to disable loader
-            bgColor: '#e63757',  // To change the background
-            textColor: '#FFFFFF',
-            loaderBg: '#FFFFFF',
-            position: 'top-center',
-            hideAfter: 1000,
-            stack: false,
-          })
+          $.toast(setOptions('error', 'Ha ocurrido un error en el servidor', 'top-center', 1))
         }
       });
 
@@ -818,34 +775,11 @@
           $('#cover-spin').hide();
           $("#modalDenegar").modal('hide');
           table.draw();
-          $.toast({
-            heading: '<b>Info:</b>',
-            text: '<span>Incidente denegado correctamente!</span>',
-            icon: 'success',
-            loader: true,        // Change it to false to disable loader
-            bgColor: '#00d27a',  // To change the background
-            textColor: '#FFFFFF',
-            loaderBg: '#FFFFFF',
-            position: 'top-center',
-            hideAfter: 3000,
-            stack: false,
-          })
-
+          $.toast(setOptions('success', 'Incidente denegado correctamente!', 'top-center', 3))
         },
         error: function (error) {
           $('#cover-spin').hide();
-          $.toast({
-            heading: '<b>Error:</b>',
-            text: '<span>Ha ocurrido un error en el servidor</span>',
-            icon: 'error',
-            loader: true,        // Change it to false to disable loader
-            bgColor: '#e63757',  // To change the background
-            textColor: '#FFFFFF',
-            loaderBg: '#FFFFFF',
-            position: 'top-center',
-            hideAfter: 1000,
-            stack: false,
-          })
+          $.toast(setOptions('error', 'Ha ocurrido un error en el servidor', 'top-center', 1))
         }
       });
 
