@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from conservacion.models import ProyectoConservacion, Actividad, Tarea, Campo
 from conservacion.serializers import ProyectoConservacionSerializer, ActividadSerializer, TareaSerializer, \
     PatrimonioSerializer, ConservadorSerializer
+from mincul.settings import MEDIA_URL
 from mincul_app.models import Documento
 from patrimonios.models import Patrimonio, Institucion, PuntoGeografico
 from incidente.models import Incidente
@@ -288,8 +289,10 @@ def listActivities(request, pk):
     else:
         proyecto = ProyectoConservacion.objects.get(pk=pk)
         patrimonios = proyecto.patrimonios.all()
+        media_path = MEDIA_URL
 
         context = {
+            'media_path': media_path,
             'status_choices': Actividad.STATUS,
             'project': proyecto,
             'patrimonios': patrimonios

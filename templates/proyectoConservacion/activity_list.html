@@ -362,16 +362,21 @@
 
                         <div class="row justify-content-between">
                             <div class="form-group col-9">
-                                <label for="documentos">Adjuntar documentos:</label>
+                                <h5>Documentos nuevos:</h5>
                             </div>
 
                             <div class="card-body bg-light">
-                                <div class="dropzone dropzone-multiple p-0" data-dropzone>
-                                    <div class="fallback">
-                                        <input type="file" name="file" id="file" multiple>
-                                    </div>
-                                </div>
+                                {#                                <div class="dropzone dropzone-multiple p-0" data-dropzone>#}
+                                {#                                    <div class="fallback">#}
+                                <input type="file" name="file" id="file" multiple>
+                                {#                                    </div>#}
+                                {#                                </div>#}
                             </div>
+
+                            <div class="col-lg-12 col-sm-12" id="seccionExistentes">
+
+                            </div>
+
                         </div>
 
 
@@ -427,6 +432,7 @@
             $('#fechaFin').val("");
             $('#type').val('new');
             $('#modal_title').text('Nueva Actividad');
+            $("#seccionExistentes").html('');
             $("#modalActividad").modal();
         });
 
@@ -437,7 +443,7 @@
 
             let files = $("#file")[0].files
             for (let i = 0, len = files.length; i < len; i++) {
-                fd.append("file" , files[i]);
+                fd.append("file", files[i]);
             }
 
             fd.append("csrfmiddlewaretoken", "{{ csrf_token }}")
@@ -612,6 +618,9 @@
 
                 let tamConservadores = data['conservadores'].length;
                 let conservadores = data['conservadores'];
+                let documentos = data['documentos'];
+                console.log(documentos);
+                let tamDocumentos = data['documentos'].length;
                 let relaciones = data['relaciones'];
                 let tamRelaciones = relaciones.length;
 
@@ -635,6 +644,23 @@
 
                     $("#conservadorAgregar").append(data);
                 }
+
+                {#$("#relacionAgregar").empty()#}
+
+                data = '<h5 class="mb-4">Documentos existentes:</h5>';
+                for (let i = 0; i < tamDocumentos; i++) {
+                    {#relacionesLista.push(relaciones[0].id);#}
+                    {#$("#lista").val(relacionesLista);#}
+
+                    console.log(documentos[i])
+                    console.log(documentos[i].name)
+
+                    data += '<a class="notification notification-flush bg-0"' +
+                        'href="' + documentos[i].url + '" download>' + documentos[i].name + '</a>' +
+                        '<hr>';
+
+                }
+                $("#seccionExistentes").html(data);
 
                 $("#relacionAgregar").empty()
                 for (let i = 0; i < tamRelaciones; i++) {

@@ -1,6 +1,9 @@
+import os
+
 from rest_framework import serializers
 from conservacion.models import ProyectoConservacion, Tarea
 from conservacion.models import Actividad
+from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
 from authentication.models import User
 
@@ -36,6 +39,15 @@ class ConservadorSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id','username', 'codigo', 'first_name', 'last_name']
 
+class DocumentoSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    class Meta:
+        model = Documento
+        fields = ['name','url']
+    def get_name(self, instance):
+        return os.path.basename(instance.url.name)
+
+
 class RelacionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -48,13 +60,14 @@ class ActividadSerializer (serializers.ModelSerializer):
     patrimonio = serializers.CharField(source='patrimonio.nombreTituloDemoninacion')
     patrimonioPk = serializers.IntegerField(source='patrimonio.pk')
     conservadores = ConservadorSerializer(read_only=True, many=True)
+    documentos = DocumentoSerializer(read_only=True, many=True)
     relaciones = RelacionSerializer(read_only=True, many=True)
     total_conservadores = serializers.SerializerMethodField()
     fechaInicio = serializers.DateField(format='%d/%m/%Y', required=False)
 
     class Meta:
         model = Actividad
-        fields = ['patrimonioPk','id','codigo','nombre','fechaInicio','fechaFin','presupuesto','gastoTotal','estado','descripcion','status', "patrimonio", "total_conservadores","relaciones","conservadores"]
+        fields = ['documentos','patrimonioPk','id','codigo','nombre','fechaInicio','fechaFin','presupuesto','gastoTotal','estado','descripcion','status', "patrimonio", "total_conservadores","relaciones","conservadores"]
 
     def get_total_conservadores(self, instance):
         return instance.conservadores.count()
