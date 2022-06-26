@@ -885,6 +885,7 @@
         }
 
         $('#modalActividad').on('hide.bs.modal', function () {
+            $("#file").val(null);
             $("#conservadorAgregar").empty();
             $("#relacionAgregar").empty();
             conservadoresLista = [];
