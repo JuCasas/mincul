@@ -1,15 +1,16 @@
 import datetime
 
 from django.http import JsonResponse
-
+from django.core import serializers
 from authentication.models import User
 from django.shortcuts import render, redirect
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from conservacion.models import ProyectoConservacion, Actividad, Tarea
+from conservacion.models import ProyectoConservacion, Actividad, Tarea, Campo
 from conservacion.serializers import ProyectoConservacionSerializer, ActividadSerializer, TareaSerializer, \
     PatrimonioSerializer, ConservadorSerializer
+from mincul_app.models import Documento
 from patrimonios.models import Patrimonio, Institucion, PuntoGeografico
 from incidente.models import Incidente
 from incidente.serializers import IncidenteSerializer, PuntoGeograficoSerializer
@@ -502,8 +503,11 @@ def editTask(request, pk):
 
 @api_view(('GET',))
 def editTaskView(request, pk):
+    tarea = Tarea.objects.get(pk=pk)
+    secciones = Campo.objects.filter(tarea_id=tarea.pk)
     context = {
-        'task': Tarea.objects.get(pk=pk),
+        'task': tarea,
+        'secciones': secciones,
         'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
     }
     return render(request, 'proyectoConservacion/editTask_view.html', context)
@@ -531,3 +535,29 @@ def updateTaskState(request):
     task.estado = nuevo_estado
     task.save()
     return JsonResponse({}, status=200)
+
+
+@api_view(('POST',))
+def addSection(request, pk):
+    print('Dentro de agregar sección>>>>>>>>')
+
+    tarea = Tarea.objects.get(pk=pk)
+    nombre = request.POST['nombre']
+    descripcion = request.POST['descripcion']
+
+    evidencias = request.FILES['evidencias']
+
+    campo = Campo.objects.create(nombre=nombre, contenido=descripcion, tarea=tarea)
+    campo.save()
+
+    for f in evidencias:
+        documento = Documento.objects.create(url=f)
+        campo.documentos.add(documento)
+
+    return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+
+def listSections(request, pk):
+    secciones = Campo.objects.filter(tarea_id=pk)
+    ser_instance = serializers.serialize('json', secciones)
+    return JsonResponse({"secciones": ser_instance}, status=200)

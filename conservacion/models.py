@@ -106,6 +106,5 @@ class Campo(models.Model):
     nombre = models.CharField(max_length=200)
     contenido = models.CharField(max_length=200, null=True, blank=True)
     tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
-    conservador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)

@@ -235,6 +235,9 @@
                 </div>
             </div>
             <div class="card-body cbody px-5 py-4">
+
+                <div id="listarSecciones"></div>
+
             </div>
         </div>
 
@@ -277,423 +280,55 @@
 
     <div class="modal fade" id="agregarSecciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog  mw-100 w-75"  >
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Agregar sección:</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
-                            class="font-weight-light" aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
+    <div class="modal-dialog  mw-100 w-50">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar sección:</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                        class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="formRegistroSeccion" name="formRegistroSeccion" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card mb-3">
-                                <div class="card-body bg-light">
-                                    <form id="project_form" method="post" enctype="multipart/form-data">
-
-                                        <div id="complain1" class="border rounded position-relative bg-white p-3 mt-3">
-                                            <div class="position-absolute r-0 t-0 mt-2 mr-3 z-index-1"></div>
-                                            <div class="accordion border-x border-top rounded" id="accordionExample">
-                                                <div class="card shadow-none border-bottom">
-                                                    <div class="card-header py-0" id="headingOne">
-                                                        <button class="btn btn-link text-decoration-none btn-block py-2 px-0 text-left"
-                                                                type="button" data-toggle="collapse"
-                                                                data-target="#collapseOne"
-                                                                aria-expanded="true" aria-controls="collapseOne"><span
-                                                                class="fas fa-caret-right accordion-icon mr-3"
-                                                                data-fa-transform="shrink-2"></span><span
-                                                                class="font-weight-medium text-sans-serif text-900">Sección 1</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse show" id="collapseOne"
-                                                         aria-labelledby="headingOne"
-                                                         data-parent="#accordionExample">
-                                                        <div class="card-body pt-2">
-                                                            <div class="pl-4">
-
-                                                                <ul class="list-group list-group-flush">
-                                                                    <li class="list-group-item"></li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="nombre_1"
-                                                                                   class="col-sm-2 col-form-label">Nombre: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <input class="form-control"
-                                                                                       id="nombre_1"
-                                                                                       name="nombre" type="text"
-                                                                                       placeholder="Nombre de la sección">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group row">
-                                                                            <label for="descripcion_1"
-                                                                                   class="col-sm-2 col-form-label">Descripción: </label>
-                                                                            <div class="col-sm-10">
-                                                                    <textarea class="form-control" id="descripcion_1"
-                                                                              name="descripcion" type="text"
-                                                                              placeholder="Ingrese una descripción"></textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="evidencias_1"
-                                                                                   class="col-sm-2 col-form-label">Evidencias: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <div class="dropzone dropzone-multiple p-0"
-                                                                                     data-dropzone
-                                                                                     data-options='{"url":"valid/url"}'>
-                                                                                    <div class="fallback">
-                                                                                        <input type="file"
-                                                                                               name="evidencias"
-                                                                                               id="evidencias_1"
-                                                                                               multiple>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div id="complain2"
-                                             class="complain-oculto border rounded position-relative bg-white p-3 mt-3"
-                                             style="display: none;">
-                                            <div class="position-absolute r-0 t-0 mt-2 mr-3 z-index-1">
-                                                <button id="cancelcomplain-2"
-                                                        class="btn btn-link btn-sm p-0 cancel-complain"
-                                                        type="button">
-                                        <span class="fas fa-times-circle text-danger"
-                                              data-fa-transform="shrink-1"></span>
-                                                </button>
-                                            </div>
-
-                                            <div class="accordion border-x border-top rounded" id="accordionExample">
-                                                <div class="card shadow-none border-bottom">
-                                                    <div class="card-header py-0" id="headingOne">
-                                                        <button class="btn btn-link text-decoration-none btn-block py-2 px-0 text-left"
-                                                                type="button" data-toggle="collapse"
-                                                                data-target="#collapseOne"
-                                                                aria-expanded="true" aria-controls="collapseOne"><span
-                                                                class="fas fa-caret-right accordion-icon mr-3"
-                                                                data-fa-transform="shrink-2"></span><span
-                                                                class="font-weight-medium text-sans-serif text-900">Sección 2</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse show" id="collapseOne"
-                                                         aria-labelledby="headingOne"
-                                                         data-parent="#accordionExample">
-                                                        <div class="card-body pt-2">
-                                                            <div class="pl-4">
-                                                                <ul class="list-group list-group-flush">
-                                                                    <li class="list-group-item"></li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="nombre_2"
-                                                                                   class="col-sm-2 col-form-label">Nombre: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <input class="form-control"
-                                                                                       id="nombre_2"
-                                                                                       name="nombre" type="text"
-                                                                                       placeholder="Nombre de la sección">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group row">
-                                                                            <label for="descripcion_2"
-                                                                                   class="col-sm-2 col-form-label">Descripción: </label>
-                                                                            <div class="col-sm-10">
-                                                                    <textarea class="form-control" id="descripcion_2"
-                                                                              name="descripcion" type="text"
-                                                                              placeholder="Ingrese una descripción"></textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="evidencias_2"
-                                                                                   class="col-sm-2 col-form-label">Evidencias: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <div class="dropzone dropzone-multiple p-0"
-                                                                                     data-dropzone
-                                                                                     data-options='{"url":"valid/url"}'>
-                                                                                    <div class="fallback">
-                                                                                        <input type="file"
-                                                                                               name="evidencias"
-                                                                                               id="evidencias_2"
-                                                                                               multiple>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div id="complain3"
-                                             class="complain-oculto border rounded position-relative bg-white p-3 mt-3"
-                                             style="display: none;">
-                                            <div class="position-absolute r-0 t-0 mt-2 mr-3 z-index-1">
-                                                <button id="cancelcomplain-3"
-                                                        class="btn btn-link btn-sm p-0 cancel-complain"
-                                                        type="button">
-                                        <span class="fas fa-times-circle text-danger"
-                                              data-fa-transform="shrink-1"></span>
-                                                </button>
-                                            </div>
+                    <div class="form-group row">
+                        <label for="nombre_1" class="col-sm-2 col-form-label">Nombre: </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="nombre_1" name="nombre_1" type="text"
+                                   placeholder="Nombre de la sección">
+                        </div>
+                    </div>
 
 
-                                            <div class="accordion border-x border-top rounded" id="accordionExample">
-                                                <div class="card shadow-none border-bottom">
-                                                    <div class="card-header py-0" id="headingOne">
-                                                        <button class="btn btn-link text-decoration-none btn-block py-2 px-0 text-left"
-                                                                type="button" data-toggle="collapse"
-                                                                data-target="#collapseOne"
-                                                                aria-expanded="true" aria-controls="collapseOne"><span
-                                                                class="fas fa-caret-right accordion-icon mr-3"
-                                                                data-fa-transform="shrink-2"></span><span
-                                                                class="font-weight-medium text-sans-serif text-900">Sección 3</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse show" id="collapseOne"
-                                                         aria-labelledby="headingOne"
-                                                         data-parent="#accordionExample">
-                                                        <div class="card-body pt-2">
-                                                            <div class="pl-4">
-                                                                <ul class="list-group list-group-flush">
-                                                                    <li class="list-group-item"></li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="nombre_3"
-                                                                                   class="col-sm-2 col-form-label">Nombre: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <input class="form-control"
-                                                                                       id="nombre_3"
-                                                                                       name="nombre" type="text"
-                                                                                       placeholder="Nombre de la sección">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group row">
-                                                                            <label for="descripcion_3"
-                                                                                   class="col-sm-2 col-form-label">Descripción: </label>
-                                                                            <div class="col-sm-10">
-                                                                    <textarea class="form-control" id="descripcion_3"
-                                                                              name="descripcion" type="text"
-                                                                              placeholder="Ingrese una descripción"></textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="evidencias_3"
-                                                                                   class="col-sm-2 col-form-label">Evidencias: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <div class="dropzone dropzone-multiple p-0"
-                                                                                     data-dropzone
-                                                                                     data-options='{"url":"valid/url"}'>
-                                                                                    <div class="fallback">
-                                                                                        <input type="file"
-                                                                                               name="evidencias"
-                                                                                               id="evidencias_3"
-                                                                                               multiple>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div id="complain4"
-                                             class="complain-oculto border rounded position-relative bg-white p-3 mt-3"
-                                             style="display: none;">
-                                            <div class="position-absolute r-0 t-0 mt-2 mr-3 z-index-1">
-                                                <button id="cancelcomplain-4"
-                                                        class="btn btn-link btn-sm p-0 cancel-complain"
-                                                        type="button">
-                                        <span class="fas fa-times-circle text-danger"
-                                              data-fa-transform="shrink-1"></span>
-                                                </button>
-                                            </div>
-
-                                            <div class="accordion border-x border-top rounded" id="accordionExample">
-                                                <div class="card shadow-none border-bottom">
-                                                    <div class="card-header py-0" id="headingOne">
-                                                        <button class="btn btn-link text-decoration-none btn-block py-2 px-0 text-left"
-                                                                type="button" data-toggle="collapse"
-                                                                data-target="#collapseOne"
-                                                                aria-expanded="true" aria-controls="collapseOne"><span
-                                                                class="fas fa-caret-right accordion-icon mr-3"
-                                                                data-fa-transform="shrink-2"></span><span
-                                                                class="font-weight-medium text-sans-serif text-900">Sección 4</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse show" id="collapseOne"
-                                                         aria-labelledby="headingOne"
-                                                         data-parent="#accordionExample">
-                                                        <div class="card-body pt-2">
-                                                            <div class="pl-4">
-                                                                <ul class="list-group list-group-flush">
-                                                                    <li class="list-group-item"></li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="nombre_4"
-                                                                                   class="col-sm-2 col-form-label">Nombre: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <input class="form-control"
-                                                                                       id="nombre_4"
-                                                                                       name="nombre" type="text"
-                                                                                       placeholder="Nombre de la sección">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group row">
-                                                                            <label for="descripcion_4"
-                                                                                   class="col-sm-2 col-form-label">Descripción: </label>
-                                                                            <div class="col-sm-10">
-                                                                    <textarea class="form-control" id="descripcion_4"
-                                                                              name="descripcion" type="text"
-                                                                              placeholder="Ingrese una descripción"></textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="evidencias_4"
-                                                                                   class="col-sm-2 col-form-label">Evidencias: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <div class="dropzone dropzone-multiple p-0"
-                                                                                     data-dropzone
-                                                                                     data-options='{"url":"valid/url"}'>
-                                                                                    <div class="fallback">
-                                                                                        <input type="file"
-                                                                                               name="evidencias"
-                                                                                               id="evidencias_4"
-                                                                                               multiple>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                    <div class="form-group row">
+                        <label for="descripcion_1"
+                               class="col-sm-2 col-form-label">Descripción: </label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="descripcion_1" name="descripcion_1" type="text"
+                                      placeholder="Ingrese una descripción"></textarea>
+                        </div>
+                    </div>
 
 
-                                        </div>
-
-                                        <div id="complain5"
-                                             class="complain-oculto border rounded position-relative bg-white p-3 mt-3"
-                                             style="display: none;">
-                                            <div class="position-absolute r-0 t-0 mt-2 mr-3 z-index-1">
-                                                <button id="cancelcomplain-5"
-                                                        class="btn btn-link btn-sm p-0 cancel-complain"
-                                                        type="button">
-                                        <span class="fas fa-times-circle text-danger"
-                                              data-fa-transform="shrink-1"></span>
-                                                </button>
-                                            </div>
-
-
-                                            <div class="accordion border-x border-top rounded" id="accordionExample">
-                                                <div class="card shadow-none border-bottom">
-                                                    <div class="card-header py-0" id="headingOne">
-                                                        <button class="btn btn-link text-decoration-none btn-block py-2 px-0 text-left"
-                                                                type="button" data-toggle="collapse"
-                                                                data-target="#collapseOne"
-                                                                aria-expanded="true" aria-controls="collapseOne"><span
-                                                                class="fas fa-caret-right accordion-icon mr-3"
-                                                                data-fa-transform="shrink-2"></span><span
-                                                                class="font-weight-medium text-sans-serif text-900">Sección 5</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse show" id="collapseOne"
-                                                         aria-labelledby="headingOne"
-                                                         data-parent="#accordionExample">
-                                                        <div class="card-body pt-2">
-                                                            <div class="pl-4">
-                                                                <ul class="list-group list-group-flush">
-                                                                    <li class="list-group-item"></li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="nombre_5"
-                                                                                   class="col-sm-2 col-form-label">Nombre: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <input class="form-control"
-                                                                                       id="nombre_5"
-                                                                                       name="nombre" type="text"
-                                                                                       placeholder="Nombre de la sección">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group row">
-                                                                            <label for="descripcion_5"
-                                                                                   class="col-sm-2 col-form-label">Descripción: </label>
-                                                                            <div class="col-sm-10">
-                                                                    <textarea class="form-control" id="descripcion_5"
-                                                                              name="descripcion" type="text"
-                                                                              placeholder="Ingrese una descripción"></textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="list-group-item">
-                                                                        <div class="form-group row">
-                                                                            <label for="evidencias_5"
-                                                                                   class="col-sm-2 col-form-label">Evidencias: </label>
-                                                                            <div class="col-sm-10">
-                                                                                <div class="dropzone dropzone-multiple p-0"
-                                                                                     data-dropzone
-                                                                                     data-options='{"url":"valid/url"}'>
-                                                                                    <div class="fallback">
-                                                                                        <input type="file"
-                                                                                               name="evidencias"
-                                                                                               id="evidencias_5"
-                                                                                               multiple>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <button id="addcomplain" class="btn btn-falcon-default btn-sm mt-2 mb-3 w-100"
-                                                type="button">
-                                            <span class="fas fa-plus mr-1" data-fa-transform="up-1"></span>Agregar
-                                            sección
-                                        </button>
-                                    </form>
+                    <div class="form-group row">
+                        <label for="evidencias_1"
+                               class="col-sm-2 col-form-label">Evidencias: </label>
+                        <div class="col-sm-10">
+                            <div class="dropzone dropzone-multiple p-0" data-dropzone
+                                 data-options='{"url":"valid/url"}'>
+                                <div class="fallback">
+                                    <input type="file" name="evidencias_1" id="evidencias_1" multiple>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary btn-sm" type="button">Guardar</button>
-                </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -709,25 +344,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
     <script>
 
+
         $(document).ready(function () {
-            let complains = 0
-            $("#addcomplain").on("click", function () {
-                complains++;
-                $(".complain-oculto").first().slideDown('fast').removeClass("complain-oculto");
-                if (complains === 4)
-                    $("#addcomplain").attr('hidden', true)
-            })
-
-            $(".cancel-complain").on("click", function () {
-                let number = $(this).attr("id").split('-')[1]
-                {% comment %}$("#servicio2").slideUp("slow");{% endcomment %}
-                $("#complain" + number).slideUp("fast").addClass("complain-oculto");
-                $("#complain" + number + " input").val("");
-                $("#addcomplain").removeAttr('hidden');
-                complains--;
-            })
-        })
-
+            listarSecciones();
+        });
 
         jQuery.validator.addMethod("alphanumeric", function (value, element) {
             return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
@@ -744,6 +364,79 @@
                 return true;
             return false;
         }, "La fecha de inicio no puede ser superior a la fecha fin");
+
+
+        function listarSecciones() {
+
+            $.ajax({
+                type: 'POST',
+                url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/listSections/',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    task_pk: {{ task.pk }},
+                },
+                success: function (response) {
+                    $("#listarSecciones").empty();
+
+                    var secciones = JSON.parse(response['secciones']);
+                    console.log(secciones);
+                    var i = 0;
+                    var j = 1;
+                    var numero = secciones.length;
+                    var data = '';
+
+                    for (i = 0; i < numero; i++) {
+                    data+=(
+                        '<div class="card mt-3">'+
+                        '    <ul class="list-group list-group-flush">'+
+                        '        <li class="list-group-item">'+
+                        '            <div class="row">'+
+                        '                <div class="col-10">'+
+                        '                    <h5>'+ secciones[i]['fields'].nombre +'</h5>'+
+                        '                </div>'+
+                        '                <div class="col-2">'+
+                        '                    <div class="d-flex flex-row justify-content-end" >'+
+                        '                        <button type="button" class="btn btn-show"><i class="fas fa-edit"></i></button>'+
+                        '                        <button type="button" class="btn btn-edit"><i class="fas fa-trash"></i>'+
+                        '                        </button>'+
+                        '                    </div>'+
+                        '                </div>'+
+                        '            </div>'+
+                        '        </li>'+
+                        '        <li class="list-group-item">'+
+                        '            <div class="form-group row">'+
+                        '                <label for="descripcion_2"'+
+                        '                       class="col-sm-2 col-form-label">Descripción: </label>'+
+                        '                <div class="col-sm-10">'+
+                        '                <textarea class="form-control" id="descripcion_2" name="descripcion_2" type="text"'+
+                        '                          disabled> '+ secciones[i]['fields'].contenido +
+                        '                </textarea>'+
+                        '                </div>'+
+                        '            </div>'+
+                        '        </li>'+
+                        '        <li class="list-group-item">'+
+                        '            <div class="form-group row">'+
+                        '                <label for="evidencias_2"'+
+                        '                       class="col-sm-2 col-form-label">Evidencias: </label>'+
+                        '                <div class="col-sm-10">'+
+                        '                    <p>Listar qui archivos</p>'+
+                        '                </div>'+
+                        '            </div>'+
+                        '        </li>'+
+                        '    </ul>'+
+                        '</div>'
+                        )
+                    }
+
+                    $("#listarSecciones").append(data);
+                },
+                error: function (response) {
+                    console.log('Ocurrio un error')
+                    alert(response["responseJSON"]["error"]);
+                }
+            });
+        }
+
 
         $("form[name='formTareas']").validate({
             rules: {
@@ -835,6 +528,8 @@
                             })
                             //window.location.pathname = "/conservacion/actividades/" + $('#idActivity').val() + "/tareas/";
                         }
+
+                        listarSecciones();
                     },
                     error: function (error) {
                         $('#cover-spin').hide()
@@ -862,6 +557,85 @@
             });
         }
 
+        $("#formRegistroSeccion").validate({
+            rules: {
+                nombre_1: {
+                    required: true,
+                    maxlength: 50,
+                    alphanumeric: true
+                },
+                descripcion_1: {
+                    required: true,
+                    maxlength: 200,
+                },
+
+                evidencias_1: {
+                    required: true,
+                },
+            },
+            messages: {
+                nombre_1: {
+                    required: "Debe ingresar el nombre de la sección",
+                    maxlength: "El nombre no debe tener más de 50 caracteres",
+                    alphanumeric: "El nombre solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
+                },
+                descripcion_1: {
+                    required: "Debe ingresar la descripción de la sección",
+                    maxlength: "La descripción no debe tener más de 200 caracteres",
+                },
+                evidencias_1: {
+                    required: "Debe seleccionar un archivo como evidencia",
+                },
+            },
+
+            submitHandler: function (form, e) {
+                e.preventDefault();
+
+                console.log($("#evidencias_1")[0].files),
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/addSection/',
+
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            task_pk: {{ task.pk }},
+                            nombre: $("#nombre_1").val(),
+                            descripcion: $("#descripcion_1").val(),
+                            evidencias: $("#evidencias_1")[0].files,
+                        },
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+
+                            $.toast({
+                                text: 'Se rechazó la solicitúd con éxito',
+                                icon: 'success',
+                                loader: false,        // Change it to false to disable loader
+                                bgColor: '#B7E6CA',  // To change the background
+                                textColor: '#000000',
+                                position: 'bottom-right',
+                                hideAfter: 3000,
+                            })
+                        },
+                        error: function (response) {
+
+                            console.log(response)
+
+                            $.toast({
+                                text: 'Ocurrió un error inesperado',
+                                icon: 'warning',
+                                loader: false,        // Change it to false to disable loader
+                                bgColor: '#c67a71',
+                                textColor: '#000000',
+                                position: 'bottom-right',
+                                hideAfter: 3000,
+                            })
+                        }
+                    });
+                return false;
+            }
+        });
 
     </script>
 {% endblock %}
