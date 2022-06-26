@@ -272,12 +272,9 @@
 
                         <div class="row">
                             <div class="form-group col-lg-12 col-sm-12">
-                                <label for="patrimonio">Patrimonio Asociado:</label>
+                                <label for="conservadores_count">Patrimonio Asociado:</label>
                                 <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
-                                    {% for patrimonio in patrimonios %}
-                                        <option value="{{ patrimonio.id }}"
-                                                selected="selected">{{ patrimonio.nombreTituloDemoninacion }}</option>
-                                    {% endfor %}
+
                                 </select>
                             </div>
                         </div>
@@ -600,7 +597,9 @@
                 let conservadores = data['conservadores'];
                 let relaciones = data['relaciones'];
                 let tamRelaciones = relaciones.length;
-                $("#patrimonio").select2("val", data['patrimonio'].toString());
+
+                $("#patrimonio").html('<option value="'+data['patrimonioPk']+'">'+data['patrimonio']+'</option>')
+                $("#patrimonio").val(data['patrimonioPk']).change();
 
                 $("#conservadorAgregar").empty()
                 for (let i = 0; i < tamConservadores; i++) {

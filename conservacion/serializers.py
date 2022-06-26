@@ -46,6 +46,7 @@ class ActividadSerializer (serializers.ModelSerializer):
 
     fechaFin = serializers.DateField(format='%d/%m/%Y', required=False)
     patrimonio = serializers.CharField(source='patrimonio.nombreTituloDemoninacion')
+    patrimonioPk = serializers.IntegerField(source='patrimonio.pk')
     conservadores = ConservadorSerializer(read_only=True, many=True)
     relaciones = RelacionSerializer(read_only=True, many=True)
     total_conservadores = serializers.SerializerMethodField()
@@ -53,7 +54,7 @@ class ActividadSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = Actividad
-        fields = ['id','codigo','nombre','fechaInicio','fechaFin','status', "patrimonio", "total_conservadores","relaciones","conservadores"]
+        fields = ['patrimonioPk','id','codigo','nombre','fechaInicio','fechaFin','presupuesto','gastoTotal','estado','descripcion','status', "patrimonio", "total_conservadores","relaciones","conservadores"]
 
     def get_total_conservadores(self, instance):
         return instance.conservadores.count()
