@@ -226,6 +226,7 @@
           <th class="sort">Fecha de Registro</th>
           <th class="sort">Estado</th>
           <th class="sort">Acciones</th>
+          <th class="sort">Proyecto</th>
         </tr>
         </thead>
         <tbody class="bg-white">
@@ -301,14 +302,15 @@
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="nombre">Proyecto de conservación:</label>
-                <input class="form-control" id="proyecto" name="proyecto" type="text" required
-                       placeholder="proyecto" disabled>
+                <select class="form-control" id="proyecto" name="proyecto" type="text" required
+                        disabled>
+                  <option value="first" selected="selected"></option>
+                </select>
               </div>
             </div>
 
             <div class="row justify-content-end mt-2 ml-0 mr-0">
-              <button type="button" data-dismiss="modal" class="btn btn-primary w-100"
-                      data-notification='{"positionClass":"toast-top-left","message":"Top left Notification!"}'>Volver
+              <button type="button" data-dismiss="modal" class="btn btn-primary w-100">Volver
               </button>
             </div>
 
@@ -355,8 +357,10 @@
         <div class="modal-body px-4">
           <div class="row mb-3">
             <label for="nombre">Proyecto de conservación:</label>
-            <input class="form-control" id="proyectoAsignacion" name="proyectoAsignacion" type="text" required
-                   placeholder="proyectoAsignacion" disabled value="">
+            <select class="form-control" id="proyecto_retirar" name="proyecto_retirar" type="text" required
+                    disabled>
+              <option value="first" selected="selected"></option>
+            </select>
           </div>
           <div class="row justify-content-center">
             <button type="button" data-dismiss="modal" class="btn second mr-2">Cancelar</button>
@@ -553,7 +557,10 @@
                 '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
             return resp;
           }
-        }
+        },
+        {"data": "proyecto"},
+      ], "columnDefs": [
+        {"visible": false, "targets": 7}
       ],
       "language": {
         "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
@@ -608,8 +615,9 @@
         if (data['status'] === '1') {
           $('#idIncidenteAsignar').val(id)
           $("#modalAsignar").modal();
-        }else if(data['status']=== '2'){
+        } else if (data['status'] === '2') {
           $('#idIncidenteRetirar').val(id)
+          $('select[name=proyecto_retirar] option:first').html(data['proyecto']['nombre']);
           $("#modalRetirar").modal();
         }
 
@@ -635,6 +643,12 @@
             $('#telefono').val(incidente['telefono']);
             $('#descripcion').val(incidente['descripcion']);
             $('select[name=status] option:first').html(status_filter[incidente['status']]['name']);
+            if (incidente['proyecto']['nombre'] === undefined) {
+              $('select[name=proyecto] option:first').html('');
+            } else {
+              $('select[name=proyecto] option:first').html(incidente['proyecto']['nombre']);
+            }
+
 
             $("#modalIncidente").modal();
           },
@@ -716,6 +730,55 @@
         });
 
       }
+
+    });
+
+    //Retirar proyecto a Incidente
+    $('#unassign').on('click', function (e) {
+
+      id = $('#idIncidenteRetirar').val()
+
+      $('#cover-spin').show(0)
+      $.ajax({
+        url: '/incidentes/' + id + '/unassign/',
+        method: 'POST',
+        data: {
+          'proyecto': project.val(),
+        },
+        success: function (response) {
+          $('#cover-spin').hide();
+          $("#modalRetirar").modal('hide');
+          table.draw();
+          $.toast({
+            heading: '<b>Info:</b>',
+            text: '<span>Proyecto retirado exitosamente!</span>',
+            icon: 'success',
+            loader: true,        // Change it to false to disable loader
+            bgColor: '#00d27a',  // To change the background
+            textColor: '#FFFFFF',
+            loaderBg: '#FFFFFF',
+            position: 'top-center',
+            hideAfter: 3000,
+            stack: false,
+          })
+
+        },
+        error: function (error) {
+          $.toast({
+            heading: '<b>Error:</b>',
+            text: '<span>Ha ocurrido un error en el servidor</span>',
+            icon: 'error',
+            loader: true,        // Change it to false to disable loader
+            bgColor: '#e63757',  // To change the background
+            textColor: '#FFFFFF',
+            loaderBg: '#FFFFFF',
+            position: 'top-center',
+            hideAfter: 1000,
+            stack: false,
+          })
+        }
+      });
+
 
     });
 
