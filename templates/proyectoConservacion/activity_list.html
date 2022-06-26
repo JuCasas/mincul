@@ -428,7 +428,8 @@
     <script>
         let conservadoresLista = [];
         let relacionesLista = [];
-        let idEnviar = '0'
+        let idEnviar = '0';
+        let objetoFila;
 
         $('#new').on('click', function (e) {
             $('#nombre').val('');
@@ -598,6 +599,7 @@
         $('#tabla_actividades tbody').on('click', 'button', function () {
             let data = table.row($(this).parents('tr')).data();
             let class_name = $(this).attr('class');
+            objetoFila = this;
 
             id = data['id'];
 
@@ -806,6 +808,20 @@
 
         function eliminarDocumento(button, pk) {
             var columna = button.parentNode;
+            let data = table.row($(objetoFila).parents('tr')).data();
+
+            let lista = []
+            var numDoc = data.documentos.length;
+
+            for (var i = 0; i < numDoc; i++) {
+                if (data.documentos[i].id !== pk) {
+                    lista.push(data.documentos[i]);
+                }
+            }
+
+            data.documentos = lista;
+
+            console.log(data.documentos);
 
             $.ajax({
                 type: 'POST',
@@ -847,8 +863,8 @@
 
         function agregarConservadorTabla() {
             let conservadorAgregar = $("#conservadores").select2('data');
-            if (!conservadoresLista.includes(conservadorAgregar[0].id)) {
-                conservadoresLista.push(conservadorAgregar[0].id);
+            if (!conservadoresLista.includes(Number(conservadorAgregar[0].id))) {
+                conservadoresLista.push(Number(conservadorAgregar[0].id));
                 $("#lista").val(conservadoresLista);
 
                 data = '<tr>' +
