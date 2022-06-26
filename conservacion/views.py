@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Count
 from django.http import JsonResponse
 from django.core import serializers
 from authentication.models import User
@@ -63,7 +64,7 @@ def query_activities_by_args(pk, **kwargs):
     order = kwargs.get('order', None)[0]
 
     project = ProyectoConservacion.objects.get(pk=pk)
-    queryset = Actividad.objects.filter(proyecto=project).filter(estado='1')
+    queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(proyecto=project).filter(estado='1')
 
     total = queryset.count()
 

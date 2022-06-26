@@ -49,7 +49,7 @@ class Actividad(models.Model):
     ORDER_COLUMN_CHOICES = {
         '0': 'codigo',
         '1': 'nombre',
-        '2': '',
+        '2': 'conservadores_count',
         '3': 'patrimonio__nombreTituloDemoninacion',
         '4': 'fechaInicio',
         '5': 'fechaFin',
