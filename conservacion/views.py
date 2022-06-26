@@ -170,7 +170,7 @@ def listPatrimonys_Project(request):
     page = int(request.GET['page'][0])
     start = (page - 1) * length
     end = start + length
-    queryset = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=search).order_by(
+    queryset = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=search).exclude(tipoPatrimonio=1).order_by(
         'nombreTituloDemoninacion')
     count = queryset.count()
     queryset = queryset[start:end]

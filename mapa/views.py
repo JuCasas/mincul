@@ -103,8 +103,8 @@ def mapaPatrimonioSimple(request):
                                                   'url':instiUrl[0].url})
                     else:
                         urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
-                        patri.append({'patrimonio':p,
-                                      'url':urlPatrimonio[0].url})
+                       # patri.append({'patrimonio':p,
+                        #              'url':urlPatrimonio[0].url})
                 patrimonio0 = None
                 institucion0 = None
                 if len(patri)>0:
