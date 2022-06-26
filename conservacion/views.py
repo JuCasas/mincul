@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from django.db.models import Count
 from django.http import JsonResponse
@@ -274,6 +275,17 @@ def deletePatrimony(request, pk):
     project.patrimonios.remove(patrimonio)
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+def eliminarDocumentoActividad(request):
+    print(request.POST)
+    actividad = Actividad.objects.get(pk=request.POST['actividad'])
+    documento = Documento.objects.get(pk=request.POST['documento'])
+    actividad.documentos.remove(documento)
+    path = documento.url.path
+    os.remove(path)
+    documento.delete()
+    actividad.save()
+    return JsonResponse({}, status=200)
 
 
 @api_view(('GET',))

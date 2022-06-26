@@ -4,6 +4,8 @@
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
     <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
     <style>
         #cover-spin {
             position: fixed;
@@ -421,9 +423,12 @@
 {% block extrajs %}
     <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
     <script>
         let conservadoresLista = [];
         let relacionesLista = [];
+        let idEnviar = '0'
 
         $('#new').on('click', function (e) {
             $('#nombre').val('');
@@ -462,10 +467,14 @@
             if (type == 'new') {
                 // new
                 url = url + $('#idProject').val() + '/actividades/add/';
+                idEnviar = '0'
                 method = 'POST';
             } else {
                 // edit
                 url = url + $('#idProject').val() + '/actividades/edit/' + id;
+                console.log(id);
+                idEnviar = id;
+                console.log(idEnviar);
                 method = 'POST';
             }
 
@@ -655,9 +664,14 @@
                     console.log(documentos[i])
                     console.log(documentos[i].name)
 
-                    data += '<a class="notification notification-flush bg-0"' +
+                    data += '<div>' +
+                        '<a class="notification notification-flush bg-0"' +
                         'href="' + documentos[i].url + '" download>' + documentos[i].name + '</a>' +
-                        '<hr>';
+                        '<button class="btn" href="#" type="button" onclick="eliminarDocumento(this,' + documentos[i].id + ')">' +
+                        '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
+                        '</button>' +
+                        '<hr>' +
+                        '</div>';
 
                 }
                 $("#seccionExistentes").html(data);
@@ -682,6 +696,7 @@
 
 
                 $('#type').val('edit');
+                idEnviar = id;
                 $('#modal_title').text('Editar Actividad');
                 $("#modalActividad").modal();
             } else if (class_name == 'btn btn-show') {
@@ -789,6 +804,47 @@
             cache: false
         });
 
+        function eliminarDocumento(button, pk) {
+            var columna = button.parentNode;
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'eliminarDocumentoActividad'%}",
+                async: false,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    documento: pk,
+                    actividad: Number(idEnviar)
+                },
+                success: function (response) {
+                    let resultado = response['existe'];
+                    columna.parentNode.removeChild(columna);
+                    $.toast({
+                        text: 'Documento eliminado con éxito',
+                        icon: 'success',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#B7E6CA',  // To change the background
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 3000,
+                    })
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    console.log(response);
+                    $.toast({
+                        text: 'Ocurrió un error inesperado',
+                        icon: 'warning',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#c67a71',
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 3000,
+                    })
+                }
+            });
+        }
+
         function agregarConservadorTabla() {
             let conservadorAgregar = $("#conservadores").select2('data');
             if (!conservadoresLista.includes(conservadorAgregar[0].id)) {
@@ -888,6 +944,7 @@
             $("#file").val(null);
             $("#conservadorAgregar").empty();
             $("#relacionAgregar").empty();
+            $("#seccionExistentes").html('');
             conservadoresLista = [];
             relacionesLista = [];
             $("#conservadores").val(null).trigger('change');

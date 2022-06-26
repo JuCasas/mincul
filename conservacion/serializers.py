@@ -43,7 +43,7 @@ class DocumentoSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     class Meta:
         model = Documento
-        fields = ['name','url']
+        fields = ['id','name','url']
     def get_name(self, instance):
         return os.path.basename(instance.url.name)
 

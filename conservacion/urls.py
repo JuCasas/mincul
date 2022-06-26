@@ -27,4 +27,5 @@ urlpatterns = [
     path('tareas/detailView/<pk>/', views.detailTaskView, name='detailTaskView'),
     path('actividades/conservadores/', views.addConservador, name='addConservador'),
     path('actividades/relaciones/<pk>', views.addRelacion, name='addRelacion'),
+    path('eliminarDocumentoActividad/', views.eliminarDocumentoActividad, name='eliminarDocumentoActividad'),
 ]
