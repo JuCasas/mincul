@@ -222,28 +222,28 @@
 
 
 
-        {% if task.estado == '2' %}
-            <div class="card">
-                <div class="card-header">
-                    <div class="form-group  row justify-content-end mt-2">
-                        <div class="col-10">
-                            <h5 class="mb-2 mb-md-0 text-black">Secciones</h5>
-                        </div>
-                        <div class="col-2">
-                            <button id="agregarSeccion" class="btn btn-primary " type="button"
-                                    data-toggle="modal" data-target="#agregarSecciones">
-                                Agregar sección
-                            </button>
-                        </div>
+    {% if task.estado == '2' %}
+        <div class="card">
+            <div class="card-header">
+                <div class="form-group  row justify-content-end mt-2">
+                    <div class="col-10">
+                        <h5 class="mb-2 mb-md-0 text-black">Secciones</h5>
+                    </div>
+                    <div class="col-2">
+                        <button id="agregarSeccion" class="btn btn-primary " type="button"
+                                data-toggle="modal" data-target="#agregarSecciones">
+                            Agregar sección
+                        </button>
                     </div>
                 </div>
-                <div class="card-body cbody px-5 py-4">
-
-                    <div id="listarSecciones"></div>
-
-                </div>
             </div>
-        {% endif %}
+            <div class="card-body cbody px-5 py-4">
+
+                <div id="listarSecciones"></div>
+
+            </div>
+        </div>
+    {% endif %}
 
 
     <div class="modal fade" id="actualizarEstado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -282,58 +282,81 @@
     <div class="modal fade" id="agregarSecciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
 
-    <div class="modal-dialog  mw-100 w-50">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar sección:</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
-                        class="font-weight-light" aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <form id="formRegistroSeccion" name="formRegistroSeccion">
-                    <div class="form-group row">
-                        <label for="nombre_1" class="col-sm-2 col-form-label">Nombre: </label>
-                        <div class="col-sm-10">
-                            <input class="form-control" id="nombre_1" name="nombre_1" type="text"
-                                   placeholder="Nombre de la sección">
+        <div class="modal-dialog  mw-100 w-50">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Agregar sección:</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formRegistroSeccion" name="formRegistroSeccion">
+                        <div class="form-group row">
+                            <label for="nombre_1" class="col-sm-2 col-form-label">Nombre: </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="nombre_1" name="nombre_1" type="text"
+                                       placeholder="Nombre de la sección">
+                            </div>
                         </div>
-                    </div>
 
 
-                    <div class="form-group row">
-                        <label for="descripcion_1"
-                               class="col-sm-2 col-form-label">Descripción: </label>
-                        <div class="col-sm-10">
+                        <div class="form-group row">
+                            <label for="descripcion_1"
+                                   class="col-sm-2 col-form-label">Descripción: </label>
+                            <div class="col-sm-10">
                             <textarea class="form-control" id="descripcion_1" name="descripcion_1" type="text"
                                       placeholder="Ingrese una descripción"></textarea>
+                            </div>
                         </div>
-                    </div>
 
 
-                    <div class="form-group row">
-                        <label for="evidencias_1"
-                               class="col-sm-2 col-form-label">Evidencias: </label>
-                        <div class="col-sm-10">
-                            <div class="dropzone dropzone-multiple p-0" data-dropzone
-                                 data-options='{"url":"valid/url"}'>
-                                <div class="fallback">
-                                    <input type="file" name="evidencias_1" id="evidencias_1" multiple>
+                        <div class="form-group row">
+                            <label for="evidencias_1"
+                                   class="col-sm-2 col-form-label">Evidencias: </label>
+                            <div class="col-sm-10">
+                                <div class="dropzone dropzone-multiple p-0" data-dropzone
+                                     data-options='{"url":"valid/url"}'>
+                                    <div class="fallback">
+                                        <input type="file" name="evidencias_1" id="evidencias_1" multiple>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
 
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal Eliminar Sección -->
+    <div class="modal fade" id="eliminarSeccion" tabindex="-1" role="dialog" aria-labelledby="eliminarSeccionLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eliminarSeccionLabel">Eliminar sección</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
 
+                <div class="modal-body">
+                    <div id="mensajeEliminacion"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                    <button id="btnEliminarSeccion" class="btn btn-primary btn-sm" type="button">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
@@ -343,8 +366,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-    <script>
 
+    <script>
+        var pkEliminarSeccion;
 
         $(document).ready(function () {
             listarSecciones();
@@ -365,6 +389,55 @@
                 return true;
             return false;
         }, "La fecha de inicio no puede ser superior a la fecha fin");
+
+
+        $("#btnEliminarSeccion").on('click', function () {
+            eliminarSeccion(pkEliminarSeccion);
+            $("#eliminarSeccion").modal('hide');
+        });
+
+        function seccionesEliminar(nombre, pk) {
+            data = '<h5>Se eliminará la sección: ' + nombre + '</h5>';
+            $("#mensajeEliminacion").html(data);
+            $("#eliminarSeccion").modal('show');
+            pkEliminarSeccion = pk;
+        };
+
+        function eliminarSeccion(seccion_pk) {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'deteleSection' %}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    seccion_pk: seccion_pk,
+                },
+                success: function (response) {
+                    listarSecciones();
+
+                    $.toast({
+                        text: 'Se eliminó la sección con éxito',
+                        icon: 'success',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#B7E6CA',  // To change the background
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 3000,
+                    })
+                },
+                error: function (response) {
+                  {% comment %}  alert(response["responseJSON"]["error"]);{% endcomment %}
+                    $.toast({
+                        text: 'Ocurrió un error inesperado',
+                        icon: 'warning',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#c67a71',
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 3000,
+                    })
+                }
+            });
+        }
 
 
         function listarSecciones() {
@@ -399,8 +472,8 @@
                             '                </div>' +
                             '                <div class="col-2">' +
                             '                    <div class="d-flex flex-row justify-content-end" >' +
-                            '                        <button type="button" class="btn btn-show"><i class="fas fa-edit"></i></button>' +
-                            '                        <button type="button" class="btn btn-edit"><i class="fas fa-trash"></i>' +
+                            '                        <button type="button" class="btn" ><i class="fas fa-edit"></i></button>' +
+                            '                        <button type="button" class="btn" onclick="seccionesEliminar(\'' + secciones[i].nombre + '\',' + secciones[i].id + ')"  ><i class="fas fa-trash"></i>' +
                             '                        </button>' +
                             '                    </div>' +
                             '                </div>' +
@@ -633,7 +706,7 @@
                     success: function (response) {
 
                         $.toast({
-                            text: 'Se rechazó la solicitúd con éxito',
+                            text: 'Se registró la sección con éxito',
                             icon: 'success',
                             loader: false,        // Change it to false to disable loader
                             bgColor: '#B7E6CA',  // To change the background

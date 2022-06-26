@@ -67,7 +67,8 @@ def query_activities_by_args(pk, **kwargs):
     order = kwargs.get('order', None)[0]
 
     project = ProyectoConservacion.objects.get(pk=pk)
-    queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(proyecto=project).filter(estado='1')
+    queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(proyecto=project).filter(
+        estado='1')
 
     total = queryset.count()
 
@@ -79,7 +80,7 @@ def query_activities_by_args(pk, **kwargs):
         queryset = queryset.filter(nombre__icontains=search_value)
     if patrimonio_filter:
         patrimonio = Patrimonio.objects.get(pk=patrimonio_filter)
-        queryset = queryset.filter(patrimonio =patrimonio)
+        queryset = queryset.filter(patrimonio=patrimonio)
     if status_filter:
         queryset = queryset.filter(status=status_filter)
 
@@ -277,6 +278,7 @@ def deletePatrimony(request, pk):
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 def eliminarDocumentoActividad(request):
     print(request.POST)
     actividad = Actividad.objects.get(pk=request.POST['actividad'])
@@ -342,13 +344,15 @@ def listPatrimonys(request, pk):
     }
     return render(request, 'proyectoConservacion/patrimonys_list.html', context)
 
-def verifyPatrimony(request,pk):
+
+def verifyPatrimony(request, pk):
     patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
     proyecto = ProyectoConservacion.objects.get(pk=pk)
-    if(proyecto.patrimonios.filter(pk = patrimonio.pk).exists()):
+    if (proyecto.patrimonios.filter(pk=patrimonio.pk).exists()):
         return JsonResponse({"existe": False}, status=200)
     else:
         return JsonResponse({"existe": True}, status=200)
+
 
 @api_view(('GET',))
 def listPatrimonysForProject(request, pk):
@@ -592,7 +596,7 @@ def addSection(request, pk):
     n_files = len(evidencias)
 
     for i in range(n_files):
-        name = 'files'+str(i)
+        name = 'files' + str(i)
         documento = Documento.objects.create(url=request.FILES.get(name))
         campo.documentos.add(documento)
 
@@ -606,3 +610,19 @@ def listSections(request, pk):
     ser_instance = SecionSerializer((secciones), many=True)
     secciones = json.dumps(ser_instance.data)
     return JsonResponse({"secciones": secciones}, status=200)
+
+
+def deleteSection(request):
+    seccion_pk = request.POST['seccion_pk']
+    seccion = Campo.objects.get(pk=seccion_pk)
+    documentos = seccion.documentos.all()
+
+    for doc in documentos: #eliminación de documentos
+        doc.estado = '0'  # eliminación lógica
+        os.remove(doc.url.path)
+        doc.url = ""
+        doc.delete()
+
+    seccion.delete()
+
+    return JsonResponse({}, status=200)
