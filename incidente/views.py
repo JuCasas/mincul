@@ -4,6 +4,8 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 
+from conservacion.models import ProyectoConservacion
+from conservacion.serializers import ProyectoConservacionSerializer
 from incidente.models import Incidente
 from incidente.serializers import IncidenteSerializer, PuntoGeograficoSerializer
 from patrimonios.models import Patrimonio, Institucion, PuntoGeografico
@@ -67,16 +69,27 @@ def patrimonio_incidente_listar(request):
       'status_choices': Incidente.STATUS,
       'typeIncidents': Incidente.AFECTACION
     }
-    return render(request, 'incidencia/patrimonio_incidente_listar.html',context=context)
+    return render(request, 'incidencia/patrimonio_incidente_listar.html', context=context)
+
 
 @api_view(('GET',))
-def incidente_detalle(request,pk):
+def incidente_detalle(request, pk):
   incidente = Incidente.objects.filter(pk=int(pk))
-  serializer = IncidenteSerializer(incidente,many=True)
+  serializer = IncidenteSerializer(incidente, many=True)
   result = dict()
   result['data'] = serializer.data
   return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+@api_view(('POST',))
+def asignar_proyecto(request,pk):
+  id_Project = int(request.POST['proyecto'])
+  project = ProyectoConservacion.objects.get(pk=id_Project)
+  incident = Incidente.objects.get(pk=int(pk))
+  project.incidentes.add(incident)
+  project.save()
+  incident.status = '2'
+  incident.save()
+  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 def incidente_reporte_listar(request, patrimonio_pk):
   context = {
@@ -138,6 +151,22 @@ def listar_zonas(request):
   count = queryset.count()
   queryset = queryset[start:end]
   serializer = PuntoGeograficoSerializer(queryset, many=True)
+  result = dict()
+  result['items'] = serializer.data
+  result['total_count'] = count
+  return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('GET',))
+def listar_proyectos(request):
+  length = 10
+  search = request.GET['search']
+  page = int(request.GET['page'][0])
+  start = (page - 1) * length
+  end = start + length
+  queryset = ProyectoConservacion.objects.filter(nombre__icontains=search).order_by('nombre')
+  count = queryset.count()
+  queryset = queryset[start:end]
+  serializer = ProyectoConservacionSerializer(queryset, many=True)
   result = dict()
   result['items'] = serializer.data
   result['total_count'] = count

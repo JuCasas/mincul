@@ -2,9 +2,15 @@
 {% load static %}
 
 {% block extrastyle %}
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
   <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
   <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
   <style>
+
+      .jq-toast-wrap {
+          width: 350px;
+      }
+
       #cover-spin {
           position: fixed;
           width: 100%;
@@ -301,7 +307,9 @@
             </div>
 
             <div class="row justify-content-end mt-2 ml-0 mr-0">
-              <button type="button" data-dismiss="modal" class="btn btn-primary w-100">Volver</button>
+              <button type="button" data-dismiss="modal" class="btn btn-primary w-100"
+                      data-notification='{"positionClass":"toast-top-left","message":"Top left Notification!"}'>Volver
+              </button>
             </div>
 
           </form>
@@ -311,24 +319,23 @@
   </div>
 
 
-  <!-- Confirm Modal -->
-  <div class="modal fade" id="modalAsociar" role="dialog">
+  <div class="modal fade" id="modalAsignar" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
+        <input id="idIncidenteAsignar" hidden>
         <div class="modal-header">
           <h4 class="modal-title">Asignar Incidente a Proyecto de Conservación</h4>
         </div>
         <div class="modal-body px-4">
           <div class="row mb-3">
-            <label for="nombre">Proyecto de conservación:</label>
-            <input class="form-control" id="proyectoAsignacion" name="proyectoAsignacion" type="text" required
-                   placeholder="proyectoAsignacion" disabled value="">
+            <label for="proyecto_asignar">Proyecto de conservación:</label>
+            <select class="selectpicker form-control" id="proyecto_asignar" name="proyecto_asignar">
+            </select>
           </div>
           <div class="row justify-content-center">
             <button type="button" data-dismiss="modal" class="btn second mr-2">Cancelar</button>
-            <button type="button" data-dismiss="modal" class="btn btn-primary ml-2" id="asign">Asignar
-              <Asignación></Asignación>
+            <button type="button" class="btn btn-primary ml-2" id="asign">Asignar
             </button>
           </div>
         </div>
@@ -337,10 +344,11 @@
   </div>
 
   <!-- Delete Modal -->
-  <div class="modal fade" id="del" role="dialog">
+  <div class="modal fade" id="modalRetirar" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
+        <input id="idIncidenteRetirar" hidden>
         <div class="modal-header">
           <h4 class="modal-title">¿Retirar asignación?</h4>
         </div>
@@ -352,8 +360,7 @@
           </div>
           <div class="row justify-content-center">
             <button type="button" data-dismiss="modal" class="btn second mr-2">Cancelar</button>
-            <button type="button" data-dismiss="modal" class="btn btn-primary ml-2" id="delete">Retirar
-              <Asignación></Asignación>
+            <button type="button" class="btn btn-primary ml-2" id="unassign">Retirar
             </button>
           </div>
         </div>
@@ -368,8 +375,16 @@
 {% block extrajs %}
   <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
   <script>
 
+    function toDate(date) {
+      let parts = date.split("/");
+      let dt = new Date(parseInt(parts[2], 10),
+          parseInt(parts[1], 10) - 1,
+          parseInt(parts[0], 10));
+      return dt.toISOString().slice(0, 10);
+    }
 
     let types = {
       '1': 'Invasión/Ocupación Ilegal/Ampliación de Invasión',
@@ -415,7 +430,6 @@
         },
         processResults: function (data, params) {
           params.page = params.page || 1;
-          console.log(data.items)
           return {
             results: $.map(data.items, function (obj, index) {
               return {id: obj.id, text: obj.nombre};
@@ -433,6 +447,45 @@
 
     //Configuración select2 para zonas
     zone.on("select2:clear", function (evt) {
+      $(this).on("select2:opening.cancelOpen", function (evt) {
+        evt.preventDefault();
+
+        $(this).off("select2:opening.cancelOpen");
+      });
+    });
+
+    //Instanciacion de select2 para proyectos
+    let project = $('#proyecto_asignar')
+    project.select2({
+      ajax: {
+        url: '/incidentes/proyectos/',
+        datatype: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            search: params.term || '',
+            page: params.page || 1
+          };
+        },
+        processResults: function (data, params) {
+          params.page = params.page || 1;
+          return {
+            results: $.map(data.items, function (obj, index) {
+              return {id: obj.id, text: obj.nombre};
+            }),
+            pagination: {
+              more: (params.page * 10) < data.total_count
+            }
+          }
+        }
+      },
+      placeholder: "Proyecto de Conservación",
+      allowClear: true,
+      cache: false
+    });
+
+    //Configuración select2 para proyectos
+    project.on("select2:clear", function (evt) {
       $(this).on("select2:opening.cancelOpen", function (evt) {
         evt.preventDefault();
 
@@ -544,7 +597,6 @@
     });
 
     //Programación de opciones en DataTable
-
     $('#tabla_incidentes tbody').on('click', 'button', function () {
 
       let data = table.row($(this).parents('tr')).data();
@@ -553,36 +605,41 @@
 
       if (class_name === 'btn btn-check') {
 
-        $("#modalAsociar").modal();
+        if (data['status'] === '1') {
+          $('#idIncidenteAsignar').val(id)
+          $("#modalAsignar").modal();
+        }else if(data['status']=== '2'){
+          $('#idIncidenteRetirar').val(id)
+          $("#modalRetirar").modal();
+        }
 
       } else if (class_name === 'btn btn-show') {
+
         $('#cover-spin').show(0)
+
         $.ajax({
           url: '/incidentes/' + id + '/detalle/',
           type: 'get',
           data: {},
           success: function (data, textStatus, jQxhr) {
+
             $('#cover-spin').hide()
+
             let incidente = data['data'][0]
-            console.log(incidente)
-            let title = "Incidente " + incidente['codigo']
-            $("#modalIncidente").modal();
-            $('#modal_title').text(title);
+
+            $('#modal_title').text("Incidente " + incidente['codigo']);
             $('#informante').val(incidente['nombre']);
             $('select[name=tipo] option:first').html(types[incidente['tipoAfectacion']]);
-            let fecha = incidente['fechaRegistro']
-            var parts = fecha.split("/");
-            var dt = new Date(parseInt(parts[2], 10),
-                parseInt(parts[1], 10) - 1,
-                parseInt(parts[0], 10));
-            var currentDate = dt.toISOString().slice(0, 10);
-            $('#fecha').val(currentDate);
+            $('#fecha').val(toDate(incidente['fechaRegistro']));
             $('#correo').val(incidente['correo']);
             $('#telefono').val(incidente['telefono']);
             $('#descripcion').val(incidente['descripcion']);
-            $('select[name=status] option:first').html(status_filter[incidente['status']]);
+            $('select[name=status] option:first').html(status_filter[incidente['status']]['name']);
+
+            $("#modalIncidente").modal();
           },
           error: function (jqXhr, textStatus, errorThrown) {
+
             $('#cover-spin').hide()
           }
         });
@@ -590,6 +647,76 @@
         // DELETE button
         $("#del").modal();
       }
+    });
+
+    //Limpiar modal Asignar Proyecto
+    $('#modalAsignar').on('hide.bs.modal', function () {
+      project.val(null).trigger('change');
+    });
+
+    //Asignar proyecto a Incidente
+    $('#asign').on('click', function (e) {
+
+      if (project.val() == null) {
+        $.toast({
+          heading: '<b>Error:</b>',
+          text: '<span>Debe ingresar un Proyecto de Conservación</span>',
+          icon: 'error',
+          loader: true,        // Change it to false to disable loader
+          bgColor: '#e63757',  // To change the background
+          textColor: '#FFFFFF',
+          loaderBg: '#FFFFFF',
+          position: 'top-center',
+          hideAfter: 1000,
+          stack: false,
+        })
+      } else {
+
+        id = $('#idIncidenteAsignar').val()
+
+        $('#cover-spin').show(0)
+        $.ajax({
+          url: '/incidentes/' + id + '/assign/',
+          method: 'POST',
+          data: {
+            'proyecto': project.val(),
+          },
+          success: function (response) {
+            $('#cover-spin').hide();
+            $("#modalAsignar").modal('hide');
+            table.draw();
+            $.toast({
+              heading: '<b>Info:</b>',
+              text: '<span>Proyecto asignado exitosamente!</span>',
+              icon: 'success',
+              loader: true,        // Change it to false to disable loader
+              bgColor: '#00d27a',  // To change the background
+              textColor: '#FFFFFF',
+              loaderBg: '#FFFFFF',
+              position: 'top-center',
+              hideAfter: 3000,
+              stack: false,
+            })
+
+          },
+          error: function (error) {
+            $.toast({
+              heading: '<b>Error:</b>',
+              text: '<span>Ha ocurrido un error en el servidor</span>',
+              icon: 'error',
+              loader: true,        // Change it to false to disable loader
+              bgColor: '#e63757',  // To change the background
+              textColor: '#FFFFFF',
+              loaderBg: '#FFFFFF',
+              position: 'top-center',
+              hideAfter: 1000,
+              stack: false,
+            })
+          }
+        });
+
+      }
+
     });
 
 
