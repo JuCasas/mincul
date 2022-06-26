@@ -2,187 +2,187 @@
 {% load static %}
 
 {% block extrastyle %}
-    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
-    <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
-    <style>
-        #cover-spin {
-            position: fixed;
-            width: 100%;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.7);
-            z-index: 9999;
-            display: none;
-        }
+  <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+  <style>
+      #cover-spin {
+          position: fixed;
+          width: 100%;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          background-color: rgba(255, 255, 255, 0.7);
+          z-index: 9999;
+          display: none;
+      }
 
-        @-webkit-keyframes spin {
-            from {
-                -webkit-transform: rotate(0deg);
-            }
-            to {
-                -webkit-transform: rotate(360deg);
-            }
-        }
+      @-webkit-keyframes spin {
+          from {
+              -webkit-transform: rotate(0deg);
+          }
+          to {
+              -webkit-transform: rotate(360deg);
+          }
+      }
 
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
+      @keyframes spin {
+          from {
+              transform: rotate(0deg);
+          }
+          to {
+              transform: rotate(360deg);
+          }
+      }
 
-        #cover-spin::after {
-            content: '';
-            display: block;
-            position: absolute;
-            left: 48%;
-            top: 40%;
-            width: 40px;
-            height: 40px;
-            border-style: solid;
-            border-color: black;
-            border-top-color: transparent;
-            border-width: 4px;
-            border-radius: 50%;
-            -webkit-animation: spin .8s linear infinite;
-            animation: spin .8s linear infinite;
-        }
+      #cover-spin::after {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 48%;
+          top: 40%;
+          width: 40px;
+          height: 40px;
+          border-style: solid;
+          border-color: black;
+          border-top-color: transparent;
+          border-width: 4px;
+          border-radius: 50%;
+          -webkit-animation: spin .8s linear infinite;
+          animation: spin .8s linear infinite;
+      }
 
-        .btn-1 {
-            text-align: center;
-            float: left;
-            border: 1px solid #2B2D42 !important;
-            background-color: #2B2D42 !important;
-            color: white !important;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
+      .btn-1 {
+          text-align: center;
+          float: left;
+          border: 1px solid #2B2D42 !important;
+          background-color: #2B2D42 !important;
+          color: white !important;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
 
-        .btn-2 {
-            text-align: center;
-            float: left;
-            border: 1px solid floralwhite;
-            background-color: white;
-            color: black;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
+      .btn-2 {
+          text-align: center;
+          float: left;
+          border: 1px solid floralwhite;
+          background-color: white;
+          color: black;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
 
-        .btn-2:hover {
-            transform: scale(0.98);
-            /* Scaling button to 0.98 to its original size */
-            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-            /* Lowering the shadow */
-        }
+      .btn-2:hover {
+          transform: scale(0.98);
+          /* Scaling button to 0.98 to its original size */
+          box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+          /* Lowering the shadow */
+      }
 
 
-        .table.dataTable tbody th, table.dataTable tbody td {
-            padding: 8px 10px 8px 18px !important;
-        }
+      .table.dataTable tbody th, table.dataTable tbody td {
+          padding: 8px 10px 8px 18px !important;
+      }
 
-        .modal-body {
-            background-color: #F7F8FB !important;
-        }
+      .modal-body {
+          background-color: #F7F8FB !important;
+      }
 
-        .form-control {
-            background-color: white !important;
-            cursor: pointer !important;
-        }
+      .form-control {
+          background-color: white !important;
+          cursor: pointer !important;
+      }
 
-        .second {
-            background-color: white !important;
-            color: #2B2D42 !important;
-            border-color: #8d8e99 !important;
-            border-radius: 12px !important;
-            height: 36px !important;
-            font-size: 12px !important;
-        }
+      .second {
+          background-color: white !important;
+          color: #2B2D42 !important;
+          border-color: #8d8e99 !important;
+          border-radius: 12px !important;
+          height: 36px !important;
+          font-size: 12px !important;
+      }
 
-        .cbody {
-            background-color: #F9FAFD !important;
-        }
+      .cbody {
+          background-color: #F9FAFD !important;
+      }
 
-        input:disabled {
-            background-color: #D2D2D2 !important;
-        }
+      input:disabled {
+          background-color: #D2D2D2 !important;
+      }
 
-    </style>
+  </style>
 
 {% endblock %}
 
 {% block body %}
-    <input type="hidden" value="{{ activity.id }}" id="idActivity">
-    <input type="hidden" value="{{ task.id }}" id="idTask">
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="row justify-content-between align-items-center">
-                <a class="nav-link py-0" href="{% url 'listTasks' pk=activity.id %}"><span
-                        class="fas fa-angle-left mr-2"
-                        data-fa-transform="shrink-3"></span>Tareas</a>
-            </div>
+  <input type="hidden" value="{{ activity.id }}" id="idActivity">
+  <input type="hidden" value="{{ task.id }}" id="idTask">
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row justify-content-between align-items-center">
+        <a class="nav-link py-0" href="{% url 'listTasks' pk=activity.id %}"><span
+            class="fas fa-angle-left mr-2"
+            data-fa-transform="shrink-3"></span>Tareas</a>
+      </div>
 
-            <div class="row justify-content-between align-items-center">
-                <div class="col-md-6">
-                    <h5 class="mb-2 mb-md-0 text-black">Detalle de Tarea: {{ task.codigo }}</h5>
-                </div>
-            </div>
+      <div class="row justify-content-between align-items-center">
+        <div class="col-md-6">
+          <h5 class="mb-2 mb-md-0 text-black">Detalle de Tarea: {{ task.codigo }}</h5>
         </div>
+      </div>
     </div>
+  </div>
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <h5 class="mb-2 mb-md-0 text-black">General</h5>
+  <div class="card mb-3">
+    <div class="card-header">
+      <h5 class="mb-2 mb-md-0 text-black">General</h5>
+    </div>
+    <div class="card-body cbody px-5 py-4">
+      <form id="formTareas" name="formTareas">
+        {% csrf_token %}
+
+        <div class="row">
+          <div class="form-group col-lg-12 col-sm-12">
+            <label for="nombre">Nombre:</label>
+            <input class="form-control" id="nombre" name="nombre" type="text"
+                   placeholder="Nombre de la Actividad" value={{ task.nombre }}>
+          </div>
         </div>
-        <div class="card-body cbody px-5 py-4">
-            <form id="formTareas" name="formTareas">
-                {% csrf_token %}
+        <div class="row">
+          <div class="form-group col-lg-12 col-sm-12">
+            <label for="descripcion">Descripcion:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" type="text"
+                      placeholder="Descripción de la Actividad">{{ task.descripcion }}</textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-lg-3 col-sm-12">
+            <label for="fechaRegistro">Fecha de Inicio:</label>
+            <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date"
+                   value={{ task.fechaRegistro|date:"Y-m-d" }}>
+          </div>
+          <div class="form-group col-lg-3 col-sm-12">
+            <label for="fecha">Fecha de Fin:</label>
+            <input class="form-control" id="fecha" name="fecha" type="date"
+                   value={{ task.fecha|date:"Y-m-d" }}>
+          </div>
+          <div class="form-group col-lg-3 col-sm-12">
+            <label for="presupuesto">Presupuesto:</label>
+            <input class="form-control" id="presupuesto" name="presupuesto" type="text"
+                   placeholder="S/" value={{ task.presupuesto }}>
+          </div>
+          <div class="form-group col-lg-3 col-sm-12">
+            <label for="gasto">Gasto Total:</label>
+            <input class="form-control" id="gasto" name="gasto" type="text"
+                   placeholder="S/" disabled value={{ task.gasto }}>
+          </div>
+          <div class="form-group col-lg-6 col-sm-12 mt-3">
 
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12">
-                        <label for="nombre">Nombre:</label>
-                        <input class="form-control" id="nombre" name="nombre" type="text"
-                               placeholder="Nombre de la Actividad" value={{ task.nombre }}>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12">
-                        <label for="descripcion">Descripcion:</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" type="text"
-                                  placeholder="Descripción de la Actividad">{{ task.descripcion }}</textarea>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-lg-3 col-sm-12">
-                        <label for="fechaRegistro">Fecha de Inicio:</label>
-                        <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date"
-                               value={{ task.fechaRegistro|date:"Y-m-d" }}>
-                    </div>
-                    <div class="form-group col-lg-3 col-sm-12">
-                        <label for="fecha">Fecha de Fin:</label>
-                        <input class="form-control" id="fecha" name="fecha" type="date"
-                               value={{ task.fecha|date:"Y-m-d" }}>
-                    </div>
-                    <div class="form-group col-lg-3 col-sm-12">
-                        <label for="presupuesto">Presupuesto:</label>
-                        <input class="form-control" id="presupuesto" name="presupuesto" type="text"
-                               placeholder="S/" value={{ task.presupuesto }}>
-                    </div>
-                    <div class="form-group col-lg-3 col-sm-12">
-                        <label for="gasto">Gasto Total:</label>
-                        <input class="form-control" id="gasto" name="gasto" type="text"
-                               placeholder="S/" disabled value={{ task.gasto }}>
-                    </div>
-                    <div class="form-group col-lg-6 col-sm-12 mt-3">
-
-                        <div class="row">
-                            <div class="col-2 flex-center mt-auto mb-auto ">
-                                <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
-                            </div>
-                            <div class="col-3">
+            <div class="row">
+              <div class="col-2 flex-center mt-auto mb-auto ">
+                <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
+              </div>
+              <div class="col-3">
                             <span class="btn
                                     {% if task.estado == '1' %}
                                        btn-info
@@ -193,449 +193,451 @@
                                     {% endif %} ">
                                 {{ task.get_estado_display }}
                             </span>
-                            </div>
-                            <div class="col-3 ">
-                                <button id="actualizar" class="btn btn-primary mx-1" type="button"
-                                        data-toggle="modal" data-target="#actualizarEstado">
-                                    Actualizar estado
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group  row justify-content-end mt-2 mr-0">
-                    <a href="{% url 'listTasks' pk=activity.id %}" class="btn second mr-3 d-flex align-items-center">Cancelar</a>
-                    <div>
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <span class="glyphicon glyphicon-ok"></span> Guardar Cambios
-                        </button>
-                    </div>
-                </div>
-            </form>
+              </div>
+              <div class="col-3 ">
+                <button id="actualizar" class="btn btn-primary mx-1" type="button"
+                        data-toggle="modal" data-target="#actualizarEstado">
+                  Actualizar estado
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div class="form-group  row justify-content-end mt-2 mr-0">
+          <a href="{% url 'listTasks' pk=activity.id %}" class="btn second mr-3 d-flex align-items-center">Cancelar</a>
+          <div>
+            <button type="submit" class="btn btn-primary btn-block">
+              <span class="glyphicon glyphicon-ok"></span> Guardar Cambios
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <div id="cover-spin"></div>
+  <div id="cover-spin"></div>
 
-    {% if task.estado == '2' %}
+  {% if task.estado == '2' %}
 
-        <div class="card">
-            <div class="card-header">
-                <div class="form-group  row justify-content-end mt-2">
-                    <div class="col-10">
-                        <h5 class="mb-2 mb-md-0 text-black">Secciónes</h5>
-                    </div>
-                    <div class="col-2">
-                        <button id="agregarSeccion" class="btn btn-primary " type="button"
-                                data-toggle="modal" data-target="#agregarSecciones">
-                            Agregar sección
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body cbody px-5 py-4">
-
-                <div id="listarSecciones"></div>
-
-            </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="form-group  row justify-content-end mt-2">
+          <div class="col-10">
+            <h5 class="mb-2 mb-md-0 text-black">Secciónes</h5>
+          </div>
+          <div class="col-2">
+            <button id="agregarSeccion" class="btn btn-primary " type="button"
+                    data-toggle="modal" data-target="#agregarSecciones">
+              Agregar sección
+            </button>
+          </div>
         </div>
+      </div>
+      <div class="card-body cbody px-5 py-4">
 
+        <div id="listarSecciones"></div>
 
-    {% endif %}
-
-    <div class="modal fade" id="actualizarEstado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Actualizar estado</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
-                            class="font-weight-light" aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    {% if task.estado == '1' %}
-                        <p>
-                            A continuación se procederá a actualizar el estado de la tarea a "EN PROCESO".
-                            ¿Esta seguro que desea confirmar esta acción?
-                        </p>
-                    {% endif %}
-
-                    {% if task.estado == '2' %}
-                        <p>
-                            A continuación se procederá a actualizar el estado de la tarea a "FINALIZADA".
-                            ¿Esta seguro que desea confirmar esta acción?
-                        </p>
-                    {% endif %}
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary btn-sm" type="button" onclick="actualizarEstado()">Confirmar</button>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
 
-    <div class="modal fade" id="agregarSecciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-    <div class="modal-dialog  mw-100 w-50">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar sección:</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
-                        class="font-weight-light" aria-hidden="true">&times;</span></button>
+  {% endif %}
+
+  <div class="modal fade" id="actualizarEstado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar estado</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+              class="font-weight-light" aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          {% if task.estado == '1' %}
+            <p>
+              A continuación se procederá a actualizar el estado de la tarea a "EN PROCESO".
+              ¿Esta seguro que desea confirmar esta acción?
+            </p>
+          {% endif %}
+
+          {% if task.estado == '2' %}
+            <p>
+              A continuación se procederá a actualizar el estado de la tarea a "FINALIZADA".
+              ¿Esta seguro que desea confirmar esta acción?
+            </p>
+          {% endif %}
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary btn-sm" type="button" onclick="actualizarEstado()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="agregarSecciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
+  <div class="modal-dialog  mw-100 w-50">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar sección:</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+            class="font-weight-light" aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <form id="formRegistroSeccion" name="formRegistroSeccion">
+          <div class="form-group row">
+            <label for="nombre_1" class="col-sm-2 col-form-label">Nombre: </label>
+            <div class="col-sm-10">
+              <input class="form-control" id="nombre_1" name="nombre_1" type="text"
+                     placeholder="Nombre de la sección">
             </div>
-            <div class="modal-body">
-                <form id="formRegistroSeccion" name="formRegistroSeccion" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    <div class="form-group row">
-                        <label for="nombre_1" class="col-sm-2 col-form-label">Nombre: </label>
-                        <div class="col-sm-10">
-                            <input class="form-control" id="nombre_1" name="nombre_1" type="text"
-                                   placeholder="Nombre de la sección">
-                        </div>
-                    </div>
+          </div>
 
 
-                    <div class="form-group row">
-                        <label for="descripcion_1"
-                               class="col-sm-2 col-form-label">Descripción: </label>
-                        <div class="col-sm-10">
+          <div class="form-group row">
+            <label for="descripcion_1"
+                   class="col-sm-2 col-form-label">Descripción: </label>
+            <div class="col-sm-10">
                             <textarea class="form-control" id="descripcion_1" name="descripcion_1" type="text"
                                       placeholder="Ingrese una descripción"></textarea>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group row">
-                        <label for="evidencias_1"
-                               class="col-sm-2 col-form-label">Evidencias: </label>
-                        <div class="col-sm-10">
-                            <div class="dropzone dropzone-multiple p-0" data-dropzone
-                                 data-options='{"url":"valid/url"}'>
-                                <div class="fallback">
-                                    <input type="file" name="evidencias_1" id="evidencias_1" multiple>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-                    </div>
-                </form>
             </div>
-        </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="evidencias_1"
+                   class="col-sm-2 col-form-label">Evidencias: </label>
+            <div class="col-sm-10">
+              <div class="dropzone dropzone-multiple p-0" data-dropzone
+                   data-options='{"url":"valid/url"}'>
+                <div class="fallback">
+                  <input type="file" name="evidencias_1" id="evidencias_1" multiple>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 
 
 {% endblock %}
 
 {% block extrajs %}
-    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
-    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-    <script>
+  <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+  <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+  <script>
 
 
-        $(document).ready(function () {
+    $(document).ready(function () {
+      listarSecciones();
+    });
+
+    jQuery.validator.addMethod("alphanumeric", function (value, element) {
+      return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
+    }, "Letters, numbers, and underscores only please");
+
+    jQuery.validator.addMethod("minDate", function (value, element) {
+      if ($("#fecha").val() > $("#fechaRegistro").val())
+        return true;
+      return false;
+    }, "La fecha de fin no puede ser inferior a la fecha inicio");
+
+    jQuery.validator.addMethod("maxDate", function (value, element) {
+      if ($("#fecha").val() > $("#fechaRegistro").val())
+        return true;
+      return false;
+    }, "La fecha de inicio no puede ser superior a la fecha fin");
+
+
+    function listarSecciones() {
+
+      $.ajax({
+        type: 'POST',
+        url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/listSections/',
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          task_pk: {{ task.pk }},
+        },
+        success: function (response) {
+          $("#listarSecciones").empty();
+
+          var secciones = JSON.parse(response['secciones']);
+          console.log(secciones);
+          var i = 0;
+          var j = 1;
+          var numero = secciones.length;
+          var data = '';
+
+          for (i = 0; i < numero; i++) {
+            data += (
+                '<div class="card mt-3">' +
+                '    <ul class="list-group list-group-flush">' +
+                '        <li class="list-group-item">' +
+                '            <div class="row">' +
+                '                <div class="col-10">' +
+                '                    <h5>' + secciones[i]['fields'].nombre + '</h5>' +
+                '                </div>' +
+                '                <div class="col-2">' +
+                '                    <div class="d-flex flex-row justify-content-end" >' +
+                '                        <button type="button" class="btn btn-show"><i class="fas fa-edit"></i></button>' +
+                '                        <button type="button" class="btn btn-edit"><i class="fas fa-trash"></i>' +
+                '                        </button>' +
+                '                    </div>' +
+                '                </div>' +
+                '            </div>' +
+                '        </li>' +
+                '        <li class="list-group-item">' +
+                '            <div class="form-group row">' +
+                '                <label for="descripcion_2"' +
+                '                       class="col-sm-2 col-form-label">Descripción: </label>' +
+                '                <div class="col-sm-10">' +
+                '                <textarea class="form-control" id="descripcion_2" name="descripcion_2" type="text"' +
+                '                          disabled> ' + secciones[i]['fields'].contenido +
+                '                </textarea>' +
+                '                </div>' +
+                '            </div>' +
+                '        </li>' +
+                '        <li class="list-group-item">' +
+                '            <div class="form-group row">' +
+                '                <label for="evidencias_2"' +
+                '                       class="col-sm-2 col-form-label">Evidencias: </label>' +
+                '                <div class="col-sm-10">' +
+                '                    <p>Listar qui archivos</p>' +
+                '                </div>' +
+                '            </div>' +
+                '        </li>' +
+                '    </ul>' +
+                '</div>'
+            )
+          }
+
+          $("#listarSecciones").append(data);
+        },
+        error: function (response) {
+          console.log('Ocurrio un error')
+          alert(response["responseJSON"]["error"]);
+        }
+      });
+    }
+
+
+    $("form[name='formTareas']").validate({
+      rules: {
+        nombre: {
+          required: true,
+          maxlength: 50,
+          alphanumeric: true
+        },
+        descripcion: {
+          required: true,
+          maxlength: 200,
+        },
+        presupuesto: {
+          required: true,
+          number: true,
+          min: 0
+        },
+        fechaRegistro: {
+          required: true,
+          date: true,
+          maxDate: true
+        },
+        fecha: {
+          required: true,
+          date: true,
+          minDate: true
+        },
+      },
+      messages: {
+        nombre: {
+          required: "Debe ingresar el nombre de la tarea",
+          maxlength: "El nombre no debe tener más de 50 caracteres",
+          alphanumeric: "El nombre solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
+        },
+        descripcion: {
+          required: "Debe ingresar la descripción de la tarea",
+          maxlength: "La descripción no debe tener más de 200 caracteres",
+        },
+        presupuesto: {
+          required: "Debe ingresar el presupuesto de la tarea",
+          number: "El presupuesto solo acepta números",
+          min: "El presupuesto no puede ser negativo"
+        },
+        fechaRegistro: {
+          required: "Debe ingresar la fecha de inicio de la tarea",
+          //max: "La fecha de inicio no puede ser superior a la fecha fin"
+        },
+        fecha: {
+          required: "Debe ingresar la fecha de fin de la tarea",
+          //min: "La fecha de fin no puede ser inferior a la fecha inicio"
+        },
+      },
+      submitHandler: function (form, e) {
+        e.preventDefault();
+        $('#cover-spin').show(0)
+        $.ajax({
+          url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/',
+          method: "POST",
+          data: {
+            'nombre': $("#nombre").val(),
+            'descripcion': $("#descripcion").val(),
+            'fechaRegistro': $("#fechaRegistro").val(),
+            'fecha': $("#fecha").val(),
+            'presupuesto': $("#presupuesto").val(),
+            'gasto': $("#gasto").val(),
+            'estado': $("#estado").val(),
+          },
+          success: function (response) {
+            $('#cover-spin').hide()
+            if (response["success"] !== undefined) {
+              $.toast({
+                text: 'No se pudo actualizar la tarea',
+                icon: 'warning',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#c67a71',
+                textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
+              })
+            } else {
+              $.toast({
+                text: 'Tarea actualizada con éxito',
+                icon: 'success',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#B7E6CA',  // To change the background
+                textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
+              })
+              //window.location.pathname = "/conservacion/actividades/" + $('#idActivity').val() + "/tareas/";
+            }
+
             listarSecciones();
+          },
+          error: function (error) {
+            $('#cover-spin').hide()
+            console.log(error)
+          }
         });
+        return false;
+      }
+    });
 
-        jQuery.validator.addMethod("alphanumeric", function (value, element) {
-            return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
-        }, "Letters, numbers, and underscores only please");
-
-        jQuery.validator.addMethod("minDate", function (value, element) {
-            if ($("#fecha").val() > $("#fechaRegistro").val())
-                return true;
-            return false;
-        }, "La fecha de fin no puede ser inferior a la fecha inicio");
-
-        jQuery.validator.addMethod("maxDate", function (value, element) {
-            if ($("#fecha").val() > $("#fechaRegistro").val())
-                return true;
-            return false;
-        }, "La fecha de inicio no puede ser superior a la fecha fin");
-
-
-        function listarSecciones() {
-
-            $.ajax({
-                type: 'POST',
-                url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/listSections/',
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    task_pk: {{ task.pk }},
-                },
-                success: function (response) {
-                    $("#listarSecciones").empty();
-
-                    var secciones = JSON.parse(response['secciones']);
-                    console.log(secciones);
-                    var i = 0;
-                    var j = 1;
-                    var numero = secciones.length;
-                    var data = '';
-
-                    for (i = 0; i < numero; i++) {
-                    data+=(
-                        '<div class="card mt-3">'+
-                        '    <ul class="list-group list-group-flush">'+
-                        '        <li class="list-group-item">'+
-                        '            <div class="row">'+
-                        '                <div class="col-10">'+
-                        '                    <h5>'+ secciones[i]['fields'].nombre +'</h5>'+
-                        '                </div>'+
-                        '                <div class="col-2">'+
-                        '                    <div class="d-flex flex-row justify-content-end" >'+
-                        '                        <button type="button" class="btn btn-show"><i class="fas fa-edit"></i></button>'+
-                        '                        <button type="button" class="btn btn-edit"><i class="fas fa-trash"></i>'+
-                        '                        </button>'+
-                        '                    </div>'+
-                        '                </div>'+
-                        '            </div>'+
-                        '        </li>'+
-                        '        <li class="list-group-item">'+
-                        '            <div class="form-group row">'+
-                        '                <label for="descripcion_2"'+
-                        '                       class="col-sm-2 col-form-label">Descripción: </label>'+
-                        '                <div class="col-sm-10">'+
-                        '                <textarea class="form-control" id="descripcion_2" name="descripcion_2" type="text"'+
-                        '                          disabled> '+ secciones[i]['fields'].contenido +
-                        '                </textarea>'+
-                        '                </div>'+
-                        '            </div>'+
-                        '        </li>'+
-                        '        <li class="list-group-item">'+
-                        '            <div class="form-group row">'+
-                        '                <label for="evidencias_2"'+
-                        '                       class="col-sm-2 col-form-label">Evidencias: </label>'+
-                        '                <div class="col-sm-10">'+
-                        '                    <p>Listar qui archivos</p>'+
-                        '                </div>'+
-                        '            </div>'+
-                        '        </li>'+
-                        '    </ul>'+
-                        '</div>'
-                        )
-                    }
-
-                    $("#listarSecciones").append(data);
-                },
-                error: function (response) {
-                    console.log('Ocurrio un error')
-                    alert(response["responseJSON"]["error"]);
-                }
-            });
+    function actualizarEstado() {
+      $.ajax({
+        type: 'POST',
+        url: "{% url 'updateTaskState'%}",
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          task_pk: {{ task.pk }},
+        },
+        success: function (response) {
+          location.reload();
+        },
+        error: function (response) {
+          console.log(response)
         }
+      });
+    }
+
+    $("#formRegistroSeccion").validate({
+      rules: {
+        nombre_1: {
+          required: true,
+          maxlength: 50,
+          alphanumeric: true
+        },
+        descripcion_1: {
+          required: true,
+          maxlength: 200,
+        },
+
+        evidencias_1: {
+          required: true,
+        },
+      },
+      messages: {
+        nombre_1: {
+          required: "Debe ingresar el nombre de la sección",
+          maxlength: "El nombre no debe tener más de 50 caracteres",
+          alphanumeric: "El nombre solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
+        },
+        descripcion_1: {
+          required: "Debe ingresar la descripción de la sección",
+          maxlength: "La descripción no debe tener más de 200 caracteres",
+        },
+        evidencias_1: {
+          required: "Debe seleccionar un archivo como evidencia",
+        },
+      },
+
+      submitHandler: function (form, e) {
+        e.preventDefault();
 
 
-        $("form[name='formTareas']").validate({
-            rules: {
-                nombre: {
-                    required: true,
-                    maxlength: 50,
-                    alphanumeric: true
-                },
-                descripcion: {
-                    required: true,
-                    maxlength: 200,
-                },
-                presupuesto: {
-                    required: true,
-                    number: true,
-                    min: 0
-                },
-                fechaRegistro: {
-                    required: true,
-                    date: true,
-                    maxDate: true
-                },
-                fecha: {
-                    required: true,
-                    date: true,
-                    minDate: true
-                },
-            },
-            messages: {
-                nombre: {
-                    required: "Debe ingresar el nombre de la tarea",
-                    maxlength: "El nombre no debe tener más de 50 caracteres",
-                    alphanumeric: "El nombre solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
-                },
-                descripcion: {
-                    required: "Debe ingresar la descripción de la tarea",
-                    maxlength: "La descripción no debe tener más de 200 caracteres",
-                },
-                presupuesto: {
-                    required: "Debe ingresar el presupuesto de la tarea",
-                    number: "El presupuesto solo acepta números",
-                    min: "El presupuesto no puede ser negativo"
-                },
-                fechaRegistro: {
-                    required: "Debe ingresar la fecha de inicio de la tarea",
-                    //max: "La fecha de inicio no puede ser superior a la fecha fin"
-                },
-                fecha: {
-                    required: "Debe ingresar la fecha de fin de la tarea",
-                    //min: "La fecha de fin no puede ser inferior a la fecha inicio"
-                },
-            },
-            submitHandler: function (form, e) {
-                e.preventDefault();
-                $('#cover-spin').show(0)
-                $.ajax({
-                    url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/',
-                    method: "POST",
-                    data: {
-                        'nombre': $("#nombre").val(),
-                        'descripcion': $("#descripcion").val(),
-                        'fechaRegistro': $("#fechaRegistro").val(),
-                        'fecha': $("#fecha").val(),
-                        'presupuesto': $("#presupuesto").val(),
-                        'gasto': $("#gasto").val(),
-                        'estado': $("#estado").val(),
-                    },
-                    success: function (response) {
-                        $('#cover-spin').hide()
-                        if (response["success"] !== undefined) {
-                            $.toast({
-                                text: 'No se pudo actualizar la tarea',
-                                icon: 'warning',
-                                loader: false,        // Change it to false to disable loader
-                                bgColor: '#c67a71',
-                                textColor: '#000000',
-                                position: 'bottom-right',
-                                hideAfter: 3000,
-                            })
-                        } else {
-                            $.toast({
-                                text: 'Tarea actualizada con éxito',
-                                icon: 'success',
-                                loader: false,        // Change it to false to disable loader
-                                bgColor: '#B7E6CA',  // To change the background
-                                textColor: '#000000',
-                                position: 'bottom-right',
-                                hideAfter: 3000,
-                            })
-                            //window.location.pathname = "/conservacion/actividades/" + $('#idActivity').val() + "/tareas/";
-                        }
+        let fd = new FormData();
+        let files = $("#evidencias_1")[0].files
+        fd.append("evidencias", files[0])
+        fd.append("csrfmiddlewaretoken", "{{ csrf_token }}")
+        fd.append("task_pk", {{ task.pk }})
+        fd.append("nombre", $("#nombre_1").val())
+        fd.append("descripcion", $("#descripcion_1").val())
 
-                        listarSecciones();
-                    },
-                    error: function (error) {
-                        $('#cover-spin').hide()
-                        console.log(error)
-                    }
-                });
-                return false;
-            }
+
+        $.ajax({
+          type: 'POST',
+          url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/addSection/',
+          data: fd,
+          contentType: false,
+          processData: false,
+          mimeType: "multipart/form-data",
+          success: function (response) {
+
+            $.toast({
+              text: 'Se rechazó la solicitúd con éxito',
+              icon: 'success',
+              loader: false,        // Change it to false to disable loader
+              bgColor: '#B7E6CA',  // To change the background
+              textColor: '#000000',
+              position: 'bottom-right',
+              hideAfter: 3000,
+            })
+            $("#agregarSecciones").modal('hide')
+            listarSecciones();
+          },
+          error: function (response) {
+
+            console.log(response)
+
+            $.toast({
+              text: 'Ocurrió un error inesperado',
+              icon: 'warning',
+              loader: false,        // Change it to false to disable loader
+              bgColor: '#c67a71',
+              textColor: '#000000',
+              position: 'bottom-right',
+              hideAfter: 3000,
+            })
+          }
         });
+        return false;
+      }
+    });
 
-        function actualizarEstado() {
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'updateTaskState'%}",
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    task_pk: {{ task.pk }},
-                },
-                success: function (response) {
-                    location.reload();
-                },
-                error: function (response) {
-                    console.log(response)
-                }
-            });
-        }
-
-        $("#formRegistroSeccion").validate({
-            rules: {
-                nombre_1: {
-                    required: true,
-                    maxlength: 50,
-                    alphanumeric: true
-                },
-                descripcion_1: {
-                    required: true,
-                    maxlength: 200,
-                },
-
-                evidencias_1: {
-                    required: true,
-                },
-            },
-            messages: {
-                nombre_1: {
-                    required: "Debe ingresar el nombre de la sección",
-                    maxlength: "El nombre no debe tener más de 50 caracteres",
-                    alphanumeric: "El nombre solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
-                },
-                descripcion_1: {
-                    required: "Debe ingresar la descripción de la sección",
-                    maxlength: "La descripción no debe tener más de 200 caracteres",
-                },
-                evidencias_1: {
-                    required: "Debe seleccionar un archivo como evidencia",
-                },
-            },
-
-            submitHandler: function (form, e) {
-                e.preventDefault();
-
-                console.log($("#evidencias_1")[0].files),
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/addSection/',
-
-                        data: {
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                            task_pk: {{ task.pk }},
-                            nombre: $("#nombre_1").val(),
-                            descripcion: $("#descripcion_1").val(),
-                            evidencias: $("#evidencias_1")[0].files,
-                        },
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-
-                            $.toast({
-                                text: 'Se rechazó la solicitúd con éxito',
-                                icon: 'success',
-                                loader: false,        // Change it to false to disable loader
-                                bgColor: '#B7E6CA',  // To change the background
-                                textColor: '#000000',
-                                position: 'bottom-right',
-                                hideAfter: 3000,
-                            })
-                        },
-                        error: function (response) {
-
-                            console.log(response)
-
-                            $.toast({
-                                text: 'Ocurrió un error inesperado',
-                                icon: 'warning',
-                                loader: false,        // Change it to false to disable loader
-                                bgColor: '#c67a71',
-                                textColor: '#000000',
-                                position: 'bottom-right',
-                                hideAfter: 3000,
-                            })
-                        }
-                    });
-                return false;
-            }
-        });
-
-    </script>
+  </script>
 {% endblock %}

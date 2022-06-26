@@ -540,12 +540,13 @@ def updateTaskState(request):
 @api_view(('POST',))
 def addSection(request, pk):
     print('Dentro de agregar sección>>>>>>>>')
+    print(request.POST)
 
     tarea = Tarea.objects.get(pk=pk)
     nombre = request.POST['nombre']
     descripcion = request.POST['descripcion']
 
-    evidencias = request.FILES['evidencias']
+    evidencias = request.FILES.get('evidencias')
 
     campo = Campo.objects.create(nombre=nombre, contenido=descripcion, tarea=tarea)
     campo.save()
