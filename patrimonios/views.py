@@ -35,7 +35,7 @@ def patrimonio_list(request):
         for pat in data:
             cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
             npat = []
-            if cat.tipo == 1 or cat.tipo == 2:
+            if int(cat.tipo) == 1 or int(cat.tipo) == 2:
                 npat = Patrimonio.objects.filter(codigo=pat['codigo'])
             else:
                 npat = Patrimonio.objects.filter(codigo=pat['nroRegistro'])
