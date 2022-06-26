@@ -67,7 +67,7 @@ def query_activities_by_args(pk, **kwargs):
 
     total = queryset.count()
 
-    order_column = ProyectoConservacion.ORDER_COLUMN_CHOICES[order_column]
+    order_column = Actividad.ORDER_COLUMN_CHOICES[order_column]
     if order == 'desc':
         order_column = '-' + order_column
 
@@ -80,7 +80,7 @@ def query_activities_by_args(pk, **kwargs):
         queryset = queryset.filter(status=status_filter)
 
     count = queryset.count()
-    queryset = queryset[start:start + length]
+    queryset = queryset.order_by(order_column)[start:start + length]
     return {
         'items': queryset,
         'count': count,
@@ -285,10 +285,13 @@ def listActivities(request, pk):
         result['recordsFiltered'] = activity['count']
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
     else:
+        proyecto = ProyectoConservacion.objects.get(pk=pk)
+        patrimonios = proyecto.patrimonios.all()
+
         context = {
-                'status_choices': Actividad.STATUS,
-            'project': ProyectoConservacion.objects.get(pk=pk),
-            'patrimonios': Patrimonio.objects.all()
+            'status_choices': Actividad.STATUS,
+            'project': proyecto,
+            'patrimonios': patrimonios
         }
         return render(request, 'proyectoConservacion/activity_list.html', context)
 

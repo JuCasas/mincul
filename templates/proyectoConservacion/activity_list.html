@@ -190,7 +190,7 @@
                 </div>
                 <div class="form-group col-sm-2 mb-0">
                     <select class="form-control" id="status_filter">
-                        <option value="" selected>Todos</option>
+                        <option value="" selected>Todos los estados</option>
                         {% for mykey,myvalue in status_choices %}
                             <option value="{{ mykey }}">{{ myvalue }}</option>
                         {% endfor %}
@@ -198,19 +198,10 @@
                 </div>
                 <div class="form-group col-sm-2 mb-0">
                     <select class="form-control" id="type_filter">
-                        <option value="" selected>Todos</option>
-                        {% for mykey,myvalue in typeProjects %}
-                            <option value="{{ mykey }}">{{ myvalue }}</option>
+                        <option value="" selected>Todos los patrimonios</option>
+                        {% for patrimonio in patrimonios %}
+                            <option value="{{ patrimonio.pk }}">{{ patrimonio.nombreTituloDemoninacion }}</option>
                         {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group col-sm-2 mb-0">
-                    <select class="form-control" id="exampleFormControlSelect3">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
                     </select>
                 </div>
                 <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
@@ -222,7 +213,7 @@
 
     <div class="card mb-3">
         <div class="card-body">
-            <table id="tabla_autores" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
+            <table id="tabla_actividades" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-100">
                 <thead class="bg-200">
                 <tr>
                     <th class="sort ">Código</th>
@@ -469,7 +460,7 @@
                 data: $.param(data),
                 success: function (response) {
                     $('#modalActividad').modal('hide')
-                    $("#tabla_autores").DataTable().draw();
+                    $("#tabla_actividades").DataTable().draw();
                 },
                 error: function (error) {
                     console.log(error)
@@ -477,7 +468,7 @@
             });
         });
 
-        let table = $('#tabla_autores').DataTable({
+        let table = $('#tabla_actividades').DataTable({
             "searching": false,
             "serverSide": true,
             "processing": true,
@@ -563,24 +554,18 @@
 
 
         $('#search').keyup(function () {
-            $('#tabla_autores').DataTable().search($(this).val()).draw();
+            $('#tabla_actividades').DataTable().search($(this).val()).draw();
         })
 
         $('#status_filter').change(function () {
-            $('#tabla_autores').DataTable().draw();
+            $('#tabla_actividades').DataTable().draw();
+        });
+        $('#type_filter').change(function () {
+            $('#tabla_actividades').DataTable().draw();
         });
 
-        $('#exampleFormControlSelect1').change(function () {
-            $('#tabla_autores').DataTable().draw();
-        });
-        $('#exampleFormControlSelect2').change(function () {
-            $('#tabla_autores').DataTable().draw();
-        });
-        $('#exampleFormControlSelect3').change(function () {
-            $('#tabla_autores').DataTable().draw();
-        });
 
-        $('#tabla_autores tbody').on('click', 'button', function () {
+        $('#tabla_actividades tbody').on('click', 'button', function () {
             let data = table.row($(this).parents('tr')).data();
             let class_name = $(this).attr('class');
 
@@ -684,7 +669,7 @@
                         })
                     } else {
                         $('#myModal').modal('hide')
-                        $("#tabla_autores").DataTable().draw();
+                        $("#tabla_actividades").DataTable().draw();
                         $.toast({
                             text: 'Actividad eliminada con éxito',
                             icon: 'success',
