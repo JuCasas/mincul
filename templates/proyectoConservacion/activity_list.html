@@ -272,7 +272,7 @@
 
                         <div class="row">
                             <div class="form-group col-lg-12 col-sm-12">
-                                <label for="conservadores_count">Patrimonio Asociado:</label>
+                                <label for="patrimonio">Patrimonio Asociado:</label>
                                 <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
 
                                 </select>
@@ -321,44 +321,44 @@
 
                         </div>
 
-{#                        <div class="row justify-content-between">#}
-{#                            <div class="form-group col-9">#}
-{#                                <label for="relaciones">Actividades Relacionadas:</label>#}
-{#                                <select class="form-control selectpicker" id="relaciones" name="relaciones"#}
-{#                                        data-placeholder='Seleccione actividad...'>#}
-{#                                </select>#}
-{#                            </div>#}
-{#                            <div class="form-group col-auto d-flex align-items-end">#}
-{#                                <button id="btnAgregarRelacion" class="btn btn-primary btn-sm" type="button"#}
-{#                                        onclick="agregarRelacionTabla()">Agregar Relación#}
-{#                                </button>#}
-{#                            </div>#}
-{#                            <div class="form-group col-lg-12 col-sm-12">#}
-{#                                <table class="table table-responsive-sm">#}
-{#                                    <thead class="thead-dark">#}
-{#                                    <tr>#}
-{#                                        <th scope="col">Código</th>#}
-{#                                        <th scope="col">Nombre</th>#}
-{#                                        <th scope="col">Acciones</th>#}
-{#                                    </tr>#}
-{#                                    </thead>#}
-{#                                    <tbody id="relacionAgregar">#}
-{#                                    {% for actividad in actividades %}#}
-{#                                        <tr>#}
-{#                                            <td>{{ actividad.codigo }}</td>#}
-{#                                            <td>{{ actividad.nombre }}</td>#}
-{#                                            <td>#}
-{#                                                <button class="btn" href="#" type="button"#}
-{#                                                        onclick="eliminarRelacion(this,{{ actividad.pk }})">#}
-{#                                                    <i class="fas fa-trash" data-fa-transform="shrink-3"></i>#}
-{#                                                </button>#}
-{#                                            </td>#}
-{#                                        </tr>#}
-{#                                    {% endfor %}#}
-{#                                    </tbody>#}
-{#                                </table>#}
-{#                            </div>#}
-{#                        </div>#}
+                        {#                        <div class="row justify-content-between">#}
+                        {#                            <div class="form-group col-9">#}
+                        {#                                <label for="relaciones">Actividades Relacionadas:</label>#}
+                        {#                                <select class="form-control selectpicker" id="relaciones" name="relaciones"#}
+                        {#                                        data-placeholder='Seleccione actividad...'>#}
+                        {#                                </select>#}
+                        {#                            </div>#}
+                        {#                            <div class="form-group col-auto d-flex align-items-end">#}
+                        {#                                <button id="btnAgregarRelacion" class="btn btn-primary btn-sm" type="button"#}
+                        {#                                        onclick="agregarRelacionTabla()">Agregar Relación#}
+                        {#                                </button>#}
+                        {#                            </div>#}
+                        {#                            <div class="form-group col-lg-12 col-sm-12">#}
+                        {#                                <table class="table table-responsive-sm">#}
+                        {#                                    <thead class="thead-dark">#}
+                        {#                                    <tr>#}
+                        {#                                        <th scope="col">Código</th>#}
+                        {#                                        <th scope="col">Nombre</th>#}
+                        {#                                        <th scope="col">Acciones</th>#}
+                        {#                                    </tr>#}
+                        {#                                    </thead>#}
+                        {#                                    <tbody id="relacionAgregar">#}
+                        {#                                    {% for actividad in actividades %}#}
+                        {#                                        <tr>#}
+                        {#                                            <td>{{ actividad.codigo }}</td>#}
+                        {#                                            <td>{{ actividad.nombre }}</td>#}
+                        {#                                            <td>#}
+                        {#                                                <button class="btn" href="#" type="button"#}
+                        {#                                                        onclick="eliminarRelacion(this,{{ actividad.pk }})">#}
+                        {#                                                    <i class="fas fa-trash" data-fa-transform="shrink-3"></i>#}
+                        {#                                                </button>#}
+                        {#                                            </td>#}
+                        {#                                        </tr>#}
+                        {#                                    {% endfor %}#}
+                        {#                                    </tbody>#}
+                        {#                                </table>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
 
                         <div class="row justify-content-between">
                             <div class="form-group col-9">
@@ -366,10 +366,9 @@
                             </div>
 
                             <div class="card-body bg-light">
-                                <div class="dropzone dropzone-multiple p-0" data-dropzone
-                                     data-options='{"url":"valid/url"}'>
+                                <div class="dropzone dropzone-multiple p-0" data-dropzone>
                                     <div class="fallback">
-                                        <input type="file" name="file" multiple>
+                                        <input type="file" name="file" id="file" multiple>
                                     </div>
                                 </div>
                             </div>
@@ -434,9 +433,23 @@
         $('#formActividad').on('submit', function (e) {
             e.preventDefault();
             let $this = $(this);
-            var data = $(this).serializeArray();
-            data.push({name: "conservadoresLista", value: conservadoresLista});
-            data.push({name: "relacionesLista", value: relacionesLista});
+            let fd = new FormData();
+
+            let files = $("#file")[0].files
+            for (let i = 0, len = files.length; i < len; i++) {
+                fd.append("file" , files[i]);
+            }
+
+            fd.append("csrfmiddlewaretoken", "{{ csrf_token }}")
+            fd.append("conservadoresLista", conservadoresLista)
+            fd.append("relacionesLista", relacionesLista)
+
+            fd.append("nombre", $("#nombre").val())
+            fd.append("descripcion", $("#descripcion").val())
+            fd.append("fechaInicio", $("#fechaInicio").val())
+            fd.append("fechaFin", $("#fechaFin").val())
+            fd.append("patrimonio", $("#patrimonio").val())
+
             let type = $('#type').val();
             let method = '';
             let url = '/conservacion/proyectos/';
@@ -453,7 +466,10 @@
             $.ajax({
                 url: url,
                 method: method,
-                data: $.param(data),
+                data: fd,
+                contentType: false,
+                processData: false,
+                mimeType: "multipart/form-data",
                 success: function (response) {
                     $('#modalActividad').modal('hide')
                     $("#tabla_actividades").DataTable().draw();
@@ -598,7 +614,7 @@
                 let relaciones = data['relaciones'];
                 let tamRelaciones = relaciones.length;
 
-                $("#patrimonio").html('<option value="'+data['patrimonioPk']+'">'+data['patrimonio']+'</option>')
+                $("#patrimonio").html('<option value="' + data['patrimonioPk'] + '">' + data['patrimonio'] + '</option>')
                 $("#patrimonio").val(data['patrimonioPk']).change();
 
                 $("#conservadorAgregar").empty()

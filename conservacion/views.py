@@ -401,6 +401,10 @@ def addActivity(request, pk):
             for idRelacion in relaciones:
                 actividad.relaciones.add(Actividad.objects.get(pk=idRelacion))
 
+        for f in request.FILES.getlist('file'):
+            doc = Documento.objects.create(url=f)
+            actividad.documentos.add(doc)
+
         actividad.codigo = "ACT" + str(actividad.id).zfill(5)
         actividad.save()
         proyecto.cantidadAct = Actividad.objects.filter(proyecto=proyecto).filter(estado='1').count()
@@ -418,6 +422,7 @@ def editActivity(request, pk, pkActividad):
     try:
         print("######")
         print(request.POST)
+        print(request.FILES)
         actividad = Actividad.objects.get(pk=pkActividad)
         actividad.nombre = request.POST['nombre']
         actividad.descripcion = request.POST['descripcion']
@@ -436,6 +441,10 @@ def editActivity(request, pk, pkActividad):
             relaciones = list(request.POST['relacionesLista'].split(","))
             for idRelacion in relaciones:
                 actividad.relaciones.add(Actividad.objects.get(pk=idRelacion))
+
+        for f in request.FILES.getlist('file'):
+            doc = Documento.objects.create(url=f)
+            actividad.documentos.add(doc)
 
         actividad.save()
         return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
