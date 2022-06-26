@@ -7,6 +7,7 @@ urlpatterns = [
     path('<pk>/detalle/', views.incidente_detalle, name='incidente_detalle'),
     path('<pk>/assign/', views.asignar_proyecto, name='asignar_proyecto'),
     path('<pk>/unassign/', views.retirar_proyecto, name='retirar_proyecto'),
+    path('<pk>/delete/', views.denegar_proyecto, name='denegar_proyecto'),
     path('zonas/', views.listar_zonas, name='listar_zonas'),
     path('proyectos/', views.listar_proyectos, name='listar_proyectos'),
     path('listar/<patrimonio_pk>/', views.incidente_reporte_listar, name='incidente_reporte_listar'),

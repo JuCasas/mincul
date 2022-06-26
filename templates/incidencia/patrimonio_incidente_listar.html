@@ -371,6 +371,25 @@
       </div>
     </div>
   </div>
+  <!-- Delete Modal -->
+  <div class="modal fade" id="modalDenegar" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <input id="idIncidenteDenegar" hidden>
+        <div class="modal-header justify-content-center">
+          <h4 class="modal-title">¿Estás seguro de denegar el incidente?</h4>
+        </div>
+        <div class="modal-body px-9">
+          <div class="row justify-content-between">
+            <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <div id="cover-spin"></div>
 
@@ -406,7 +425,7 @@
         'class': 'badge-soft-warning',
       },
       '2': {
-        'name': 'En Proceso',
+        'name': 'Asignado',
         'class': 'badge-soft-primary',
       },
       '3': {
@@ -415,7 +434,7 @@
       },
       '4': {
         'name': 'Denegado',
-        'class': 'badge-soft-primary',
+        'class': 'badge-soft-danger',
       }
     };
 
@@ -553,8 +572,8 @@
           "data": "status", render: function (data, type, row) {
 
             let resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-                '<button type="button" class="btn btn-check"><i class="fas fa-check"></i></button>' + '&nbsp;&nbsp' +
-                '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+                '<button type="button" class="btn btn-check"' + (data==='3'|| data==='4'?' disabled ':'')+'><i class="fas fa-check"></i></button>' + '&nbsp;&nbsp' +
+                '<button type="button" class="btn btn-delete"'+ (data==='3'|| data==='4'?' disabled ':'')+'><i class="fas fa-trash-alt"></i></button>'
             return resp;
           }
         },
@@ -659,7 +678,8 @@
         });
       } else {
         // DELETE button
-        $("#del").modal();
+        $('#idIncidenteDenegar').val(id)
+        $("#modalDenegar").modal();
       }
     });
 
@@ -714,6 +734,7 @@
 
           },
           error: function (error) {
+            $('#cover-spin').hide();
             $.toast({
               heading: '<b>Error:</b>',
               text: '<span>Ha ocurrido un error en el servidor</span>',
@@ -764,6 +785,55 @@
 
         },
         error: function (error) {
+          $('#cover-spin').hide();
+          $.toast({
+            heading: '<b>Error:</b>',
+            text: '<span>Ha ocurrido un error en el servidor</span>',
+            icon: 'error',
+            loader: true,        // Change it to false to disable loader
+            bgColor: '#e63757',  // To change the background
+            textColor: '#FFFFFF',
+            loaderBg: '#FFFFFF',
+            position: 'top-center',
+            hideAfter: 1000,
+            stack: false,
+          })
+        }
+      });
+
+
+    });
+
+    //Denegar Incidente
+    $('#delete').on('click', function (e) {
+
+      id = $('#idIncidenteDenegar').val()
+
+      $('#cover-spin').show(0)
+      $.ajax({
+        url: '/incidentes/' + id + '/delete/',
+        method: 'POST',
+        data: {},
+        success: function (response) {
+          $('#cover-spin').hide();
+          $("#modalDenegar").modal('hide');
+          table.draw();
+          $.toast({
+            heading: '<b>Info:</b>',
+            text: '<span>Incidente denegado correctamente!</span>',
+            icon: 'success',
+            loader: true,        // Change it to false to disable loader
+            bgColor: '#00d27a',  // To change the background
+            textColor: '#FFFFFF',
+            loaderBg: '#FFFFFF',
+            position: 'top-center',
+            hideAfter: 3000,
+            stack: false,
+          })
+
+        },
+        error: function (error) {
+          $('#cover-spin').hide();
           $.toast({
             heading: '<b>Error:</b>',
             text: '<span>Ha ocurrido un error en el servidor</span>',

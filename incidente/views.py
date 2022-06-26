@@ -102,6 +102,18 @@ def retirar_proyecto(request,pk):
   incident.save()
   return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+@api_view(('POST',))
+def denegar_proyecto(request,pk):
+  incident = Incidente.objects.get(pk=int(pk))
+  if(incident.status=='2'):
+    queryset = incident.proyectoconservacion_set.all().filter()
+    project = ProyectoConservacion.objects.get(pk=queryset[0].id)
+    project.incidentes.remove(incident)
+    project.save()
+  incident.status = '4'
+  incident.save()
+  return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 def incidente_reporte_listar(request, patrimonio_pk):
   context = {
     'incidentes': Incidente.objects.filter(patrimonio_id=patrimonio_pk),
