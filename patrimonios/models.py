@@ -197,10 +197,10 @@ class PatrimonioMaterialMueble(models.Model):
     conservacion = models.CharField(max_length=50, null=True)
     detalleConservacion = models.CharField(max_length=200, null=True)
     detalleTratamiento = models.CharField(max_length=200, null=True)
-    alto = models.FloatField(default=0.0)
-    largo = models.FloatField(default=0.0)
-    ancho = models.FloatField(default=0.0)
-    espesor = models.FloatField(default=0.0)
+    alto = models.CharField(max_length=50)
+    largo = models.CharField(max_length=50)
+    ancho = models.CharField(max_length=50)
+    espesor = models.CharField(max_length=50)
     formaAdquisicion = models.CharField(max_length=200, null=True)
     ubicacionEspecifica = models.CharField(max_length=200, null=True)
     situacion = models.CharField(max_length=50, null=True)
@@ -228,9 +228,9 @@ class PatrimonioArqueologico(models.Model):
     cultura = models.CharField(max_length=100, null=True)
     estilo = models.CharField(max_length=100, null=True)
     periodo = models.CharField(max_length=100, null=True)
-    diametroMax = models.FloatField(default=0.0, null=True)
-    diametroMin = models.FloatField(default=0.0, null=True)
-    diametroBase = models.FloatField(default=0.0, null=True)
+    diametroMax = models.CharField(max_length=50, null=True)
+    diametroMin = models.CharField(max_length=50, null=True)
+    diametroBase = models.CharField(max_length=50, null=True)
     patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble,on_delete=models.CASCADE)
 
 class PatrimonioHistoricoArtistico(models.Model):
@@ -238,8 +238,8 @@ class PatrimonioHistoricoArtistico(models.Model):
     procedencia = models.CharField(max_length=100, null=True)
     datacion = models.CharField(max_length=100, null=True)
     materialSoporte = models.CharField(max_length=100, null=True)
-    fondo = models.FloatField(default=0.0)
-    diametro = models.FloatField(default=0.0)
+    fondo = models.CharField(max_length=50, null=True)
+    diametro = models.CharField(max_length=50, null=True)
     patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble, on_delete=models.CASCADE)
 
 class PatrimonioEtnografico(models.Model):
@@ -247,8 +247,8 @@ class PatrimonioEtnografico(models.Model):
     procedencia = models.CharField(max_length=100, null=True)
     datacion = models.CharField(max_length=100, null=True)
     materialSoporte = models.CharField(max_length=100, null=True)
-    fondo = models.FloatField(default=0.0)
-    diametro = models.FloatField(default=0.0)
+    fondo = models.CharField(max_length=50, null=True)
+    diametro = models.CharField(max_length=50, null=True)
     patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble, on_delete=models.CASCADE)
 
 class PatrimonioPaleontologico(models.Model):
@@ -268,8 +268,8 @@ class PatrimonioIndustrial(models.Model):
     procedencia = models.CharField(max_length=50, null=True)
     datacion = models.CharField(max_length=50, null=True)
     materialSoporte = models.CharField(max_length=100, null=True)
-    fondo = models.FloatField(default=0.0)
-    diametro = models.FloatField(default=0.0)
+    fondo = models.CharField(max_length=50, null=True)
+    diametro = models.CharField(max_length=50, null=True)
     fabricantes = models.ManyToManyField(Fabricante)
     patrimonioMueble = models.OneToOneField(PatrimonioMaterialMueble, on_delete=models.CASCADE)
 
