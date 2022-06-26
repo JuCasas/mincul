@@ -85,7 +85,9 @@ class Tarea(models.Model):
     ESTADOS = (
         ('1', 'Registrada'),
         ('2', 'En proceso'),
-        ('3', 'Finalizada'),
+        ('3', 'En evaluacion'),
+        ('4', 'Rechazada'),
+        ('5', 'Finalizada'),
     )
     codigo = models.CharField(max_length=8, null=True)
     nombre = models.CharField(max_length=50, null=True)
@@ -100,11 +102,8 @@ class Tarea(models.Model):
 
 class Campo(models.Model):
     ESTADOS = (
-        ('1', 'Registrada'),
-        ('2', 'En proceso'),
-        ('3', 'En evaluacion'),
-        ('4', 'Rechazada'),
-        ('5', 'Finalizada'),
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
     )
     nombre = models.CharField(max_length=200)
     contenido = models.CharField(max_length=200, null=True, blank=True)
