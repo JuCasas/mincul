@@ -40,34 +40,34 @@
                     <div>
                         <img class="img-fluid w-100"
                              style="height: 320px; object-fit: fill; border-radius: 3px"
-                             src={{ valor.url }}/>
+                             src={{ institucion.url }}/>
                     </div>
                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
                         <p class="card-text "
-                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ valor.nombre }}
+                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ institucion.nombre }}
                             </p>
                         <div class="col text-right">
-                            {% if puntacion >= 1 %}
+                            {% if puntuacion >= 1 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                                 {% else %}
                                 <span class="fa fa-star"></span>
                             {% endif %}
-                            {% if puntacion >= 2 %}
+                            {% if puntuacion >= 2 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                                 {% else %}
                                 <span class="fa fa-star"></span>
                             {% endif %}
-                            {% if puntacion >= 3 %}
+                            {% if puntuacion >= 3 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                                 {% else %}
                                 <span class="fa fa-star"></span>
                             {% endif %}
-                            {% if puntacion >= 4 %}
+                            {% if puntuacion >= 4 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                                 {% else %}
                                 <span class="fa fa-star"></span>
                             {% endif %}
-                            {% if puntacion >= 5 %}
+                            {% if puntuacion >= 5 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                                 {% else %}
                                 <span class="fa fa-star"></span>
@@ -186,18 +186,9 @@
                         <div class="row">
                             <div class="col-md">
                                 <h5 class="card-title text-black">Datos del museo:</h5>
-                                <h6 class="mb-2 mb-md-0 text-black">Nombre completo: {{ valor.nombre }}</h6>
+                                <h6 class="mb-2 mb-md-0 text-black">Nombre completo: {{ institucion.nombre }}</h6>
                                 <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Dirección: {{ area.direccion }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Departamento: {{ area.departamento }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Provincia: {{ area.provincia }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Distrito: {{ area.distrito }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Cantidad de patrimonios: -</h6>
-                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Dirección: {{ institucion.direccion }}</h6>
                             </div>
                         </div>
                     </div>

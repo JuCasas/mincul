@@ -35,7 +35,7 @@
                             <div class="position-relative" style="padding: 10px;">
                                 <label for="txtBuscar"></label>
                                 <input name="patrimonio_name" class="form-control" id="txtBuscar"
-                                       placeholder="Buscar patrimonio..." required>
+                                       placeholder="Buscar patrimonio...">
                             </div>
                             <div class="text-right" style="padding: 10px">
                                 <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioAvanzado' %}">
@@ -48,7 +48,7 @@
                 <div class="row" style="padding-bottom: 5px">
                     <div class="col">
                         <div class="position-relative" style="padding: 5px;">
-                            <button class="btn-primary text-white" type="submit" form="form_buscar">
+                            <button class="btn-primary text-white" type="submit" form="form_buscar" id="btn-submit">
                                 Realizar Búsqueda
                             </button>
                         </div>
@@ -268,8 +268,24 @@
     </script>
     <!--script verificadores-->
     <script>
-    jQuery.validator.addMethod("regexPatrimonio",function(value, element){
-        return this.optional(element) || /[a-z\u00E0-\u00FC\-\w\s+\.]+$/i.test(value);
-    }, "Letters, numbers, and underscores only please");
+    const isAlpha = str => /^[a-zA-Z()]*$/.test(str);
+    const txtInput = document.getElementById('txtBuscar');
+    $(document).ready(function () {
+        $('#btn-submit').click(function() {
+            var txtInputValue = txtInput.value.trim();
+            if(txtInputValue== "") {
+                alert("Debe escribir una palabra en el cuadro de texto");
+                txtInput.value = txtInputValue;
+                return false;
+            }
+            if(txtInputValue != ""){
+                if(isAlpha(txtInputValue)){ {% comment %} Nothing {% endcomment %} }
+                else{
+                    alert("Solo debe escribir letras");
+                    return false;
+                }
+            }
+        });
+    });
     </script>
 {% endblock %}

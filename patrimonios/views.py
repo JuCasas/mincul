@@ -14,6 +14,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from authentication.models import User
+from conservacion.serializers import PatrimonioSerializer
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
@@ -24,6 +25,31 @@ from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Ca
 from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
+@api_view(('GET',))
+def patrimonio_list_ajax(request):
+    search = request.GET['search_value']
+    start = int(request.GET['start'])
+    length = int(request.GET['length'])
+    type = request.GET['tipo']
+    category = request.GET['category']
+    departamento = request.GET['departamento']
+    queryset = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
+    if search:
+        queryset = queryset.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
+    if (type!='0'):
+        queryset = queryset.filter(tipoPatrimonio=type).order_by('nombreTituloDemoninacion')
+    if(category!='Categoria'):
+        cat = Categoria.objects.get(nombre__icontains=category)
+        queryset = queryset.filter(categoria_id=cat.pk).order_by('nombreTituloDemoninacion')
+    if(departamento!='Departamento'):
+        queryset = queryset.filter(departamento__icontains=departamento).order_by('nombreTituloDemoninacion')
+    count = queryset.count()
+    queryset = queryset[start:start + length]
+    serializer = PatrimonioSerializer(queryset, many=True)
+    result = dict()
+    result['items'] = serializer.data
+    result['total_count'] = count
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 def patrimonio_list(request):
 
@@ -717,16 +743,6 @@ def detalle(request, pk):
     return render(request, 'patrimonio/templateDetail.html', context)
 
 def detalle_museo(request, pk):
-    #Provisional hasta cambio de la bd
-    #museo
-    valor = {'url': 'https://enlima.pe/sites/default/files/mali-lima.jpg',
-             'nombre': 'Museo Nacional de Arqueología, Antropología e Historia del Perú'}
-
-    area = {'direccion': 'Plaza Bolivar s/n',
-            'departamento': 'Lima',
-            'provincia': 'Lima',
-            'distrito': 'Pueblo Libre'}
-
     institucion = Institucion.objects.get(pk=pk)
     #lista de patrimonio dentro del museo
     patrimonios = Patrimonio.objects.filter(institucion_id=pk)
@@ -735,13 +751,18 @@ def detalle_museo(request, pk):
     #lista de incidentes
     incidentes = Incidente.objects.filter(zona__institucion_id=pk)
 
-    context = {"valor": valor,
-               "area": area,
-               "institucion": institucion,
+    puntuacion = 0
+    for v in valoraciones:
+        puntuacion = v.valoracion + puntuacion
+    if len(valoraciones):
+        puntuacion = puntuacion / len(valoraciones)
+
+    context = {"institucion": institucion,
                "patrimonios": patrimonios,
                "valoraciones": valoraciones,
                "incidentes": incidentes,
-               'afectaciones': [c[1] for c in Incidente.AFECTACION]}
+               'afectaciones': [c[1] for c in Incidente.AFECTACION],
+               'puntuacion': puntuacion,}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
 

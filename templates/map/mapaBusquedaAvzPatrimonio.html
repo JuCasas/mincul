@@ -36,14 +36,14 @@
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
                                                 <label for="txtBuscar"></label>
                                                 <input name="patrimonio_name" class="form-control" id="txtBuscar"
-                                                       placeholder="Buscar patrimonio..." required>
+                                                       placeholder="Buscar patrimonio...">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row" style="padding-bottom:3px">
                                         <div class="col">
                                             <div class="position-relative" style="padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
-                                                <select class="form-control" id="formSelectCategoría" style="padding:3px"
+                                                <select class="form-control" id="formSelectCategoria" style="padding:3px"
                                                         name="select_categoria">
                                                     <option>Categoría</option>
                                                     {% for cat in categorias %}
@@ -97,7 +97,7 @@
                         <div class="row" style="padding-bottom: 3px">
                             <div class="col">
                                 <div class="position-relative" style="padding: 10px;">
-                                    <button class="btn-primary text-white" type="submit" form="form_buscar">
+                                    <button class="btn-primary text-white" type="submit" form="form_buscar" id="btn-submit">
                                         Realizar Búsqueda
                                     </button>
                                 </div>
@@ -379,8 +379,35 @@
         })
     })
     </script>
+
     <!--Requirements of search camps script-->
     <script>
-
+        {% comment %} At least two forms should be selected{% endcomment %}
+        const isAlpha = str => /^[a-zA-Z()]*$/.test(str);
+        const txtInput = document.getElementById('txtBuscar');
+        const categoriaInput = document.getElementById('formSelectCategoria');
+        $(document).ready(function () {
+            $('#btn-submit').click(function() {
+                var valueDepa = departamentoInput.value;
+                var txtInputValue = txtInput.value.trim();
+                var categoriaInputValue = categoriaInput.value;
+                if(valueDepa == "-1") {
+                    alert("Debe seleccionar un Departamento");
+                    return false;
+                }
+                if(txtInputValue== "" && categoriaInputValue == "Categoría") {
+                    alert("Debe escribir una palabra en el cuadro de texto de Patrimonio o Seleccionar una categoria");
+                    txtInput.value = txtInputValue;
+                    return false;
+                }
+                if(txtInputValue != ""){
+                    if(isAlpha(txtInputValue)){ {% comment %} Nothing {% endcomment %} }
+                    else{
+                        alert("Solo debe escribir letras");
+                        return false;
+                    }
+                }
+            });
+        });
     </script>
 {% endblock %}

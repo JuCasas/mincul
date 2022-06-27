@@ -57,9 +57,10 @@ class Actividad(models.Model):
     }
 
     STATUS = (
-        ('0', 'En Proceso'),
-        ('1','Registrado'),
-        ('2','Completado'),
+        ('0', 'Registrado'),
+        ('1','En proceso'),
+        ('2','Finalizado'),
+        ('3','Anulada'),
     )
     ESTADOS = (
         ('1', 'Activo'),
