@@ -80,63 +80,18 @@
         <!-- Info de patrimonio -->
         <div class="row mt-4">
             <div class="col-8">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md">
                                 <h5 class="card-title text-black">Historia:</h5>
                                 <p class="mb-2 mb-md-0 text-black">
-                                    Se ubica en la provincia de Barranca, Región Lima. Constituye la manifestación más
-                                    antigua de la civilización en el Perú y en el continente americano debido a sus 5000
-                                    años de antigüedad. Está conformada por 32 edificios monumentales, comprendidos en
-                                    un complejo sistema de asentamientos que muestran una fuerte ideología religiosa,
-                                    entre los cuales se distinguen edificios ceremoniales, sectores residenciales para
-                                    gente de alto ranfo social, un conjunto de templos menores y talleres para la
-                                    producción. Caral lideró un sistema de asentamientos que congregó 17 sitios
-                                    similares,
-                                    aunque más pequeños, ubicados en el valle de Supe. Expresa la complejidad y el
-                                    desarrollo de un modelo de organización socio político y económico temprano durante
-                                    el Período Arcaico tardío (5000 - 3800 BP) originado de manera independiente por las
-                                    sociedades andinas que habitaron este pequeño valle fértil de la costa central
-                                    peruana.
+                                    {{ valor.descripcion }}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md">
-                                <h5 class="card-title text-black">Datos de identificación:</h5>
-                                <h6 class="mb-2 mb-md-0 text-black">Categoría: Arquitectura arcaica</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Tipo de Bien: Inmueble</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Título/Denominación: La Ciudad Sagrada Caral</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Autor: --</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Firmada: --</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Lugar de Manufactura: --</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Estilo: --</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Datación: 3000 a.c. - Periodo arcaico tardío</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Info de patrimonio fin-->
-
-        <div class="row mt-4">
-            <div class="col-8">
                 <div class="col-sm-12 col-lg-12 px-0">
                     <div class="card bg-light">
                       <div class="card-body">
@@ -178,13 +133,36 @@
                           {% endfor %}
                       </div>
                     </div>
-                  </div>
+                    </div>
                 </div>
-
             <div class="col-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md">
+                                <h5 class="card-title text-black">Datos de identificación:</h5>
+                                <h6 class="mb-2 mb-md-0 text-black">Categoría: {{ valor.categoria }}</h6>
+                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Tipo de Bien: {{ valor.tipoPatrimonio }}</h6>
+                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Título/Denominación: {{ valor.nombreTituloDemoninacion }}</h6>
+                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Autor: {{ valor.propietarios }}</h6>
+                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Firmada: {{ valor.propietarios }}</h6>
+                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Lugar de Manufactura: {{ valor.provincia }}</h6>
+                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Estilo: </h6>
+                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Datación: 3000 a.c. - Periodo arcaico tardío</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title text-black">Registar Incidente</h5>
+                            <h5 class="card-title text-black">Registrar Incidente</h5>
 
                             <form id="incidente_form" method="post" action="" enctype="multipart/form-data">
                                 {% csrf_token %}
@@ -237,18 +215,16 @@
                                 <input name="telefono" class="form-control" placeholder="Teléfono...">
                             </form>
 
-                            <button class="btn btn-dark mt-4 mr-1 mb-1 w-100" type="submit" form="incidente_form" name="accion" value="incidente">Registar Incidente</button>
+                            <button class="btn btn-primary btn-block" type="submit" form="incidente_form" name="accion" value="incidente">Registrar Incidente</button>
                         </div>
                 </div>
-
-
-                    <div class="card mt-4">
+                <div class="card mt-4">
                         <div class="card-body">
-                            <h5 class="card-title text-black">Valora la ciudad sagrada de Caral:</h5>
+                            <h5 class="card-title text-black">Valora {{ valor.nombreTituloDemoninacion }}:</h5>
                             <form class="form-validation" method="post">
                                 {% csrf_token %}
                               <div class="form-group">
-                                <label for="form-name">Name*</label>
+                                <label for="form-name">Nombre*</label>
                                 <input class="form-control" type="text" name="name" placeholder="Nombre y Apellido..." required id="form-name">
                               </div>
                               <div class="form-group">
@@ -267,84 +243,83 @@
                                     <div class="raty" id="raty" onclick="lessThan2Stars()"></div>
                                  </div>
                               </div>
-                              <button class="btn btn-primary btn-block" type="submit" id="ratySubmit" onclick="validar()">Guardar</button>
+                              <button class="btn btn-primary btn-block" type="submit" id="ratySubmit" onclick="validar()" value="valoracion" name="accion_valoracion">Registrar Valoración</button>
                             </form>
                         </div>
                     </div>
             </div>
-
         </div>
 
-    <!-- Incident Modal -->
-  <div class="modal fade px-1" id="incidentModal" role="dialog" oncancel="closeModal()">
-    <div class="modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header justify-content-center">
-          <h4 class="card-title text-black mb-0">Registar Incidente</h4>
+        <!-- Info de patrimonio fin-->
+
+        <!-- Incident Modal -->
+        <div class="modal fade px-1" id="incidentModal" role="dialog" oncancel="closeModal()">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                  <h4 class="card-title text-black mb-0">Registrar Incidente</h4>
+                </div>
+                <div class="modal-body">
+                  <form id="incidente_form" method="post" action="" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <label for="tipo">Seleccione el tipo de afectación:</label>
+                                        <select class="form-control" id="tipoAfectacion" name="tipo"
+                                                data-placeholder='Tipo de afectación'>
+                                          {% for a in afectaciones %}
+                                            <option data="{{ a }}" value={{ a }}>{{ a }}</option>
+                                          {% endfor %}
+                                        </select>
+
+                                        <label for="fecha">¿Cuándo sucedió el hecho?</label>
+                                        <input type="date" name="fecha" class="form-control">
+
+                                        <label for="descripcion">Descripción:</label>
+                                        <textarea name="descripcion" class="form-control" style="height: 8em" placeholder="Descripción..."></textarea>
+
+                                        <label for="descripcion">Evidencia: peso máximo 50 mb</label>
+
+                                        <input type="file" id="actual-btn" hidden multiple/>
+
+                                        <label for="actual-btn" class="btn btn-primary mr-1 mb-1 form-control d-flex align-items-center justify-content-center" type="button">Adjuntar Archivos</label>
+                                        <span id="file-chosen-0" class="form-control d-flex align-items-center justify-content-center">No se eligió ningún archivo</span>
+                                        <span id="file-chosen-1" class="form-control" hidden></span>
+                                        <span id="file-chosen-2" class="form-control" hidden></span>
+                                        <script>
+                                            const actualBtn = document.getElementById('actual-btn');
+                                            actualBtn.addEventListener('change', function(){
+                                                console.log(actualBtn.files)
+                                                console.log(actualBtn.files.length)
+                                                for(var i=1; i<3; i++){
+                                                    const fileChosen  = document.getElementById('file-chosen-' + i);
+                                                    fileChosen.hidden = true;
+                                                }
+                                                for(var i=0; i<actualBtn.files.length; i++){
+                                                    const fileChosen  = document.getElementById('file-chosen-' + i);
+                                                    fileChosen.textContent = this.files[i].name;
+                                                    fileChosen.hidden = false;
+                                                }
+                                            })
+                                        </script>
+
+                                        <label for="nombre">¿Cómo te llamas?</label>
+                                        <input name="nombre" class="form-control" placeholder="Nombre y Apellido...">
+
+                                        <label for="email">¿Cual es tu correo electrónico?</label>
+                                        <input name="email" class="form-control" placeholder="Correo electrónico...">
+
+                                        <label for="telefono">¿Cual es tu teléfono?</label>
+                                        <input name="telefono" class="form-control" placeholder="Teléfono...">
+                                    </form>
+                <div class="row justify-content-between m-0 mt-3">
+                    <button type="button" data-dismiss="modal" class="btn second col-5">Cancelar</button>
+                    <button class="btn btn-primary col-5" type="submit" form="incidente_form" name="accion" value="incidente">Registrar Incidente</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <form id="incidente_form" method="post" action="" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <label for="tipo">Seleccione el tipo de afectación:</label>
-                                <select class="form-control" id="tipoAfectacion" name="tipo"
-                                        data-placeholder='Tipo de afectación'>
-                                  {% for a in afectaciones %}
-                                    <option data="{{ a }}" value={{ a }}>{{ a }}</option>
-                                  {% endfor %}
-                                </select>
-
-                                <label for="fecha">¿Cuándo sucedió el hecho?</label>
-                                <input type="date" name="fecha" class="form-control">
-
-                                <label for="descripcion">Descripción:</label>
-                                <textarea name="descripcion" class="form-control" style="height: 8em" placeholder="Descripción..."></textarea>
-
-                                <label for="descripcion">Evidencia: peso máximo 50 mb</label>
-
-                                <input type="file" id="actual-btn" hidden multiple/>
-
-                                <label for="actual-btn" class="btn btn-primary mr-1 mb-1 form-control d-flex align-items-center justify-content-center" type="button">Adjuntar Archivos</label>
-                                <span id="file-chosen-0" class="form-control d-flex align-items-center justify-content-center">No se eligió ningún archivo</span>
-                                <span id="file-chosen-1" class="form-control" hidden></span>
-                                <span id="file-chosen-2" class="form-control" hidden></span>
-                                <script>
-                                    const actualBtn = document.getElementById('actual-btn');
-                                    actualBtn.addEventListener('change', function(){
-                                        console.log(actualBtn.files)
-                                        console.log(actualBtn.files.length)
-                                        for(var i=1; i<3; i++){
-                                            const fileChosen  = document.getElementById('file-chosen-' + i);
-                                            fileChosen.hidden = true;
-                                        }
-                                        for(var i=0; i<actualBtn.files.length; i++){
-                                            const fileChosen  = document.getElementById('file-chosen-' + i);
-                                            fileChosen.textContent = this.files[i].name;
-                                            fileChosen.hidden = false;
-                                        }
-                                    })
-                                </script>
-
-                                <label for="nombre">¿Cómo te llamas?</label>
-                                <input name="nombre" class="form-control" placeholder="Nombre y Apellido...">
-
-                                <label for="email">¿Cual es tu correo electrónico?</label>
-                                <input name="email" class="form-control" placeholder="Correo electrónico...">
-
-                                <label for="telefono">¿Cual es tu teléfono?</label>
-                                <input name="telefono" class="form-control" placeholder="Teléfono...">
-                            </form>
-        <div class="row justify-content-between m-0 mt-3">
-            <button type="button" data-dismiss="modal" class="btn second col-5">Cancelar</button>
-            <button class="btn btn-primary col-5" type="submit" form="incidente_form" name="accion" value="incidente">Registar Incidente</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-
     </div>
 
 

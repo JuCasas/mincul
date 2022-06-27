@@ -703,7 +703,7 @@ def detalle(request, pk):
         incidente.save()
         return HttpResponseRedirect(reverse(detalle, args=[pk]))
 
-    if request.POST.get("accion") == "valoracion":
+    if request.POST.get("accion_valoracion") == "valoracion":
         print(request.POST)
         valoracion = PatrimonioValoracion.objects.create()
         valoracion.patrimonio_id = pk;
