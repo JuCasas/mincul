@@ -18,7 +18,126 @@
 {% endblock %}
 
 {% block body %}
+    <div class="col-md-4" style="padding-left:30px; padding-top: 15px; overflow-y: scroll; ">
+        <nav class="card mb-3" style="height: 75vh">
+        <!-- Content-->
+        <div class="navbar-vertical-content">
+            <div class="row" style="padding-bottom: 3px">
+                <div class="col">
+                    <form id="form_buscar" method="post" action="{% url 'mapaPatrimonioSimple' %}"
+                            name = "formBuscar">
+                        {% csrf_token %}
+                        <div class="position-relative" style="padding: 10px;">
+                            <label for="txtBuscar"></label>
+                            <input name="patrimonio_name" class="form-control" id="txtBuscar"
+                                placeholder="Buscar patrimonio...">
+                        </div>
+                        <div class="text-right" style="padding: 10px">
+                            <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioAvanzado' %}">
+                                <u>Cambiar a búsqueda avanzada</u>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 5px">
+                <div class="col">
+                    <div class="position-relative" style="padding: 5px;">
+                        <button class="btn-primary text-white" type="submit" form="form_buscar" id="btn-submit">
+                            Realizar Búsqueda
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!--if queried, then it must show the # of results given, including case 0-->
+            {% if success != -1 %}
+                <div class="row">
+                    <div class="col">
+                        {% if success == 0 %}
+                        <p>No se encontraron resultados</p>
+                        {% elif success == 1 %}
+                            {% if lensearch == 1 %}
+                                <p> Se encontró {{  lensearch }} patrimonio o institución asociada</p>
+                            {% else %}
+                                <p> Se encontraron {{  lensearch }} patrimonios o instituciones asociadas</p>
+                            {% endif %}
+                        {% else %}
+                                <!--Nothing-->
+                        {% endif %}
+                    </div>
+                </div>
+                {% for p in patrimonios %}
+                    <div class="card mb-5" style="padding: 10px;margin-top: 10px;">
+                        <div class="position-relative">
+                            <div>
+                                <img class="img-fluid w-100"
+                                    style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
+                                    src="{{ p.url }}"
+                                    alt="Card image"/>
+                            </div>
+                            <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                                <p class="card-text "
+                                style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
+                                    {{ p.patrimonio.nombreTituloDemoninacion }}</p>
+                            </div>
+                        </div>
+                        <div class="card-body pt-2 pb-2">
+                            {% if p.patrimonio.tipoPatrimonio == "1" %}
+                                <p class="mb-0 " style="font-size: 15px"> Patrimonio Inmaterial </p>
+                            {% else %}
+                                <p class="mb-0 " style="font-size: 15px"> Patrimonio Material Inmueble </p>
+                            {% endif %}
+
+                            <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                    value="{{ p.patrimonio.id }},1">
+                                        Ver en el mapa
+                            </button>
+
+                            <a href="{% url 'detalle' pk=p.patrimonio.pk %}">
+                                <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
+                                        style="font-size: 10px">
+                                            Ver Ficha
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% for i in instituciones %}
+                    <div class="card mb-5" style="padding: 10px;margin-top: 10px;">
+                        <div class="position-relative">
+                            <div>
+                                <img class="img-fluid w-100"
+                                    style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
+                                    src="{{ i.url }}"
+                                    alt="Card image"/>
+                            </div>
+                            <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                                <p class="card-text "
+                                style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
+                                    {{ i.institucion.nombre}}</p>
+                            </div>
+                        </div>
+                        <div class="card-body pt-2 pb-2">
+                            <p class="mb-0 " style="font-size: 15px"> Institución </p>
+                            <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                    value="{{ i.institucion.pk }},2">
+                                        Ver en el mapa
+                            </button>
+                            <a href="{% url 'detalle_museo' pk=i.institucion.pk %}">
+                                <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
+                                        style="font-size: 10px">
+                                            Ver detalle
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </nav>
+    </div>
     <div class="filtrosBusqueda">
+        <br><br><br><br>
         <div class="row">
             <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
         </div>
@@ -66,6 +185,7 @@
         var grupoMarcadoresRuta = L.layerGroup().addTo(map);
         var grupoMarcadoresFueraRuta = L.layerGroup().addTo(map);
         var patrimoniosEnRuta = null;
+        var patrimoniosFueraRuta = null;
         var numPatrimoniosEnRuta=0;
         var dispersion=-1;//por defecto será un 0.2 de la distancia original de la ruta, hasta un máximo de 2km
         var esquinasMapa={
@@ -143,6 +263,8 @@
             grupoMarcadoresFueraRuta.clearLayers();
             controlRuta=null;
             patrimoniosEnRuta=null;
+            patrimoniosFueraRuta=null;
+            
         }
         async function obtenerPatrimoniosCercanos(lat1,long1,lat2,long2,lat1menor,long1menor){
             return $.ajax({
@@ -160,8 +282,23 @@
             });
         }
         function crearDivPatrimonio(patrimonioDatos){
-            return '<div>' + '<h3 style="text-align: center">'+patrimonioDatos.nombreTituloDemoninacion+'</h3>'+
+            return '<div>' + '<h3 style="text-align: center">'+patrimonioDatos.nombre+'</h3>'+
                 '<img src="'+ patrimonioDatos.url+'" height="100px" width="300px"/>'+'</div>';
+        }
+        async function obtenerPatrimoniosFueraRuta(){
+            return $.ajax({
+                type: "POST",
+                url: "/mapa_patrimonio/mapa/patrimoniosFueraRuta",
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+            });
+        }
+        async function anadirPatrimoniosFueraRuta(){
+            if(patrimoniosEnRuta==null){
+                return;
+            }
+            
         }
         function anadirPatrimoniosEnRuta(){//tipo 2 para inmuebles, 4 para institucion
             for(let i=0;i<patrimoniosEnRuta.length;i++){
@@ -177,21 +314,17 @@
                     }).addTo(grupoMarcadoresRuta).bindPopup(crearDivPatrimonio(patrimoniosEnRuta[i]));
                 }
             }
-            /*for(let i=0;i<patrimoniosCercanos.data.length;i++){
-                if(patrimoniosCercanos.data[i].tipoPatrimonio==2){//material inmueble
-                    let markerInicio = L.marker([patrimoniosCercanos.data[i].lat, patrimoniosCercanos.data[i].long], {
-                        icon: patrimonioIcon,
-                        title: patrimoniosCercanos.data[i].nombreTituloDemoninacion,
-                    }).addTo(grupoMarcadoresRuta).bindPopup(crearDivPatrimonio(patrimoniosCercanos.data[i]));
-                }else{//ver lo de agruparlos en institución
-
-                }
-            }*/
-            return;
+        }
+        function ordenarPatrimoniosEnBasePuntoPartida(lat,long){//primero se irá al más cercano, luego al siguiente en cercanía, etc
+            patrimoniosEnRuta.sort((a,b)=>{
+                return distanciaEntreDosCoordenadas(lat,long,parseFloat(a.lat),parseFloat(a.long)) - distanciaEntreDosCoordenadas(lat,long,b.lat,b.long);
+            });
+            console.log(patrimoniosEnRuta); 
         }
         async function enrutamientoConPatrimonios(lat1,long1,lat2,long2){
             let puntosRuta=[];
             puntosRuta.push(L.latLng(lat1,long1));
+            ordenarPatrimoniosEnBasePuntoPartida(lat1,long1);
             for(let i=0;i<patrimoniosEnRuta.length;i++){
                 puntosRuta.push(L.latLng(patrimoniosEnRuta[i].lat,patrimoniosEnRuta[i].long))
             }
@@ -238,9 +371,12 @@
                 then(datos=>{
                     patrimoniosEnRuta=datos.data;
                     numPatrimoniosEnRuta=datos.numPatrimonios;
+                    console.log(datos);
+                    console.log(patrimoniosEnRuta);
                 });
             await enrutamientoConPatrimonios(lat1,long1,lat2,long2);
             anadirPatrimoniosEnRuta();
+            await anadirPatrimoniosFueraRuta();
         }
         async function generarRuta() {
             if(controlRuta!=null){
@@ -307,7 +443,6 @@
         function distanciaEntreDosCoordenadas(lat1,long1,lat2,long2){//devuelve en metros
             //mientras más grande la distancia tendrá menos precisión, a más pequeña más precisión
             //en caso de todo el perú son 30m +- de falta de precisión
-            console.log(lat1,long1,lat2,long2);
             let lat1Rad=lat1*(Math.PI/180);
             let lat2Rad=lat2*(Math.PI/180);
             let difLatRad=(lat2-lat1)*(Math.PI/180);
@@ -316,7 +451,6 @@
                 Math.cos(lat1Rad)*Math.cos(lat2Rad)*Math.sin(difLongRad/2)*Math.sin(difLongRad/2);
             let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
             let d=RADIO_DE_LA_TIERRA_PROMEDIO_PERU*c*1000;
-            console.log(d);
             return d;
         }
     </script>

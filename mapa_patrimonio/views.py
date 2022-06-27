@@ -107,6 +107,9 @@ def datos(request):
                          'numPatrimonios':numPatriInstit},
                         status=200, safe=False)
 
+def patrimonioFueraRuta(request):
+    return JsonResponse({'data':'hola'},status=200,safe=False)
+
 def index(request):
     ########################################################################################################################
     # Get HTML Representation of Map Object
