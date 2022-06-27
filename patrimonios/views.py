@@ -19,6 +19,7 @@ from authentication.models import User
 from conservacion.serializers import PatrimonioSerializer
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
+from mincul_app.models import Documento
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
     ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio, EpocaVisita, \
     FuenteBibliografica, PatrimonioPaleontologico, PatrimonioMaterialMueble, PatrimonioIndustrial, Fabricante, \
@@ -83,8 +84,6 @@ def patrimonio_list(request):
                 npat = Patrimonio.objects.filter(codigo=pat['codigo'],estado=1)
             else:
                 npat = Patrimonio.objects.filter(codigo=pat['nroRegistro'],estado=1)
-
-            #wget.download(pat['imagenes']['vistaAnterior'],'media/'+pat['nroRegistro']+'.jpg')
 
             if len(npat) == 0:
                 patrimonio = Patrimonio()
@@ -161,6 +160,16 @@ def patrimonio_list(request):
                             entrada.patrimonio = patrimonio
                             entrada.save()
                     inmaterial.save()
+
+                    i = 0
+                    for img in pat['galeria']:
+                        wget.download(img, 'media/' + pat['codigo'] + str(i) + '.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['codigo'] + str(i) + '.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                        i += 1
+                    patrimonio.save()
 
                 elif int(cat.tipo) == 2:
                     patrimonio.nombreTituloDemoninacion = pat['nombre']
@@ -243,6 +252,16 @@ def patrimonio_list(request):
                         epoca.observaciones = pat['epocaPropicia']['observaciones']
                         epoca.patrimonioMaterialInMueble = inmueble
                         epoca.save()
+
+                    i = 0
+                    for img in pat['galeria']:
+                        wget.download(img, 'media/' + pat['codigo'] + str(i) + '.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['codigo'] + str(i) + '.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                        i += 1
+                    patrimonio.save()
 
                 elif int(cat.tipo) == 3:
 
@@ -657,10 +676,55 @@ def patrimonio_list(request):
                             indus.fabricantes.add(fab)
                         indus.save()
 
+                    if pat['imagenes']['vistaAnterior'] != '':
+                        wget.download(pat['imagenes']['vistaAnterior'], 'media/' + pat['nroRegistro'] + '_va.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_va.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaPosterior'] != '':
+                        wget.download(pat['imagenes']['vistaPosterior'], 'media/' + pat['nroRegistro'] + '_vp.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vp.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaLateralDerecha'] != '':
+                        wget.download(pat['imagenes']['vistaLateralDerecha'], 'media/' + pat['nroRegistro'] + '_vld.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vld.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaLateralIzquierda'] != '':
+                        wget.download(pat['imagenes']['vistaLateralIzquierda'], 'media/' + pat['nroRegistro'] + '_vli.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vli.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaSuperior'] != '':
+                        wget.download(pat['imagenes']['vistaSuperior'], 'media/' + pat['nroRegistro'] + '_vs.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vs.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaInferior'] != '':
+                        wget.download(pat['imagenes']['vistaInferior'], 'media/' + pat['nroRegistro'] + '_vi.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vi.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaDetalle'] != '':
+                        wget.download(pat['imagenes']['vistaDetalle'], 'media/' + pat['nroRegistro'] + '_vd.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vd.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    patrimonio.save()
+
     patrimonios = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
 
     context = {
         'patrimonios': patrimonios,
+
         'cantidad': len(patrimonios),
     }
 
