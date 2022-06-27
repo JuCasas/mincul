@@ -263,6 +263,7 @@
           length: length,
           start: start,
           search_value: $("#search").val(),
+          tipo: $("#tipoPatrimonio").val(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
@@ -285,6 +286,7 @@
           length: length,
           start: start,
           search_value: $("#search").val(),
+          tipo: $("#tipoPatrimonio").val(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
@@ -326,6 +328,11 @@
     });
 
     $("#search").keyup(function () {
+      init = true
+      getInitialData(0, 9)
+    });
+
+    $("#tipoPatrimonio").change(function () {
       init = true
       getInitialData(0, 9)
     });

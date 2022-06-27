@@ -30,9 +30,12 @@ def patrimonio_list_ajax(request):
     search = request.GET['search_value']
     start = int(request.GET['start'])
     length = int(request.GET['length'])
+    type = request.GET['tipo']
     queryset = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
     if search:
         queryset = queryset.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
+    if (type!='0'):
+        queryset = queryset.filter(tipoPatrimonio=type).order_by('nombreTituloDemoninacion')
     count = queryset.count()
     queryset = queryset[start:start + length]
     serializer = PatrimonioSerializer(queryset, many=True)
