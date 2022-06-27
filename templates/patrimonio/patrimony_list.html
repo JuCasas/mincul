@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'proyectoConservacion/components/base.html' %}
 {% load static %}
 
 {% block extrastyle %}
@@ -7,6 +7,41 @@
       .degradado {
           background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
           opacity: .8;
+      }
+  </style>
+  <style type="text/css">
+      ul.pagination {
+          display: inline-block;
+          padding: 0;
+          margin: 0;
+      }
+
+      .jq-toast-wrap {
+          width: 500px;
+      }
+
+      ul.pagination li {
+          display: inline-block;
+      }
+
+      ul.pagination li a {
+          color: black;
+          float: left;
+          padding: 8px 16px;
+          text-decoration: none;
+          transition: background-color .3s;
+          border: 1px solid #ddd;
+      }
+
+      ul.pagination li.active a {
+          background-color: darkgray;
+          color: white;
+          border: 1px solid darkgray;
+          pointer-events: none;
+      }
+
+      ul.pagination li a:hover:not(.active) {
+          background-color: #ddd;
       }
   </style>
 {% endblock %}
@@ -219,9 +254,6 @@
     let result = {};
     let init = true
 
-    //Filtros
-    let search = $('#search')
-
     //Funcion que obtiene Data al hacer clic en una página
     function getData(start, length) {
       $.ajax({
@@ -230,7 +262,7 @@
         data: {
           length: length,
           start: start,
-          search_value: search.val(),
+          search_value: $("#search").val(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
@@ -252,7 +284,7 @@
         data: {
           length: length,
           start: start,
-          search_value: search.val(),
+          search_value: $("#search").val(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
@@ -293,7 +325,7 @@
       }
     });
 
-    search.keyup(function () {
+    $("#search").keyup(function () {
       init = true
       getInitialData(0, 9)
     });
@@ -301,7 +333,7 @@
     //Inicializacion de Listado de cards
     $(document).ready(function () {
       init = true
-      search.val('');
+      $("#search").val('');
       getInitialData(0, 9)
     });
 
