@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 
+import googlemaps as gm
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.lookups import In
 from django.http import HttpResponseRedirect
@@ -59,6 +60,7 @@ def patrimonio_list_ajax(request):
 def patrimonio_list(request):
 
     if request.POST:
+        gmaps = gm.Client(key='AIzaSyDxdNwYXHCCpfoiNtGorfbdwGjtDsXk6MI')
         file = request.FILES['file']
         data = json.load(file)
         # beautify = json.dumps(data, indent=4)
@@ -237,22 +239,27 @@ def patrimonio_list(request):
                     patrimonio.provincia = pat['datosUbicacion']['ubicacionGeografica']['provincia']
                     patrimonio.distrito = pat['datosUbicacion']['ubicacionGeografica']['distrito']
 
-                    # if pat['latitud'] != '':
-                    #     patrimonio.lat = pat['latitud']
-                    # if pat['longitud'] != '':
-                    #     patrimonio.long = pat['longitud']
+                    resGM = gmaps.geocode(pat['datosUbicacion']['ubicacionGeografica']['direccion'])
+
+                    patrimonio.lat = resGM[0]['geometry']['location']['lat']
+                    patrimonio.long = resGM[0]['geometry']['location']['lng']
 
                     patrimonio.descripcion = pat['datosTecnicos']['descripcion']
                     patrimonio.observacion = pat['datosTecnicos']['observaciones']
 
-                    inst = Institucion.objects.filter(nombre=pat['datosPropiedad']['custodio'])
-                    if len(inst) > 0:
-                        inst = Institucion.objects.get(nombre=pat['datosPropiedad']['custodio'])
-                    else:
-                        inst = Institucion()
-                        inst.nombre = pat['datosPropiedad']['custodio']
-                        inst.save()
-                    patrimonio.institucion = inst
+                    if pat['datosPropiedad']['custodio'] != '':
+                        inst = Institucion.objects.filter(nombre=pat['datosPropiedad']['custodio'])
+                        if len(inst) > 0:
+                            inst = Institucion.objects.get(nombre=pat['datosPropiedad']['custodio'])
+                        else:
+                            inst = Institucion()
+                            inst.nombre = pat['datosPropiedad']['custodio']
+                            resGM = gmaps.geocode(pat['datosPropiedad']['custodio'])
+
+                            inst.lat = resGM[0]['geometry']['location']['lat']
+                            inst.long = resGM[0]['geometry']['location']['lng']
+                            inst.save()
+                        patrimonio.institucion = inst
                     patrimonio.save()
 
                     prop = Propietario.objects.filter(nombre=pat['datosPropiedad']['propietario']['nombrePropietario'])

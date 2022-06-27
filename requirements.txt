@@ -14,3 +14,4 @@ django-migration-fixer
 folium
 django-crispy-forms
 geocoder
+googlemaps
