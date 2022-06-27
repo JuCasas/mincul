@@ -2,9 +2,10 @@ import json
 from datetime import datetime
 
 import googlemaps as gm
+import wget
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.lookups import In
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse
@@ -57,6 +58,16 @@ def patrimonio_list_ajax(request):
     result['fin'] = fin
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+@api_view(('POST',))
+def patrimonio_delete(request):
+    pk = request.POST.get('pk')
+    print('delete', pk)
+    pat = Patrimonio.objects.get(pk=pk)
+    pat.estado = 2
+    pat.save()
+
+    return JsonResponse({'status': 'succes'}, status=200)
+
 def patrimonio_list(request):
 
     if request.POST:
@@ -69,9 +80,11 @@ def patrimonio_list(request):
             cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
             npat = []
             if int(cat.tipo) == 1 or int(cat.tipo) == 2:
-                npat = Patrimonio.objects.filter(codigo=pat['codigo'])
+                npat = Patrimonio.objects.filter(codigo=pat['codigo'],estado=1)
             else:
-                npat = Patrimonio.objects.filter(codigo=pat['nroRegistro'])
+                npat = Patrimonio.objects.filter(codigo=pat['nroRegistro'],estado=1)
+
+            #wget.download(pat['imagenes']['vistaAnterior'],'media/'+pat['nroRegistro']+'.jpg')
 
             if len(npat) == 0:
                 patrimonio = Patrimonio()
@@ -714,7 +727,7 @@ def detalle(request, pk):
     valor = Patrimonio.objects.get(pk=pk)
     zona = PuntoGeografico.objects.get(patrimonio_id=pk)
     valoraciones = PatrimonioValoracion.objects.filter(zona=zona).filter(estado=2)
-    puntuacion=0
+    puntuacion = 0
     for v in valoraciones:
         puntuacion = v.valoracion + puntuacion
     if len(valoraciones):
