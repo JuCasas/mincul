@@ -14,4 +14,5 @@ urlpatterns = [
     path('detalle/area/<pk>', views.detalle_museo, name='detalle_museo'),
     path('detalle/area/valor/<pk>', views.valor_museo, name='valor_museo'),
     path('detalle/area/incidente/<pk>', views.incidete_museo, name='incidete_museo'),
+    path('detalle/area/addIncidente/<pk>', views.addIncidente, name='addIncidente'),
 ]
