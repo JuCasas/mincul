@@ -733,16 +733,6 @@ def detalle(request, pk):
     return render(request, 'patrimonio/templateDetail.html', context)
 
 def detalle_museo(request, pk):
-    #Provisional hasta cambio de la bd
-    #museo
-    valor = {'url': 'https://enlima.pe/sites/default/files/mali-lima.jpg',
-             'nombre': 'Museo Nacional de Arqueología, Antropología e Historia del Perú'}
-
-    area = {'direccion': 'Plaza Bolivar s/n',
-            'departamento': 'Lima',
-            'provincia': 'Lima',
-            'distrito': 'Pueblo Libre'}
-
     institucion = Institucion.objects.get(pk=pk)
     #lista de patrimonio dentro del museo
     patrimonios = Patrimonio.objects.filter(institucion_id=pk)
@@ -751,13 +741,18 @@ def detalle_museo(request, pk):
     #lista de incidentes
     incidentes = Incidente.objects.filter(zona__institucion_id=pk)
 
-    context = {"valor": valor,
-               "area": area,
-               "institucion": institucion,
+    puntuacion = 0
+    for v in valoraciones:
+        puntuacion = v.valoracion + puntuacion
+    if len(valoraciones):
+        puntuacion = puntuacion / len(valoraciones)
+
+    context = {"institucion": institucion,
                "patrimonios": patrimonios,
                "valoraciones": valoraciones,
                "incidentes": incidentes,
-               'afectaciones': [c[1] for c in Incidente.AFECTACION]}
+               'afectaciones': [c[1] for c in Incidente.AFECTACION],
+               'puntuacion': puntuacion,}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
 
