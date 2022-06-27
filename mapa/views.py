@@ -64,16 +64,28 @@ def ficha(request,my_id):
             dataCategoria = PatrimonioPaleontologico.objects.get(patrimonioMueble=patrimonioMueble)
         if (patrimonio.categoria.pk == 10):
             dataCategoria = PatrimonioIndustrial.objects.get(patrimonioMueble=patrimonioMueble)
-        context = {
-            'patrimony': patrimonio,
-            'patrimonioMuebleData': patrimonioMueble,
-            'materialesSecundarios':materialesSecundariosString,
-            'tecnicasAcabado': tecnicasAcabadoString,
-            'tecnicasDecoracion': tecnicasDecoracionString,
-            'tecnicasManufactura': tecnicasManufacturaString,
-            'dataCategoria':dataCategoria,
-            'urlPatrimonio':urlPatrimonio[0].url
-        }
+        try:
+            context = {
+                'patrimony': patrimonio,
+                'patrimonioMuebleData': patrimonioMueble,
+                'materialesSecundarios':materialesSecundariosString,
+                'tecnicasAcabado': tecnicasAcabadoString,
+                'tecnicasDecoracion': tecnicasDecoracionString,
+                'tecnicasManufactura': tecnicasManufacturaString,
+                'dataCategoria':dataCategoria,
+                'urlPatrimonio':urlPatrimonio[0].url
+            }
+        except:
+            context = {
+                'patrimony': patrimonio,
+                'patrimonioMuebleData': patrimonioMueble,
+                'materialesSecundarios': materialesSecundariosString,
+                'tecnicasAcabado': tecnicasAcabadoString,
+                'tecnicasDecoracion': tecnicasDecoracionString,
+                'tecnicasManufactura': tecnicasManufacturaString,
+                'dataCategoria': dataCategoria,
+                'urlPatrimonio': '/static/img/landmarks/notAvailable.jpg'
+            }
         return render(request, 'map/ficha.html', context)
     context={
         'patrimony':patrimonio,
@@ -88,8 +100,8 @@ def mapaPatrimonioSimple(request):
         patrimonioNombre.strip()
         if len(patrimonioNombre)>0 :
             success = 0
-            #patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1",tipoPatrimonio="2")
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1")
+            #patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1",tipoPatrimonio="2")
             if len(patrimonios) > 0:
                 instituciones = []
                 patri = []
@@ -98,12 +110,21 @@ def mapaPatrimonioSimple(request):
                         insti = Institucion.objects.get(pk=p.institucion.pk)
                         if insti not in instituciones:
                             instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
-                            instituciones.append({'institucion': insti,
-                                                  'url':instiUrl[0].url})
+                            try:
+                                instituciones.append({'institucion': insti,
+                                                      'url': instiUrl[0].url})
+                            except:
+                                instituciones.append({'institucion': insti,
+                                                      'url': '/static/img/landmarks/notAvailable.jpg'})
+
                     else:
                         urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
-                       # patri.append({'patrimonio':p,
-                        #              'url':urlPatrimonio[0].url})
+                        try:
+                            patri.append({'patrimonio':p,
+                                          'url':urlPatrimonio[0].url})
+                        except:
+                            patri.append({'patrimonio': p,
+                                          'url': '/static/img/landmarks/notAvailable.jpg'})
                 patrimonio0 = None
                 institucion0 = None
                 if len(patri)>0:
@@ -139,8 +160,8 @@ def mapaPatrimonioAvanzado(request):
         patrimoniodistrito = request.POST['select_distrito']
         patrimonioNombre.strip()
         success=0
-        #patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
-        patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1",tipoPatrimonio="2")
+        patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1")
+        #patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1",tipoPatrimonio="2")
         if len(patrimonios) > 0:
             if(patrimonioCategoria=="Categoría"):
                 pass
@@ -148,7 +169,7 @@ def mapaPatrimonioAvanzado(request):
                 cats = Categoria.objects.get(nombre__iexact=patrimonioCategoria)
                 catId = cats.pk
                 patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,
-                                                        categoria_id=catId,tipoPatrimonio="2")
+                                                        categoria_id=catId)
             if len(patrimonios)>0:
                 patriId = int(patrimoniodepartamento)
                 if(patriId == -1):
@@ -193,12 +214,20 @@ def mapaPatrimonioAvanzado(request):
                         insti = Institucion.objects.get(pk=p.institucion.pk)
                         if insti not in instituciones:
                             instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
-                            instituciones.append({'institucion': insti,
-                                                  'url': instiUrl[0].url})
+                            try:
+                                instituciones.append({'institucion': insti,
+                                                      'url': instiUrl[0].url})
+                            except:
+                                instituciones.append({'institucion': insti,
+                                                      'url': '/static/img/landmarks/notAvailable.jpg'})
                     else:
                         urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
-                        patrimons.append({'patrimonio': p,
-                                          'url': urlPatrimonio[0].url})
+                        try:
+                            patrimons.append({'patrimonio': p,
+                                            'url': urlPatrimonio[0].url})
+                        except:
+                            patrimons.append({'patrimonio': p,
+                                             'url': '/static/img/landmarks/notAvailable.jpg'})
                 patrimonio0 = None
                 institucion0 = None
                 if len(patrimons) > 0:

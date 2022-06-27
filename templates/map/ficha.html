@@ -15,7 +15,7 @@
             <div class="col-md-3">
                 <div class="card mb-3 bg-card-gradient">
                     {% if patrimony.tipoPatrimonio == "3" %}
-                        <button class="btn-primary text-white" onclick="location.href='/patrimonios/detalle/area/{{ patrimony.institucion.id }}'">
+                        <button class="btn-primary text-white" onclick="location.href='/patrimonios/detalle/area/{{ patrimony.institucion.pk }}'">
                             Volver
                         </button>
                     {% else %}
@@ -201,7 +201,15 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            3000 a.C
+                                            {% if patrimony.categoria.id == 6 %}
+                                                {{ dataCategoria.periodo }}
+                                            {% elif patrimony.categoria.id >= 7 and patrimony.categoria.id <= 9 %}
+                                                {{ dataCategoria.datacion }}
+                                            {% elif patrimony.categoria.id == 10 %}
+                                                {{ dataCategoria.eraGeologica }}, {{ dataCategoria.epocaGeologica }}
+                                            {% else %}
+                                            --
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -222,7 +230,7 @@
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
                                             <!--Tiene autor solo si no es Inmueble-->
                                             {% if patrimony.tipoPatrimonio == "3" %}
-                                                Tiene autor
+                                                Anónimo
                                             {% else %}
                                                 --
                                             {% endif %}
@@ -418,7 +426,15 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            15.25
+                                            {% if patrimony.tipoPatrimonio == "3" %}
+                                                {% if patrimonioMuebleData.alto == -1 %}
+                                                    --
+                                                {% else %}
+                                                    {{ patrimonioMuebleData.alto }}
+                                                {% endif %}
+                                            {% else %}
+                                                --
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -435,7 +451,15 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            --
+                                            {% if patrimony.categoria.id == 7 or patrimony.categoria.id == 8 or patrimony.categoria.id == 10 %}
+                                                {% if dataCategoria.fondo == -1 %}
+                                                    --
+                                                {% else %}
+                                                    {{ dataCategoria.fondo }}
+                                                {% endif %}
+                                            {% else %}
+                                                --
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -455,7 +479,15 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            28.5
+                                            {% if patrimony.tipoPatrimonio == "3" %}
+                                                {% if patrimonioMuebleData.largo == -1 or patrimonioMuebleData.largo == "-1" %}
+                                                    --
+                                                {% else %}
+                                                    {{ patrimonioMuebleData.largo }}
+                                                {% endif %}
+                                            {% else %}
+                                                --
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -472,7 +504,21 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            --
+                                            {% if patrimony.categoria.id == 6 %}
+                                                {% if dataCategoria.diametroBase == -1 or dataCategoria.diametroBase == "-1" %}
+                                                    --
+                                                {% else %}
+                                                    {{ dataCategoria.diametroBase }}
+                                                {% endif %}
+                                            {% elif patrimony.categoria.id == 7 or patrimony.categoria.id == 8 or patrimony.categoria.id == 10 %}
+                                                {% if dataCategoria.diametro == -1 or dataCategoria.diametro == "-1" %}
+                                                    --
+                                                {% else %}
+                                                    {{ dataCategoria.diametro }}
+                                                {% endif %}
+                                            {% else %}
+                                                --
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -492,7 +538,15 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            10.0
+                                            {% if patrimony.tipoPatrimonio == "3" %}
+                                                {% if patrimonioMuebleData.ancho == -1 %}
+                                                    --
+                                                {% else %}
+                                                    {{ patrimonioMuebleData.ancho }}
+                                                {% endif %}
+                                            {% else %}
+                                                --
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -509,7 +563,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            452
+                                            --
                                         </div>
                                     </div>
                                 </div>
@@ -528,7 +582,15 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            --
+                                            {% if patrimony.tipoPatrimonio == "3" %}
+                                                {% if patrimonioMuebleData.ancho == -1 %}
+                                                    --
+                                                {% else %}
+                                                    {{ patrimonioMuebleData.ancho }}
+                                                {% endif %}
+                                            {% else %}
+                                                --
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
