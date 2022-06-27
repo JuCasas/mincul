@@ -181,27 +181,50 @@
                     <div class="form-group col-lg-6 col-sm-12 mt-3">
 
                         <div class="row">
-                            <div class="col-2 flex-center mt-auto mb-auto ">
+                            <div class="col-3 flex-center mt-auto mb-auto ">
                                 <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
                             </div>
                             <div class="col-3">
-                            <span class="btn
-                                    {% if task.estado == '1' %}
-                                       btn-info
-                                    {% elif task.estado == '2' %}
-                                       btn-success
-                                    {% elif task.estado == '3' %}
-                                        btn-dark
-                                    {% endif %} ">
-                                {{ task.get_estado_display }}
-                            </span>
+                                <span class="btn
+                                        {% if task.estado == '1' %}
+                                           btn-info
+                                        {% elif task.estado == '2' %}
+                                           btn-success
+                                        {% elif task.estado == '3' %}
+                                            btn-dark
+                                        {% elif task.estado == '4' %}
+                                            btn-danger
+                                        {% endif %} ">
+                                    {{ task.get_estado_display }}
+                                </span>
                             </div>
-                            <div class="col-3 ">
-                                <button id="actualizar" class="btn btn-primary mx-1" type="button"
-                                        data-toggle="modal" data-target="#actualizarEstado">
-                                    Actualizar estado
-                                </button>
-                            </div>
+
+
+                            {% if task.estado == '4' %}
+                                <div class="col-3 ">
+                                    <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
+                                            data-target="#informarDetalleObservacion">
+                                        Ver detalle observación
+                                    </button>
+                                </div>
+                            {% endif %}
+
+                            {% if task.estado != '5' %}
+                                <div class="col-3 ">
+                                    <button id="actualizar" class="btn btn-primary mx-1" type="button">
+                                        {% if task.estado == '1' %}
+                                            Iniciar tarea
+                                        {% elif task.estado == '2' %}
+                                            Solicitar revisión
+                                        {% elif task.estado == '3' %}
+                                            Revisar tarea
+                                        {% elif task.estado == '4' %}
+                                            Solicitar revisión
+                                        {% endif %}
+                                    </button>
+                                </div>
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>
@@ -222,19 +245,25 @@
 
 
 
-    {% if task.estado == '2' %}
+    {% if task.estado != '1' %}
         <div class="card">
             <div class="card-header">
                 <div class="form-group  row justify-content-end mt-2">
-                    <div class="col-10">
-                        <h5 class="mb-2 mb-md-0 text-black">Secciones</h5>
-                    </div>
-                    <div class="col-2">
-                        <button id="agregarSeccion" class="btn btn-primary " type="button"
-                                data-toggle="modal" data-target="#agregarSecciones">
-                            Agregar sección
-                        </button>
-                    </div>
+                    {% if task.estado == '2' or task.estado == '4' %}
+                        <div class="col-10">
+                            <h5 class="mb-2 mb-md-0 text-black">Secciones</h5>
+                        </div>
+                        <div class="col-2">
+                            <button id="agregarSeccion" class="btn btn-primary " type="button"
+                                    data-toggle="modal" data-target="#agregarSecciones">
+                                Agregar sección
+                            </button>
+                        </div>
+                    {% else %}
+                        <div class="col-12">
+                            <h5 class="mb-2 mb-md-0 text-black">Secciones</h5>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="card-body cbody px-5 py-4">
@@ -246,6 +275,7 @@
     {% endif %}
 
 
+    <!-- Modal Actualizar estado -->
     <div class="modal fade" id="actualizarEstado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -263,22 +293,67 @@
                         </p>
                     {% endif %}
 
-                    {% if task.estado == '2' %}
+                    {% if task.estado == '2' or task.estado == '4' %}
                         <p>
-                            A continuación se procederá a actualizar el estado de la tarea a "FINALIZADA".
-                            ¿Esta seguro que desea confirmar esta acción?
+                            A continuación se procederá a actualizar el estado de la tarea a "EN REVISIÓN" y no podra
+                            agregar o eliminar secciones como evidencia. ¿Esta seguro que desea confirmar esta acción?
                         </p>
                     {% endif %}
+
                 </div>
 
                 <div class="modal-footer">
                     <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary btn-sm" type="button" onclick="actualizarEstado()">Confirmar</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="actualizarEstado()">Confirmar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal Actualizar estado 2 -->
+    <div class="modal fade" id="actualizarEstado2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar estado</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    {% if task.estado == '3' %}
+                        <form id="formAprobDes">
+                            <div class="form-group">
+                                <label for="estadoTarea">Acción: </label>
+                                <select class="form-control selectpicker" id="estadoTarea" name="estadoTarea"
+                                        onchange="validar_detalle()">
+
+                                    {% for estado in estadosEditables %}
+                                        <option data="{{ estado.0 }}" value={{ estado.0 }}>{{ estado.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="detallarObservacion">
+                                <label for="detalleObservacion">Detalle:</label>
+                                <textarea class="form-control" id="detalleObservacion" name="detalleObservacion"
+                                          rows="3" required></textarea>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="actualizarEstado2()">Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Agregar Sección -->
     <div class="modal fade" id="agregarSecciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
 
@@ -358,6 +433,52 @@
         </div>
     </div>
 
+    <!-- Modal Informar registro de secciones-->
+    <div class="modal fade" id="informarRegistroSecciones" tabindex="-1" role="dialog"
+         aria-labelledby="eliminarSeccionLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eliminarSeccionLabel">Notificación</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+
+                <div class="modal-body">
+                    <h5> Para solicitar revisión de la tarea debe registrar una sección como evidencia como mínimo</h5>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Informar detalle observación-->
+    <div class="modal fade" id="informarDetalleObservacion" tabindex="-1" role="dialog"
+         aria-labelledby="informarDetalleObservacionLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eliminarSeccionLabel">Detalle de observación</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+
+                <div class="modal-body">
+                    <h5>{{ task.detalleObservacion }} </h5>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block extrajs %}
@@ -372,6 +493,7 @@
 
         $(document).ready(function () {
             listarSecciones();
+            validar_detalle();
         });
 
         jQuery.validator.addMethod("alphanumeric", function (value, element) {
@@ -440,6 +562,125 @@
         }
 
 
+        $("#actualizar").on('click', function () {
+
+            if ("{{ task.estado }}" == '1') {
+                $("#actualizarEstado").modal('show');
+            }
+
+            if ("{{ task.estado }}" == '2') {
+                validarExisteSecciones();
+            }
+
+            if ("{{ task.estado }}" == '3') {
+                $("#actualizarEstado2").modal('show');
+            }
+
+            if ("{{ task.estado }}" == '4') {
+                 validarExisteSecciones();
+            }
+
+        });
+
+
+        function validar_detalle() {
+
+            validarCampos();
+
+            if ($("#estadoTarea").val() === "4") {
+                $("#detallarObservacion").show();
+            } else {
+                $("#detallarObservacion").hide();
+            }
+        }
+
+
+        function validarCampos() {
+
+            if ($("#estadoTarea").val() === "4") {
+
+                console.log("Campo detalle  requerido");
+
+                $("#detalleObservacion").attr('required', true);
+
+               {% comment %} var settings = $('#formAprobDes').validate().settings;
+
+
+                $.extend(settings, {
+                    rules: {
+                        detalleObservacion: {
+                            required: true,
+                        },
+                    },
+                    messages: {
+                        detalleObservacion: {
+                            required: "Debe ingresar un detalle del rechazo",
+                        },
+                    }
+                });{% endcomment %}
+
+            } else {
+
+                console.log("Campo detalle no requerido");
+
+                $("#detalleObservacion").attr('required', false);
+
+                {% comment %}var settings = $('#formAprobDes').validate().settings;
+
+                console.log(settings);
+
+                $.extend(settings, {
+                    rules: {
+                        detalleObservacion: {
+                            required: false,
+                        },
+                    },
+                });{% endcomment %}
+            }
+        }
+
+
+        function actualizarEstado() {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'updateTaskState'%}",
+                async: false,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    task_pk: {{ task.pk }},
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        }
+
+        function actualizarEstado2() {
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'updateTaskState2'%}",
+                async: false,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    task_pk: {{ task.pk }},
+                    nuevo_estado: $("#estadoTarea").val(),
+                    detalle_observacion: $("#detalleObservacion").val(),
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+        }
+
+
         function listarSecciones() {
 
             $.ajax({
@@ -483,9 +724,13 @@
                                 '                    <h5>' + secciones[i].nombre + '</h5>' +
                                 '                </div>' +
                                 '                <div class="col-2">' +
-                                '                    <div class="d-flex flex-row justify-content-end" >' +
-                                '                        <button type="button" class="btn" ><i class="fas fa-edit"></i></button>' +
-                                '                        <button type="button" class="btn" onclick="seccionesEliminar(\'' + secciones[i].nombre + '\',' + secciones[i].id + ')"  ><i class="fas fa-trash"></i>' +
+                                '                    <div class="d-flex flex-row justify-content-end" >')
+                            if ("{{ task.estado }}" == "2" || "{{ task.estado }}" == "4" ) {
+                                data += (
+                                    '                        <button type="button" class="btn" onclick="seccionesEliminar(\'' + secciones[i].nombre + '\',' + secciones[i].id + ')"  ><i class="fas fa-trash"></i>'
+                                )
+                            }
+                            data += (
                                 '                        </button>' +
                                 '                    </div>' +
                                 '                </div>' +
@@ -645,22 +890,29 @@
             }
         });
 
-        function actualizarEstado() {
+
+        function validarExisteSecciones() {
             $.ajax({
                 type: 'POST',
-                url: "{% url 'updateTaskState'%}",
+                url: "{% url 'validateSections'%}",
+                async: false,
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                     task_pk: {{ task.pk }},
                 },
                 success: function (response) {
-                    location.reload();
+                    if (response['tiene_secciones']) {
+                        $("#actualizarEstado").modal('show');
+                    } else {
+                        $("#informarRegistroSecciones").modal('show');
+                    }
                 },
                 error: function (response) {
                     console.log(response)
                 }
             });
         }
+
 
         $("#formRegistroSeccion").validate({
             rules: {

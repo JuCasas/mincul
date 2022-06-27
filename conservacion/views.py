@@ -546,10 +546,14 @@ def editTaskView(request, pk):
     media_path = MEDIA_URL
     tarea = Tarea.objects.get(pk=pk)
     secciones = Campo.objects.filter(tarea_id=tarea.pk)
+
+    estadosEditables = [('4', 'Observar'), ('5', 'Aprobar')]
+
     context = {
         'media_path': media_path,
         'task': tarea,
         'secciones': secciones,
+        'estadosEditables': estadosEditables,
         'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
     }
     return render(request, 'proyectoConservacion/editTask_view.html', context)
@@ -573,9 +577,27 @@ def updateTaskState(request):
         nuevo_estado = '2'
     elif (task.estado == '2'):
         nuevo_estado = '3'
+    elif (task.estado == '4'):
+        nuevo_estado = '3'
 
     task.estado = nuevo_estado
     task.save()
+    return JsonResponse({}, status=200)
+
+
+def updateTaskState2(request):
+    task_pk = request.POST.get('task_pk')
+    task = Tarea.objects.get(pk=task_pk)
+    nuevo_estado = request.POST.get('nuevo_estado')
+    task.estado = nuevo_estado
+
+    detalle_observacion = request.POST.get('detalle_observacion')
+
+    if (nuevo_estado == '4'):
+        task.detalleObservacion = detalle_observacion
+
+    task.save()
+
     return JsonResponse({}, status=200)
 
 
@@ -617,7 +639,7 @@ def deleteSection(request):
     seccion = Campo.objects.get(pk=seccion_pk)
     documentos = seccion.documentos.all()
 
-    for doc in documentos: #eliminación de documentos
+    for doc in documentos:  # eliminación de documentos
         doc.estado = '0'  # eliminación lógica
         os.remove(doc.url.path)
         doc.url = ""
@@ -626,3 +648,12 @@ def deleteSection(request):
     seccion.delete()
 
     return JsonResponse({}, status=200)
+
+
+def validateSections(request):
+    tarea_pk = request.POST['task_pk']
+    secciones = Campo.objects.filter(tarea_id=tarea_pk)
+    tiene_secciones = False
+    if (len(secciones) > 0):
+        tiene_secciones = True
+    return JsonResponse({"tiene_secciones": tiene_secciones}, status=200)
