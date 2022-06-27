@@ -14,6 +14,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from authentication.models import User
+from conservacion.serializers import PatrimonioSerializer
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
@@ -24,6 +25,21 @@ from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Ca
 from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
+@api_view(('GET',))
+def patrimonio_list_ajax(request):
+    search = request.GET['search_value']
+    start = int(request.GET['start'])
+    length = int(request.GET['length'])
+    queryset = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
+    if search:
+        queryset = queryset.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
+    count = queryset.count()
+    queryset = queryset[start:start + length]
+    serializer = PatrimonioSerializer(queryset, many=True)
+    result = dict()
+    result['items'] = serializer.data
+    result['total_count'] = count
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 def patrimonio_list(request):
 

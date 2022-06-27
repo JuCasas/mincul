@@ -2,146 +2,137 @@
 {% load static %}
 
 {% block extrastyle %}
-    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
-    <style>
-        .degradado {
-            background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
-            opacity: .8;
-        }
-    </style>
+  <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+  <style>
+      .degradado {
+          background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
+          opacity: .8;
+      }
+  </style>
 {% endblock %}
 
 {% block body %}
-    <div class="card mb-3">
-        <div class="card-body p-0">
-            <div class="navbar">
-                <div class="col-sm-auto mb-2 mb-sm-0">
-                    <h6 class="mb-0">Mostrando 1-24 de {{ cantidad }} Patrimonios</h6>
-                </div>
-                <div class="row d-flex align-items-center">
-
-                    <div class="form-group col-sm-auto my-1">
-                        <div class="position-relative">
-                            <input class="form-control" id="name" type="text" placeholder="Nombre">
-                            <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-sm-auto my-1">
-                        <select class="form-control" id="exampleFormControlSelect1">
-                            <option selected>Clasificación</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-auto my-1">
-                        <select class="form-control" id="exampleFormControlSelect1">
-                            <option selected>Tipo de Bien</option>
-                            <option>Cultural</option>
-                            <option>Humano</option>
-                            <option>Kriptoniano</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-auto my-1">
-                        <select class="form-control" id="exampleFormControlSelect1">
-                            <option selected>Departamento</option>
-                            <option>Lima</option>
-                            <option>Ica</option>
-                            <option>Cusco</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-auto my-1">
-                        <button class="btn btn-primary col-sm-auto" type="button" data-toggle="modal"
-                                data-target="#importarModal">
-                            <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
-                        </button>
-                    </div>
-                </div>
-            </div>
+  <div class="card mb-3">
+    <div class="card-body p-0">
+      <div class="navbar">
+        <div class="col-sm-auto mb-2 mb-sm-0">
+          <h6 class="mb-0">Mostrando 1-24 de {{ cantidad }} Patrimonios</h6>
         </div>
+        <div class="row d-flex align-items-center">
+
+          <div class="form-group col-sm-auto my-1">
+            <div class="position-relative">
+              <input class="form-control" id="search" type="text" placeholder="Nombre">
+              <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+            </div>
+          </div>
+
+          <div class="form-group col-sm-auto my-1">
+            <select class="form-control" id="tipoPatrimonio">
+              <option value="0" selected>Tipo</option>
+              <option value="1">Inmaterial</option>
+              <option value="2">Material Inmueble</option>
+              <option value="3">Material Mueble</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-auto my-1">
+            <select class="form-control" id="categoria">
+            </select>
+          </div>
+          <div class="form-group col-sm-auto my-1">
+            <select class="form-control" id="exampleFormControlSelect1">
+              <option selected>Departamento</option>
+              <option>Lima</option>
+              <option>Ica</option>
+              <option>Cusco</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-auto my-1">
+            <button class="btn btn-primary col-sm-auto" type="button" data-toggle="modal"
+                    data-target="#importarModal">
+              <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row" id="container">
+        {% comment %}        {% for pat in patrimonios %}
+          <div class="col-12 col-lg-4 col-md-4 col-sm-6">
+            <div class="card">
+              <div class="card-img-top" style="height: 13rem">
+                <img class="h-100 w-100 rounded-top"
+                     src="https://www.feednavigator.com/var/wrbm_gb_food_pharma/storage/images/_aliases/news_large/9/2/8/5/235829-6-eng-GB/Feed-Test-SIC-Feed-20142.jpg"
+                     alt="Card image cap">
+              </div>
+              <div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">
+                <h5 class="card-text pt-9" style="color: white">{{ pat.nombreTituloDemoninacion }}</h5>
+              </div>
+              <div class="card-body">
+                <p class="card-text font-italic mb-0">{{ pat.get_categoria_display }}
+                  - {{ pat.get_subcategoria_display }}</p>
+                <p class="card-text font-weight-semi-bold">{{ pat.direccion }}</p>
+                <div class="row">
+                  <div class="col-sm-5"></div>
+                  <div class="col-sm-7">
+                    <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
+                       href="patrimonio/detalle">
+                      Ver detalle
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div><p></p></div>
+          </div>
+        {% endfor %}{% endcomment %}
+      </div>
     </div>
 
+    <!--Paginacion-->
+    <div class="card-footer bg-light d-flex justify-content-center">
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="row">
-                {% for pat in patrimonios %}
-                    <div class="col-12 col-lg-4 col-md-4 col-sm-6">
-                        <div class="card">
-                            <div class="card-img-top" style="height: 13rem">
-                                <img class="h-100 w-100 rounded-top"
-                                     src="https://www.feednavigator.com/var/wrbm_gb_food_pharma/storage/images/_aliases/news_large/9/2/8/5/235829-6-eng-GB/Feed-Test-SIC-Feed-20142.jpg"
-                                     alt="Card image cap">
-                            </div>
-                            <div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">
-                                <h5 class="card-text pt-9" style="color: white">{{ pat.nombreTituloDemoninacion }}</h5>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text font-italic mb-0">{{ pat.get_categoria_display }}
-                                    - {{ pat.get_subcategoria_display }}</p>
-                                <p class="card-text font-weight-semi-bold">{{ pat.direccion }}</p>
-                                <div class="row">
-                                    <div class="col-sm-5"></div>
-                                    <div class="col-sm-7">
-                                        <a class="float-right mr-3 pt-2 tooltip-inner arrow btn btn-block" type="button"
-                                           href="patrimonio/detalle">
-                                            Ver detalle
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div><p></p></div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!--Paginacion-->
-        <div class="card-footer bg-light d-flex justify-content-center">
-            <div>
-                <button class="btn btn-falcon-default btn-sm mr-2" type="button" disabled data-toggle="tooltip"
-                        data-placement="top" title="Prev"><span class="fas fa-chevron-left"></span></button>
-                <a class="btn btn-sm btn-falcon-default text-primary mr-2" href="#!">1</a>
-                <a class="btn btn-sm btn-falcon-default mr-2" href="#!">2</a>
-                <a class="btn btn-sm btn-falcon-default mr-2" href="#!"> <span class="fas fa-ellipsis-h"></span></a>
-                <a class="btn btn-sm btn-falcon-default mr-2" href="#!">35</a>
-                <button class="btn btn-falcon-default btn-sm" type="button" data-toggle="tooltip" data-placement="top"
-                        title="Next"><span class="fas fa-chevron-right"></span></button>
-            </div>
-        </div>
+      <div class="paginator">
+        <ul class="pagination"></ul>
+      </div>
     </div>
+  </div>
 
 
-    <!--  Modal de importar archivo-->
-    <div class="modal fade" id="importarModal" tabindex="-1" role="dialog" aria-labelledby="importarModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="importarModalLabel">Importar patrimonios</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
-                            class="font-weight-light" aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formularioCargaMasiva" action="{% url 'patrimonio_list' %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <input type="file" name="file">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary btn-sm" type="submit" form="formularioCargaMasiva" value="Submit">
-                        Importar patrimonios
-                    </button>
-                </div>
-            </div>
+  <!--  Modal de importar archivo-->
+  <div class="modal fade" id="importarModal" tabindex="-1" role="dialog" aria-labelledby="importarModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="importarModalLabel">Importar patrimonios</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+              class="font-weight-light" aria-hidden="true">&times;</span></button>
         </div>
+        <div class="modal-body">
+          <form id="formularioCargaMasiva" action="{% url 'patrimonio_list' %}" method="post"
+                enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <input type="file" name="file">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary btn-sm" type="submit" form="formularioCargaMasiva" value="Submit">
+            Importar patrimonios
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 
 
 
@@ -149,5 +140,171 @@
 {% endblock %}
 
 {% block extrajs %}
-    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+  <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap-pagy-master/bootstrap-pagy.js' %}"></script>
+  <script src="{% static 'lib/bootstrap-pagy-master/js/prettify.js' %}"></script>
+  <script>
+    let options = [
+      '<option value="0">Categoria</option>',
+      '<option value="0">Categoria</option>' +
+      '<option value="1">Folclore</option>' +
+      '<option value="2">Acontecimientos Programados</option>',
+      '<option value="0">Categoria</option>' +
+      '<option value="1">Manifestaciones Culturales</option>' +
+      '<option value="2">Realizaciones Tecnicas, Cientificas y Artisticas Contemporaneas Programados</option>' +
+      '<option value="3">Sitios Naturales</option>',
+      '<option value="0">Categoria</option>' +
+      '<option value="1">Industrial</option>' +
+      '<option value="2">Arqueologica</option>' +
+      '<option value="3">Historica-Artistica</option>',
+      '<option value="4">Etnografica</option>',
+      '<option value="5">Paleontologica</option>',
+    ]
+
+    //Programacion de selects dependientes
+    let type = $("#tipoPatrimonio")
+    let category = $("#categoria")
+    type.change(function () {
+      let value = $(this).val()
+      category.html(options[value])
+    })
+
+    type.val('0').change();
+    category.val('0').change();
+
+    //Funcion renderiza patrimonios dinamicamente
+
+    let container = $("#container")
+
+    function loadContainer() {
+      container.empty();
+      let data = result['items']
+      console.log(data)
+      let content = ''
+      for (i = 0; i < data.length; i++) {
+        let div;
+        content += (
+            '<div class="col-12 col-lg-4 col-md-4 col-sm-6">'
+            + '<div class="card">'
+            + '<div class="card-img-top" style="height: 13rem">'
+            + '<img class="h-100 w-100 rounded-top"'
+            + 'src="https://www.culturandesperu.com/wp-content/uploads/2018/01/FEATURED-THE-SACRED-CITY-OF-CARAL.jpg"'
+            + 'alt="Card image cap">'
+            + '</div>'
+            + '<div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">'
+            + '<h5 class="card-text pt-9" style="color: white">' + data[i]['nombreTituloDemoninacion'] + '</h5>'
+            + '</div>'
+            + '<div class="card-body">'
+            + '<p class="card-text font-italic mb-0">' + data[i]['nombreTituloDemoninacion']
+            + '-' + data[i]['nombreTituloDemoninacion'] + '</p>'
+            + '<p class="card-text font-weight-semi-bold">' + data[i]['nombreTituloDemoninacion'] + '</p>'
+            + '<div class="row">'
+            + '<div class="col-sm-5"></div>'
+            + '<div class="col-sm-7">'
+            + '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>'
+            + '<button type="button" class="btn btn-delete" onclick="eliminarPat(' + data[i].id + ')"><i class="fas fa-trash-alt"></i></button>'
+            + '</div>'
+            + '</div>'
+            + '</div>'
+            + '</div>'
+            + '<div><p></p></div>'
+            + '</div>'
+
+        )
+      }
+      container.html(content);
+    }
+
+    //Variables globales de estado
+    let result = {};
+    let init = true
+
+    //Filtros
+    let search = $('#search')
+
+    //Funcion que obtiene Data al hacer clic en una página
+    function getData(start, length) {
+      $.ajax({
+        url: '/patrimonios/listarAjax/',
+        type: 'get',
+        data: {
+          length: length,
+          start: start,
+          search_value: search.val(),
+        },
+        success: function (data, textStatus, jQxhr) {
+          result["total_count"] = data.total_count
+          result["items"] = data.items
+          loadContainer()
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+          console.log(jqXhr)
+        }
+      });
+      return 1;
+    }
+
+    //Funcion que obtiene Data cuando se interactua con filtros
+    function getInitialData(start, length) {
+      $.ajax({
+        url: '/patrimonios/listarAjax/',
+        type: 'get',
+        data: {
+          length: length,
+          start: start,
+          search_value: search.val(),
+        },
+        success: function (data, textStatus, jQxhr) {
+          result["total_count"] = data.total_count
+          result["items"] = data.items
+          if (result["total_count"] === 0) {
+            $(".paginator").hide()
+            container.empty();
+          } else {
+            let mod = result["total_count"] % 9
+            let div = (result["total_count"] - mod) / 9
+            if (mod !== 0) {
+              div = div + 1;
+            }
+            loadContainer()
+            $(".paginator").pagy("page", 1, div);
+          }
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+          console.log(jqXhr)
+        }
+      });
+    }
+
+    //Instanciacion de librería para paginacion
+    $(".paginator").pagy({
+      totalPages: null,
+      currentPage: null,
+
+      page: function (page) {
+        if (!init) {
+          let start = (page - 1) * 9
+          getData(start, 9)
+        }
+        search = $('#search').val()
+        console.log(`page: ${page} , search: ${search}`)
+        init = false
+        return true;
+      }
+    });
+
+    search.keyup(function () {
+      init = true
+      getInitialData(0, 9)
+    });
+
+    //Inicializacion de Listado de cards
+    $(document).ready(function () {
+      init = true
+      search.val('');
+      getInitialData(0, 9)
+    });
+
+
+  </script>
 {% endblock %}
