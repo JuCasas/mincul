@@ -14,14 +14,39 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from authentication.models import User
+from conservacion.serializers import PatrimonioSerializer
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
     ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio, EpocaVisita, \
-    FuenteBibliografica
+    FuenteBibliografica, PatrimonioPaleontologico, PatrimonioMaterialMueble, PatrimonioIndustrial, Fabricante, \
+    PatrimonioArqueologico, TecnicaManufactura, TecnicaDecoracion, PatrimonioHistoricoArtistico, MaterialSecundario, \
+    TecnicaAcabado, PatrimonioEtnografico, Propietario, Excavacion, ElementoAdicional
 from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
 
+@api_view(('GET',))
+def patrimonio_list_ajax(request):
+    search = request.GET['search_value']
+    start = int(request.GET['start'])
+    length = int(request.GET['length'])
+    type = request.GET['tipo']
+    category = request.GET['category']
+    queryset = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
+    if search:
+        queryset = queryset.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
+    if (type!='0'):
+        queryset = queryset.filter(tipoPatrimonio=type).order_by('nombreTituloDemoninacion')
+    if(category!='Categoria'):
+        cat = Categoria.objects.get(nombre__icontains=category)
+        queryset = queryset.filter(categoria_id=cat.pk).order_by('nombreTituloDemoninacion')
+    count = queryset.count()
+    queryset = queryset[start:start + length]
+    serializer = PatrimonioSerializer(queryset, many=True)
+    result = dict()
+    result['items'] = serializer.data
+    result['total_count'] = count
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 def patrimonio_list(request):
 
@@ -31,27 +56,31 @@ def patrimonio_list(request):
         # beautify = json.dumps(data, indent=4)
         # print(beautify)
         for pat in data:
-            if len(Patrimonio.objects.filter(nombreTituloDemoninacion=pat['nombre'])) == 0:
+            cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
+            npat = []
+            if int(cat.tipo) == 1 or int(cat.tipo) == 2:
+                npat = Patrimonio.objects.filter(codigo=pat['codigo'])
+            else:
+                npat = Patrimonio.objects.filter(codigo=pat['nroRegistro'])
+
+            if len(npat) == 0:
                 patrimonio = Patrimonio()
-                patrimonio.departamento = pat['departamento']
-                patrimonio.provincia = pat['provincia']
-                patrimonio.distrito = pat['distrito']
-                patrimonio.descripcion = pat['descripcion']
-                patrimonio.observacion = pat['observaciones']
-
-                cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
-
                 patrimonio.tipoPatrimonio = int(cat.tipo)
                 patrimonio.categoria = cat
-                patrimonio.save()
 
                 if int(cat.tipo) == 1:
                     patrimonio.nombreTituloDemoninacion = pat['nombre']
                     patrimonio.codigo = pat['codigo']
+                    patrimonio.departamento = pat['departamento']
+                    patrimonio.provincia = pat['provincia']
+                    patrimonio.distrito = pat['distrito']
+                    patrimonio.descripcion = pat['descripcion']
+                    patrimonio.observacion = pat['observaciones']
                     if pat['latitud'] != '':
                         patrimonio.lat = pat['latitud']
                     if pat['longitud'] != '':
                         patrimonio.long = pat['longitud']
+                    patrimonio.save()
 
                     resp = Responsable.objects.filter(nombre=pat['responsable']['nombreResponsable'])
                     if len(resp) > 0:
@@ -69,10 +98,11 @@ def patrimonio_list(request):
                     patrimonio.responsables.add(resp)
                     patrimonio.save()
 
-                    fuente = FuenteBibliografica()
-                    fuente.referencia = pat['responsable']['fuentesBiblio']
-                    fuente.patrimonio = patrimonio
-                    fuente.save()
+                    if pat['responsable']['fuentesBiblio'] != '':
+                        fuente = FuenteBibliografica()
+                        fuente.referencia = pat['responsable']['fuentesBiblio']
+                        fuente.patrimonio = patrimonio
+                        fuente.save()
 
                     for actividad in pat['actividades']:
                         act = ActividadTuristica()
@@ -107,16 +137,21 @@ def patrimonio_list(request):
                             entrada.precio = ent[1]
                             entrada.patrimonio = patrimonio
                             entrada.save()
-
                     inmaterial.save()
 
                 elif int(cat.tipo) == 2:
                     patrimonio.nombreTituloDemoninacion = pat['nombre']
+                    patrimonio.departamento = pat['departamento']
+                    patrimonio.provincia = pat['provincia']
+                    patrimonio.distrito = pat['distrito']
+                    patrimonio.descripcion = pat['descripcion']
+                    patrimonio.observacion = pat['observaciones']
                     patrimonio.codigo = pat['codigo']
                     if pat['latitud'] != '':
                         patrimonio.lat = pat['latitud']
                     if pat['longitud'] != '':
                         patrimonio.long = pat['longitud']
+                    patrimonio.save()
 
                     resp = Responsable.objects.filter(nombre=pat['responsable']['nombreResponsable'])
                     if len(resp) > 0:
@@ -134,10 +169,11 @@ def patrimonio_list(request):
                     patrimonio.responsables.add(resp)
                     patrimonio.save()
 
-                    fuente = FuenteBibliografica()
-                    fuente.referencia = pat['responsable']['fuentesBiblio']
-                    fuente.patrimonio = patrimonio
-                    fuente.save()
+                    if pat['responsable']['fuentesBiblio'] != '':
+                        fuente = FuenteBibliografica()
+                        fuente.referencia = pat['responsable']['fuentesBiblio']
+                        fuente.patrimonio = patrimonio
+                        fuente.save()
 
                     for actividad in pat['actividades']:
                         act = ActividadTuristica()
@@ -186,7 +222,412 @@ def patrimonio_list(request):
                         epoca.save()
 
                 elif int(cat.tipo) == 3:
-                    print('Mueble')
+
+                    patrimonio.codigo = pat['nroRegistro']
+                    patrimonio.direccion = pat['datosUbicacion']['ubicacionGeografica']['direccion']
+                    patrimonio.departamento = pat['datosUbicacion']['ubicacionGeografica']['departamento']
+                    patrimonio.provincia = pat['datosUbicacion']['ubicacionGeografica']['provincia']
+                    patrimonio.distrito = pat['datosUbicacion']['ubicacionGeografica']['distrito']
+
+                    # if pat['latitud'] != '':
+                    #     patrimonio.lat = pat['latitud']
+                    # if pat['longitud'] != '':
+                    #     patrimonio.long = pat['longitud']
+
+                    patrimonio.descripcion = pat['datosTecnicos']['descripcion']
+                    patrimonio.observacion = pat['datosTecnicos']['observaciones']
+
+                    inst = Institucion.objects.filter(nombre=pat['datosPropiedad']['custodio'])
+                    if len(inst) > 0:
+                        inst = Institucion.objects.get(nombre=pat['datosPropiedad']['custodio'])
+                    else:
+                        inst = Institucion()
+                        inst.nombre = pat['datosPropiedad']['custodio']
+                        inst.save()
+                    patrimonio.institucion = inst
+                    patrimonio.save()
+
+                    prop = Propietario.objects.filter(nombre=pat['datosPropiedad']['propietario']['nombrePropietario'])
+                    if len(prop) > 0:
+                        prop = Propietario.objects.get(nombre=pat['datosPropiedad']['propietario']['nombrePropietario'])
+                    else:
+                        prop = Propietario()
+                        if pat['datosPropiedad']['tipoPropietario'] == 'jurídica':
+                            prop.nombre = pat['datosPropiedad']['propietario']['nombrePropietario']
+                            prop.direccion = pat['datosPropiedad']['propietario']['direccion']
+                            prop.departamento = pat['datosPropiedad']['propietario']['departamento']
+                            prop.provincia = pat['datosPropiedad']['propietario']['provincia']
+                            prop.distrito = pat['datosPropiedad']['propietario']['distrito']
+                            prop.doi = pat['datosPropiedad']['propietario']['documentoIdentidad']
+                            prop.telefono = pat['datosPropiedad']['propietario']['telefono']
+                            prop.tipo = '1'
+                        else:
+                            prop.nombre = pat['datosPropiedad']['propietario']['nombrePropietario']
+                            prop.direccion = pat['datosPropiedad']['propietario']['direccion']
+                            prop.departamento = pat['datosPropiedad']['propietario']['departamento']
+                            prop.provincia = pat['datosPropiedad']['propietario']['provincia']
+                            prop.distrito = pat['datosPropiedad']['propietario']['distrito']
+                            prop.doi = pat['datosPropiedad']['propietario']['documentoIdentidad']
+                            prop.telefono = pat['datosPropiedad']['propietario']['telefono']
+                            prop.tipo = '2'
+                        prop.save()
+                    patrimonio.propietarios.add(prop)
+                    patrimonio.save()
+
+                    for fuente in pat['datosTecnicos']['bibliografia']:
+                        if fuente != '':
+                            fue = FuenteBibliografica()
+                            fue.referencia = fuente
+                            fue.patrimonio = patrimonio
+                            fue.save()
+
+                    mueble = PatrimonioMaterialMueble()
+                    mueble.nroRegistro = pat['nroRegistro']
+                    mueble.asociacion = pat['asociación']
+                    mueble.integridad = pat['datosTecnicos']['integridad']
+                    mueble.conservacion = pat['datosTecnicos']['conservacion']
+                    mueble.detalleConservacion = pat['datosTecnicos']['detalleConservacion']
+                    mueble.detalleTratamiento = pat['datosTecnicos']['detalleTratamiento']
+                    mueble.alto = pat['datosTecnicos']['dimensionesYPeso']['alto']
+                    mueble.largo = pat['datosTecnicos']['dimensionesYPeso']['largo']
+                    mueble.ancho = pat['datosTecnicos']['dimensionesYPeso']['ancho']
+                    mueble.espesor = pat['datosTecnicos']['dimensionesYPeso']['espesor']
+                    mueble.formaAdquisicion = pat['datosPropiedad']['formaAdquision']
+                    mueble.ubicacionEspecifica = pat['datosUbicacion']['ubicacionEspecifica']
+                    mueble.situacion = pat['datosUbicacion']['situacion']
+                    mueble.codigoPropietario = pat['codigos']['codigoPropietario']
+                    mueble.codigoRegistroAnteriorINC = pat['codigos']['codigoRegistroAnteriorINC']
+                    mueble.codigoInventario = pat['codigos']['codigoInventarioINC']
+                    mueble.otrosCodigos = pat['codigos']['otros']
+                    mueble.patrimonio = patrimonio
+                    mueble.save()
+
+                    if cat.pk ==6:
+
+                        patrimonio.nombreTituloDemoninacion = pat['datosIdentificacion']['denominacion']
+                        patrimonio.save()
+
+                        if pat['datosOrigen']['excavacion']:
+                            exc = Excavacion()
+                            exc.areaGeografica = pat['datosOrigen']['areaGeografica']
+                            exc.clasificacionOrigen = pat['datosOrigen']['clasificacionOrigen']
+                            exc.nombreClasificacion = pat['datosOrigen']['nombreClasificacionOrigen']
+                            exc.capa = pat['datosOrigen']['capa']
+                            exc.unidad = pat['datosOrigen']['unidad']
+                            exc.sector = pat['datosOrigen']['sector']
+                            exc.patrimonioMueble = mueble
+                            exc.save()
+
+                        for tecnica in pat['datosTecnicos']['tecnicasManufactura']:
+                            tec = TecnicaManufactura.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaManufactura.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaManufactura()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasManifactura.add(tec)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasDecoracion']:
+                            tec = TecnicaDecoracion.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaDecoracion.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaDecoracion()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasDecoracion.add(tec)
+                        mueble.save()
+
+                        arq = PatrimonioArqueologico()
+                        arq.material = pat['datosIdentificacion']['material']
+                        arq.tipoMaterial = pat['datosIdentificacion']['tipoMaterial']
+                        arq.cultura = pat['datosIdentificacion']['cultura']
+                        arq.estilo = pat['datosIdentificacion']['estilo']
+                        arq.periodo = pat['datosIdentificacion']['periodo']
+                        arq.diametroMax = pat['datosTecnicos']['dimensionesYPeso']['diametroMax']
+                        arq.diametroMin = pat['datosTecnicos']['dimensionesYPeso']['diametroMin']
+                        arq.diametroBase = pat['datosTecnicos']['dimensionesYPeso']['diametroBase']
+                        arq.patrimonioMueble = mueble
+                        arq.save()
+
+                    elif cat.pk == 7:
+
+                        patrimonio.nombreTituloDemoninacion = pat['datosIdentificacion']['tituloDenominacion']
+                        patrimonio.save()
+
+                        if pat['datosOrigen']['excavacion']:
+                            exc = Excavacion()
+                            exc.areaGeografica = pat['datosOrigen']['areaGeografica']
+                            exc.clasificacionOrigen = pat['datosOrigen']['clasificacionOrigen']
+                            exc.nombreClasificacion = pat['datosOrigen']['nombreClasificacionOrigen']
+                            exc.capa = pat['datosOrigen']['capa']
+                            exc.unidad = pat['datosOrigen']['unidad']
+                            exc.sector = pat['datosOrigen']['sector']
+                            exc.patrimonioMueble = mueble
+                            exc.save()
+
+                        if pat['presentaElementosAdicionales']:
+                            for elemento in pat['elementosAdicionales']:
+                                ele = ElementoAdicional()
+                                ele.descripcion = elemento['elemento']
+                                ele.material = elemento['material']
+                                ele.integridad = elemento['integridadBien']
+                                ele.conservacion = elemento['conservacionBien']
+                                ele.alto = elemento['alto']
+                                ele.largo = elemento['largo']
+                                ele.ancho = elemento['ancho']
+                                ele.espesor = elemento['espesor']
+                                ele.fondo = elemento['fondo']
+                                ele.diametro = elemento['diametro']
+                                ele.patrimonioMueble = mueble
+                                ele.save()
+
+                        for material in pat['datosTecnicos']['materialesSecundarios']:
+                            mat = MaterialSecundario.objects.filter(descripcion=material)
+                            if len(mat) > 0:
+                                mat = MaterialSecundario.objects.get(descripcion=material)
+                            else:
+                                mat = MaterialSecundario()
+                                mat.descripcion = material
+                                mat.save()
+                            mueble.materialesSecundarios.add(mat)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasManufactura']:
+                            tec = TecnicaManufactura.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaManufactura.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaManufactura()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasManifactura.add(tec)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasDecoracion']:
+                            tec = TecnicaDecoracion.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaDecoracion.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaDecoracion()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasDecoracion.add(tec)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasAcabado']:
+                            tec = TecnicaAcabado.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaAcabado.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaAcabado()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasAcabado.add(tec)
+                        mueble.save()
+
+                        hist = PatrimonioHistoricoArtistico()
+                        hist.estilo = pat['datosIdentificacion']['estilo']
+                        hist.procedencia = pat['datosIdentificacion']['estilo']
+                        hist.datacion = pat['datosIdentificacion']['estilo']
+                        hist.materialSoporte = pat['datosTecnicos']['materialSoporte']
+                        hist.fondo = pat['datosTecnicos']['dimensionesYPeso']['fondo']
+                        hist.diametro = pat['datosTecnicos']['dimensionesYPeso']['diametro']
+                        hist.patrimonioMueble = mueble
+                        hist.save()
+
+                    elif cat.pk == 8:
+
+                        patrimonio.nombreTituloDemoninacion = pat['datosIdentificacion']['tituloDenominacion']
+                        patrimonio.save()
+
+                        if pat['presentaElementosAdicionales']:
+                            for elemento in pat['elementosAdicionales']:
+                                ele = ElementoAdicional()
+                                ele.descripcion = elemento['elemento']
+                                ele.material = elemento['material']
+                                ele.integridad = elemento['integridadBien']
+                                ele.conservacion = elemento['conservacionBien']
+                                ele.alto = elemento['alto']
+                                ele.largo = elemento['largo']
+                                ele.ancho = elemento['ancho']
+                                ele.espesor = elemento['espesor']
+                                ele.fondo = elemento['fondo']
+                                ele.diametro = elemento['diametro']
+                                ele.patrimonioMueble = mueble
+                                ele.save()
+
+                        for material in pat['datosTecnicos']['materialesSecundarios']:
+                            mat = MaterialSecundario.objects.filter(descripcion=material)
+                            if len(mat) > 0:
+                                mat = MaterialSecundario.objects.get(descripcion=material)
+                            else:
+                                mat = MaterialSecundario()
+                                mat.descripcion = material
+                                mat.save()
+                            mueble.materialesSecundarios.add(mat)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasManufactura']:
+                            tec = TecnicaManufactura.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaManufactura.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaManufactura()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasManifactura.add(tec)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasDecoracion']:
+                            tec = TecnicaDecoracion.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaDecoracion.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaDecoracion()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasDecoracion.add(tec)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasAcabado']:
+                            tec = TecnicaAcabado.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaAcabado.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaAcabado()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasAcabado.add(tec)
+                        mueble.save()
+
+                        etno = PatrimonioEtnografico()
+                        etno.filacionCultural = pat['datosIdentificacion']['filacionCultural']
+                        etno.procedencia = pat['datosIdentificacion']['procedencia']
+                        etno.datacion = pat['datosIdentificacion']['datacion']
+                        etno.materialSoporte = pat['datosTecnicos']['materialSoporte']
+                        etno.fondo = pat['datosTecnicos']['dimensionesYPeso']['fondo']
+                        etno.diametro = pat['datosTecnicos']['dimensionesYPeso']['diametro']
+                        etno.patrimonioMueble = mueble
+                        etno.save()
+
+                    elif cat.pk == 9:
+
+                        patrimonio.nombreTituloDemoninacion = pat['datosIdentificacion']['denominacion']
+                        patrimonio.save()
+
+                        if pat['datosOrigen']['excavacion']:
+                            exc = Excavacion()
+                            exc.areaGeografica = pat['datosOrigen']['areaGeografica']
+                            exc.clasificacionOrigen = pat['datosOrigen']['clasificacionOrigen']
+                            exc.nombreClasificacion = pat['datosOrigen']['nombreClasificacionOrigen']
+                            exc.capa = pat['datosOrigen']['capa']
+                            exc.unidad = pat['datosOrigen']['unidad']
+                            exc.sector = pat['datosOrigen']['sector']
+                            exc.patrimonioMueble = mueble
+                            exc.save()
+
+                        paleo = PatrimonioPaleontologico()
+                        paleo.nombreCientifico = pat['datosIdentificacion']['nombreCientifico']
+                        paleo.reino = pat['datosIdentificacion']['reino']
+                        paleo.phylumDivision = pat['datosIdentificacion']['phylumDivision']
+                        paleo.clase = pat['datosIdentificacion']['clase']
+                        paleo.eraGeologica = pat['datosIdentificacion']['eraGeologica']
+                        paleo.epocaGeologica = pat['datosIdentificacion']['epocaGeologica']
+                        paleo.tipoFosilizacion = pat['datosTecnicos']['tipoFosilizacion']
+                        paleo.tipoMuestra = pat['datosTecnicos']['tipoMuestra']
+                        paleo.patrimonioMueble = mueble
+                        paleo.save()
+
+                    elif cat.pk == 10:
+
+                        patrimonio.nombreTituloDemoninacion = pat['datosIdentificacion']['tituloDenominacion']
+                        patrimonio.save()
+
+                        if pat['datosOrigen']['excavacion']:
+                            exc = Excavacion()
+                            exc.areaGeografica = pat['datosOrigen']['areaGeografica']
+                            exc.clasificacionOrigen = pat['datosOrigen']['clasificacionOrigen']
+                            exc.nombreClasificacion = pat['datosOrigen']['nombreClasificacionOrigen']
+                            exc.capa = pat['datosOrigen']['capa']
+                            exc.unidad = pat['datosOrigen']['unidad']
+                            exc.sector = pat['datosOrigen']['sector']
+                            exc.patrimonioMueble = mueble
+                            exc.save()
+
+                        if pat['presentaElementosAdicionales']:
+                            for elemento in pat['elementosAdicionales']:
+                                ele = ElementoAdicional()
+                                ele.descripcion = elemento['elemento']
+                                ele.material = elemento['material']
+                                ele.integridad = elemento['integridadBien']
+                                ele.conservacion = elemento['conservacionBien']
+                                ele.alto = elemento['alto']
+                                ele.largo = elemento['largo']
+                                ele.ancho = elemento['ancho']
+                                ele.espesor = elemento['espesor']
+                                ele.fondo = elemento['fondo']
+                                ele.diametro = elemento['diametro']
+                                ele.patrimonioMueble = mueble
+                                ele.save()
+
+                        for material in pat['datosTecnicos']['materialesSecundarios']:
+                            mat = MaterialSecundario.objects.filter(descripcion=material)
+                            if len(mat) > 0:
+                                mat = MaterialSecundario.objects.get(descripcion=material)
+                            else:
+                                mat = MaterialSecundario()
+                                mat.descripcion = material
+                                mat.save()
+                            mueble.materialesSecundarios.add(mat)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasManufactura']:
+                            tec = TecnicaManufactura.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaManufactura.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaManufactura()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasManifactura.add(tec)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasDecoracion']:
+                            tec = TecnicaDecoracion.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaDecoracion.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaDecoracion()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasDecoracion.add(tec)
+
+                        for tecnica in pat['datosTecnicos']['tecnicasAcabado']:
+                            tec = TecnicaAcabado.objects.filter(descripcion=tecnica)
+                            if len(tec) > 0:
+                                tec = TecnicaAcabado.objects.get(descripcion=tecnica)
+                            else:
+                                tec = TecnicaAcabado()
+                                tec.descripcion = tecnica
+                                tec.save()
+                            mueble.tecnicasAcabado.add(tec)
+                        mueble.save()
+
+                        indus = PatrimonioIndustrial()
+                        indus.modeloMarca = pat['datosIdentificacion']['modeloMarca']
+                        indus.serie = pat['datosIdentificacion']['serie']
+                        indus.procedencia = pat['datosIdentificacion']['procedencia']
+                        indus.datacion = pat['datosIdentificacion']['datacion']
+                        indus.materialSoporte = pat['datosTecnicos']['materialSoporte']
+                        indus.fondo = pat['datosTecnicos']['dimensionesYPeso']['fondo']
+                        indus.diametro = pat['datosTecnicos']['dimensionesYPeso']['diametro']
+                        indus.patrimonioMueble = mueble
+                        indus.save()
+
+                        for fabricante in pat['datosIdentificacion']['fabricante']:
+                            fab = Fabricante.objects.filter(nombre=fabricante)
+                            if len(fab) > 0:
+                                fab = Fabricante.objects.get(nombre=fabricante)
+                            else:
+                                fab = Fabricante()
+                                fab.nombre = fabricante
+                                fab.save()
+                            indus.fabricantes.add(fab)
+                        indus.save()
 
     patrimonios = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
 
@@ -299,16 +740,6 @@ def detalle(request, pk):
     return render(request, 'patrimonio/templateDetail.html', context)
 
 def detalle_museo(request, pk):
-    #Provisional hasta cambio de la bd
-    #museo
-    valor = {'url': 'https://enlima.pe/sites/default/files/mali-lima.jpg',
-             'nombre': 'Museo Nacional de Arqueología, Antropología e Historia del Perú'}
-
-    area = {'direccion': 'Plaza Bolivar s/n',
-            'departamento': 'Lima',
-            'provincia': 'Lima',
-            'distrito': 'Pueblo Libre'}
-
     institucion = Institucion.objects.get(pk=pk)
     #lista de patrimonio dentro del museo
     patrimonios = Patrimonio.objects.filter(institucion_id=pk)
@@ -317,13 +748,18 @@ def detalle_museo(request, pk):
     #lista de incidentes
     incidentes = Incidente.objects.filter(zona__institucion_id=pk)
 
-    context = {"valor": valor,
-               "area": area,
-               "institucion": institucion,
+    puntuacion = 0
+    for v in valoraciones:
+        puntuacion = v.valoracion + puntuacion
+    if len(valoraciones):
+        puntuacion = puntuacion / len(valoraciones)
+
+    context = {"institucion": institucion,
                "patrimonios": patrimonios,
                "valoraciones": valoraciones,
                "incidentes": incidentes,
-               'afectaciones': [c[1] for c in Incidente.AFECTACION]}
+               'afectaciones': [c[1] for c in Incidente.AFECTACION],
+               'puntuacion': puntuacion,}
 
     return render(request, 'patrimonio/patrimony_museum.html',context)
 

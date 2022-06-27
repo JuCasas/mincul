@@ -77,6 +77,7 @@
           /* Lowering the shadow */
       }
 
+
       .table.dataTable tbody th, table.dataTable tbody td {
           padding: 8px 10px 8px 18px !important;
       }
@@ -87,7 +88,6 @@
 
       .form-control {
           background-color: white !important;
-          cursor: pointer !important;
       }
 
       .second {
@@ -97,6 +97,11 @@
           border-radius: 12px !important;
           height: 36px !important;
           font-size: 12px !important;
+      }
+
+      .form-control {
+          background-color: white !important;
+          cursor: pointer !important;
       }
 
       span.select2-selection.select2-selection--single {
@@ -137,6 +142,14 @@
       }
 
       input:disabled {
+          background-color: #D2D2D2 !important;
+      }
+
+      select:disabled{
+          background-color: #D2D2D2 !important;
+      }
+
+      textarea:disabled{
           background-color: #D2D2D2 !important;
       }
   </style>
@@ -181,25 +194,33 @@
 
   <div class="card mb-3">
     <div class="card-body">
-      <div class="row filterBar justify-content-end">
-        <div class="form-group col-sm-3 mb-0">
+      <div class="row filterBar justify-content-end mr-0">
+
+        <div class="form-group col-sm-2 mb-0">
           <div class="position-relative">
-            <input class="form-control" id="search" type="text" placeholder="Nombre">
+            <input class="form-control" id="search" type="text" placeholder="Código">
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
           </div>
         </div>
-        <div class="form-group col-sm-2 mb-0">
-          <select class="form-control" id="status_filter">
+
+        <div class="form-group col-sm-3 mb-0">
+          <select class="selectpicker form-control" id="zona" name="zona">
+          </select>
+          <span class="fas fa-chevron-down inputIcon inputIcon2 mr-3"></span>
+        </div>
+
+        <div class="form-group col-sm-3 mb-0">
+          <select class="form-control" id="type_filter">
             <option value="" selected>Tipos</option>
-            {% for mykey,myvalue in status_choices %}
+            {% for mykey,myvalue in typeIncidents %}
               <option value="{{ mykey }}">{{ myvalue }}</option>
             {% endfor %}
           </select>
         </div>
         <div class="form-group col-sm-2 mb-0">
-          <select class="form-control" id="type_filter">
+          <select class="form-control" id="status_filter">
             <option value="" selected>Estados</option>
-            {% for mykey,myvalue in typeProjects %}
+            {% for mykey,myvalue in status_choices %}
               <option value="{{ mykey }}">{{ myvalue }}</option>
             {% endfor %}
           </select>
@@ -210,12 +231,12 @@
 
   <div class="card mb-3">
     <div class="card-body">
-      <table id="tabla_autores" class="table table-sm table-dashboard data-table no-wrap mb-0 fs--1 w-200">
+          <table id="tabla_autores" class="table table-sm table-dashboard data-table mb-0 fs--1 w-100">
         <thead class="bg-200">
         <tr>
           <th class="sort ">Código</th>
-          <th class="sort">Descripción</th>
-          <th class="sort">Tipo de Afectación</th>
+          <th class="sort">Zona</th>
+          <th class="sort type">Tipo de Afectación</th>
           <th class="sort">Informante</th>
           <th class="sort">Fecha de Registro</th>
           <th class="sort">Estado</th>
@@ -230,8 +251,8 @@
   </div>
 
   <!-- NEW and EDIT Modal -->
-  <div class="modal fade" id="modalActividad" role="dialog">
-    <div class="modal-dialog mw-100 w-50">
+  <div class="modal fade" id="modalIncidente" role="dialog">
+    <div class="modal-dialog mw-100 w-25">
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -243,61 +264,65 @@
 
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
-                <label for="nombre">Nombre:</label>
-                <input class="form-control" id="nombre" name="nombre" type="text" required
-                       placeholder="Nombre de la Actividad">
+                <label for="nombre">Informante:</label>
+                <input class="form-control" id="informante" name="informante" type="text" required
+                       placeholder="informante" disabled>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="patrimonio">Tipo del incidente:</label>
+                <select class="form-control selectpicker" id="tipo" name="tipo" disabled>
+                  <option value="first" selected="selected">Otros</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="fechaInicio">Fecha del incidente:</label>
+                <input class="form-control" id="fecha" name="fecha" type="date" required disabled>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="nombre">Correo Electrónico:</label>
+                <input class="form-control" id="correo" name="correo" type="text" required
+                       placeholder="correo" disabled>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="nombre">Teléfono:</label>
+                <input class="form-control" id="telefono" name="telefono" type="text" required
+                       placeholder="teléfono" disabled>
               </div>
             </div>
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="descripcion">Descripcion:</label>
                 <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
-                          placeholder="Descripción de la Actividad"></textarea>
+                          placeholder="Descripción de la Actividad" disabled></textarea>
               </div>
             </div>
             <div class="row">
-              <div class="form-group col-lg-6 col-sm-12">
-                <label for="fechaInicio">Fecha de Inicio:</label>
-                <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required>
-              </div>
-              <div class="form-group col-lg-6 col-sm-12">
-                <label for="fechaFin">Fecha de Fin:</label>
-                <input class="form-control" id="fechaFin" name="fechaFin" type="date" required>
+              <div class="form-group col-lg-12 col-sm-12">
+                <label for="patrimonio">Estado:</label>
+                <select class="form-control selectpicker" id="status" name="status" disabled>
+                  <option value="first" selected="selected">Asignado</option>
+                </select>
               </div>
             </div>
 
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
-                <label for="patrimonio">Patrimonio Asociado:</label>
-                <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
-                  <option value="" selected="selected">Todos</option>
-                </select>
+                <label for="nombre">Proyecto de conservación:</label>
+                <input class="form-control" id="proyecto" name="proyecto" type="text" required
+                       placeholder="proyecto" disabled>
               </div>
             </div>
 
-            <div class="row justify-content-between">
-              <div class="form-group col-9">
-                <label for="conservadores">Conservador(es):</label>
-                <select class="form-control selectpicker" id="conservadores" name="conservadores"
-                        data-placeholder='Seleccione patrimonio...'>
-
-                </select>
-              </div>
-              <div class="form-group col-auto d-flex align-items-end">
-                <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
-                        onclick="agregarPatrimonioTabla()">Agregar Conservador
-                </button>
-              </div>
-            </div>
-
-            <div class="row justify-content-end mt-2 mr-1">
-              <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
-              <div>
-                <input type="hidden" id="type" name="type" value="">
-                <button type="submit" class="btn btn-primary btn-block"><span
-                    class="glyphicon glyphicon-ok"></span> Guardar
-                </button>
-              </div>
+            <div class="row justify-content-end mt-2 ml-0 mr-0">
+              <button type="button" data-dismiss="modal" class="btn btn-primary w-100">Volver</button>
             </div>
 
           </form>
@@ -306,18 +331,51 @@
     </div>
   </div>
 
-  <!-- Delete Modal -->
-  <div class="modal fade" id="confirm" role="dialog">
+
+    <!-- Confirm Modal -->
+    <div class="modal fade" id="confirm" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
-        <div class="modal-header justify-content-center">
-          <h4 class="modal-title">¿Retirar Asignación?</h4>
+        <div class="modal-header">
+          <h4 class="modal-title">Asignar Incidente a Proyecto de Conservación</h4>
         </div>
-        <div class="modal-body px-9">
-          <div class="row justify-content-between">
-            <button type="button" data-dismiss="modal" class="btn second">Cancelar</button>
-            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Retirar <Asignación></Asignación></button>
+        <div class="modal-body px-4">
+            <div class="row mb-3">
+                <label for="nombre">Proyecto de conservación:</label>
+            <input class="form-control" id="proyectoAsignacion" name="proyectoAsignacion" type="text" required
+                       placeholder="proyectoAsignacion" disabled value="">
+          </div>
+          <div class="row justify-content-center">
+            <button type="button" data-dismiss="modal" class="btn second mr-2">Cancelar</button>
+            <button type="button" data-dismiss="modal" class="btn btn-primary ml-2" id="asign">Asignar
+              <Asignación></Asignación>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal fade" id="del" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">¿Retirar asignación?</h4>
+        </div>
+        <div class="modal-body px-4">
+            <div class="row mb-3">
+                <label for="nombre">Proyecto de conservación:</label>
+            <input class="form-control" id="proyectoAsignacion" name="proyectoAsignacion" type="text" required
+                       placeholder="proyectoAsignacion" disabled value="">
+          </div>
+          <div class="row justify-content-center">
+            <button type="button" data-dismiss="modal" class="btn second mr-2">Cancelar</button>
+            <button type="button" data-dismiss="modal" class="btn btn-primary ml-2" id="delete">Retirar
+              <Asignación></Asignación>
+            </button>
           </div>
         </div>
       </div>
@@ -333,10 +391,118 @@
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
   <script src="{% static 'project/projects/incidents.js' %}"></script>
   <script>
+    let types = {
+      '1': 'Invasión/Ocupación Ilegal/Ampliación de Invasión',
+      '2': 'Deterioro de patrimonio por efectos de la persona',
+      '3': 'Deterioro de patrimonio por efectos de la naturaleza',
+      '4': 'Destrucción en zonas arqueológicas',
+      '5': 'Destrucción de casonas',
+      '6': 'Huaquería',
+      '7': 'Otros',
+    };
+    let status_filter = {
+      '1': 'No Asignado',
+      '2': 'Asignado',
+    };
+    let table = $('#tabla_autores').DataTable({
+      "searching": false,
+      "serverSide": true,
+      "processing": true,
+      "lengthChange": false,
+      "pageLength": 10,
+      "scrollX": true,
+      "ajax": function (data, callback, settings) {
+        let order_column = data.order[0].column
+        let order = data.order[0].dir
+
+        $.ajax({
+          url: '',
+          type: 'get',
+          data: {
+            length: data.length,
+            start: data.start,
+            search_value: $('#search').val(),
+            type_filter: $('#type_filter').val(),
+            status_filter: $('#status_filter').val(),
+            zone_filter: $('#zona').val(),
+            order_column: order_column,
+            order: order
+          },
+          success: function (data, textStatus, jQxhr) {
+            console.log(data)
+            callback({
+              recordsTotal: data.recordsTotal,
+              recordsFiltered: data.recordsFiltered,
+              data: data.data
+            });
+          },
+          error: function (jqXhr, textStatus, errorThrown) {
+          }
+        });
+      },
+      "columns": [
+        {"data": "codigo"},
+        {"data": "zona"},
+        {
+          "data": "tipoAfectacion", render: function (data, type, row) {
+            return types[data]
+          }
+        },
+        {"data": "nombre"},
+        {"data": "fechaRegistro"},
+        {
+          "data": "status", render: function (data, type, row) {
+            if (data == '1') {
+              resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "No Asignado" + '</span>'
+            } else if (data == '2') {
+              resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Asignado" + '</span>'
+            }
+            return resp;
+          }
+        },
+        {
+          "data": "status", render: function (data, type, row) {
+
+            let resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>'
+            if (data == '1') {
+              resp = resp + '&nbsp;&nbsp' +
+                  '<button type="button" class="btn btn-edit"><i class="fas fa-check"></i></button>' + '&nbsp;&nbsp' +
+                  '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+            }
+            return resp;
+          }
+        }
+      ],
+      "language": {
+        "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sZeroRecords": "No se encontraron resultados",
+        "sEmptyTable": "Ningún dato disponible en esta tabla",
+        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sSearch": "Buscar:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+          "sFirst": "Primero",
+          "sLast": "Último",
+          "sNext": "Siguiente",
+          "sPrevious": "Anterior"
+        },
+        "oAria": {
+          "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+          "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+      },
+    });
+
     $(document).ready(function () {
-      $('#patrimonio').prepend('<option selected=""></option>').select2({
+      $('#zona').select2({
         ajax: {
-          url: '/conservacion/proyectos/patrimonios',
+          url: '/incidentes/zonas/',
           datatype: 'json',
           delay: 250,
           data: function (params) {
@@ -350,7 +516,7 @@
             console.log(data.items)
             return {
               results: $.map(data.items, function (obj, index) {
-                return {id: obj.id, text: obj.nombreTituloDemoninacion};
+                return {id: obj.id, text: obj.nombre};
               }),
               pagination: {
                 more: (params.page * 10) < data.total_count
@@ -358,10 +524,19 @@
             }
           }
         },
-        placeholder: "Patrimonio",
+        placeholder: "Zona",
         allowClear: true,
         cache: false
       });
+
+      $('#zona').on("select2:clear", function (evt) {
+        $(this).on("select2:opening.cancelOpen", function (evt) {
+          evt.preventDefault();
+
+          $(this).off("select2:opening.cancelOpen");
+        });
+      });
+
 
     });
   </script>

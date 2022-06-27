@@ -56,7 +56,7 @@
     "model": "patrimonios.categoria",
     "pk": 6,
     "fields": {
-      "nombre": "Arqueologico",
+      "nombre": "Arqueologica",
       "tipo": "3",
       "estado": "1"
     }
@@ -65,7 +65,7 @@
     "model": "patrimonios.categoria",
     "pk": 7,
     "fields": {
-      "nombre": "Historico-Artistico",
+      "nombre": "Historica-Artistica",
       "tipo": "3",
       "estado": "1"
     }
@@ -74,7 +74,7 @@
     "model": "patrimonios.categoria",
     "pk": 8,
     "fields": {
-      "nombre": "Etnografico",
+      "nombre": "Etnografica",
       "tipo": "3",
       "estado": "1"
     }
@@ -83,7 +83,7 @@
     "model": "patrimonios.categoria",
     "pk": 9,
     "fields": {
-      "nombre": "Paleontologico",
+      "nombre": "Paleontologica",
       "tipo": "3",
       "estado": "1"
     }

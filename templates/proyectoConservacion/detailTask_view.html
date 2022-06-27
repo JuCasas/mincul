@@ -116,6 +116,7 @@
 
 {% block body %}
     <input type="hidden" value="{{ activity.id }}" id="idActivity">
+    <input type="hidden" value="{{ task.id }}" id="idTask">
     <div class="card mb-3">
         <div class="card-body">
             <div class="row justify-content-between align-items-center">
@@ -126,7 +127,7 @@
 
             <div class="row justify-content-between align-items-center">
                 <div class="col-md-6">
-                    <h5 class="mb-2 mb-md-0 text-black">Crear Tarea</h5>
+                    <h5 class="mb-2 mb-md-0 text-black">Detalle de Tarea: {{ task.codigo }}</h5>
                 </div>
             </div>
         </div>
@@ -144,52 +145,60 @@
                     <div class="form-group col-lg-12 col-sm-12">
                         <label for="nombre">Nombre:</label>
                         <input class="form-control" id="nombre" name="nombre" type="text"
-                               placeholder="Nombre de la tarea">
+                               placeholder="Nombre de la Actividad" value={{ task.nombre }} disabled>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12">
                         <label for="descripcion">Descripcion:</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" type="text"
-                                  placeholder="Descripción de la tarea"></textarea>
+                                  placeholder="Descripción de la Actividad" disabled>{{ task.descripcion }}</textarea>
                     </div>
                 </div>
-
                 <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12">
-                        <label for="conservador">Responsable:</label>
-                        <select class="form-control selectpicker" id="conservador" name="conservador"
-                                data-placeholder='Seleccione el conservador responsable...'>
-                            {% for conservador in conservadores %}
-                                <option value="{{ conservador.pk }}">{{ conservador.first_name }} {{ conservador.last_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group col-lg-4 col-sm-12">
+                    <div class="form-group col-lg-3 col-sm-12">
                         <label for="fechaRegistro">Fecha de Inicio:</label>
-                        <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date">
+                        <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date"
+                               value={{ task.fechaRegistro|date:"Y-m-d" }} disabled>
                     </div>
-                    <div class="form-group col-lg-4 col-sm-12">
+                    <div class="form-group col-lg-3 col-sm-12">
                         <label for="fecha">Fecha de Fin:</label>
-                        <input class="form-control" id="fecha" name="fecha" type="date">
+                        <input class="form-control" id="fecha" name="fecha" type="date"
+                               value={{ task.fecha|date:"Y-m-d" }} disabled>
                     </div>
-                    <div class="form-group col-lg-4 col-sm-12">
+                    <div class="form-group col-lg-3 col-sm-12">
                         <label for="presupuesto">Presupuesto:</label>
                         <input class="form-control" id="presupuesto" name="presupuesto" type="text"
-                               placeholder="S/">
+                               placeholder="S/" value={{ task.presupuesto }} disabled>
+                    </div>
+                    <div class="form-group col-lg-3 col-sm-12">
+                        <label for="gasto">Gasto Total:</label>
+                        <input class="form-control" id="gasto" name="gasto" type="text"
+                               placeholder="S/" disabled value={{ task.gasto }} disabled>
+                    </div>
+                    <div class="form-group col-lg-6 col-sm-12">
+                        <div class="row">
+                            <div class="col-2 flex-center mt-auto mb-auto ">
+                                <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
+                            </div>
+                            <div class="col-3">
+                            <span class="btn
+                                    {% if task.estado == '1' %}
+                                       btn-info
+                                    {% elif task.estado == '2' %}
+                                       btn-success
+                                    {% elif task.estado == '3' %}
+                                        btn-dark
+                                    {% endif %} ">
+                                {{ task.get_estado_display }}
+                            </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-group  row justify-content-end mt-2 mr-0">
-                    <a href="{% url 'listTasks' pk=activity.id %}" class="btn second mr-3 d-flex align-items-center">Cancelar</a>
-                    <div>
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <span class="glyphicon glyphicon-ok"></span> Crear Tarea
-                        </button>
-                    </div>
+                    <a href="{% url 'listTasks' pk=activity.id %}" class="btn second mr-3 d-flex align-items-center">Regresar</a>
                 </div>
 
             </form>
@@ -279,21 +288,22 @@
                 e.preventDefault();
                 $('#cover-spin').show(0)
                 $.ajax({
-                    url: '/conservacion/actividades/' + $('#idActivity').val() + '/tareas/add/',
+                    url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/',
                     method: "POST",
                     data: {
                         'nombre': $("#nombre").val(),
                         'descripcion': $("#descripcion").val(),
-                        'conservador': $("#conservador").val(),
                         'fechaRegistro': $("#fechaRegistro").val(),
                         'fecha': $("#fecha").val(),
                         'presupuesto': $("#presupuesto").val(),
+                        'gasto': $("#gasto").val(),
+                        'estado': $("#estado").val(),
                     },
                     success: function (response) {
                         $('#cover-spin').hide()
                         if (response["success"] !== undefined) {
                             $.toast({
-                                text: 'No se pudo crear la tarea',
+                                text: 'No se pudo actualizar la tarea',
                                 icon: 'warning',
                                 loader: false,        // Change it to false to disable loader
                                 bgColor: '#c67a71',
@@ -302,13 +312,8 @@
                                 hideAfter: 3000,
                             })
                         } else {
-                            $("#nombre").val(null)
-                            $("#descripcion").val(null)
-                            $("#fechaRegistro").val(null)
-                            $("#fecha").val(null)
-                            $("#presupuesto").val(null)
                             $.toast({
-                                text: 'Tarea creada con éxito',
+                                text: 'Tarea actualizada con éxito',
                                 icon: 'success',
                                 loader: false,        // Change it to false to disable loader
                                 bgColor: '#B7E6CA',  // To change the background
@@ -316,6 +321,7 @@
                                 position: 'bottom-right',
                                 hideAfter: 3000,
                             })
+                            //window.location.pathname = "/conservacion/actividades/" + $('#idActivity').val() + "/tareas/";
                         }
                     },
                     error: function (error) {

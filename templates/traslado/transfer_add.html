@@ -848,6 +848,19 @@
             return (fechaFin > fechaIni);
         }, "Letters, numbers, and underscores only please");
 
+        jQuery.validator.addMethod("fechaSalidaMaxima", function (value, element) {
+            var fechaSalidaProgramada = document.getElementById("fechaSalidaProgramada").value;
+
+            var fechaFin = new Date();
+            var fechaIni = new Date(fechaSalidaProgramada);
+            fechaIni.setHours(0, 0, 0, 0);
+            fechaFin.setHours(0, 0, 0, 0);
+            fechaFin = new Date(fechaFin.setMonth(fechaFin.getMonth()+1));
+
+
+            return (fechaIni < fechaFin);
+        }, "Letters, numbers, and underscores only please");
+
         $("form[name='formAgregar']").validate({
             rules: {
                 destino: {
@@ -884,6 +897,7 @@
                 fechaSalidaProgramada: {
                     required: true,
                     validarFechaMayor: true,
+                    fechaSalidaMaxima: true,
                 },
                 fechaSalidaReal: {
                     required: true,
@@ -915,7 +929,8 @@
                 },
                 fechaSalidaProgramada: {
                     required: "Ingrese una fecha de salida programada",
-                    validarFechaMayor: "Ingrese una fecha posterior a la actual"
+                    validarFechaMayor: "Ingrese una fecha posterior a la actual",
+                    fechaSalidaMaxima: "La fecha de Salida Programada debe estar entre la fecha actual y el mes siguiente."
                 },
                 fechaSalidaReal: {
                     required: "Ingrese una fecha de salida real",

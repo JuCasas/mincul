@@ -46,10 +46,21 @@ class ProyectoConservacion(models.Model):
     status = models.CharField(max_length=2, choices=STATUS, default='1', null=True, blank=True)
 
 class Actividad(models.Model):
+    ORDER_COLUMN_CHOICES = {
+        '0': 'codigo',
+        '1': 'nombre',
+        '2': 'conservadores_count',
+        '3': 'patrimonio__nombreTituloDemoninacion',
+        '4': 'fechaInicio',
+        '5': 'fechaFin',
+        '6': 'status'
+    }
+
     STATUS = (
-        ('0', 'En Proceso'),
-        ('1','Registrado'),
-        ('2','Completado'),
+        ('0', 'Registrado'),
+        ('1','En proceso'),
+        ('2','Finalizado'),
+        ('3','Anulada'),
     )
     ESTADOS = (
         ('1', 'Activo'),
@@ -64,7 +75,7 @@ class Actividad(models.Model):
     gastoTotal = models.FloatField()
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
     proyecto = models.ForeignKey(ProyectoConservacion, on_delete=models.CASCADE)
-    actividadPrecia = models.ManyToManyField("self", blank=True)
+    relaciones = models.ManyToManyField("self", blank=True)
     documentos = models.ManyToManyField(Documento)
     conservadores = models.ManyToManyField(settings.AUTH_USER_MODEL)
     estado = models.CharField(max_length=2,choices=ESTADOS,default='1',null=True,blank=True)
@@ -73,12 +84,16 @@ class Actividad(models.Model):
 
 class Tarea(models.Model):
     ESTADOS = (
-        ('1', 'Activo'),
-        ('2', 'Inactivo'),
+        ('1', 'Registrada'),
+        ('2', 'En proceso'),
+        ('3', 'En evaluacion'),
+        ('4', 'Rechazada'),
+        ('5', 'Finalizada'),
     )
     codigo = models.CharField(max_length=8, null=True)
     nombre = models.CharField(max_length=50, null=True)
     descripcion = models.CharField(max_length=200)
+    responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     gasto = models.FloatField(blank=True, null=True)
     presupuesto = models.FloatField(blank=True, null=True)
     fecha = models.DateField(blank=True, null=True, verbose_name='fecha')
@@ -94,6 +109,5 @@ class Campo(models.Model):
     nombre = models.CharField(max_length=200)
     contenido = models.CharField(max_length=200, null=True, blank=True)
     tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE)
-    conservador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     documentos = models.ManyToManyField(Documento)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
