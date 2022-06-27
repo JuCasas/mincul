@@ -27,8 +27,8 @@
             <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
         </div>
         <br>
-        <!--<div>100m <input type="range" min="100" max="2000" value="600" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
-        <input type="number" min="100" max="2000" value="600" class="" id="inputDispersion" disabled/></div>
+        <!--<div>0m <input type="range" min="0" max="2000" value="0" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
+        <input type="number" min="0" max="2000" value="0" class="" id="inputDispersion" disabled/></div>
         <br>-->
         <button id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
     </div>
@@ -52,15 +52,28 @@
         const LONGITUD_CENTRO_PERU=-77;
         const ZOOM_CENTRO_PERU=6;
         const LATITUD_METROS=111100;
-        const LONGITUD_METROS=110400;//no es exacto, pero como perú está cerca de la línea ecuatorial, es aproximado
+        const LONGITUD_METROS_ECUADOR=111321;
+        const RADIO_DE_LA_TIERRA_PROMEDIO_PERU=6377.0854565;
+        const PORCENTAJE_DISPERSION=0.15;
+        const MAX_DISPERSION=2000;//en metros
+        
 
         var zoomActual=0;
         var map = L.map('map').setView([LATITUD_CENTRO_PERU, LONGITUD_CENTRO_PERU],ZOOM_CENTRO_PERU);
         var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
         var geocoder = new google.maps.Geocoder();
         var controlRuta = null;
-        var grupoMarcadores = L.layerGroup().addTo(map);
-        var patrimoniosCercanos = null;
+        var grupoMarcadoresRuta = L.layerGroup().addTo(map);
+        var grupoMarcadoresFueraRuta = L.layerGroup().addTo(map);
+        var patrimoniosEnRuta = null;
+        var numPatrimoniosEnRuta=0;
+        var dispersion=-1;//por defecto será un 0.2 de la distancia original de la ruta, hasta un máximo de 2km
+        var esquinasMapa={
+            noroeste:null,
+            noreste:null,
+            suroeste:null,
+            sureste:null,
+        }
         var puntoPartidaIcon = L.icon({
             iconUrl : '../../static/img/icons/punto-partida.png',
             iconSize: [24,35]
@@ -90,15 +103,27 @@
         }
         leyenda.addTo(map);
 
-        var dispersion = $('#sliderDispersion').val();
+        var dispersionValor = $('#sliderDispersion').val();
         $('#sliderDispersion').change(function(){
-            if($('#sliderDispersion').val()!=dispersion){
-                dispersion=$('#sliderDispersion').val();
+            if($('#sliderDispersion').val()!=dispersionValor){
+                dispersionValor=$('#sliderDispersion').val();
                 let inputDispersion=document.getElementById('inputDispersion');
-                inputDispersion.value=dispersion;
+                inputDispersion.value=dispersionValor;
             }
-        })
-        
+        });
+        map.on('moveend',function(){
+            obtenerCoordenadasEsquinaMapa();
+            distanciaEntreDosCoordenadas(esquinasMapa.noroeste.lat,esquinasMapa.noroeste.lng,esquinasMapa.sureste.lat,esquinasMapa.sureste.lng);
+        });
+
+        function obtenerCoordenadasEsquinaMapa(){
+            let bounds=map.getBounds();
+            esquinasMapa.noroeste=bounds.getNorthWest();
+            esquinasMapa.noreste=bounds.getNorthEast();
+            esquinasMapa.suroeste=bounds.getSouthWest();
+            esquinasMapa.sureste=bounds.getSouthEast();
+            console.log(esquinasMapa);
+        }
         async function obtenerLatitudLongitudConDireccion(direccion){
             let lat=0;
             let long=0;
@@ -114,11 +139,12 @@
         }
         function limpiarMapa(){
             map.removeControl(controlRuta);
-            grupoMarcadores.clearLayers();
+            grupoMarcadoresRuta.clearLayers();
+            grupoMarcadoresFueraRuta.clearLayers();
             controlRuta=null;
-            patrimoniosCercanos=null;
+            patrimoniosEnRuta=null;
         }
-        async function obtenerPatrimoniosCercanos(lat1,long1,lat2,long2){
+        async function obtenerPatrimoniosCercanos(lat1,long1,lat2,long2,lat1menor,long1menor){
             return $.ajax({
                 type: "POST",
                 url: "/mapa_patrimonio/mapa/datos",
@@ -128,6 +154,8 @@
                     longitudIni:long1,
                     latitudFin:lat2,
                     longitudFin:long2,
+                    latIniMenor:lat1menor,
+                    longIniMenor:long1menor,
                 },
             });
         }
@@ -135,41 +163,84 @@
             return '<div>' + '<h3 style="text-align: center">'+patrimonioDatos.nombreTituloDemoninacion+'</h3>'+
                 '<img src="'+ patrimonioDatos.url+'" height="100px" width="300px"/>'+'</div>';
         }
-        function anadirPatrimoniosCercanos(){
-            for(let i=0;i<patrimoniosCercanos.data.length;i++){
-                if(patrimoniosCercanos.data[i].tipoPatrimonio==1){//inmaterial
-                    let markerInicio = L.marker([patrimoniosCercanos.data[i].lat, patrimoniosCercanos.data[i].long], {
-                        icon: inmaterialesIcon,
-                        title: patrimoniosCercanos.data[i].nombreTituloDemoninacion,
-                    }).addTo(grupoMarcadores).bindPopup(crearDivPatrimonio(patrimoniosCercanos.data[i]));
-                }else if(patrimoniosCercanos.data[i].tipoPatrimonio==2){//material inmueble
+        function anadirPatrimoniosEnRuta(){//tipo 2 para inmuebles, 4 para institucion
+            for(let i=0;i<patrimoniosEnRuta.length;i++){
+                if(patrimoniosEnRuta[i].tipo==2){
+                    let markerInicio = L.marker([patrimoniosEnRuta[i].lat, patrimoniosEnRuta[i].long], {
+                        icon: patrimonioIcon,
+                        title: patrimoniosEnRuta[i].nombre,
+                    }).addTo(grupoMarcadoresRuta).bindPopup(crearDivPatrimonio(patrimoniosEnRuta[i]));
+                }else{
+                    let markerInicio = L.marker([patrimoniosEnRuta[i].lat, patrimoniosEnRuta[i].long], {
+                        icon: institucionesIcon,
+                        title: patrimoniosEnRuta[i].nombre,
+                    }).addTo(grupoMarcadoresRuta).bindPopup(crearDivPatrimonio(patrimoniosEnRuta[i]));
+                }
+            }
+            /*for(let i=0;i<patrimoniosCercanos.data.length;i++){
+                if(patrimoniosCercanos.data[i].tipoPatrimonio==2){//material inmueble
                     let markerInicio = L.marker([patrimoniosCercanos.data[i].lat, patrimoniosCercanos.data[i].long], {
                         icon: patrimonioIcon,
                         title: patrimoniosCercanos.data[i].nombreTituloDemoninacion,
-                    }).addTo(grupoMarcadores).bindPopup(crearDivPatrimonio(patrimoniosCercanos.data[i]));
+                    }).addTo(grupoMarcadoresRuta).bindPopup(crearDivPatrimonio(patrimoniosCercanos.data[i]));
                 }else{//ver lo de agruparlos en institución
-                    
+
                 }
-            }
+            }*/
+            return;
         }
-        async function generarRutaDispersion(lat1,long1,lat2,long2){
-            let patrimoniosEnDispersion=[];
-            for(let i=0;i<patrimoniosCercanos.data.length;i++){
-                
+        async function enrutamientoConPatrimonios(lat1,long1,lat2,long2){
+            let puntosRuta=[];
+            puntosRuta.push(L.latLng(lat1,long1));
+            for(let i=0;i<patrimoniosEnRuta.length;i++){
+                puntosRuta.push(L.latLng(patrimoniosEnRuta[i].lat,patrimoniosEnRuta[i].long))
             }
-            controlRuta = L.Routing.control({
+            puntosRuta.push(L.latLng(lat2,long2));
+            controlRuta = await L.Routing.control({
                 createMarker: function () { return null; },
                 lineOptions : {
                     addWaypoints: false
                 },
-                waypoints: [    
-                    L.latLng(lat1, long1),
-                    L.latLng(lat2, long2),
-                    //L.latLng(-12.0983342, -76.9799472),
-                    //.latLng(-12.1093342, -7.0000072),
-                ],
+                waypoints: puntosRuta,
                 language:'es',
             }).addTo(map);
+        }
+        async function generarRutaDispersion(lat1,long1,lat2,long2){
+            let distanciaDispersion;
+            let lat1menor=false;
+            let long1menor=false;
+            distanciaDispersion= dispersion==-1 ? PORCENTAJE_DISPERSION*distanciaEntreDosCoordenadas(lat1,long1,lat2,long2) : dispersion;
+            if(distanciaDispersion>MAX_DISPERSION){
+                distanciaDispersion=MAX_DISPERSION;
+            }
+            //esta en metros
+            let nuevaLat1, nuevaLong1, nuevaLat2, nuevaLong2;
+            if(long1<=long2){//se expande para la izquierda long1 y long2 para la derecha
+                long1menor=true;
+                nuevaLong1 = modificarLongitudDispersion(lat1,long1,distanciaDispersion*-1);
+                nuevaLong2 = modificarLongitudDispersion(lat2,long2,distanciaDispersion);
+            }else{//se expande para la izquierda long2 y long1 para la derecha
+                nuevaLong1 = modificarLongitudDispersion(lat1,long1,distanciaDispersion);
+                nuevaLong2 = modificarLongitudDispersion(lat2,long2,distanciaDispersion*-1);
+            }
+            console.log(lat1,lat2);
+            if(lat1<=lat2){//se expande para abajo lat1 y lat2 para arriba
+                lat1menor=true;
+                nuevaLat1 = modificarLatitudDispersion(lat1,distanciaDispersion*-1);
+                nuevaLat2 = modificarLatitudDispersion(lat2,distanciaDispersion);
+            }else{//se expande para abajo lat2 y lat1 para arriba
+                nuevaLat1 = modificarLatitudDispersion(lat1,distanciaDispersion);
+                nuevaLat2 = modificarLatitudDispersion(lat2,distanciaDispersion*-1);
+            }
+            
+            //back devuelve hasta 10 patrimonios o instituciones que estén dentro del nuevo rectangulo de coordenadas
+            await obtenerPatrimoniosCercanos(nuevaLat1,nuevaLong1,nuevaLat2,nuevaLong2,lat1menor,long1menor).
+                then(datos=>{
+                    patrimoniosEnRuta=datos.data;
+                    numPatrimoniosEnRuta=datos.numPatrimonios;
+                });
+            await enrutamientoConPatrimonios(lat1,long1,lat2,long2);
+            anadirPatrimoniosEnRuta();
         }
         async function generarRuta() {
             if(controlRuta!=null){
@@ -184,21 +255,69 @@
             let latitudDireccionLlegada = latLongLlegada[0];
             let longitudDireccionLlegada = latLongLlegada[1];
             console.log(latitudDireccionPartida,longitudDireccionPartida,latitudDireccionLlegada,longitudDireccionLlegada);
-            await obtenerPatrimoniosCercanos(latitudDireccionPartida,longitudDireccionPartida,latitudDireccionLlegada,longitudDireccionLlegada).
-                then(datos=>{
-                    patrimoniosCercanos=datos;
-                });
-            console.log(patrimoniosCercanos);
+            await generarRutaDispersion(latitudDireccionPartida,longitudDireccionPartida,latitudDireccionLlegada,longitudDireccionLlegada);
             let markerInicio = L.marker([latitudDireccionPartida, longitudDireccionPartida], {
                 icon: puntoPartidaIcon,
                 title: "Partida"
-            }).addTo(grupoMarcadores);
+            }).addTo(grupoMarcadoresRuta);
             let markerLlegada = L.marker([latitudDireccionLlegada, longitudDireccionLlegada], {
                 icon: puntoLlegadaIcon,
                 title: "Llegada"
-            }).addTo(grupoMarcadores);
-            await anadirPatrimoniosCercanos();
-            await generarRutaDispersion(latitudDireccionPartida,longitudDireccionPartida,latitudDireccionLlegada,longitudDireccionLlegada);
+            }).addTo(grupoMarcadoresRuta);
+        }
+        function modificarLatitudDispersion(lat,dist){
+            let latEnGrados=decimalesAGradosMinutosSegundos(lat);
+            let distEnGradosLatitud=dist/LATITUD_METROS;
+            let distLatEnGrados=decimalesAGradosMinutosSegundos(distEnGradosLatitud);
+            latEnGrados.grados=latEnGrados.grados+distLatEnGrados.grados;
+            latEnGrados.minutos=latEnGrados.minutos+distLatEnGrados.minutos;
+            latEnGrados.segundos=latEnGrados.segundos+distLatEnGrados.segundos;
+            let nuevaLatitud=gradosMinutosSegundosADecimales(latEnGrados.grados,latEnGrados.minutos,latEnGrados.segundos);
+            return nuevaLatitud;
+        }
+        function modificarLongitudDispersion(lat,long,dist){
+            let longEnGrados=decimalesAGradosMinutosSegundos(long);
+            let distPorGradoLongitud=Math.cos(lat)*LONGITUD_METROS_ECUADOR;
+            let distEnGradosLongitud=dist/distPorGradoLongitud;
+            let distLongEnGrados=decimalesAGradosMinutosSegundos(distEnGradosLongitud);
+            longEnGrados.grados=longEnGrados.grados+distLongEnGrados.grados;
+            longEnGrados.minutos=longEnGrados.minutos+distLongEnGrados.minutos;
+            longEnGrados.segundos=longEnGrados.segundos+distLongEnGrados.segundos;
+            let nuevaLongitud=gradosMinutosSegundosADecimales(longEnGrados.grados,longEnGrados.minutos,longEnGrados.segundos);
+            return nuevaLongitud;
+        }
+        function decimalesAGradosMinutosSegundos(decimales){
+            let gradosSexagesimal={
+                grados:0,
+                minutos:0,
+                segundos:0,
+            }
+            gradosSexagesimal.grados=Math.trunc(decimales);
+            decimales=decimales-gradosSexagesimal.grados;
+            decimales=decimales*60;
+            gradosSexagesimal.minutos=Math.trunc(decimales);
+            decimales=decimales-gradosSexagesimal.minutos;
+            decimales=decimales*60;
+            gradosSexagesimal.segundos=decimales;
+            return gradosSexagesimal;
+        }
+        function gradosMinutosSegundosADecimales(grados,minutos,segundos){
+            return (grados+(1/60)*minutos+(1/3600)*segundos);
+        }
+        function distanciaEntreDosCoordenadas(lat1,long1,lat2,long2){//devuelve en metros
+            //mientras más grande la distancia tendrá menos precisión, a más pequeña más precisión
+            //en caso de todo el perú son 30m +- de falta de precisión
+            console.log(lat1,long1,lat2,long2);
+            let lat1Rad=lat1*(Math.PI/180);
+            let lat2Rad=lat2*(Math.PI/180);
+            let difLatRad=(lat2-lat1)*(Math.PI/180);
+            let difLongRad=(long2-long1)*(Math.PI/180);
+            let a=Math.sin(difLatRad/2)*Math.sin(difLatRad/2) +
+                Math.cos(lat1Rad)*Math.cos(lat2Rad)*Math.sin(difLongRad/2)*Math.sin(difLongRad/2);
+            let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+            let d=RADIO_DE_LA_TIERRA_PROMEDIO_PERU*c*1000;
+            console.log(d);
+            return d;
         }
     </script>
 

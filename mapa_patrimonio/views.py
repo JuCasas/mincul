@@ -6,17 +6,106 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.http import HttpResponse
 
+from random import seed
+from random import randint
+from random import sample
 
 # Create your views here.
 from patrimonios.models import Patrimonio
+from patrimonios.models import Institucion
 
 
 def datos(request):
     print(request)
     print(request.POST)
-    print(request.POST["latitudIni"])
-    context = list(Patrimonio.objects.values())
-    return JsonResponse({'data':context}, status=200, safe=False)
+    patri=Patrimonio.objects.filter(estado=1).filter(tipoPatrimonio=2)
+    print(patri)
+    if request.POST["latIniMenor"]=="true":
+        patri=patri.filter(lat__gte=request.POST["latitudIni"]).filter(lat__lte=request.POST["latitudFin"])
+        print("ntro")
+        print(patri)
+    else:
+        patri = patri.filter(lat__gte=request.POST["latitudFin"]).filter(lat__lte=request.POST["latitudIni"])
+        print("entro")
+        print(patri)
+    if request.POST["longIniMenor"]=="true":
+        patri = patri.filter(long__gte=request.POST["longitudIni"]).filter(long__lte=request.POST["longitudFin"])
+        print("entro2")
+        print(patri)
+    else:
+        patri = patri.filter(long__gte=request.POST["longitudFin"]).filter(long__lte=request.POST["longitudIni"])
+        print("entro3")
+        print(patri)
+    print(patri)
+    instit=Institucion.objects.filter(estado=1)
+    if request.POST["latIniMenor"]:
+        instit =instit.filter(lat__gte=request.POST["latitudIni"]).filter(lat__lte=request.POST["latitudFin"])
+    else:
+        instit = instit.filter(lat__gte=request.POST["latitudFin"]).filter(lat__lte=request.POST["latitudIni"])
+    if request.POST["longIniMenor"]:
+        instit = instit.filter(long__gte=request.POST["longitudIni"]).filter(long__lte=request.POST["longitudFin"])
+    else:
+        instit = instit.filter(long__gte=request.POST["longitudFin"]).filter(long__lte=request.POST["longitudIni"])
+    print(instit)
+    numPatri = patri.count()
+    numInstit = instit.count()
+    numPatriInstit = 0
+    patriInstit = []
+    if (numPatri+numInstit) <= 10:
+        numPatriInstit = numPatri + numInstit
+        for i in range(numPatri):
+            patriInstit.append({
+                "id": patri[i].id,
+                "lat": patri[i].lat,
+                "long": patri[i].long,
+                "nombre": patri[i].nombreTituloDemoninacion,
+                "url": patri[i].url,
+                "tipo": 2,
+            })
+        for j in range(numInstit):
+            patriInstit.append({
+                "id": instit[i].id,
+                "lat": instit[i].lat,
+                "long": instit[i].long,
+                "nombre": instit[i].nombre,
+                "url": instit[i].url,
+                "tipo": 4,
+            })
+    else:#escoger al azar
+        numPatriInstit = 10
+        numAzarPatri = randint(0, 9)
+        numAzarInstit = 10 - numAzarPatri
+        if numPatri < numAzarPatri:
+            numAzarPatri = numPatri
+            numAzarInstit = 10 - numAzarPatri
+        elif numInstit < numAzarInstit:
+            numAzarInstit = numInstit
+            numAzarPatri = 10 - numAzarInstit
+        patrimoniosAzar = sample(list(patri.values()), numAzarPatri)
+        institucionesAzar = sample(list(instit.values()), numAzarInstit)
+        print(patrimoniosAzar)
+        for patriAzar in patrimoniosAzar:
+            patriInstit.append({
+                "id": patriAzar['id'],
+                "lat": patriAzar['lat'],
+                "long": patriAzar['long'],
+                "nombre": patriAzar['nombreTituloDemoninacion'],
+                "url": patriAzar['url'],
+                "tipo": 2,
+            })
+        for institAzar in institucionesAzar:
+            patriInstit.append({
+                "id": institAzar['id'],
+                "lat": institAzar['lat'],
+                "long": institAzar['long'],
+                "nombre": institAzar['nombre'],
+                "url": institAzar['url'],
+                "tipo": 4,
+            })
+
+    return JsonResponse({'data': patriInstit,
+                         'numPatrimonios':numPatriInstit},
+                        status=200, safe=False)
 
 def index(request):
     ########################################################################################################################
