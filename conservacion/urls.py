@@ -2,6 +2,7 @@ from django.urls import path
 from conservacion import views
 
 urlpatterns = [
+    path('login/',views.loginProjects, name='loginProjects'),
     path('proyectos/',views.listProjects, name='listProjects'),
     path('proyectos/add/',views.addProject, name='addProject'),
     path('proyectos/edit/<pk>/',views.editProject, name='addProject'),

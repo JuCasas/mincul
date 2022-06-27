@@ -1,0 +1,186 @@
+{% extends 'proyectoConservacion/components/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
+    <style>
+        #cover-spin {
+            position: fixed;
+            width: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            display: none;
+        }
+
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #cover-spin::after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 48%;
+            top: 40%;
+            width: 40px;
+            height: 40px;
+            border-style: solid;
+            border-color: black;
+            border-top-color: transparent;
+            border-width: 4px;
+            border-radius: 50%;
+            -webkit-animation: spin .8s linear infinite;
+            animation: spin .8s linear infinite;
+        }
+
+        .btn-1 {
+            text-align: center;
+            float: left;
+            border: 1px solid #2B2D42 !important;
+            background-color: #2B2D42 !important;
+            color: white !important;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-2 {
+            text-align: center;
+            float: left;
+            border: 1px solid floralwhite;
+            background-color: white;
+            color: black;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-2:hover {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+        }
+
+
+        .table.dataTable tbody th, table.dataTable tbody td {
+            padding: 8px 10px 8px 18px !important;
+        }
+
+        .modal-body {
+            background-color: #F7F8FB !important;
+        }
+
+        .form-control {
+            background-color: white !important;
+            cursor: pointer !important;
+        }
+
+        .second {
+            background-color: white !important;
+            color: #2B2D42 !important;
+            border-color: #8d8e99 !important;
+            border-radius: 12px !important;
+            height: 36px !important;
+            font-size: 12px !important;
+        }
+
+        .cbody {
+            background-color: #F9FAFD !important;
+        }
+
+        input:disabled {
+            background-color: #D2D2D2 !important;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+    <input type="hidden" value="{{ activity.id }}" id="idActivity">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row justify-content-between align-items-center">
+                <a class="nav-link py-0" href="{% url 'listTasks' pk=activity.id %}"><span
+                        class="fas fa-angle-left mr-2"
+                        data-fa-transform="shrink-3"></span>Tareas</a>
+            </div>
+
+            <div class="row justify-content-between align-items-center">
+                <div class="col-md-6">
+                    <h5 class="mb-2 mb-md-0 text-black">Crear Tarea</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="mb-2 mb-md-0 text-black">General</h5>
+        </div>
+        <div class="card-body cbody px-5 py-4">
+            <form id="formTareas" name="formTareas" method="post" action="{% url 'loginProjects'  %}">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="form-group col-lg-12 col-sm-12">
+                        <label for="username">Nombre:</label>
+                        <input class="form-control" id="username" name="username" type="text"
+                               placeholder="Nombre de la tarea">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-12 col-sm-12">
+                        <label for="password">Descripcion:</label>
+                        <textarea class="form-control" id="password" name="password" type="text"
+                                  placeholder="Descripción de la tarea"></textarea>
+                    </div>
+                </div>
+
+
+                <div class="form-group  row justify-content-end mt-2 mr-0">
+                    <a href="{% url 'listTasks' pk=activity.id %}" class="btn second mr-3 d-flex align-items-center">Cancelar</a>
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span class="glyphicon glyphicon-ok"></span> Crear Tarea
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="cover-spin"></div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+    <script>
+
+
+    </script>
+{% endblock %}

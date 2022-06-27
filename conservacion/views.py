@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 
+from django.contrib.auth import authenticate, login
 from django.db.models import Count
 from django.http import JsonResponse
 from django.core import serializers
@@ -207,6 +208,7 @@ def addRelacion(request, pk):
 
 @api_view(('GET',))
 def listProjects(request, **kwargs):
+    print(request.user)
     if request.is_ajax():
         project = query_projects_by_args(**request.GET)
         serializer = ProyectoConservacionSerializer((project['items']), many=True)
@@ -269,6 +271,23 @@ def deleteProject(request, pk):
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
+def loginProjects(request):
+    if(request.POST):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request,username=username, password=password)
+        if user is not None:
+            login(request,user)
+        return redirect('addTaskView',1)
+    actividad = Actividad.objects.get(pk=1)
+    conservadores = actividad.conservadores.all()
+
+    context = {
+        'activity': actividad,
+        'conservadores': conservadores
+    }
+    return render(request, 'proyectoConservacion/loginProjects.html', context)
 
 @api_view(('POST',))
 def deletePatrimony(request, pk):
