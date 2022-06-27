@@ -43,7 +43,7 @@
       </a>
   </div>
 
-  <ul class="d-flex navbar-nav navbar-nav-icons ml-auto flex-row align-items-center mt-2">
+  <ul class="d-flex navbar-nav navbar-nav-icons ml-auto flex-row justify-content-end mt-2">
     {% comment %}<li class="d-flex flex-row nav-item mr-3">
 
       <p class="mb-2 mr-2">Admin </p>
@@ -54,11 +54,9 @@
     </li>{% endcomment %}
     <li class="nav-item align-items-end">
       <div class="col-md pr-0">
-        <h5 class="mb-0 d-flex align-items-end" id="top_navbar_name" style="font-size: 1rem">Admin</h5>
+        <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Admin</h5>
         <p class="m-0" id="top_navbar_rol" style="color: #f5803e">{{ request.user }} </p>
         <p class="m-0">{{ user.groups.get }}</p>
-
-
       </div>
     </li>
 
@@ -121,6 +119,7 @@
           </div>
         </div>
       </li>
+        
     {% else %}
       <li class="nav-item">
         <a class="btn btn-falcon-primary mt-2" id="login" href="">Iniciar Sesión</a>
