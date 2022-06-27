@@ -539,21 +539,36 @@
                 {"data": "fechaFin"},
                 {
                     "data": "status", render: function (data, type, row) {
-                        if (data == '0') {
+                        if (data == '1') {
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
-                        } else if (data == '1') {
+                        } else if (data == '0') {
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrado" + '</span>'
+                        } else if (data == '2') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Finalizado" + '</span>'
                         } else {
-                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Anulado" + '</span>'
                         }
                         return resp;
                     }
                 },
                 {
-                    "data": null,
-                    "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-                        '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-                        '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>',
+                    "data":  "status",render: function (data, type, row) {
+                        if (data == '1') {
+                            resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' ;
+                        } else if (data == '0') {
+                            resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>';
+                        } else if (data == '2') {
+                            resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' ;
+                        } else {
+                            resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' ;
+                        }
+                        return resp;
+                    },
                     "orderable": false,
                 }
             ],
