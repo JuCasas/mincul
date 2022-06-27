@@ -31,11 +31,15 @@ def patrimonio_list_ajax(request):
     start = int(request.GET['start'])
     length = int(request.GET['length'])
     type = request.GET['tipo']
+    category = request.GET['category']
     queryset = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
     if search:
         queryset = queryset.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
     if (type!='0'):
         queryset = queryset.filter(tipoPatrimonio=type).order_by('nombreTituloDemoninacion')
+    if(category!='Categoria'):
+        cat = Categoria.objects.get(nombre__icontains=category)
+        queryset = queryset.filter(categoria_id=cat.pk).order_by('nombreTituloDemoninacion')
     count = queryset.count()
     queryset = queryset[start:start + length]
     serializer = PatrimonioSerializer(queryset, many=True)

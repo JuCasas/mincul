@@ -186,7 +186,7 @@
       '<option value="2">Acontecimientos Programados</option>',
       '<option value="0">Categoria</option>' +
       '<option value="1">Manifestaciones Culturales</option>' +
-      '<option value="2">Realizaciones Tecnicas, Cientificas y Artisticas Contemporaneas Programados</option>' +
+      '<option value="2">Realizaciones Tecnicas, Cientificas y Artisticas Contemporaneas</option>' +
       '<option value="3">Sitios Naturales</option>',
       '<option value="0">Categoria</option>' +
       '<option value="1">Industrial</option>' +
@@ -264,6 +264,7 @@
           start: start,
           search_value: $("#search").val(),
           tipo: $("#tipoPatrimonio").val(),
+          category: $("#categoria").find('option:selected').text(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
@@ -287,6 +288,7 @@
           start: start,
           search_value: $("#search").val(),
           tipo: $("#tipoPatrimonio").val(),
+          category: $("#categoria").find('option:selected').text(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
@@ -333,6 +335,11 @@
     });
 
     $("#tipoPatrimonio").change(function () {
+      init = true
+      getInitialData(0, 9)
+    });
+
+    $("#categoria").change(function () {
       init = true
       getInitialData(0, 9)
     });
