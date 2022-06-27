@@ -44,11 +44,16 @@ def patrimonio_list_ajax(request):
     if(departamento!='Departamento'):
         queryset = queryset.filter(departamento__icontains=departamento).order_by('nombreTituloDemoninacion')
     count = queryset.count()
+    inicio = start + 1
     queryset = queryset[start:start + length]
+    count2 = len(queryset)
+    fin = inicio + count2 - 1
     serializer = PatrimonioSerializer(queryset, many=True)
     result = dict()
     result['items'] = serializer.data
     result['total_count'] = count
+    result['inicio'] = inicio
+    result['fin'] = fin
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 def patrimonio_list(request):

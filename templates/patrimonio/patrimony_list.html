@@ -51,7 +51,7 @@
     <div class="card-body p-0">
       <div class="navbar">
         <div class="col-sm-auto mb-2 mb-sm-0">
-          <h6 class="mb-0">Mostrando 1-24 de {{ cantidad }} Patrimonios</h6>
+          <h6 class="mb-0" id="Cantidad"></h6>
         </div>
         <div class="row d-flex align-items-center">
 
@@ -232,10 +232,15 @@
     //Funcion renderiza patrimonios dinamicamente
 
     let container = $("#container")
+    let cantidad = $("#Cantidad")
 
     function loadContainer() {
       container.empty();
+      cantidad.empty()
       let data = result['items']
+      let inicio = result['inicio']
+      let fin = result['fin']
+      let count = result["total_count"]
       console.log(data)
       let content = ''
       for (i = 0; i < data.length; i++) {
@@ -270,6 +275,9 @@
         )
       }
       container.html(content);
+      if (count > 0) {
+        cantidad.html(`Mostrando ${inicio}-${fin} de ${count} Patrimonios`)
+      }
     }
 
     //Variables globales de estado
@@ -292,6 +300,8 @@
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
           result["items"] = data.items
+          result["inicio"] = data.inicio
+          result["fin"] = data.fin
           loadContainer()
         },
         error: function (jqXhr, textStatus, errorThrown) {
@@ -317,9 +327,12 @@
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
           result["items"] = data.items
+          result["inicio"] = data.inicio
+          result["fin"] = data.fin
           if (result["total_count"] === 0) {
             $(".paginator").hide()
             container.empty();
+            cantidad.empty();
           } else {
             let mod = result["total_count"] % 9
             let div = (result["total_count"] - mod) / 9
@@ -378,7 +391,7 @@
     $(document).ready(function () {
       init = true
       $("#search").val('');
-      getInitialData(0, 9)
+      getInitialData(0, 9);
     });
 
 
