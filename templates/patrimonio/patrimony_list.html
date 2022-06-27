@@ -75,11 +75,33 @@
             </select>
           </div>
           <div class="form-group col-sm-auto my-1">
-            <select class="form-control" id="exampleFormControlSelect1">
+            <select class="form-control" id="departamento">
               <option selected>Departamento</option>
-              <option>Lima</option>
-              <option>Ica</option>
+              <option>Amazonas</option>
+              <option>Ancash</option>
+              <option>Apurimac</option>
+              <option>Arequipa</option>
+              <option>Ayacucho</option>
+              <option>Cajamarca</option>
+              <option>Callao</option>
               <option>Cusco</option>
+              <option>Huancavelica</option>
+              <option>Huanuco</option>
+              <option>Ica</option>
+              <option>Junín</option>
+              <option>La Libertad</option>
+              <option>Lambayeque</option>
+              <option>Lima</option>
+              <option>Loreto</option>
+              <option>Madre de Dios</option>
+              <option>Moquegua</option>
+              <option>Pasco</option>
+              <option>Piura</option>
+              <option>Puno</option>
+              <option>San Martin</option>
+              <option>Tacna</option>
+              <option>Tumbes</option>
+              <option>Ucayali</option>
             </select>
           </div>
           <div class="form-group col-sm-auto my-1">
@@ -265,6 +287,7 @@
           search_value: $("#search").val(),
           tipo: $("#tipoPatrimonio").val(),
           category: $("#categoria").find('option:selected').text(),
+          departamento: $("#departamento").find('option:selected').text(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
@@ -289,6 +312,7 @@
           search_value: $("#search").val(),
           tipo: $("#tipoPatrimonio").val(),
           category: $("#categoria").find('option:selected').text(),
+          departamento: $("#departamento").find('option:selected').text(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
@@ -329,6 +353,7 @@
       }
     });
 
+    //Vinculacion de filtros a paginacion
     $("#search").keyup(function () {
       init = true
       getInitialData(0, 9)
@@ -340,6 +365,11 @@
     });
 
     $("#categoria").change(function () {
+      init = true
+      getInitialData(0, 9)
+    });
+
+    $("#departamento").change(function () {
       init = true
       getInitialData(0, 9)
     });
