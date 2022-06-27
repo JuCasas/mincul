@@ -23,6 +23,68 @@
             color: #2B2D42 !important;
             background-color: #EDF2F9;
         }
+
+      span.select2-selection.select2-selection--single {
+          display: flex !important;
+          align-items: center !important;
+      }
+
+      span.select2-selection__arrow {
+          margin-top: 5px !important;
+          display: none !important;
+      }
+
+      span.select2-selection__arrow > i.fa.fa-chevron-right:before {
+          content: "\f0fe" !important;
+      }
+
+      span.select2-selection__arrow {
+          margin-top: 5px !important;
+      }
+
+      .select2-selection {
+          height: 36px !important;
+          border-radius: 10px !important;
+          border-color: #D7E1EE !important;
+          align-items: center !important;
+      }
+
+      .select2-selection__placeholder {
+          align-items: center !important;
+          font-size: 12px !important;
+          color: #BDC1D2 !important;
+      }
+
+      .select2-selection__rendered {
+        align-items: center !important;
+          font-size: 12px !important;
+      }
+
+      .inputIcon2 {
+          color: #393e44 !important;
+          font-size: 10px !important;
+          position: absolute !important;
+          bottom: 12px !important;
+          right: 16px !important;
+      }
+
+      input:disabled {
+          background-color: #D2D2D2 !important;
+      }
+
+      .second {
+          background-color: white !important;
+          color: #2B2D42 !important;
+          border-color: #8d8e99 !important;
+          border-radius: 12px !important;
+          height: 36px !important;
+          font-size: 12px !important;
+      }
+
+      .form-control {
+          background-color: white !important;
+          cursor: pointer !important;
+      }
     </style>
 {% endblock %}
 
@@ -53,7 +115,7 @@
                             <h5>General</h5>
                         </div>
                         <div class="card-body bg-light">
-                            <div class="form-group">
+                            <div class="form-group position-relative">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
                                 <select class="form-control selectpicker" id="tipoTraslado" name="tipoTraslado" required
                                         {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %} onchange="validarPais()">
@@ -67,14 +129,16 @@
                                         Diplomática
                                     </option>
                                 </select>
+                            <span class="fas fa-chevron-down inputIcon2"></span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group position-relative">
                                 <label for="pais">País destino:</label>
                                 <select class="form-control selectpicker" id="pais" name="pais"
-                                        data-placeholder='Seleccione pais...' required
+                                        data-placeholder='Seleccione país...' required
                                         {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                                     {% include 'traslado/paises.html' %}
                                 </select>
+                                <span class="fas fa-chevron-down inputIcon2"></span>
                             </div>
                             <div class="form-group">
                                 <label for="ubigeo">Dirección de destino:</label>
@@ -91,7 +155,7 @@
                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group position-relative">
                                 <label for="comisario">Comisario:</label>
                                 <select class="form-control selectpicker" id="comisario" name="comisario"
                                         data-placeholder='Seleccione comisario...'
@@ -100,6 +164,7 @@
                                         <option value="{{ c.pk }}">{{ c.first_name }} {{ c.last_name }}</option>
                                     {% endfor %}
                                 </select>
+                                <span class="fas fa-chevron-down inputIcon2"></span>
                             </div>
 
                             {% if traslado.estado == '2' or traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
@@ -125,7 +190,7 @@
                                     <h5>Entidad solicitante</h5>
                                 </div>
                                 <div class="card-body bg-light">
-                                    <div class="form-group">
+                                    <div class="form-group position-relative">
                                         <label for="nombreInstitucion">Entidad Solicitante</label>
                                         <select class="form-control selectpicker" id="nombreInstitucion"
                                                 name="nombreInstitucion"
@@ -135,6 +200,7 @@
                                                 <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
                                             {% endfor %}
                                         </select>
+                                        <span class="fas fa-chevron-down inputIcon2"></span>
                                     </div>
 
                                     <div class="form-group ">
@@ -199,11 +265,14 @@
                                     <h5>Patrimonios a ser trasladados</h5>
                                 </div>
                                 {% if  estado  == '1' or estado == '0' or operacion == 'agregar' %}
-                                    <div class="form-group col-auto d-flex align-items-end">
-                                        <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
+                                    <div class="form-group col-auto d-flex justify-content-between mx-2">
+                                        <div class="position-relative w-100">
+                                            <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
                                                 data-placeholder='Seleccione patrimonio...'
                                                 {% if traslado.estado != '1' and idEditar != 0 %} hidden {% endif %} >
                                         </select>
+                                        <span class="fas fa-chevron-down inputIcon2"></span>
+                                        </div>
 
                                         <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
                                                 type="button"
@@ -405,8 +474,8 @@
                 </div>
                 <div class="col-4">
                     <div class="d-flex flex-row justify-content-end mt-5">
-                        <div class="flex-column">
-                            <a class="btn btn-primary mr-3 mb-1" type="button"
+                        <div class="flex-column align-items-center">
+                            <a class="btn second mr-3 d-flex align-items-center" type="button"
                                href="{% url 'list_transfers' %}">Volver</a>
                         </div>
                         {% if traslado.estado != '6' %}
