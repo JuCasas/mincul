@@ -86,13 +86,14 @@ class Tarea(models.Model):
     ESTADOS = (
         ('1', 'Registrada'),
         ('2', 'En proceso'),
-        ('3', 'En evaluacion'),
-        ('4', 'Rechazada'),
+        ('3', 'En evaluación'),
+        ('4', 'Observada'),
         ('5', 'Finalizada'),
     )
     codigo = models.CharField(max_length=8, null=True)
     nombre = models.CharField(max_length=50, null=True)
     descripcion = models.CharField(max_length=200)
+    detalleObservacion = models.CharField(max_length=200, null=True)
     responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     gasto = models.FloatField(blank=True, null=True)
     presupuesto = models.FloatField(blank=True, null=True)
@@ -100,6 +101,7 @@ class Tarea(models.Model):
     fechaRegistro = models.DateField(blank=True, null=True, verbose_name='fechaRegistro')
     actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
+
 
 class Campo(models.Model):
     ESTADOS = (

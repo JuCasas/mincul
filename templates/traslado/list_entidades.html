@@ -101,6 +101,19 @@
             font-size: 14px !important;
         }
 
+        .modal-body {
+          background-color: #F7F8FB !important;
+      }
+
+        .second {
+          background-color: white !important;
+          color: #2B2D42 !important;
+          border-color: #8d8e99 !important;
+          border-radius: 12px !important;
+          height: 36px !important;
+          font-size: 12px !important;
+      }
+
     </style>
 {% endblock %}
 
@@ -130,11 +143,6 @@
     <div class="card mb-3">
         <div class="card-body">
             <div class="row filterBar justify-content-end mr-0">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAgregar">
-                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Entidad
-                </button>
-
-
                 <div class="form-group col-sm-3 mb-0">
                     <div class="position-relative">
                         <input class="form-control" id="search" name="search" type="text"
@@ -142,6 +150,9 @@
                         <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
                     </div>
                 </div>
+                <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center" data-toggle="modal" data-target="#ModalAgregar">
+                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Entidad
+                </button>
             </div>
         </div>
     </div>
@@ -232,9 +243,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Nueva Entidad Solicitante</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+{#                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                        <span aria-hidden="true">&times;</span>#}
+{#                    </button>#}
                 </div>
                 <div class="modal-body">
                     <form name="formAddEntidades" id="formAddEntidades" action="/traslado/registrarSolicitantes/"
@@ -274,6 +285,7 @@
                             </div>
                         </div>
                         <div class="row justify-content-end mr-0">
+                            <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Agregar Entidad</button>
                         </div>
                     </form>

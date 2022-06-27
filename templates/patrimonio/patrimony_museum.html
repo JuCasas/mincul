@@ -260,7 +260,7 @@
                                     <div class="pt-1 mr-3">
                                         <label for="value">Puntuación:</label>
                                     </div>
-                                    <div class="raty"></div>
+                                    <div class="raty" id="raty" onclick="lessThan2Stars()"></div>
                                 </div>
                                 <p id="errorv" class="text-danger font-weight-medium" style="font-size: 0.83333rem;letter-spacing: 0.02em;filter: none;"></p>
                             </div>
@@ -330,6 +330,74 @@
             </div>
         </div>
 
+        <!-- Incident Modal -->
+        <div class="modal fade px-1" id="incidentModal" role="dialog" oncancel="closeModal()">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                  <h4 class="card-title text-black mb-0">Registar Incidente</h4>
+                </div>
+                <div class="modal-body">
+                  <form id="incidente_form" method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label for="tipo">Seleccione el tipo de afectación:</label>
+                    <select class="form-control" id="tipoAfectacion" name="tipo"
+                            data-placeholder='Tipo de afectación'>
+                      {% for a in afectaciones %}
+                        <option data="{{ a }}" value={{ a }}>{{ a }}</option>
+                      {% endfor %}
+                    </select>
+
+                    <label for="fecha">¿Cuándo sucedió el hecho?</label>
+                    <input type="date" name="fecha" class="form-control">
+
+                    <label for="descripcion">Descripción:</label>
+                    <textarea name="descripcion" class="form-control" style="height: 8em" placeholder="Descripción..."></textarea>
+
+                    <label for="descripcion">Evidencia: peso máximo 50 mb</label>
+
+                    <input type="file" id="actual-btn" hidden multiple/>
+
+                    <label for="actual-btn" class="btn btn-primary mr-1 mb-1 form-control d-flex align-items-center justify-content-center" type="button">Adjuntar Archivos</label>
+                    <span id="file-chosen-0" class="form-control d-flex align-items-center justify-content-center">No se eligió ningún archivo</span>
+                    <span id="file-chosen-1" class="form-control" hidden></span>
+                    <span id="file-chosen-2" class="form-control" hidden></span>
+                    <script>
+                        const actualBtn = document.getElementById('actual-btn');
+                        actualBtn.addEventListener('change', function(){
+                            console.log(actualBtn.files)
+                            console.log(actualBtn.files.length)
+                            for(var i=1; i<3; i++){
+                                const fileChosen  = document.getElementById('file-chosen-' + i);
+                                fileChosen.hidden = true;
+                            }
+                            for(var i=0; i<actualBtn.files.length; i++){
+                                const fileChosen  = document.getElementById('file-chosen-' + i);
+                                fileChosen.textContent = this.files[i].name;
+                                fileChosen.hidden = false;
+                            }
+                        })
+                    </script>
+
+                    <label for="nombre">¿Cómo te llamas?</label>
+                    <input name="nombre" class="form-control" placeholder="Nombre y Apellido...">
+
+                    <label for="email">¿Cual es tu correo electrónico?</label>
+                    <input name="email" class="form-control" placeholder="Correo electrónico...">
+
+                    <label for="telefono">¿Cual es tu teléfono?</label>
+                    <input name="telefono" class="form-control" placeholder="Teléfono...">
+                </form>
+                <div class="row justify-content-between m-0 mt-3">
+                    <button type="button" data-dismiss="modal" class="btn second col-5">Cancelar</button>
+                    <button class="btn btn-primary col-5" type="submit" form="incidente_form" name="accion" value="incidente">Registar Incidente</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+        </div>
     </div>
 
 
@@ -426,5 +494,23 @@
                 buttons: []
             });
         });
+
+        function lessThan2Stars(){
+            if($('#raty').raty('score') <= 2){
+                console.log("got in");
+                $("#incidentModal").modal();
+                $("#ratySubmit").attr("disabled", true);
+            }
+            else{
+                $("#ratySubmit").removeAttr("disabled");
+            }
+        }
+
+        $('#incidentModal').on('hidden.bs.modal', function (e) {
+            if($('#raty').raty('score') <= 2){
+                $('#raty').raty('reload');
+                $("#ratySubmit").removeAttr("disabled");
+            }
+        })
     </script>
 {% endblock %}

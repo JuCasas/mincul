@@ -1,9 +1,11 @@
 import json
 from datetime import datetime
 
+import googlemaps as gm
+import wget
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.lookups import In
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse
@@ -17,6 +19,7 @@ from authentication.models import User
 from conservacion.serializers import PatrimonioSerializer
 from mincul.settings import ALLOWED_HOSTS
 # Create your views here.
+from mincul_app.models import Documento
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
     ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio, EpocaVisita, \
     FuenteBibliografica, PatrimonioPaleontologico, PatrimonioMaterialMueble, PatrimonioIndustrial, Fabricante, \
@@ -32,6 +35,7 @@ def patrimonio_list_ajax(request):
     length = int(request.GET['length'])
     type = request.GET['tipo']
     category = request.GET['category']
+    departamento = request.GET['departamento']
     queryset = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
     if search:
         queryset = queryset.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
@@ -40,17 +44,35 @@ def patrimonio_list_ajax(request):
     if(category!='Categoria'):
         cat = Categoria.objects.get(nombre__icontains=category)
         queryset = queryset.filter(categoria_id=cat.pk).order_by('nombreTituloDemoninacion')
+    if(departamento!='Departamento'):
+        queryset = queryset.filter(departamento__icontains=departamento).order_by('nombreTituloDemoninacion')
     count = queryset.count()
+    inicio = start + 1
     queryset = queryset[start:start + length]
+    count2 = len(queryset)
+    fin = inicio + count2 - 1
     serializer = PatrimonioSerializer(queryset, many=True)
     result = dict()
     result['items'] = serializer.data
     result['total_count'] = count
+    result['inicio'] = inicio
+    result['fin'] = fin
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+@api_view(('POST',))
+def patrimonio_delete(request):
+    pk = request.POST.get('pk')
+    print('delete', pk)
+    pat = Patrimonio.objects.get(pk=pk)
+    pat.estado = 2
+    pat.save()
+
+    return JsonResponse({'status': 'succes'}, status=200)
 
 def patrimonio_list(request):
 
     if request.POST:
+        gmaps = gm.Client(key='AIzaSyDxdNwYXHCCpfoiNtGorfbdwGjtDsXk6MI')
         file = request.FILES['file']
         data = json.load(file)
         # beautify = json.dumps(data, indent=4)
@@ -59,9 +81,9 @@ def patrimonio_list(request):
             cat = Categoria.objects.get(nombre__icontains=pat['categoria'])
             npat = []
             if int(cat.tipo) == 1 or int(cat.tipo) == 2:
-                npat = Patrimonio.objects.filter(codigo=pat['codigo'])
+                npat = Patrimonio.objects.filter(codigo=pat['codigo'],estado=1)
             else:
-                npat = Patrimonio.objects.filter(codigo=pat['nroRegistro'])
+                npat = Patrimonio.objects.filter(codigo=pat['nroRegistro'],estado=1)
 
             if len(npat) == 0:
                 patrimonio = Patrimonio()
@@ -138,6 +160,16 @@ def patrimonio_list(request):
                             entrada.patrimonio = patrimonio
                             entrada.save()
                     inmaterial.save()
+
+                    i = 0
+                    for img in pat['galeria']:
+                        wget.download(img, 'media/' + pat['codigo'] + str(i) + '.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['codigo'] + str(i) + '.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                        i += 1
+                    patrimonio.save()
 
                 elif int(cat.tipo) == 2:
                     patrimonio.nombreTituloDemoninacion = pat['nombre']
@@ -221,6 +253,16 @@ def patrimonio_list(request):
                         epoca.patrimonioMaterialInMueble = inmueble
                         epoca.save()
 
+                    i = 0
+                    for img in pat['galeria']:
+                        wget.download(img, 'media/' + pat['codigo'] + str(i) + '.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['codigo'] + str(i) + '.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                        i += 1
+                    patrimonio.save()
+
                 elif int(cat.tipo) == 3:
 
                     patrimonio.codigo = pat['nroRegistro']
@@ -229,22 +271,27 @@ def patrimonio_list(request):
                     patrimonio.provincia = pat['datosUbicacion']['ubicacionGeografica']['provincia']
                     patrimonio.distrito = pat['datosUbicacion']['ubicacionGeografica']['distrito']
 
-                    # if pat['latitud'] != '':
-                    #     patrimonio.lat = pat['latitud']
-                    # if pat['longitud'] != '':
-                    #     patrimonio.long = pat['longitud']
+                    resGM = gmaps.geocode(pat['datosUbicacion']['ubicacionGeografica']['direccion'])
+
+                    patrimonio.lat = resGM[0]['geometry']['location']['lat']
+                    patrimonio.long = resGM[0]['geometry']['location']['lng']
 
                     patrimonio.descripcion = pat['datosTecnicos']['descripcion']
                     patrimonio.observacion = pat['datosTecnicos']['observaciones']
 
-                    inst = Institucion.objects.filter(nombre=pat['datosPropiedad']['custodio'])
-                    if len(inst) > 0:
-                        inst = Institucion.objects.get(nombre=pat['datosPropiedad']['custodio'])
-                    else:
-                        inst = Institucion()
-                        inst.nombre = pat['datosPropiedad']['custodio']
-                        inst.save()
-                    patrimonio.institucion = inst
+                    if pat['datosPropiedad']['custodio'] != '':
+                        inst = Institucion.objects.filter(nombre=pat['datosPropiedad']['custodio'])
+                        if len(inst) > 0:
+                            inst = Institucion.objects.get(nombre=pat['datosPropiedad']['custodio'])
+                        else:
+                            inst = Institucion()
+                            inst.nombre = pat['datosPropiedad']['custodio']
+                            resGM = gmaps.geocode(pat['datosPropiedad']['custodio'])
+
+                            inst.lat = resGM[0]['geometry']['location']['lat']
+                            inst.long = resGM[0]['geometry']['location']['lng']
+                            inst.save()
+                        patrimonio.institucion = inst
                     patrimonio.save()
 
                     prop = Propietario.objects.filter(nombre=pat['datosPropiedad']['propietario']['nombrePropietario'])
@@ -629,10 +676,55 @@ def patrimonio_list(request):
                             indus.fabricantes.add(fab)
                         indus.save()
 
+                    if pat['imagenes']['vistaAnterior'] != '':
+                        wget.download(pat['imagenes']['vistaAnterior'], 'media/' + pat['nroRegistro'] + '_va.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_va.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaPosterior'] != '':
+                        wget.download(pat['imagenes']['vistaPosterior'], 'media/' + pat['nroRegistro'] + '_vp.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vp.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaLateralDerecha'] != '':
+                        wget.download(pat['imagenes']['vistaLateralDerecha'], 'media/' + pat['nroRegistro'] + '_vld.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vld.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaLateralIzquierda'] != '':
+                        wget.download(pat['imagenes']['vistaLateralIzquierda'], 'media/' + pat['nroRegistro'] + '_vli.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vli.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaSuperior'] != '':
+                        wget.download(pat['imagenes']['vistaSuperior'], 'media/' + pat['nroRegistro'] + '_vs.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vs.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaInferior'] != '':
+                        wget.download(pat['imagenes']['vistaInferior'], 'media/' + pat['nroRegistro'] + '_vi.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vi.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    if pat['imagenes']['vistaDetalle'] != '':
+                        wget.download(pat['imagenes']['vistaDetalle'], 'media/' + pat['nroRegistro'] + '_vd.jpg')
+                        doc = Documento()
+                        doc.url = 'media/' + pat['nroRegistro'] + '_vd.jpg'
+                        doc.save()
+                        patrimonio.documentos.add(doc)
+                    patrimonio.save()
+
     patrimonios = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
 
     context = {
         'patrimonios': patrimonios,
+
         'cantidad': len(patrimonios),
     }
 
@@ -699,7 +791,7 @@ def detalle(request, pk):
     valor = Patrimonio.objects.get(pk=pk)
     zona = PuntoGeografico.objects.get(patrimonio_id=pk)
     valoraciones = PatrimonioValoracion.objects.filter(zona=zona).filter(estado=2)
-    puntuacion=0
+    puntuacion = 0
     for v in valoraciones:
         puntuacion = v.valoracion + puntuacion
     if len(valoraciones):
@@ -726,7 +818,7 @@ def detalle(request, pk):
         incidente.save()
         return HttpResponseRedirect(reverse(detalle, args=[pk]))
 
-    if request.POST.get("accion") == "valoracion":
+    if request.POST.get("accion_valoracion") == "valoracion":
         print(request.POST)
         valoracion = PatrimonioValoracion.objects.create()
         valoracion.patrimonio_id = pk;

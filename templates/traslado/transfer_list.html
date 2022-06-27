@@ -125,9 +125,6 @@
     <div class="card mb-3">
         <div class="card-body">
             <div class="row filterBar justify-content-end mr-0">
-                <a class="btn btn-primary col-sm-2 mb-0" href="{% url 'addTransfer' %}" type="button">
-                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Traslado
-                </a>
                 <div class="form-group col-sm-3 mb-0">
                     <div class="position-relative">
                         <input class="form-control" id="search" type="text" placeholder="Entidad Solicitante">
@@ -146,6 +143,10 @@
                         <option value="6">Finalizada</option>
                     </select>
                 </div>
+
+                <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" href="{% url 'addTransfer' %}" type="button">
+                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Traslado
+                </a>
 
             </div>
         </div>

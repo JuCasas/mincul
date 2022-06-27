@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 
+from django.contrib.auth import authenticate, login
 from django.db.models import Count
 from django.http import JsonResponse
 from django.core import serializers
@@ -207,6 +208,7 @@ def addRelacion(request, pk):
 
 @api_view(('GET',))
 def listProjects(request, **kwargs):
+    print(request.user)
     if request.is_ajax():
         project = query_projects_by_args(**request.GET)
         serializer = ProyectoConservacionSerializer((project['items']), many=True)
@@ -269,6 +271,23 @@ def deleteProject(request, pk):
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
+def loginProjects(request):
+    if(request.POST):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request,username=username, password=password)
+        if user is not None:
+            login(request,user)
+        return redirect('addTaskView',1)
+    actividad = Actividad.objects.get(pk=1)
+    conservadores = actividad.conservadores.all()
+
+    context = {
+        'activity': actividad,
+        'conservadores': conservadores
+    }
+    return render(request, 'proyectoConservacion/loginProjects.html', context)
 
 @api_view(('POST',))
 def deletePatrimony(request, pk):
@@ -546,10 +565,14 @@ def editTaskView(request, pk):
     media_path = MEDIA_URL
     tarea = Tarea.objects.get(pk=pk)
     secciones = Campo.objects.filter(tarea_id=tarea.pk)
+
+    estadosEditables = [('4', 'Observar'), ('5', 'Aprobar')]
+
     context = {
         'media_path': media_path,
         'task': tarea,
         'secciones': secciones,
+        'estadosEditables': estadosEditables,
         'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
     }
     return render(request, 'proyectoConservacion/editTask_view.html', context)
@@ -573,9 +596,27 @@ def updateTaskState(request):
         nuevo_estado = '2'
     elif (task.estado == '2'):
         nuevo_estado = '3'
+    elif (task.estado == '4'):
+        nuevo_estado = '3'
 
     task.estado = nuevo_estado
     task.save()
+    return JsonResponse({}, status=200)
+
+
+def updateTaskState2(request):
+    task_pk = request.POST.get('task_pk')
+    task = Tarea.objects.get(pk=task_pk)
+    nuevo_estado = request.POST.get('nuevo_estado')
+    task.estado = nuevo_estado
+
+    detalle_observacion = request.POST.get('detalle_observacion')
+
+    if (nuevo_estado == '4'):
+        task.detalleObservacion = detalle_observacion
+
+    task.save()
+
     return JsonResponse({}, status=200)
 
 
@@ -617,7 +658,7 @@ def deleteSection(request):
     seccion = Campo.objects.get(pk=seccion_pk)
     documentos = seccion.documentos.all()
 
-    for doc in documentos: #eliminación de documentos
+    for doc in documentos:  # eliminación de documentos
         doc.estado = '0'  # eliminación lógica
         os.remove(doc.url.path)
         doc.url = ""
@@ -626,3 +667,12 @@ def deleteSection(request):
     seccion.delete()
 
     return JsonResponse({}, status=200)
+
+
+def validateSections(request):
+    tarea_pk = request.POST['task_pk']
+    secciones = Campo.objects.filter(tarea_id=tarea_pk)
+    tiene_secciones = False
+    if (len(secciones) > 0):
+        tiene_secciones = True
+    return JsonResponse({"tiene_secciones": tiene_secciones}, status=200)

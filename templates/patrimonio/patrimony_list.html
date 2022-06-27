@@ -51,7 +51,7 @@
     <div class="card-body p-0">
       <div class="navbar">
         <div class="col-sm-auto mb-2 mb-sm-0">
-          <h6 class="mb-0">Mostrando 1-24 de {{ cantidad }} Patrimonios</h6>
+          <h6 class="mb-0" id="Cantidad"></h6>
         </div>
         <div class="row d-flex align-items-center">
 
@@ -75,11 +75,33 @@
             </select>
           </div>
           <div class="form-group col-sm-auto my-1">
-            <select class="form-control" id="exampleFormControlSelect1">
+            <select class="form-control" id="departamento">
               <option selected>Departamento</option>
-              <option>Lima</option>
-              <option>Ica</option>
+              <option>Amazonas</option>
+              <option>Ancash</option>
+              <option>Apurimac</option>
+              <option>Arequipa</option>
+              <option>Ayacucho</option>
+              <option>Cajamarca</option>
+              <option>Callao</option>
               <option>Cusco</option>
+              <option>Huancavelica</option>
+              <option>Huanuco</option>
+              <option>Ica</option>
+              <option>Junín</option>
+              <option>La Libertad</option>
+              <option>Lambayeque</option>
+              <option>Lima</option>
+              <option>Loreto</option>
+              <option>Madre de Dios</option>
+              <option>Moquegua</option>
+              <option>Pasco</option>
+              <option>Piura</option>
+              <option>Puno</option>
+              <option>San Martin</option>
+              <option>Tacna</option>
+              <option>Tumbes</option>
+              <option>Ucayali</option>
             </select>
           </div>
           <div class="form-group col-sm-auto my-1">
@@ -210,10 +232,35 @@
     //Funcion renderiza patrimonios dinamicamente
 
     let container = $("#container")
+    let cantidad = $("#Cantidad")
+
+    //Funcion eliminar patrimonio
+    function eliminarPat(pk) {
+        $.ajax({
+            url: '{% url 'patrimonio_delete' %}',
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                pk: pk,
+            },
+            success: function (response) {
+                console.log('Patrimonio Eliminado')
+                location.reload()
+            },
+            error: function (response) {
+                alert(response["responseJSON"]["error"]);
+            }
+        });
+        return 1;
+    }
 
     function loadContainer() {
       container.empty();
+      cantidad.empty()
       let data = result['items']
+      let inicio = result['inicio']
+      let fin = result['fin']
+      let count = result["total_count"]
       console.log(data)
       let content = ''
       for (i = 0; i < data.length; i++) {
@@ -236,7 +283,7 @@
             + '<div class="row">'
             + '<div class="col-sm-5"></div>'
             + '<div class="col-sm-7">'
-            + '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>'
+            + '<a href="/patrimonios/detalle/' + data[i].id + '"><button type="button" class="btn btn-show" onclick=""><i class="fas fa-eye"></i></button></a>'
             + '<button type="button" class="btn btn-delete" onclick="eliminarPat(' + data[i].id + ')"><i class="fas fa-trash-alt"></i></button>'
             + '</div>'
             + '</div>'
@@ -248,6 +295,9 @@
         )
       }
       container.html(content);
+      if (count > 0) {
+        cantidad.html(`Mostrando ${inicio}-${fin} de ${count} Patrimonios`)
+      }
     }
 
     //Variables globales de estado
@@ -265,10 +315,13 @@
           search_value: $("#search").val(),
           tipo: $("#tipoPatrimonio").val(),
           category: $("#categoria").find('option:selected').text(),
+          departamento: $("#departamento").find('option:selected').text(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
           result["items"] = data.items
+          result["inicio"] = data.inicio
+          result["fin"] = data.fin
           loadContainer()
         },
         error: function (jqXhr, textStatus, errorThrown) {
@@ -289,13 +342,17 @@
           search_value: $("#search").val(),
           tipo: $("#tipoPatrimonio").val(),
           category: $("#categoria").find('option:selected').text(),
+          departamento: $("#departamento").find('option:selected').text(),
         },
         success: function (data, textStatus, jQxhr) {
           result["total_count"] = data.total_count
           result["items"] = data.items
+          result["inicio"] = data.inicio
+          result["fin"] = data.fin
           if (result["total_count"] === 0) {
             $(".paginator").hide()
             container.empty();
+            cantidad.empty();
           } else {
             let mod = result["total_count"] % 9
             let div = (result["total_count"] - mod) / 9
@@ -329,6 +386,7 @@
       }
     });
 
+    //Vinculacion de filtros a paginacion
     $("#search").keyup(function () {
       init = true
       getInitialData(0, 9)
@@ -344,11 +402,16 @@
       getInitialData(0, 9)
     });
 
+    $("#departamento").change(function () {
+      init = true
+      getInitialData(0, 9)
+    });
+
     //Inicializacion de Listado de cards
     $(document).ready(function () {
       init = true
       $("#search").val('');
-      getInitialData(0, 9)
+      getInitialData(0, 9);
     });
 
 
