@@ -293,10 +293,12 @@
                         <div class="row justify-content-between">
                             <div class="form-group col-9">
                                 <label for="conservadores">Conservador(es):</label>
-                                <select class="form-control selectpicker" id="conservadores" name="conservadores"
+                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                                  <select class="form-control selectpicker" id="conservadores" name="conservadores"
                                         data-placeholder='Seleccione conservador...' {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
 
                                 </select>
+                                {% endif %}
                             </div>
 
                             {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
@@ -656,9 +658,7 @@
                         '<td>' + conservadores[i].codigo + '</td>' +
                         ' <td>' + conservadores[i].first_name + '</td>' +
                         '<td>' +
-                        '<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadores[i].id + ')">' +
-                        '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                        '</button>' +
+                        '{% if request.user|has_group:"Gestor de Conservación y Traslados" %}<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadores[i].id + ')"><i class="fas fa-trash" data-fa-transform="shrink-3"></i></button>{% endif %}' +
                         '</td>' +
                         '</tr>';
 
