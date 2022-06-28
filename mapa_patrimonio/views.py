@@ -16,6 +16,7 @@ from patrimonios.models import Institucion
 
 
 def datos(request):
+    success=-1
     print(request)
     print(request.POST)
     patri=Patrimonio.objects.filter(estado=1).filter(tipoPatrimonio=2)
@@ -71,6 +72,7 @@ def datos(request):
                 "url": instit[i].url,
                 "tipo": 4,
             })
+        success = 1
     else:#escoger al azar
         numPatriInstit = 10
         numAzarPatri = randint(0, 9)
@@ -102,9 +104,10 @@ def datos(request):
                 "url": institAzar['url'],
                 "tipo": 4,
             })
-
+        success = 1
     return JsonResponse({'data': patriInstit,
-                         'numPatrimonios':numPatriInstit},
+                         'numPatrimonios':numPatriInstit,
+                        'success':success},
                         status=200, safe=False)
 
 def patrimonioFueraRuta(request):

@@ -18,141 +18,44 @@
 {% endblock %}
 
 {% block body %}
-    <div class="col-md-4" style="padding-left:30px; padding-top: 15px; overflow-y: scroll; ">
-        <nav class="card mb-3" style="height: 75vh">
-        <!-- Content-->
-        <div class="navbar-vertical-content">
-            <div class="row" style="padding-bottom: 3px">
-                <div class="col">
-                    <form id="form_buscar" method="post" action="{% url 'mapaPatrimonioSimple' %}"
-                            name = "formBuscar">
-                        {% csrf_token %}
-                        <div class="position-relative" style="padding: 10px;">
-                            <label for="txtBuscar"></label>
-                            <input name="patrimonio_name" class="form-control" id="txtBuscar"
-                                placeholder="Buscar patrimonio...">
+    <div class="card mb-3 cardForm">
+        <div class="row">
+            <!--Barra lateral-->
+            <div class="col-md-4" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
+                <nav class="mb-3" style="height: 75vh">
+
+                    <div class="navbar-vertical-content">
+                            <div class="row">
+                                <div class="col" >
+                                    <div class="row px-3 pb-3 position-relative flex align-items-center">
+                                        <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
+                                    </div>
+                                    <div class="row px-3 pb-3">
+                                        <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
+                                    </div>
+                                    <div class="row px-3 pb-3">
+                                        <button id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
+                                    </div>
+                                    <div class="row px-3 pb-3">
+                                        <!--<div>0m <input type="range" min="0" max="2000" value="0" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
+                                        <input type="number" min="0" max="2000" value="0" class="" id="inputDispersion" disabled/></div>-->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-right" style="padding: 10px">
-                            <a class="text-black" style="font-size: small" href="{% url 'mapaPatrimonioAvanzado' %}">
-                                <u>Cambiar a búsqueda avanzada</u>
-                            </a>
+                        <div id="patrimoniosLista">
                         </div>
-                    </form>
+                </nav>
+            </div>
+            <!--Mapa-->
+            <div class="col-md-8" style="padding-top: 15px;padding-right: 30px;">
+                <div class="card" style="width: 100%">
+                    <div class="position-relative">
+                        <div id="map" style="height: 75vh; object-fit: cover; border-radius: 3px"></div>
+                    </div>
                 </div>
             </div>
-            <div class="row" style="padding-bottom: 5px">
-                <div class="col">
-                    <div class="position-relative" style="padding: 5px;">
-                        <button class="btn-primary text-white" type="submit" form="form_buscar" id="btn-submit">
-                            Realizar Búsqueda
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <!--if queried, then it must show the # of results given, including case 0-->
-            {% if success != -1 %}
-                <div class="row">
-                    <div class="col">
-                        {% if success == 0 %}
-                        <p>No se encontraron resultados</p>
-                        {% elif success == 1 %}
-                            {% if lensearch == 1 %}
-                                <p> Se encontró {{  lensearch }} patrimonio o institución asociada</p>
-                            {% else %}
-                                <p> Se encontraron {{  lensearch }} patrimonios o instituciones asociadas</p>
-                            {% endif %}
-                        {% else %}
-                                <!--Nothing-->
-                        {% endif %}
-                    </div>
-                </div>
-                {% for p in patrimonios %}
-                    <div class="card mb-5" style="padding: 10px;margin-top: 10px;">
-                        <div class="position-relative">
-                            <div>
-                                <img class="img-fluid w-100"
-                                    style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                    src="{{ p.url }}"
-                                    alt="Card image"/>
-                            </div>
-                            <div class="card-img-overlay d-flex align-items-end text-white pb-2">
-                                <p class="card-text "
-                                style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
-                                    {{ p.patrimonio.nombreTituloDemoninacion }}</p>
-                            </div>
-                        </div>
-                        <div class="card-body pt-2 pb-2">
-                            {% if p.patrimonio.tipoPatrimonio == "1" %}
-                                <p class="mb-0 " style="font-size: 15px"> Patrimonio Inmaterial </p>
-                            {% else %}
-                                <p class="mb-0 " style="font-size: 15px"> Patrimonio Material Inmueble </p>
-                            {% endif %}
-
-                            <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
-                                    value="{{ p.patrimonio.id }},1">
-                                        Ver en el mapa
-                            </button>
-
-                            <a href="{% url 'detalle' pk=p.patrimonio.pk %}">
-                                <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
-                                        style="font-size: 10px">
-                                            Ver Ficha
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                {% endfor %}
-                {% for i in instituciones %}
-                    <div class="card mb-5" style="padding: 10px;margin-top: 10px;">
-                        <div class="position-relative">
-                            <div>
-                                <img class="img-fluid w-100"
-                                    style="height: 130px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px"
-                                    src="{{ i.url }}"
-                                    alt="Card image"/>
-                            </div>
-                            <div class="card-img-overlay d-flex align-items-end text-white pb-2">
-                                <p class="card-text "
-                                style="font-size: 15px;font-weight: bold; text-shadow : 1px 1px black;">
-                                    {{ i.institucion.nombre}}</p>
-                            </div>
-                        </div>
-                        <div class="card-body pt-2 pb-2">
-                            <p class="mb-0 " style="font-size: 15px"> Institución </p>
-                            <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
-                                    value="{{ i.institucion.pk }},2">
-                                        Ver en el mapa
-                            </button>
-                            <a href="{% url 'detalle_museo' pk=i.institucion.pk %}">
-                                <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
-                                        style="font-size: 10px">
-                                            Ver detalle
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
         </div>
-    </nav>
-    </div>
-    <div class="filtrosBusqueda">
-        <br><br><br><br>
-        <div class="row">
-            <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
-        </div>
-        <br>
-        <div class="row">
-            <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
-        </div>
-        <br>
-        <!--<div>0m <input type="range" min="0" max="2000" value="0" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
-        <input type="number" min="0" max="2000" value="0" class="" id="inputDispersion" disabled/></div>
-        <br>-->
-        <button id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
-    </div>
-    <br>
-    <div class="col-md-10 offset-md-1" id="map" style="width:100%;height:100vh">
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -176,7 +79,7 @@
         const PORCENTAJE_DISPERSION=0.15;
         const MAX_DISPERSION=2000;//en metros
         
-
+        var success=-1;
         var zoomActual=0;
         var map = L.map('map').setView([LATITUD_CENTRO_PERU, LONGITUD_CENTRO_PERU],ZOOM_CENTRO_PERU);
         var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
@@ -264,7 +167,13 @@
             controlRuta=null;
             patrimoniosEnRuta=null;
             patrimoniosFueraRuta=null;
-            
+            let divPatriLista=document.querySelector('#patrimoniosLista');
+            while(divPatriLista.firstChild){
+                divPatriLista.removeChild(divPatriLista.firstChild);
+            }
+        }
+        function enfocarPatrimonio(){
+            //enfocar con el fly
         }
         async function obtenerPatrimoniosCercanos(lat1,long1,lat2,long2,lat1menor,long1menor){
             return $.ajax({
@@ -291,6 +200,7 @@
                 url: "/mapa_patrimonio/mapa/patrimoniosFueraRuta",
                 data: {
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    //insertar las esquinas
                 },
             });
         }
@@ -338,6 +248,109 @@
                 language:'es',
             }).addTo(map);
         }
+        function anadirListaPatrimonios(){
+            var divListaPatrimonio = document.getElementById("patrimoniosLista");
+            let divMensajeConfirmacion = document.createElement("div");
+            let classes=['row','px-3','flex-row','justify-content-center','text-center','mt-3'];
+            classes.forEach((clas)=>{
+                divMensajeConfirmacion.classList.add(clas);
+            });
+            let mensaje="";
+            if(success==1){
+                if(patrimoniosEnRuta.length==0){
+                    mensaje="No se encontraron patrimonios dentro de la ruta ingresada."
+                }else{
+                    mensaje="Se encontraron " + patrimoniosEnRuta.length + " patrimonios dentro de la ruta ingresada."
+                }
+            }else{
+                mensaje="Hubo un error al generar la ruta."
+            }
+            divMensajeConfirmacion.appendChild(document.createTextNode(mensaje));
+            divListaPatrimonio.appendChild(divMensajeConfirmacion);
+            if(success==1 && patrimoniosEnRuta.length>0){
+                let classDivMayor=['card','mb-4','mx-0'];
+                let classImg=['img-fluid','w-100'];
+                let classCard=['card-img-overlay','d-flex','align-items-end','text-white','pb-2'];//--
+                let classPatrimonioLabel=['card-body','pt-2','pb-2'];
+                let classButton=['btn','bg-200','mr-1','mb-1','w-100'];
+                let classLink=['btn','btn-dark','mr-1','mb-1','w-100'];
+                for(let i=0;i<patrimoniosEnRuta.length;i++){
+                    let divMayor=document.createElement("div");
+                    classDivMayor.forEach((clas)=>{
+                        divMayor.classList.add(clas);
+                    });
+                    let divMediano=document.createElement("div");
+                    divMediano.classList.add('position-relative');
+                    
+                    let divImg=document.createElement("div");
+                    let img=document.createElement('img');
+                    classImg.forEach((clas)=>{
+                        img.classList.add(clas);
+                    });
+                    //img.src=patrimoniosEnRuta[i].url;
+                    img.src="/static/img/landmarks/notAvailable.jpg";
+                    img.style.height="130px";
+                    img.style.objectFit="cover";
+                    img.style.borderTopLeftRadius="20px";
+                    img.style.borderTopRightRadius="20px";
+                    img.alt=patrimoniosEnRuta[i].nombre;
+                    divImg.appendChild(img);
+
+                    let divCard=document.createElement("div");
+                    classCard.forEach((clas)=>{
+                        divCard.classList.add(clas);
+                    });
+                    let pCard=document.createElement("p");
+                    pCard.appendChild(document.createTextNode(patrimoniosEnRuta[i].nombre));
+                    pCard.style.fontSize="15px";
+                    pCard.style.fontWeight="bold";
+                    pCard.style.textShadow="1px 1px black";
+                    divCard.appendChild(pCard);
+
+                    divMediano.appendChild(divImg);
+                    divMediano.appendChild(divCard);
+                    
+                    divMayor.appendChild(divMediano);
+
+                    let divPatrimonioLabel=document.createElement("div");
+                    classPatrimonioLabel.forEach((clas)=>{
+                        divPatrimonioLabel.classList.add(clas);
+                    });
+                    let pPatrimonio=document.createElement("p");
+                    pPatrimonio.appendChild(document.createTextNode(patrimoniosEnRuta[i].tipo==2 ? "Patrimonio Material Inmueble" : "Institución"));
+                    divPatrimonioLabel.appendChild(pPatrimonio);
+
+                    let btnFicha=document.createElement("button");
+                    classButton.forEach((clas)=>{
+                        btnFicha.classList.add(clas);
+                    });
+                    btnFicha.type="button";
+                    btnFicha.style.fontSize="10px";
+                    btnFicha.innerHTML="Ver en el mapa";
+                    btnFicha.value=patrimoniosEnRuta[i].id;
+                    btnFicha.onclick=function(){
+                        enfocarPatrimonio(patrimoniosEnRuta[i]);
+                    };
+                    divPatrimonioLabel.appendChild(btnFicha);
+
+                    let linkFicha=document.createElement("a");
+                    linkFicha.href="http://127.0.0.1:8000/patrimonios/detalle/"+patrimoniosEnRuta[i].id+"/";
+                    let btnFichaLink=document.createElement("button");
+                    classLink.forEach((clas)=>{
+                        btnFichaLink.classList.add(clas);
+                    });
+                    btnFichaLink.type="button";
+                    btnFichaLink.style.fontSize="10px";
+                    btnFichaLink.innerHTML="Ver Ficha";
+                    linkFicha.appendChild(btnFichaLink);
+                    divPatrimonioLabel.appendChild(linkFicha);
+
+                    divMayor.appendChild(divPatrimonioLabel);
+
+                    divListaPatrimonio.appendChild(divMayor);
+                }
+            }
+        }
         async function generarRutaDispersion(lat1,long1,lat2,long2){
             let distanciaDispersion;
             let lat1menor=false;
@@ -371,12 +384,14 @@
                 then(datos=>{
                     patrimoniosEnRuta=datos.data;
                     numPatrimoniosEnRuta=datos.numPatrimonios;
+                    success=datos.success;
                     console.log(datos);
                     console.log(patrimoniosEnRuta);
                 });
             await enrutamientoConPatrimonios(lat1,long1,lat2,long2);
             anadirPatrimoniosEnRuta();
             await anadirPatrimoniosFueraRuta();
+            anadirListaPatrimonios();
         }
         async function generarRuta() {
             if(controlRuta!=null){
