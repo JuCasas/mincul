@@ -27,6 +27,8 @@ from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Ca
     TecnicaAcabado, PatrimonioEtnografico, Propietario, Excavacion, ElementoAdicional
 from incidente.models import Incidente
 from patrimonios.serializers import InstitucionSerializer, UserSerializer
+from mincul_app.models import Documento
+from datetime import datetime
 
 @api_view(('GET',))
 def patrimonio_list_ajax(request):
@@ -786,6 +788,37 @@ def patrimonio_edit(request,pk):
             'actividades_turisticas': actividadesTuristicas,
         }
         return render(request, 'patrimonio/patrimony_inmaterial_edit.html', context)
+
+@api_view(('POST',))
+def addIncidente(request,pk):
+    try:
+        incidente = Incidente.objects.create()
+        zona = PuntoGeografico.objects.get(patrimonio_id=pk)
+        for c in Incidente.AFECTACION:
+            if c[1] == request.POST.get("tipo"):
+                incidente.tipoAfectacion = c[0]
+                break
+        incidente.fechaOcurrencia = request.POST.get("fechaOcurrencia")
+        incidente.descripcion = request.POST.get("descripcion")
+        incidente.nombre = request.POST.get("nombre")
+        incidente.correo = request.POST.get("email")
+        incidente.telefono = request.POST.get("telefono")
+        incidente.zona_id = zona.id
+        # zona=PuntoGeografico.objects.get(patrimonio_id=pk)
+        incidente.codigo = "INCD" + str(incidente.id).zfill(6)
+        incidente.fechaRegistro = datetime.today().strftime('%Y-%m-%d')
+
+        for f in request.FILES.getlist('file'):
+            doc = Documento.objects.create(url=f)
+            incidente.documentos.add(doc)
+
+        incidente.save()
+        return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+    except Exception as e:
+        result = dict()
+        result['success'] = False
+        result['message'] = str(e)  # or custom message
+        return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 def detalle(request, pk):
     valor = Patrimonio.objects.get(pk=pk)

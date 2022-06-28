@@ -25,6 +25,30 @@
           position: absolute!important;
           right: 8px!important;
       }
+
+
+        .btn-1 {
+            text-align: center;
+            float: left;
+            border: 1px solid #2B2D42 !important;
+            background-color: #2B2D42 !important;
+            color: white !important;
+        }
+
+        .btn-2 {
+            text-align: center;
+            float: left;
+            border: 1px solid floralwhite;
+            background-color: white;
+            color: black;
+        }
+
+        .btn-2:hover {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+        }
     </style>
 {% endblock %}
 
@@ -38,13 +62,19 @@
 <div class="card mb-3 cardForm">
     <div class="row">
         <!--Barra lateral-->
-        <div class="col-md-4" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
+        <div class="col-md-4 pt-0" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
             <nav class="mb-3" style="height: 75vh">
 
-                <div class="navbar-vertical-content">
+                <div class="navbar-vertical-content pb-0">
                         <div class="row">
                                 <form class="col" id="form_buscar" method="post" action={% url 'mapaPatrimonioAvanzado' %} >
                                     {% csrf_token %}
+
+                                    <div class="nav nav-pills row mb-4">
+                                        <button class="nav-link col-md-6 btn-1" disabled>Patrimonios</button>
+                                        <a class="nav-link col-md-6 btn-2" href="{% url 'index' %}">Ruta Patrimonial</a>
+                                    </div>
+
                                     <div class="row px-3 pb-3 position-relative flex align-items-center">
                                                 <label for="txtBuscar"></label>
                                                 <input name="patrimonio_name" class="form-control" id="txtBuscar"
@@ -139,7 +169,7 @@
                                         <p class="mb-0 " style="font-size: 15px"> Patrimonio Material Inmueble </p>
                                     {% endif %}
 
-                                    <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                    <button class="btn bg-200 mr-1 mb-1 w-100 btnVerMapa" type="button" style="font-size: 10px"
                                             value="{{ p.patrimonio.id }},1">
                                                 Ver en el mapa
                                     </button>
@@ -172,7 +202,7 @@
                             <div class="card-body pt-2 pb-2">
                                 <p class="mb-0 " style="font-size: 15px"> Institución </p>
 
-                                <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                <button class="btn bg-200 mr-1 mb-1 w-100 btnVerMapa" type="button" style="font-size: 10px"
                                         value="{{ i.institucion.id }},2">
                                             Ver en el mapa
                                 </button>
@@ -190,7 +220,7 @@
             </nav>
         </div>
         <!--Mapa-->
-        <div class="col-md-8" style="padding-top: 15px;padding-right: 30px;">
+        <div class="col-md-8" style="padding: 15px;padding-right: 30px;">
             <div class="card" style="width: 100%">
                 <div class="position-relative">
                     <div id="map" style="height: 75vh; object-fit: cover; border-radius: 3px"></div>
@@ -254,7 +284,7 @@
     </script>
     <!--script for flying to other results-->
     <script>
-    document.querySelectorAll('.mr-1').forEach(item =>{
+    document.querySelectorAll('.btnVerMapa').forEach(item =>{
         item.addEventListener('click',event=>{
             var data = event.target.value.split(",");
             $(".leaflet-popup").remove();

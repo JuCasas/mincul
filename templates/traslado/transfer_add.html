@@ -972,7 +972,12 @@
                     required: true,
                     validarFechaMayor: true,
                     validarFechasDos: true,
-                }
+                },
+                nombreInstitucion: {
+                    required: true,
+                },
+                comisario: {
+                    required: true,
             },
             messages: {
                 destino: {
@@ -1005,6 +1010,12 @@
                     required: "Ingrese una fecha de salida real",
                     validarFechaMayor: "Ingrese una fecha posterior a la actual",
                     validarFechasDos: "La fecha de salida real debe ser igual o posterior a la programada"
+                },
+                nombreInstitucion: {
+                    required: "Debe registrar una entidad solicitante primero",
+                },
+                comisario: {
+                    required: "Debe registar un comisario."
                 }
             },
             submitHandler: function (form, e) {

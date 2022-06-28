@@ -49,20 +49,21 @@
 {% block body %}
   <div class="card mb-3">
     <div class="card-body p-0">
-      <div class="navbar">
-        <div class="col-sm-auto mb-2 mb-sm-0">
+      <div class="navbar row mx-0">
+
+        <div class="col-sm-2 mb-2 mb-sm-0">
           <h6 class="mb-0" id="Cantidad"></h6>
         </div>
-        <div class="row d-flex align-items-center">
 
-          <div class="form-group col-sm-auto my-1">
+
+          <div class="form-group col-sm-2 my-1 pl-0">
             <div class="position-relative">
               <input class="form-control" id="search" type="text" placeholder="Nombre">
               <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
             </div>
           </div>
 
-          <div class="form-group col-sm-auto my-1">
+          <div class="form-group col-sm-2 my-1">
             <select class="form-control" id="tipoPatrimonio">
               <option value="0" selected>Tipo</option>
               <option value="1">Inmaterial</option>
@@ -70,11 +71,12 @@
               <option value="3">Material Mueble</option>
             </select>
           </div>
-          <div class="form-group col-sm-auto my-1">
+
+          <div class="form-group col-sm-2 my-1">
             <select class="form-control" id="categoria">
             </select>
           </div>
-          <div class="form-group col-sm-auto my-1">
+          <div class="form-group col-sm-2 my-1">
             <select class="form-control" id="departamento">
               <option selected>Departamento</option>
               <option>Amazonas</option>
@@ -104,14 +106,15 @@
               <option>Ucayali</option>
             </select>
           </div>
-          <div class="form-group col-sm-auto my-1">
-            <button class="btn btn-primary col-sm-auto" type="button" data-toggle="modal"
+
+          <div class="form-group col-sm-2 my-1 p-0 w-100">
+            <button class="btn btn-primary col-sm-auto w-100" type="button" data-toggle="modal"
                     data-target="#importarModal">
               <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
             </button>
           </div>
         </div>
-      </div>
+
     </div>
   </div>
 
