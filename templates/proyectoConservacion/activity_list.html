@@ -203,7 +203,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="form-group col-sm-2 mb-0 {% if request.user|has_group:"Gestor de Conservación y Traslados" %}pr-0{% endif %}">
+                <div class="form-group col-sm-2 mb-0 {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}pr-0{% endif %}">
                     <select class="form-control" id="type_filter">
                         <option value="" selected>Patrimonios</option>
                         {% for patrimonio in patrimonios %}
