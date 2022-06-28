@@ -285,24 +285,6 @@ def deleteProject(request, pk):
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
-def loginProjects(request):
-    if(request.POST):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request,username=username, password=password)
-        if user is not None:
-            login(request,user)
-        return redirect('addTaskView',1)
-    actividad = Actividad.objects.get(pk=1)
-    conservadores = actividad.conservadores.all()
-
-    context = {
-        'activity': actividad,
-        'conservadores': conservadores
-    }
-    return render(request, 'proyectoConservacion/loginProjects.html', context)
-
 @api_view(('POST',))
 def deletePatrimony(request, pk):
     project = ProyectoConservacion.objects.get(pk=pk)

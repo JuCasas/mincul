@@ -7,5 +7,5 @@ from authentication import views
 
 urlpatterns = [
     # path( url hijo, backend, nombre de la variable)
-    path('login/', views.RenderLogin.as_view(), name="login"),
+    path('login/', views.login, name="login"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
