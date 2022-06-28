@@ -58,7 +58,7 @@ def query_projects_by_args(**kwargs):
     }
 
 
-def query_activities_by_args(request,pk, **kwargs):
+def query_activities_by_args(pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
@@ -71,9 +71,9 @@ def query_activities_by_args(request,pk, **kwargs):
     queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(proyecto=project).filter(
         estado='1')
 
-    if(request.user is not None):
-        if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
-            print("XD")
+    # if(request.user is not None):
+    #     if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
+    #         print("XD")
 
     total = queryset.count()
 
@@ -98,7 +98,7 @@ def query_activities_by_args(request,pk, **kwargs):
     }
 
 
-def query_tasks_by_args(pk, **kwargs):
+def query_tasks_by_args(request,pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     # search_value = kwargs.get('search_value', None)[0]
@@ -109,6 +109,10 @@ def query_tasks_by_args(pk, **kwargs):
 
     activity = Actividad.objects.get(pk=pk)
     queryset = Tarea.objects.filter(actividad=activity).filter()
+
+    if(request.user is not None):
+        if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
+            queryset = queryset.filter(responsable_id=request.user.id)
 
     total = queryset.count()
 
@@ -407,7 +411,7 @@ def addPatrimony(request, pk):
 @api_view(('GET',))
 def listTasks(request, pk):
     if request.is_ajax():
-        task = query_tasks_by_args(pk, **request.GET)
+        task = query_tasks_by_args(request,pk, **request.GET)
         serializer = TareaSerializer((task['items']), many=True)
         result = dict()
         result['data'] = serializer.data

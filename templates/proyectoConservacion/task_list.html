@@ -1,4 +1,5 @@
 {% extends 'proyectoConservacion/components/base.html' %}
+{% load has_group %}
 {% load static %}
 
 {% block extrastyle %}
@@ -263,7 +264,7 @@
                         if (data == '1') {
                             resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-                                '{% if request.user|has_group:"Gestor de Conservación y Traslados" %}<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>{% endif %}';
+                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}'<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'{% else %}''{% endif %}
                         } else if (data == '2') {
                             resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp';
