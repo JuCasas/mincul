@@ -1,5 +1,6 @@
 {% extends 'traslado/components/base.html' %}
 {% load static %}
+{% load has_group %}
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
@@ -144,9 +145,11 @@
                     </select>
                 </div>
 
-                <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" href="{% url 'addTransfer' %}" type="button">
-                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Traslado
-                </a>
+                {% if request.user|has_group:"Gestor de Patrimonios"%}
+                    <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" href="{% url 'addTransfer' %}" type="button" >
+                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Traslado
+                    </a>
+                {% endif %}
 
             </div>
         </div>
