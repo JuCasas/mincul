@@ -143,10 +143,15 @@
                         <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
                     </div>
                 </div>
-                <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" type="button"
-                   href="{% url 'addTaskView' pk=activity.id %}">
-                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
-                </a>
+
+                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                    <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center"
+                       type="button"
+                       href="{% url 'addTaskView' pk=activity.id %}">
+                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
+                    </a>
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -264,7 +269,9 @@
                         if (data == '1') {
                             resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}'<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'{% else %}''{% endif %}
+                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                                    '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+                                    {% else %}''{% endif %}
                         } else if (data == '2') {
                             resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp';
