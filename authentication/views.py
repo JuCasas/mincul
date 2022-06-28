@@ -11,11 +11,7 @@ def login(request):
         if user is not None:
             login(request,user)
         return redirect('addTaskView',1)
-    actividad = Actividad.objects.get(pk=1)
-    conservadores = actividad.conservadores.all()
 
     context = {
-        'activity': actividad,
-        'conservadores': conservadores
     }
     return render(request, 'authentication/login.html', context)
