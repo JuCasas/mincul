@@ -10,7 +10,14 @@ def login(request):
         user = authenticate(request,username=username, password=password)
         if user is not None:
             login(request,user)
-        return redirect('addTaskView',1)
+            return redirect('addTaskView',1)
+        else:
+            error_message = "Sus credenciales de inicio de sesión no son correctas. " + \
+                            "Si no cuenta con un usuario, comuníquese con el administrador"
+            context = {
+                'error_message': error_message,
+            }
+            return render(request, 'authentication/login.html', context)
 
     context = {
     }
