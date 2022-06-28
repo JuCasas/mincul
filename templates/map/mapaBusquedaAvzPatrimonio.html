@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'map/baseExternalUser.html' %}
 {% load static %}
 
 {% block extrastyle %}
@@ -35,6 +35,26 @@
 {% endblock %}
 
 {% block body %}
+    <!--TOP NAVBAR-->
+    <nav class="d-flex align-items-start navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand"
+     style="height: 75px">
+        <div class="d-flex flex-row align-items-center">
+            <div class="mr-5">
+                  <img src="{% static '/img/logos/mincult.png' %}" style="height: 50px;"/>
+            </div>
+            <button class="btn-secondary text-black" style="padding-left: 3px;padding-right: 3px" disabled>
+                {% comment %}<span class="fas fa-arrow-left mr-1" data-fa-transform="shrink-3"></span> {% endcomment %}
+                Patrimonio
+            </button>
+            <a href="{% url 'index' %}" style="padding-left: 3px;padding-right: 3px">
+                <button class="btn-primary text-white">
+                    {% comment %}<span class="fas fa-arrow-left mr-1" data-fa-transform="shrink-3"></span> {% endcomment %}
+                    Ruta Patrimonial
+                </button>
+            </a>
+        </div>
+    </nav>
+
 <div class="card mb-3 cardForm">
     <div class="row">
         <!--Barra lateral-->

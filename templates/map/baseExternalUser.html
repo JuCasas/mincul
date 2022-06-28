@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title> Ministerio de Cultura </title>
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicons/apple-touch-icon.png' %}">
+{#    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicons/favicon-32x32.png' %}">#}
+{#    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicons/favicon-16x16.png' %}">#}
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/icons/escudo.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicons/favicon.png' %}">
+    <link rel="manifest" href="{% static 'img/favicons/manifest.json' %}">
+    <meta name="msapplication-TileImage" content="{% static 'img/favicons/mstile-150x150.png' %}">
+    <meta name="theme-color" content="#ffffff">
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    {% block extrastyle %}{% endblock %}
+    {% include 'base/stylesheets.html' %}
+
+    {% block extrahead %}{% endblock %}
+
+
+    {#    Tema oscuro#}
+{#        <link href="{% static 'css/theme-dark.css' %}" rel="stylesheet">#}
+
+</head>
+{#<main class="main cambio-left mt-3 ml-10" id="top">#}
+<main class="main cambio-left mt-3 " id="top">
+    <div class="container-fluid mt-3" data-layout="container">
+
+
+        <div class="content cambio-right">
+
+            {% block body %}{% endblock %}
+            {% include 'base/footer.html' %}
+        </div>
+    </div>
+</main>
+<body>
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+    {% csrf_token %}
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+{% include 'base/js.html' %}
+{% block extrajs %}{% endblock %}
+
+<script>
+</script>
+
+</body>
+
+</html>
