@@ -14,6 +14,29 @@
             margin-left: 6rem;
             width: 20rem;
         }
+
+         .btn-1 {
+            text-align: center;
+            float: left;
+            border: 1px solid #2B2D42 !important;
+            background-color: #2B2D42 !important;
+            color: white !important;
+        }
+
+        .btn-2 {
+            text-align: center;
+            float: left;
+            border: 1px solid floralwhite;
+            background-color: white;
+            color: black;
+        }
+
+        .btn-2:hover {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+        }
     </style>
 {% endblock %}
 
@@ -21,12 +44,18 @@
     <div class="card mb-3 cardForm">
         <div class="row">
             <!--Barra lateral-->
-            <div class="col-md-4" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
+            <div class="col-md-4 pt-0" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
                 <nav class="mb-3" style="height: 75vh">
 
                     <div class="navbar-vertical-content">
                             <div class="row">
                                 <div class="col" >
+                                    <div class="nav nav-pills row mb-4">
+                                        <a class="nav-link col-md-6 btn-2" href="{% url 'mapaPatrimonioSimple' %}">Patrimonios</a>
+                            <button class="nav-link col-md-6 btn-1" disabled>Ruta Patrimonial</button>
+
+                        </div>
+
                                     <div class="row px-3 pb-3 position-relative flex align-items-center">
                                         <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
                                     </div>
@@ -34,7 +63,7 @@
                                         <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
                                     </div>
                                     <div class="row px-3 pb-3">
-                                        <button id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
+                                        <button class="btn btn-primary w-100" id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
                                     </div>
                                     <div class="row px-3 pb-3">
                                         <!--<div>0m <input type="range" min="0" max="2000" value="0" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
