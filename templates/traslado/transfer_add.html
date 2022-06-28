@@ -1,6 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% load get_email %}
+{% load has_group %}
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
@@ -176,7 +177,7 @@
                                             {% else %}
                                            placeholder="Ingrese Número de Resolución"
                                             {% endif %}
-                                           {% if traslado.estado != '2' and idEditar != 0 %}disabled{% endif %}>
+                                           {% if  traslado.estado != '2' and idEditar != 0 or request.user|has_group:"Gestor de Patrimonios" %}disabled{% endif %}>
                                 </div>
                             {% endif %}
                         </div>
@@ -449,14 +450,16 @@
                                 </div>
 
                                 {% if operacion == "editar" %}
-                                    {% if traslado.estado == '1' or traslado.estado == '2' or traslado.estado == '4' or  traslado.estado == '5' %}
-                                        <div class="col-3 p-0">
-                                            <button id="actualizar" class="btn btn-primary mx-1" type="button"
-                                                    data-toggle="modal"
-                                            >
-                                                Actualizar estado
-                                            </button>
-                                        </div>
+                                    {% if request.user|has_group:"Gestor de Conservación y Traslados"%}
+                                        {% if traslado.estado == '1' or traslado.estado == '2' or traslado.estado == '4' or  traslado.estado == '5' %}
+                                            <div class="col-3 p-0">
+                                                <button id="actualizar" class="btn btn-primary mx-1" type="button"
+                                                        data-toggle="modal"
+                                                >
+                                                    Actualizar estado
+                                                </button>
+                                            </div>
+                                        {% endif %}
                                     {% endif %}
 
                                     {% if traslado.estado == '3' and operacion == 'editar' %}
