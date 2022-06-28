@@ -65,7 +65,7 @@
         <div class="col-md-4 pt-0" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
             <nav class="mb-3" style="height: 75vh">
 
-                <div class="navbar-vertical-content">
+                <div class="navbar-vertical-content pb-0">
                         <div class="row">
                                 <form class="col" id="form_buscar" method="post" action={% url 'mapaPatrimonioAvanzado' %} >
                                     {% csrf_token %}
@@ -220,7 +220,7 @@
             </nav>
         </div>
         <!--Mapa-->
-        <div class="col-md-8" style="padding-top: 15px;padding-right: 30px;">
+        <div class="col-md-8" style="padding: 15px;padding-right: 30px;">
             <div class="card" style="width: 100%">
                 <div class="position-relative">
                     <div id="map" style="height: 75vh; object-fit: cover; border-radius: 3px"></div>
