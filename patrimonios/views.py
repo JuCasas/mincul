@@ -4,7 +4,6 @@ from datetime import datetime
 import googlemaps as gm
 import wget
 from django.core.mail import EmailMultiAlternatives
-from django.db.models.lookups import In
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
@@ -16,19 +15,17 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from authentication.models import User
-from conservacion.serializers import PatrimonioSerializer
+from incidente.models import Incidente
 from mincul.settings import ALLOWED_HOSTS
-# Create your views here.
 from mincul_app.models import Documento
+# Create your views here.
 from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Categoria, PatrimonioInMaterial, Entrada, \
     ActividadTuristica, Responsable, PuntoGeografico, PatrimonioMaterialInMueble, Servicio, EpocaVisita, \
     FuenteBibliografica, PatrimonioPaleontologico, PatrimonioMaterialMueble, PatrimonioIndustrial, Fabricante, \
     PatrimonioArqueologico, TecnicaManufactura, TecnicaDecoracion, PatrimonioHistoricoArtistico, MaterialSecundario, \
     TecnicaAcabado, PatrimonioEtnografico, Propietario, Excavacion, ElementoAdicional
-from incidente.models import Incidente
-from patrimonios.serializers import InstitucionSerializer, UserSerializer
-from mincul_app.models import Documento
-from datetime import datetime
+from patrimonios.serializers import InstitucionSerializer, UserSerializer, PatrimonioListSerializer
+
 
 @api_view(('GET',))
 def patrimonio_list_ajax(request):
@@ -53,7 +50,7 @@ def patrimonio_list_ajax(request):
     queryset = queryset[start:start + length]
     count2 = len(queryset)
     fin = inicio + count2 - 1
-    serializer = PatrimonioSerializer(queryset, many=True)
+    serializer = PatrimonioListSerializer(queryset, many=True)
     result = dict()
     result['items'] = serializer.data
     result['total_count'] = count
@@ -726,7 +723,6 @@ def patrimonio_list(request):
 
     context = {
         'patrimonios': patrimonios,
-
         'cantidad': len(patrimonios),
     }
 
