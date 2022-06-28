@@ -37,6 +37,13 @@
             box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
             /* Lowering the shadow */
         }
+        .ubicacionImg{
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .divUbicacionActual:hover{
+            cursor:pointer;
+        }
     </style>
 {% endblock %}
 
@@ -46,34 +53,35 @@
             <!--Barra lateral-->
             <div class="col-md-4 pt-0" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
                 <nav class="mb-3" style="height: 75vh">
-
                     <div class="navbar-vertical-content">
-                            <div class="row">
-                                <div class="col" >
-                                    <div class="nav nav-pills row mb-4">
-                                        <a class="nav-link col-md-6 btn-2" href="{% url 'mapaPatrimonioSimple' %}">Patrimonios</a>
-                            <button class="nav-link col-md-6 btn-1" disabled>Ruta Patrimonial</button>
-
-                        </div>
-
-                                    <div class="row px-3 pb-3 position-relative flex align-items-center">
-                                        <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
+                        <div class="row">
+                            <div class="col" >
+                                <div class="nav nav-pills row mb-4">
+                                    <a class="nav-link col-md-6 btn-2" href="{% url 'mapaPatrimonioSimple' %}">Patrimonios</a>
+                                        <button class="nav-link col-md-6 btn-1" disabled>Ruta Patrimonial</button>
+                                </div>
+                                <div class="row px-3 pb-3 position-relative flex align-items-center">
+                                    <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
+                                    <div class="divUbicacionActual" onclick="obtenerUbicacionActual()">
+                                        <img class="ubicacionImg" alt ="Ubicación Actual" src="../../static/img/icons/ubicacionActual.png"
+                                        width="20" height="20"/>
                                     </div>
-                                    <div class="row px-3 pb-3">
-                                        <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
-                                    </div>
-                                    <div class="row px-3 pb-3">
-                                        <button class="btn btn-primary w-100" id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
-                                    </div>
-                                    <div class="row px-3 pb-3">
-                                        <!--<div>0m <input type="range" min="0" max="2000" value="0" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
-                                        <input type="number" min="0" max="2000" value="0" class="" id="inputDispersion" disabled/></div>-->
-                                    </div>
+                                </div>
+                                <div class="row px-3 pb-3">
+                                    <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
+                                </div>
+                                <div class="row px-3 pb-3">
+                                    <button class="btn btn-primary w-100" id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
+                                </div>
+                                <div class="row px-3 pb-3">
+                                    <!--<div>0m <input type="range" min="0" max="2000" value="0" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
+                                    <input type="number" min="0" max="2000" value="0" class="" id="inputDispersion" disabled/></div>-->
                                 </div>
                             </div>
                         </div>
-                        <div id="patrimoniosLista">
-                        </div>
+                    </div>
+                    <div id="patrimoniosLista">
+                    </div>
                 </nav>
             </div>
             <!--Mapa-->
@@ -113,6 +121,8 @@
         var map = L.map('map').setView([LATITUD_CENTRO_PERU, LONGITUD_CENTRO_PERU],ZOOM_CENTRO_PERU);
         var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
         var geocoder = new google.maps.Geocoder();
+        var autocompletePartida;
+        var autocompleteLlegada;
         var controlRuta = null;
         var grupoMarcadoresRuta = L.layerGroup().addTo(map);
         var grupoMarcadoresFueraRuta = L.layerGroup().addTo(map);
@@ -167,7 +177,14 @@
             grupoMarcadoresFueraRuta.clearLayers();
             anadirPatrimoniosFueraRuta();
         });
-
+        function initAutoCompletePartida(){
+            autocompletePartida = new google.maps.places.Autocomplete(
+                document.getElementById("txtDireccionPartida"),
+                {
+                    componentRestrictions: {'country':['PE']}
+                }
+            )
+        }
         function obtenerCoordenadasEsquinaMapa(){
             let bounds=map.getBounds();
             esquinasMapa.noroeste=bounds.getNorthWest();
@@ -185,9 +202,28 @@
                 if (status == google.maps.GeocoderStatus.OK) {
                     lat=results[0].geometry.location.lat();
                     long=results[0].geometry.location.lng();
+                }else{
+                    alert("No se encontró la dirección ingresada");
                 }
             });
             return [lat, long];
+        }
+        async function obtenerUbicacionActual(){
+            navigator.geolocation.getCurrentPosition((position)=>{
+                let txtDireccionPartida=document.getElementById("txtDireccionPartida");
+                let dirLatLong=new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+                console.log(position.coords.latitude,position.coords.longitude);
+                geocoder.geocode({
+                    'latLng':dirLatLong
+                }, function(results,status){
+                    if(status===google.maps.GeocoderStatus.OK){
+                        console.log(results[1]);
+                        txtDireccionPartida.value=results[1].formatted_address;
+                    }else{
+                        alert("Error al obtener la ubicación actual");
+                    }
+                });
+            });
         }
         function limpiarMapa(){
             map.removeControl(controlRuta);
