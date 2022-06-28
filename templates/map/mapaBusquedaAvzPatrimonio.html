@@ -159,7 +159,7 @@
                                         <p class="mb-0 " style="font-size: 15px"> Patrimonio Material Inmueble </p>
                                     {% endif %}
 
-                                    <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                    <button class="btn bg-200 mr-1 mb-1 w-100 btnVerMapa" type="button" style="font-size: 10px"
                                             value="{{ p.patrimonio.id }},1">
                                                 Ver en el mapa
                                     </button>
@@ -192,7 +192,7 @@
                             <div class="card-body pt-2 pb-2">
                                 <p class="mb-0 " style="font-size: 15px"> Institución </p>
 
-                                <button class="btn bg-200 mr-1 mb-1 w-100" type="button" style="font-size: 10px"
+                                <button class="btn bg-200 mr-1 mb-1 w-100 btnVerMapa" type="button" style="font-size: 10px"
                                         value="{{ i.institucion.id }},2">
                                             Ver en el mapa
                                 </button>
@@ -274,7 +274,7 @@
     </script>
     <!--script for flying to other results-->
     <script>
-    document.querySelectorAll('.mr-1').forEach(item =>{
+    document.querySelectorAll('.btnVerMapa').forEach(item =>{
         item.addEventListener('click',event=>{
             var data = event.target.value.split(",");
             $(".leaflet-popup").remove();
