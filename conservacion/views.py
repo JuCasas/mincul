@@ -555,7 +555,6 @@ def editTask(request, pk):
     tarea.presupuesto = request.POST['presupuesto']
     tarea.fechaRegistro = datetime.datetime.strptime(request.POST['fechaRegistro'], "%Y-%m-%d").date()
     tarea.fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
-    tarea.estado = request.POST['estado']
     tarea.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
@@ -592,14 +591,14 @@ def updateTaskState(request):
     task = Tarea.objects.get(pk=task_pk)
     nuevo_estado = ''
 
-    if (task.estado == '1'):
+    if (task.status == '1'):
         nuevo_estado = '2'
-    elif (task.estado == '2'):
+    elif (task.status == '2'):
         nuevo_estado = '3'
-    elif (task.estado == '4'):
+    elif (task.status == '4'):
         nuevo_estado = '3'
 
-    task.estado = nuevo_estado
+    task.status = nuevo_estado
     task.save()
     return JsonResponse({}, status=200)
 
@@ -608,7 +607,7 @@ def updateTaskState2(request):
     task_pk = request.POST.get('task_pk')
     task = Tarea.objects.get(pk=task_pk)
     nuevo_estado = request.POST.get('nuevo_estado')
-    task.estado = nuevo_estado
+    task.status = nuevo_estado
 
     detalle_observacion = request.POST.get('detalle_observacion')
 

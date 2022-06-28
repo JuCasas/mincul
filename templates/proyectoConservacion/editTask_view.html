@@ -108,7 +108,7 @@
         }
 
         input:disabled {
-            background-color: #EEEEEE !important;
+            background-color: #D2D2D2 !important;
         }
 
     </style>
@@ -147,31 +147,36 @@
                     <div class="form-group col-lg-12 col-sm-12">
                         <label for="nombre">Nombre:</label>
                         <input class="form-control" id="nombre" name="nombre" type="text"
-                               placeholder="Nombre de la Actividad" value={{ task.nombre }}>
+                               placeholder="Nombre de la Actividad" value={{ task.nombre }}
+                                       {% if request.user|has_group:"Conservador" or task.status != '1' %}Disabled {% endif %}>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12">
                         <label for="descripcion">Descripcion:</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" type="text"
-                                  placeholder="Descripción de la Actividad">{{ task.descripcion }}</textarea>
+                                  placeholder="Descripción de la Actividad"
+                                  {% if request.user|has_group:"Conservador" or task.status != '1'%}Disabled {% endif %}>{{ task.descripcion }}</textarea>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-3 col-sm-12">
                         <label for="fechaRegistro">Fecha de Inicio:</label>
                         <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date"
-                               value={{ task.fechaRegistro|date:"Y-m-d" }}>
+                               value={{ task.fechaRegistro|date:"Y-m-d" }}
+                                       {% if request.user|has_group:"Conservador" or task.status != '1' %}Disabled {% endif %}>
                     </div>
                     <div class="form-group col-lg-3 col-sm-12">
                         <label for="fecha">Fecha de Fin:</label>
                         <input class="form-control" id="fecha" name="fecha" type="date"
-                               value={{ task.fecha|date:"Y-m-d" }}>
+                               value={{ task.fecha|date:"Y-m-d" }}
+                                       {% if request.user|has_group:"Conservador" or task.status != '1' %}Disabled {% endif %}>
                     </div>
                     <div class="form-group col-lg-3 col-sm-12">
                         <label for="presupuesto">Presupuesto:</label>
                         <input class="form-control" id="presupuesto" name="presupuesto" type="text"
-                               placeholder="S/" value={{ task.presupuesto }}>
+                               placeholder="S/" value={{ task.presupuesto }}
+                                       {% if request.user|has_group:"Conservador" or task.status != '1' %}Disabled {% endif %}>
                     </div>
                     <div class="form-group col-lg-3 col-sm-12">
                         <label for="gasto">Gasto Total:</label>
@@ -182,25 +187,28 @@
 
                         <div class="row">
                             <div class="col-3 flex-center mt-auto mb-auto ">
-                                <h5 class="flex-center mt-auto mb-auto">Estado: </h5>
+                                <h5 class="flex-center mt-auto mb-auto">Estado: {{ task.status }} </h5>
                             </div>
                             <div class="col-3">
                                 <span class="btn
-                                        {% if task.estado == '1' %}
-                                           btn-info
-                                        {% elif task.estado == '2' %}
-                                           btn-success
-                                        {% elif task.estado == '3' %}
-                                            btn-dark
-                                        {% elif task.estado == '4' %}
-                                            btn-danger
-                                        {% endif %} ">
-                                    {{ task.get_estado_display }}
-                                </span>
+                                    {% if task.status == '1' %}
+                                       btn-info
+                                    {% elif task.status == '2' %}
+                                       btn-primary
+                                    {% elif task.status == '3' %}
+                                        btn-primary
+                                    {% elif task.status == '4' %}
+                                        btn-danger
+                                    {% elif task.status == '5' %}
+                                        btn-success
+                                    {% endif %} ">
+                                {{ task.get_status_display }}
+                            </span>
                             </div>
 
 
-                            {% if task.estado == '4' %}
+
+                            {% if task.status == '4' %}
                                 <div class="col-3 ">
                                     <button class="btn btn-primary mx-1" type="button" data-toggle="modal"
                                             data-target="#informarDetalleObservacion">
@@ -209,34 +217,51 @@
                                 </div>
                             {% endif %}
 
-                            {% if task.estado != '5' %}
+                            {% if  request.user|has_group:"Conservador" %}
+                                {% if task.status == '1' or task.status == '2' or task.status == '4' %}
+                                    <div class="col-3 ">
+                                        <button id="actualizar" class="btn btn-primary mx-1" type="button">
+                                            {% if task.status == '1' %}
+                                                Iniciar tarea
+                                            {% elif task.status == '2' %}
+                                                Solicitar revisión
+                                            {% elif task.status == '4' %}
+                                                Solicitar revisión
+                                            {% endif %}
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+
+
+                            {% if task.status == '3' and request.user|has_group:"Gestor de Conservación y traslados" %}
+
                                 <div class="col-3 ">
                                     <button id="actualizar" class="btn btn-primary mx-1" type="button">
-                                        {% if task.estado == '1' %}
-                                            Iniciar tarea
-                                        {% elif task.estado == '2' %}
-                                            Solicitar revisión
-                                        {% elif task.estado == '3' %}
-                                            Revisar tarea
-                                        {% elif task.estado == '4' %}
-                                            Solicitar revisión
-                                        {% endif %}
+                                        Revisar tarea
                                     </button>
                                 </div>
                             {% endif %}
+
 
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group  row justify-content-end mt-2 mr-0">
-                    <a href="{% url 'listTasks' pk=activity.id %}" class="btn second mr-3 d-flex align-items-center">Cancelar</a>
-                    <div>
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <span class="glyphicon glyphicon-ok"></span> Guardar Cambios
-                        </button>
+                {% if request.user|has_group:"Gestor de Conservación y traslados" and task.status == '1' %}
+
+                    <div class="form-group  row justify-content-end mt-2 mr-0">
+                        <a href="{% url 'listTasks' pk=activity.id %}"
+                           class="btn second mr-3 d-flex align-items-center">Cancelar</a>
+                        <div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <span class="glyphicon glyphicon-ok"></span> Guardar Cambios
+                            </button>
+                        </div>
                     </div>
-                </div>
+
+                {% endif %}
+
             </form>
         </div>
     </div>
@@ -245,31 +270,34 @@
 
 
 
-    {% if task.estado != '1' %}
+    {% if task.status != '1' %}
         <div class="card">
             <div class="card-header">
                 <div class="form-group  row justify-content-end mt-2">
-                    {% if task.estado == '2' or task.estado == '4' %}
-                        <div class="col-10">
-                            <h5 class="mb-2 mb-md-0 text-black">Secciones</h5>
-                        </div>
-                        <div class="col-2">
-                            <button id="agregarSeccion" class="btn btn-primary " type="button"
-                                    data-toggle="modal" data-target="#agregarSecciones">
-                                Agregar sección
-                            </button>
-                        </div>
-                    {% else %}
-                        <div class="col-12">
-                            <h5 class="mb-2 mb-md-0 text-black">Secciones</h5>
-                        </div>
+                    {% if task.status == '2' or task.status == '4' %}
+
+                        {% if request.user|has_group:"Conservador" %}
+                            <div class="col-10">
+                                <h5 class="mb-2 mb-md-0 text-black">Secciones</h5>
+                            </div>
+                            <div class="col-2">
+                                <button id="agregarSeccion" class="btn btn-primary " type="button"
+                                        data-toggle="modal" data-target="#agregarSecciones">
+                                    Agregar sección
+                                </button>
+                            </div>
+                        {% endif %}
+                        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                            <div class="col-10">
+                                <h5 class="mb-2 mb-md-0 text-black">Secciones</h5>
+                            </div>
+                        {% endif %}
                     {% endif %}
+
+                    <div class="card-body cbody px-5 py-4">
+                        <div id="listarSecciones"></div>
+                    </div>
                 </div>
-            </div>
-            <div class="card-body cbody px-5 py-4">
-
-                <div id="listarSecciones"></div>
-
             </div>
         </div>
     {% endif %}
@@ -286,14 +314,14 @@
                             class="font-weight-light" aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    {% if task.estado == '1' %}
+                    {% if task.status == '1' %}
                         <p>
                             A continuación se procederá a actualizar el estado de la tarea a "EN PROCESO".
                             ¿Esta seguro que desea confirmar esta acción?
                         </p>
                     {% endif %}
 
-                    {% if task.estado == '2' or task.estado == '4' %}
+                    {% if task.status == '2' or task.status == '4' %}
                         <p>
                             A continuación se procederá a actualizar el estado de la tarea a "EN REVISIÓN" y no podra
                             agregar o eliminar secciones como evidencia. ¿Esta seguro que desea confirmar esta acción?
@@ -322,7 +350,7 @@
                             class="font-weight-light" aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    {% if task.estado == '3' %}
+                    {% if task.status == '3' %}
                         <form id="formAprobDes">
                             <div class="form-group">
                                 <label for="estadoTarea">Acción: </label>
@@ -564,20 +592,20 @@
 
         $("#actualizar").on('click', function () {
 
-            if ("{{ task.estado }}" == '1') {
+            if ("{{ task.status }}" == '1') {
                 $("#actualizarEstado").modal('show');
             }
 
-            if ("{{ task.estado }}" == '2') {
+            if ("{{ task.status }}" == '2') {
                 validarExisteSecciones();
             }
 
-            if ("{{ task.estado }}" == '3') {
+            if ("{{ task.status }}" == '3') {
                 $("#actualizarEstado2").modal('show');
             }
 
-            if ("{{ task.estado }}" == '4') {
-                 validarExisteSecciones();
+            if ("{{ task.status }}" == '4') {
+                validarExisteSecciones();
             }
 
         });
@@ -603,21 +631,21 @@
 
                 $("#detalleObservacion").attr('required', true);
 
-               {% comment %} var settings = $('#formAprobDes').validate().settings;
+                {% comment %} var settings = $('#formAprobDes').validate().settings;
 
 
-                $.extend(settings, {
-                    rules: {
-                        detalleObservacion: {
-                            required: true,
-                        },
-                    },
-                    messages: {
-                        detalleObservacion: {
-                            required: "Debe ingresar un detalle del rechazo",
-                        },
-                    }
-                });{% endcomment %}
+                 $.extend(settings, {
+                     rules: {
+                         detalleObservacion: {
+                             required: true,
+                         },
+                     },
+                     messages: {
+                         detalleObservacion: {
+                             required: "Debe ingresar un detalle del rechazo",
+                         },
+                     }
+                 });{% endcomment %}
 
             } else {
 
@@ -725,9 +753,10 @@
                                 '                </div>' +
                                 '                <div class="col-2">' +
                                 '                    <div class="d-flex flex-row justify-content-end" >')
-                            if ("{{ task.estado }}" == "2" || "{{ task.estado }}" == "4" ) {
+                            if (("{{ task.status }}" == "2" || "{{ task.status }}" == "4")) {
                                 data += (
-                                    '                        <button type="button" class="btn" onclick="seccionesEliminar(\'' + secciones[i].nombre + '\',' + secciones[i].id + ')"  ><i class="fas fa-trash"></i>'
+                                    ' <button type="button" class="btn" onclick="seccionesEliminar(\'' + secciones[i].nombre + '\',' + secciones[i].id + ')" '+
+                                     {% if request.user|has_group:"Gestor de Conservación y Traslados"  %}' hidden ' {% else %} '' {% endif %} + '><i class="fas fa-trash"></i>'
                                 )
                             }
                             data += (
@@ -846,6 +875,7 @@
                     url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/',
                     method: "POST",
                     data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
                         'nombre': $("#nombre").val(),
                         'descripcion': $("#descripcion").val(),
                         'fechaRegistro': $("#fechaRegistro").val(),

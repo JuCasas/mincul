@@ -282,6 +282,7 @@
                     url: '/conservacion/actividades/' + $('#idActivity').val() + '/tareas/add/',
                     method: "POST",
                     data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
                         'nombre': $("#nombre").val(),
                         'descripcion': $("#descripcion").val(),
                         'conservador': $("#conservador").val(),
@@ -320,7 +321,16 @@
                     },
                     error: function (error) {
                         $('#cover-spin').hide()
-                        console.log(error)
+
+                        $.toast({
+                                text: 'Ha ocurrido un error inesperado',
+                                icon: 'warning',
+                                loader: false,        // Change it to false to disable loader
+                                bgColor: '#B7E6CA',  // To change the background
+                                textColor: '#000000',
+                                position: 'bottom-right',
+                                hideAfter: 3000,
+                            })
                     }
                 });
                 return false;

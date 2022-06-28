@@ -24,7 +24,7 @@ class TareaSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = Tarea
-        fields = ['id','codigo','nombre','descripcion','fechaRegistro','fecha','presupuesto','gasto']
+        fields = ['id','codigo','nombre','descripcion','fechaRegistro','fecha','presupuesto','gasto', 'status']
         #                                               fechaInicio   , fechaFin
 
 class PatrimonioSerializer(serializers.ModelSerializer):
