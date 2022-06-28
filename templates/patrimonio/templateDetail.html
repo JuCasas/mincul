@@ -43,8 +43,7 @@
                     <div>
                         <img class="img-fluid w-100"
                              style="height: 320px; object-fit: fill; border-radius: 3px"
-                                {#                                         src="../static/img/generic/4-caral.jpg"#}
-                             src={{ valor.url }}
+                             src="{{ valor.imagen }}"
                              alt="Card image"/>
                     </div>
                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
@@ -150,11 +149,11 @@
                                 <h5 class="card-title text-black">Datos de identificación:</h5>
                                 <h6 class="mb-2 mb-md-0 text-black">Categoría: {{ valor.categoria }}</h6>
                                 <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Tipo de Bien: {{ valor.tipoPatrimonio }}</h6>
+                                <h6 class="mb-2 mb-md-0 text-black">Tipo: {{ valor.tipo.1 }}</h6>
                                 <p></p>
                                 <h6 class="mb-2 mb-md-0 text-black">Título/Denominación: {{ valor.nombreTituloDemoninacion }}</h6>
                                 <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Autor: {{ valor.propietarios }}</h6>
+                                <h6 class="mb-2 mb-md-0 text-black">Autor: {{ valor.propietarios.1 }}</h6>
                                 <p></p>
                                 <h6 class="mb-2 mb-md-0 text-black">Firmada: {{ valor.propietarios }}</h6>
                                 <p></p>
