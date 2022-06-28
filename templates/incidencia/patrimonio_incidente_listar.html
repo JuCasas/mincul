@@ -107,7 +107,6 @@
 
       .form-control {
           background-color: white !important;
-          cursor: pointer !important;
       }
 
       span.select2-selection.select2-selection--single {
@@ -135,6 +134,10 @@
           align-items: center !important;
       }
 
+      #anchoIncidente {
+          width: 35%;
+      }
+
       .select2-selection__placeholder {
           align-items: center !important;
           font-size: 12px !important;
@@ -148,15 +151,23 @@
       }
 
       input:disabled {
-          background-color: #EEEEEE !important;
+          background-color: #edf2f9 !important;
       }
 
       select:disabled {
-          background-color: #EEEEEE !important;
+          background-color: #edf2f9 !important;
       }
 
       textarea:disabled {
-          background-color: #EEEEEE !important;
+          background-color: #edf2f9 !important;
+      }
+
+      select:disabled {
+          background-color: #edf2f9 !important;
+      }
+
+      textarea:disabled {
+          background-color: #edf2f9 !important;
       }
 
   </style>
@@ -238,7 +249,7 @@
 
   <!-- NEW and EDIT Modal -->
   <div class="modal fade" id="modalIncidente" role="dialog">
-    <div class="modal-dialog mw-100 w-25">
+    <div id="anchoIncidente" class="modal-dialog mw-100">
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -296,6 +307,12 @@
                 <select class="form-control selectpicker" id="status" name="status" disabled>
                   <option value="first" selected="selected">Asignado</option>
                 </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-lg-12 col-sm-12" id="seccionExistentes">
+
               </div>
             </div>
 
@@ -642,6 +659,8 @@
     $('#tabla_incidentes tbody').on('click', 'button', function () {
 
       let data = table.row($(this).parents('tr')).data();
+      console.log("DATAAAAAAAAA")
+
       let class_name = $(this).attr('class');
       id = data['id'];
 
@@ -657,9 +676,9 @@
         }
 
       } else if (class_name === 'btn btn-show') {
-
+        console.log(data)
         $('#cover-spin').show(0)
-
+        console.log("BTN SHOWWWW");
         $.ajax({
           url: '/incidentes/' + id + '/detalle/',
           type: 'get',
@@ -669,6 +688,9 @@
             $('#cover-spin').hide()
 
             let incidente = data['data'][0]
+            let documentos = incidente['documentos'];
+            console.log(documentos)
+            let tamDocumentos = incidente['documentos'].length;
 
             $('#modal_title').text("Incidente " + incidente['codigo']);
             $('#informante').val(incidente['nombre']);
@@ -684,6 +706,27 @@
               $('select[name=proyecto] option:first').html(incidente['proyecto']['nombre']);
             }
 
+            //DOCUMENTOS
+            if (tamDocumentos == 0) {
+                data = ''
+            }
+            else {
+                data = '<h5 class="mb-4">Documentos existentes:</h5>';
+                for (let i = 0; i < tamDocumentos; i++) {
+                data += '<div>' +
+                            '<a class="notification notification-flush bg-0"' +
+                                'href="' + documentos[i].url + '" download>' + documentos[i].name +
+                                    '<button class="btn" href="' + documentos[i].url + '" type="button">' +
+                                        '<i class="fas fa-download" data-fa-transform="shrink-3"></i>' +
+                                    '</button>' +
+                            '</a>'+
+                            '<hr>' +
+                        '</div>';
+                }
+            }
+
+
+            $("#seccionExistentes").html(data);
 
             $("#modalIncidente").modal();
           },
@@ -770,7 +813,8 @@
       $.ajax({
         url: '/incidentes/' + id + '/delete/',
         method: 'POST',
-        data: {},
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}',},
+
         success: function (response) {
           $('#cover-spin').hide();
           $("#modalDenegar").modal('hide');
