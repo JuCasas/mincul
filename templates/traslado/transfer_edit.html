@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load has_group %}
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
@@ -62,11 +63,15 @@
                                 <input class="form-control" id="comisario" name="comisario" type="text"
                                        value="{{ traslado.gestorConservacionTraslados }}">
                             </div>
-                            <div class="form-group">
-                                <label for="nResolucion">N° de Resolucion:</label>
-                                <input class="form-control" id="nResolucion" name="nResolucion" type="text"
-                                       value="{{ traslado.numeroResolucion }}">
-                            </div>
+
+                            {% if traslado.estado != '1' %}
+                                <div class="form-group">
+                                    <label for="nResolucion">N° de Resolucion:</label>
+                                    <input class="form-control" id="nResolucion" name="nResolucion" type="text"
+                                           value="{{ traslado.numeroResolucion }}"
+                                    {% if request.user|has_group:"Gestor de Patrimonios"%}Disabled {% endif %}>
+                                </div>
+                            {% endif %}
 
                         </div>
                     </div>
@@ -231,11 +236,13 @@
                             <button class="btn btn-warning  mx-1" disabled>{{ traslado.get_estado_display }}</button>
                         </div>
 
-                        <div class="col-2">
-                            <button class="btn btn-primary" type="button" data-toggle="modal"
-                                    data-target="#actualizarEstado">Actualizar estado
-                            </button>
-                        </div>
+                        {% if request.user|has_group:"Gestor de Conservación y Traslados"%}
+                            <div class="col-2">
+                                <button class="btn btn-primary" type="button" data-toggle="modal"
+                                        data-target="#actualizarEstado">Actualizar estado
+                                </button>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-1 align-items-end">

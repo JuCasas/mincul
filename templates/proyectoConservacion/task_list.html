@@ -1,4 +1,5 @@
 {% extends 'proyectoConservacion/components/base.html' %}
+{% load has_group %}
 {% load static %}
 
 {% block extrastyle %}
@@ -142,10 +143,15 @@
                         <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
                     </div>
                 </div>
-                <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center" type="button"
-                   href="{% url 'addTaskView' pk=activity.id %}">
-                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
-                </a>
+
+                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                    <a class="btn btn-primary col-sm-2 mb-0 d-flex align-items-center justify-content-center"
+                       type="button"
+                       href="{% url 'addTaskView' pk=activity.id %}">
+                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Tarea
+                    </a>
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -162,6 +168,7 @@
                     <th class="sort">Gasto Total</th>
                     <th class="sort">Fecha de Inicio</th>
                     <th class="sort">Fecha de Fin</th>
+                    <th class="sort">Estado</th>
                     <th class="sort">Acciones</th>
                 </tr>
                 </thead>
@@ -242,10 +249,45 @@
                 {"data": "fechaRegistro"},
                 {"data": "fecha"},
                 {
-                    "data": null,
-                    "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-                        '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-                        '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+                    "data": "status", render: function (data, type, row) {
+                        if (data == '1') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-info">' + "Registrada" + '</span>'
+                        } else if (data == '2') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En proceso" + '</span>'
+                        } else if (data == '3') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En evaluación" + '</span>'
+                        } else if (data == '4') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Observada" + '</span>'
+                        } else if (data == '5') {
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Finalizada" + '</span>'
+                        }
+                        return resp;
+                    }
+                },
+                {
+                    "data": "status", render: function (data, type, row) {
+                        if (data == '1') {
+                            resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                                    '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>'
+                                    {% else %}''{% endif %}
+                        } else if (data == '2') {
+                            resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp';
+                        } else if (data == '3') {
+                            resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp';
+                        } else if (data == '4') {
+                            resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp';
+                        } else if (data == '5') {
+                            resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp';
+                        }
+                        return resp;
+                    },
+                    "orderable": false,
                 }
             ],
             "language": {

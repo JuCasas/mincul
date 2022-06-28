@@ -83,12 +83,16 @@ class Actividad(models.Model):
 
 
 class Tarea(models.Model):
-    ESTADOS = (
+    STATUS = (
         ('1', 'Registrada'),
         ('2', 'En proceso'),
         ('3', 'En evaluación'),
         ('4', 'Observada'),
         ('5', 'Finalizada'),
+    )
+    ESTADOS = (
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
     )
     codigo = models.CharField(max_length=8, null=True)
     nombre = models.CharField(max_length=50, null=True)
@@ -101,6 +105,7 @@ class Tarea(models.Model):
     fechaRegistro = models.DateField(blank=True, null=True, verbose_name='fechaRegistro')
     actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
+    status = models.CharField(max_length=2, choices=STATUS, default='1', null=True, blank=True)
 
 
 class Campo(models.Model):

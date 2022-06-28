@@ -58,7 +58,7 @@ def query_projects_by_args(**kwargs):
     }
 
 
-def query_activities_by_args(pk, **kwargs):
+def query_activities_by_args(request,pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
@@ -68,8 +68,18 @@ def query_activities_by_args(pk, **kwargs):
     order = kwargs.get('order', None)[0]
 
     project = ProyectoConservacion.objects.get(pk=pk)
-    queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(proyecto=project).filter(
-        estado='1')
+
+
+    if(request.user is not None):
+        if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
+            user = User.objects.get(username=request.user)
+            queryset = user.actividad_set.all().filter(estado='1')
+            queryset= queryset.annotate(conservadores_count=Count('conservadores')).filter(
+        proyecto=project)
+        else:
+            queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(
+                proyecto=project).filter(
+                estado='1')
 
     total = queryset.count()
 
@@ -94,7 +104,7 @@ def query_activities_by_args(pk, **kwargs):
     }
 
 
-def query_tasks_by_args(pk, **kwargs):
+def query_tasks_by_args(request,pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     # search_value = kwargs.get('search_value', None)[0]
@@ -105,6 +115,10 @@ def query_tasks_by_args(pk, **kwargs):
 
     activity = Actividad.objects.get(pk=pk)
     queryset = Tarea.objects.filter(actividad=activity).filter()
+
+    if(request.user is not None):
+        if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
+            queryset = queryset.filter(responsable_id=request.user.id)
 
     total = queryset.count()
 
@@ -313,7 +327,7 @@ def eliminarDocumentoActividad(request):
 @api_view(('GET',))
 def listActivities(request, pk):
     if request.is_ajax():
-        activity = query_activities_by_args(pk, **request.GET)
+        activity = query_activities_by_args(request,pk, **request.GET)
         serializer = ActividadSerializer((activity['items']), many=True)
         result = dict()
         result['data'] = serializer.data
@@ -403,7 +417,7 @@ def addPatrimony(request, pk):
 @api_view(('GET',))
 def listTasks(request, pk):
     if request.is_ajax():
-        task = query_tasks_by_args(pk, **request.GET)
+        task = query_tasks_by_args(request,pk, **request.GET)
         serializer = TareaSerializer((task['items']), many=True)
         result = dict()
         result['data'] = serializer.data
@@ -555,7 +569,6 @@ def editTask(request, pk):
     tarea.presupuesto = request.POST['presupuesto']
     tarea.fechaRegistro = datetime.datetime.strptime(request.POST['fechaRegistro'], "%Y-%m-%d").date()
     tarea.fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
-    tarea.estado = request.POST['estado']
     tarea.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
@@ -592,14 +605,14 @@ def updateTaskState(request):
     task = Tarea.objects.get(pk=task_pk)
     nuevo_estado = ''
 
-    if (task.estado == '1'):
+    if (task.status == '1'):
         nuevo_estado = '2'
-    elif (task.estado == '2'):
+    elif (task.status == '2'):
         nuevo_estado = '3'
-    elif (task.estado == '4'):
+    elif (task.status == '4'):
         nuevo_estado = '3'
 
-    task.estado = nuevo_estado
+    task.status = nuevo_estado
     task.save()
     return JsonResponse({}, status=200)
 
@@ -608,7 +621,7 @@ def updateTaskState2(request):
     task_pk = request.POST.get('task_pk')
     task = Tarea.objects.get(pk=task_pk)
     nuevo_estado = request.POST.get('nuevo_estado')
-    task.estado = nuevo_estado
+    task.status = nuevo_estado
 
     detalle_observacion = request.POST.get('detalle_observacion')
 

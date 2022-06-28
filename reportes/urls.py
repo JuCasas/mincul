@@ -5,5 +5,4 @@ from reportes import views
 urlpatterns = [
     path('', views.reportes, name='reportes'),
     path('traerData/', views.traerData, name='traerData'),
-    path('traerNombres/', views.traerNombres, name='traerNombres'),
 ]
