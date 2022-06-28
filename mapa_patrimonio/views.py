@@ -17,27 +17,15 @@ from patrimonios.models import Institucion
 
 def datos(request):
     success=-1
-    print(request)
-    print(request.POST)
     patri=Patrimonio.objects.filter(estado=1).filter(tipoPatrimonio=2)
-    print(patri)
     if request.POST["latIniMenor"]=="true":
         patri=patri.filter(lat__gte=request.POST["latitudIni"]).filter(lat__lte=request.POST["latitudFin"])
-        print("ntro")
-        print(patri)
     else:
         patri = patri.filter(lat__gte=request.POST["latitudFin"]).filter(lat__lte=request.POST["latitudIni"])
-        print("entro")
-        print(patri)
     if request.POST["longIniMenor"]=="true":
         patri = patri.filter(long__gte=request.POST["longitudIni"]).filter(long__lte=request.POST["longitudFin"])
-        print("entro2")
-        print(patri)
     else:
         patri = patri.filter(long__gte=request.POST["longitudFin"]).filter(long__lte=request.POST["longitudIni"])
-        print("entro3")
-        print(patri)
-    print(patri)
     instit=Institucion.objects.filter(estado=1)
     if request.POST["latIniMenor"]:
         instit =instit.filter(lat__gte=request.POST["latitudIni"]).filter(lat__lte=request.POST["latitudFin"])
@@ -47,7 +35,6 @@ def datos(request):
         instit = instit.filter(long__gte=request.POST["longitudIni"]).filter(long__lte=request.POST["longitudFin"])
     else:
         instit = instit.filter(long__gte=request.POST["longitudFin"]).filter(long__lte=request.POST["longitudIni"])
-    print(instit)
     numPatri = patri.count()
     numInstit = instit.count()
     numPatriInstit = 0
@@ -85,7 +72,6 @@ def datos(request):
             numAzarPatri = 10 - numAzarInstit
         patrimoniosAzar = sample(list(patri.values()), numAzarPatri)
         institucionesAzar = sample(list(instit.values()), numAzarInstit)
-        print(patrimoniosAzar)
         for patriAzar in patrimoniosAzar:
             patriInstit.append({
                 "id": patriAzar['id'],
@@ -111,7 +97,85 @@ def datos(request):
                         status=200, safe=False)
 
 def patrimonioFueraRuta(request):
-    return JsonResponse({'data':'hola'},status=200,safe=False)
+    print(request.POST)
+    idPatrimonios=request.POST.getlist("idPatrimoniosEnrutados[]")
+    idInstituciones = request.POST.getlist("idInstitucionesEnrutadas[]")
+    print(idPatrimonios)
+    print(idInstituciones)
+    patri = Patrimonio.objects.filter(estado=1).filter(tipoPatrimonio=2)
+    patri = patri.filter(lat__gte=request.POST["suresteLat"]).filter(lat__lte=request.POST["noroesteLat"])
+    patri = patri.filter(long__gte=request.POST["noroesteLong"]).filter(long__lte=request.POST["suresteLong"])
+    instit = Institucion.objects.filter(estado=1)
+    instit = instit.filter(lat__gte=request.POST["suresteLat"]).filter(lat__lte=request.POST["noroesteLat"])
+    instit = instit.filter(long__gte=request.POST["noroesteLong"]).filter(long__lte=request.POST["suresteLong"])
+
+    for idPatri in idPatrimonios:
+        patri=patri.exclude(id=int(idPatri))
+    for idInstit in idInstituciones:
+        instit=instit.exclude(id=int(idInstit))
+
+    numEnrutados=request.POST.get("numEnrutados")
+    numEnrutados=int(numEnrutados)
+    numPatri = patri.count()
+    numInstit = instit.count()
+    numPatriInstit = 0
+    patriInstit = []
+    if (numPatri + numInstit) <= numEnrutados:
+        numPatriInstit = numPatri + numInstit
+        for i in range(numPatri):
+            patriInstit.append({
+                "id": patri[i].id,
+                "lat": patri[i].lat,
+                "long": patri[i].long,
+                "nombre": patri[i].nombreTituloDemoninacion,
+                "url": patri[i].url,
+                "tipo": 2,
+            })
+        for j in range(numInstit):
+            patriInstit.append({
+                "id": instit[i].id,
+                "lat": instit[i].lat,
+                "long": instit[i].long,
+                "nombre": instit[i].nombre,
+                "url": instit[i].url,
+                "tipo": 4,
+            })
+        success = 1
+    else:  # escoger al azar
+        numPatriInstit = numEnrutados
+        numAzarPatri = randint(0, numEnrutados)
+        numAzarInstit = numEnrutados - numAzarPatri
+        if numPatri < numAzarPatri:
+            numAzarPatri = numPatri
+            numAzarInstit = numEnrutados - numAzarPatri
+        elif numInstit < numAzarInstit:
+            numAzarInstit = numInstit
+            numAzarPatri = numEnrutados - numAzarInstit
+        patrimoniosAzar = sample(list(patri.values()), numAzarPatri)
+        institucionesAzar = sample(list(instit.values()), numAzarInstit)
+        for patriAzar in patrimoniosAzar:
+            patriInstit.append({
+                "id": patriAzar['id'],
+                "lat": patriAzar['lat'],
+                "long": patriAzar['long'],
+                "nombre": patriAzar['nombreTituloDemoninacion'],
+                "url": patriAzar['url'],
+                "tipo": 2,
+            })
+        for institAzar in institucionesAzar:
+            patriInstit.append({
+                "id": institAzar['id'],
+                "lat": institAzar['lat'],
+                "long": institAzar['long'],
+                "nombre": institAzar['nombre'],
+                "url": institAzar['url'],
+                "tipo": 4,
+            })
+        success = 1
+
+    return JsonResponse({'data': patriInstit,
+                          'success': success},
+                        status=200, safe=False)
 
 def index(request):
     ########################################################################################################################
