@@ -334,7 +334,8 @@
                     divPatrimonioLabel.appendChild(btnFicha);
 
                     let linkFicha=document.createElement("a");
-                    linkFicha.href="http://127.0.0.1:8000/patrimonios/detalle/"+patrimoniosEnRuta[i].id+"/";
+                    linkFicha.href=window.location.origin+"/patrimonios/detalle/"+patrimoniosEnRuta[i].id+"/";
+                    console.log(window.location.origin);
                     let btnFichaLink=document.createElement("button");
                     classLink.forEach((clas)=>{
                         btnFichaLink.classList.add(clas);
