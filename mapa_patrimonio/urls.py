@@ -5,5 +5,5 @@ from mapa_patrimonio import views as mapa_patrimonio_views
 urlpatterns = [
     path('mapa/index', mapa_patrimonio_views.index, name='index'),
     path('mapa/datos', mapa_patrimonio_views.datos, name='datos'),
-    #path('mapa/prueba', mapa_patrimonio_views.prueba, name='prueba'),
+    path('mapa/patrimoniosFueraRuta', mapa_patrimonio_views.patrimonioFueraRuta, name='patrimonioFueraRuta'),
 ]

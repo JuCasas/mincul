@@ -18,22 +18,44 @@
 {% endblock %}
 
 {% block body %}
-    <div class="filtrosBusqueda">
+    <div class="card mb-3 cardForm">
         <div class="row">
-            <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
+            <!--Barra lateral-->
+            <div class="col-md-4" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
+                <nav class="mb-3" style="height: 75vh">
+
+                    <div class="navbar-vertical-content">
+                            <div class="row">
+                                <div class="col" >
+                                    <div class="row px-3 pb-3 position-relative flex align-items-center">
+                                        <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
+                                    </div>
+                                    <div class="row px-3 pb-3">
+                                        <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
+                                    </div>
+                                    <div class="row px-3 pb-3">
+                                        <button id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
+                                    </div>
+                                    <div class="row px-3 pb-3">
+                                        <!--<div>0m <input type="range" min="0" max="2000" value="0" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
+                                        <input type="number" min="0" max="2000" value="0" class="" id="inputDispersion" disabled/></div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="patrimoniosLista">
+                        </div>
+                </nav>
+            </div>
+            <!--Mapa-->
+            <div class="col-md-8" style="padding-top: 15px;padding-right: 30px;">
+                <div class="card" style="width: 100%">
+                    <div class="position-relative">
+                        <div id="map" style="height: 75vh; object-fit: cover; border-radius: 3px"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <br>
-        <div class="row">
-            <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
-        </div>
-        <br>
-        <!--<div>0m <input type="range" min="0" max="2000" value="0" data-color="#f00" class="" id="sliderDispersion" /> 2000m 
-        <input type="number" min="0" max="2000" value="0" class="" id="inputDispersion" disabled/></div>
-        <br>-->
-        <button id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
-    </div>
-    <br>
-    <div class="col-md-10 offset-md-1" id="map" style="width:100%;height:100vh">
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -57,7 +79,7 @@
         const PORCENTAJE_DISPERSION=0.15;
         const MAX_DISPERSION=2000;//en metros
         
-
+        var success=-1;
         var zoomActual=0;
         var map = L.map('map').setView([LATITUD_CENTRO_PERU, LONGITUD_CENTRO_PERU],ZOOM_CENTRO_PERU);
         var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: "OSM"}).addTo(map);
@@ -66,6 +88,7 @@
         var grupoMarcadoresRuta = L.layerGroup().addTo(map);
         var grupoMarcadoresFueraRuta = L.layerGroup().addTo(map);
         var patrimoniosEnRuta = null;
+        var patrimoniosFueraRuta = null;
         var numPatrimoniosEnRuta=0;
         var dispersion=-1;//por defecto será un 0.2 de la distancia original de la ruta, hasta un máximo de 2km
         var esquinasMapa={
@@ -143,6 +166,14 @@
             grupoMarcadoresFueraRuta.clearLayers();
             controlRuta=null;
             patrimoniosEnRuta=null;
+            patrimoniosFueraRuta=null;
+            let divPatriLista=document.querySelector('#patrimoniosLista');
+            while(divPatriLista.firstChild){
+                divPatriLista.removeChild(divPatriLista.firstChild);
+            }
+        }
+        function enfocarPatrimonio(){
+            //enfocar con el fly
         }
         async function obtenerPatrimoniosCercanos(lat1,long1,lat2,long2,lat1menor,long1menor){
             return $.ajax({
@@ -160,8 +191,24 @@
             });
         }
         function crearDivPatrimonio(patrimonioDatos){
-            return '<div>' + '<h3 style="text-align: center">'+patrimonioDatos.nombreTituloDemoninacion+'</h3>'+
+            return '<div>' + '<h3 style="text-align: center">'+patrimonioDatos.nombre+'</h3>'+
                 '<img src="'+ patrimonioDatos.url+'" height="100px" width="300px"/>'+'</div>';
+        }
+        async function obtenerPatrimoniosFueraRuta(){
+            return $.ajax({
+                type: "POST",
+                url: "/mapa_patrimonio/mapa/patrimoniosFueraRuta",
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    //insertar las esquinas
+                },
+            });
+        }
+        async function anadirPatrimoniosFueraRuta(){
+            if(patrimoniosEnRuta==null){
+                return;
+            }
+            
         }
         function anadirPatrimoniosEnRuta(){//tipo 2 para inmuebles, 4 para institucion
             for(let i=0;i<patrimoniosEnRuta.length;i++){
@@ -177,21 +224,17 @@
                     }).addTo(grupoMarcadoresRuta).bindPopup(crearDivPatrimonio(patrimoniosEnRuta[i]));
                 }
             }
-            /*for(let i=0;i<patrimoniosCercanos.data.length;i++){
-                if(patrimoniosCercanos.data[i].tipoPatrimonio==2){//material inmueble
-                    let markerInicio = L.marker([patrimoniosCercanos.data[i].lat, patrimoniosCercanos.data[i].long], {
-                        icon: patrimonioIcon,
-                        title: patrimoniosCercanos.data[i].nombreTituloDemoninacion,
-                    }).addTo(grupoMarcadoresRuta).bindPopup(crearDivPatrimonio(patrimoniosCercanos.data[i]));
-                }else{//ver lo de agruparlos en institución
-
-                }
-            }*/
-            return;
+        }
+        function ordenarPatrimoniosEnBasePuntoPartida(lat,long){//primero se irá al más cercano, luego al siguiente en cercanía, etc
+            patrimoniosEnRuta.sort((a,b)=>{
+                return distanciaEntreDosCoordenadas(lat,long,parseFloat(a.lat),parseFloat(a.long)) - distanciaEntreDosCoordenadas(lat,long,b.lat,b.long);
+            });
+            console.log(patrimoniosEnRuta); 
         }
         async function enrutamientoConPatrimonios(lat1,long1,lat2,long2){
             let puntosRuta=[];
             puntosRuta.push(L.latLng(lat1,long1));
+            ordenarPatrimoniosEnBasePuntoPartida(lat1,long1);
             for(let i=0;i<patrimoniosEnRuta.length;i++){
                 puntosRuta.push(L.latLng(patrimoniosEnRuta[i].lat,patrimoniosEnRuta[i].long))
             }
@@ -204,6 +247,109 @@
                 waypoints: puntosRuta,
                 language:'es',
             }).addTo(map);
+        }
+        function anadirListaPatrimonios(){
+            var divListaPatrimonio = document.getElementById("patrimoniosLista");
+            let divMensajeConfirmacion = document.createElement("div");
+            let classes=['row','px-3','flex-row','justify-content-center','text-center','mt-3'];
+            classes.forEach((clas)=>{
+                divMensajeConfirmacion.classList.add(clas);
+            });
+            let mensaje="";
+            if(success==1){
+                if(patrimoniosEnRuta.length==0){
+                    mensaje="No se encontraron patrimonios dentro de la ruta ingresada."
+                }else{
+                    mensaje="Se encontraron " + patrimoniosEnRuta.length + " patrimonios dentro de la ruta ingresada."
+                }
+            }else{
+                mensaje="Hubo un error al generar la ruta."
+            }
+            divMensajeConfirmacion.appendChild(document.createTextNode(mensaje));
+            divListaPatrimonio.appendChild(divMensajeConfirmacion);
+            if(success==1 && patrimoniosEnRuta.length>0){
+                let classDivMayor=['card','mb-4','mx-0'];
+                let classImg=['img-fluid','w-100'];
+                let classCard=['card-img-overlay','d-flex','align-items-end','text-white','pb-2'];//--
+                let classPatrimonioLabel=['card-body','pt-2','pb-2'];
+                let classButton=['btn','bg-200','mr-1','mb-1','w-100'];
+                let classLink=['btn','btn-dark','mr-1','mb-1','w-100'];
+                for(let i=0;i<patrimoniosEnRuta.length;i++){
+                    let divMayor=document.createElement("div");
+                    classDivMayor.forEach((clas)=>{
+                        divMayor.classList.add(clas);
+                    });
+                    let divMediano=document.createElement("div");
+                    divMediano.classList.add('position-relative');
+                    
+                    let divImg=document.createElement("div");
+                    let img=document.createElement('img');
+                    classImg.forEach((clas)=>{
+                        img.classList.add(clas);
+                    });
+                    //img.src=patrimoniosEnRuta[i].url;
+                    img.src="/static/img/landmarks/notAvailable.jpg";
+                    img.style.height="130px";
+                    img.style.objectFit="cover";
+                    img.style.borderTopLeftRadius="20px";
+                    img.style.borderTopRightRadius="20px";
+                    img.alt=patrimoniosEnRuta[i].nombre;
+                    divImg.appendChild(img);
+
+                    let divCard=document.createElement("div");
+                    classCard.forEach((clas)=>{
+                        divCard.classList.add(clas);
+                    });
+                    let pCard=document.createElement("p");
+                    pCard.appendChild(document.createTextNode(patrimoniosEnRuta[i].nombre));
+                    pCard.style.fontSize="15px";
+                    pCard.style.fontWeight="bold";
+                    pCard.style.textShadow="1px 1px black";
+                    divCard.appendChild(pCard);
+
+                    divMediano.appendChild(divImg);
+                    divMediano.appendChild(divCard);
+                    
+                    divMayor.appendChild(divMediano);
+
+                    let divPatrimonioLabel=document.createElement("div");
+                    classPatrimonioLabel.forEach((clas)=>{
+                        divPatrimonioLabel.classList.add(clas);
+                    });
+                    let pPatrimonio=document.createElement("p");
+                    pPatrimonio.appendChild(document.createTextNode(patrimoniosEnRuta[i].tipo==2 ? "Patrimonio Material Inmueble" : "Institución"));
+                    divPatrimonioLabel.appendChild(pPatrimonio);
+
+                    let btnFicha=document.createElement("button");
+                    classButton.forEach((clas)=>{
+                        btnFicha.classList.add(clas);
+                    });
+                    btnFicha.type="button";
+                    btnFicha.style.fontSize="10px";
+                    btnFicha.innerHTML="Ver en el mapa";
+                    btnFicha.value=patrimoniosEnRuta[i].id;
+                    btnFicha.onclick=function(){
+                        enfocarPatrimonio(patrimoniosEnRuta[i]);
+                    };
+                    divPatrimonioLabel.appendChild(btnFicha);
+
+                    let linkFicha=document.createElement("a");
+                    linkFicha.href="http://127.0.0.1:8000/patrimonios/detalle/"+patrimoniosEnRuta[i].id+"/";
+                    let btnFichaLink=document.createElement("button");
+                    classLink.forEach((clas)=>{
+                        btnFichaLink.classList.add(clas);
+                    });
+                    btnFichaLink.type="button";
+                    btnFichaLink.style.fontSize="10px";
+                    btnFichaLink.innerHTML="Ver Ficha";
+                    linkFicha.appendChild(btnFichaLink);
+                    divPatrimonioLabel.appendChild(linkFicha);
+
+                    divMayor.appendChild(divPatrimonioLabel);
+
+                    divListaPatrimonio.appendChild(divMayor);
+                }
+            }
         }
         async function generarRutaDispersion(lat1,long1,lat2,long2){
             let distanciaDispersion;
@@ -238,9 +384,14 @@
                 then(datos=>{
                     patrimoniosEnRuta=datos.data;
                     numPatrimoniosEnRuta=datos.numPatrimonios;
+                    success=datos.success;
+                    console.log(datos);
+                    console.log(patrimoniosEnRuta);
                 });
             await enrutamientoConPatrimonios(lat1,long1,lat2,long2);
             anadirPatrimoniosEnRuta();
+            await anadirPatrimoniosFueraRuta();
+            anadirListaPatrimonios();
         }
         async function generarRuta() {
             if(controlRuta!=null){
@@ -307,7 +458,6 @@
         function distanciaEntreDosCoordenadas(lat1,long1,lat2,long2){//devuelve en metros
             //mientras más grande la distancia tendrá menos precisión, a más pequeña más precisión
             //en caso de todo el perú son 30m +- de falta de precisión
-            console.log(lat1,long1,lat2,long2);
             let lat1Rad=lat1*(Math.PI/180);
             let lat2Rad=lat2*(Math.PI/180);
             let difLatRad=(lat2-lat1)*(Math.PI/180);
@@ -316,7 +466,6 @@
                 Math.cos(lat1Rad)*Math.cos(lat2Rad)*Math.sin(difLongRad/2)*Math.sin(difLongRad/2);
             let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
             let d=RADIO_DE_LA_TIERRA_PROMEDIO_PERU*c*1000;
-            console.log(d);
             return d;
         }
     </script>
