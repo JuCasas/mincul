@@ -24,7 +24,7 @@ from patrimonios.models import Patrimonio, Institucion, PatrimonioValoracion, Ca
     FuenteBibliografica, PatrimonioPaleontologico, PatrimonioMaterialMueble, PatrimonioIndustrial, Fabricante, \
     PatrimonioArqueologico, TecnicaManufactura, TecnicaDecoracion, PatrimonioHistoricoArtistico, MaterialSecundario, \
     TecnicaAcabado, PatrimonioEtnografico, Propietario, Excavacion, ElementoAdicional
-from patrimonios.serializers import InstitucionSerializer, UserSerializer, PatrimonioListSerializer
+from patrimonios.serializers import InstitucionSerializer, UserSerializer, PatrimonioListSerializer, PatrimonioSerializer
 
 
 @api_view(('GET',))
@@ -817,17 +817,6 @@ def addIncidente(request,pk):
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 def detalle(request, pk):
-    valor = Patrimonio.objects.get(pk=pk)
-    zona = PuntoGeografico.objects.get(patrimonio_id=pk)
-    valoraciones = PatrimonioValoracion.objects.filter(zona=zona).filter(estado=2)
-    puntuacion = 0
-    for v in valoraciones:
-        puntuacion = v.valoracion + puntuacion
-    if len(valoraciones):
-        puntuacion=puntuacion/len(valoraciones)
-    context = {'puntacion': puntuacion, 'valor': valor, 'valoraciones': valoraciones,
-               'afectaciones': [c[1] for c in Incidente.AFECTACION]}
-
     if request.POST.get("accion") == "incidente":
         print(request.POST)
         incidente = Incidente.objects.create()
@@ -858,6 +847,34 @@ def detalle(request, pk):
         valoracion.save()
         send_email(request, valoracion.pk)
         return HttpResponseRedirect(reverse(detalle, args=[pk]))
+
+    valor = Patrimonio.objects.get(pk=pk)
+    if int(valor.tipoPatrimonio) > 1:
+        zona = PuntoGeografico.objects.get(institucion_id=valor.institucion.pk)
+    else:
+        zona = PuntoGeografico.objects.get(patrimonio_id=pk)
+    valoraciones = PatrimonioValoracion.objects.filter(zona=zona).filter(estado=2)
+    puntuacion = 0
+
+    for v in valoraciones:
+        puntuacion = v.valoracion + puntuacion
+    if len(valoraciones):
+        puntuacion = puntuacion / len(valoraciones)
+
+    actividadesTuristicas = ActividadTuristica.objects.filter(patrimonio_id=pk)
+    entradas = Entrada.objects.filter(patrimonio_id=pk)
+    servicios = Servicio.objects.filter(patrimonio_id=pk)
+
+    context = {
+        'puntacion': puntuacion,
+        'valor': PatrimonioSerializer(valor).data,
+        'actividades_turisticas': actividadesTuristicas,
+        'entradas': entradas,
+        'servicios': servicios,
+        'valoraciones': valoraciones,
+        'afectaciones': [c[1] for c in Incidente.AFECTACION]
+    }
+
     return render(request, 'patrimonio/templateDetail.html', context)
 
 def detalle_museo(request, pk):

@@ -53,10 +53,31 @@
     height: 36px;
 }
 
+.form-control:disabled {
+    background-color: #EEEEEE;
+}
+
 .inputIcon {
     position: absolute;
     top: 30%;
     right: 8px;
+}
+
+.topNavIcon{
+    position: absolute;
+    top: 37%;
+    right: 20px;
+}
+
+.dropdown-menu{
+    margin-right: 15px!important;
+    right: 0!important;
+    top: 50px!important;
+    width: 200px!important;
+}
+
+.dropdown-menu.show:after{
+    content: none;
 }
 
 div.dataTables_scrollBody table thead .sorting:before,

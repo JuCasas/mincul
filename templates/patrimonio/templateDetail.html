@@ -40,12 +40,11 @@
         <div class="card rounded-3">
             <div class="card" style="width: 100%;">
                 <div class="position-relative">
-                    <div>
-                        <img class="img-fluid w-100"
-                             style="height: 320px; object-fit: fill; border-radius: 3px"
-                                {#                                         src="../static/img/generic/4-caral.jpg"#}
-                             src={{ valor.url }}
-                             alt="Card image"/>
+                    <div class="card-img-top" style="height: 400px; overflow: hidden; object-fit: cover;">
+                        <img class="w-100"
+                             style="transform: translate(0, -30%); border-radius: 3px;"
+                             src="{{ valor.imagen }}"
+                             alt="Card image">
                     </div>
                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
                         <p class="card-text "
@@ -87,11 +86,12 @@
         <!-- Info de patrimonio -->
         <div class="row mt-4">
             <div class="col-8">
+                <!-- Descripcion -->
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md">
-                                <h5 class="card-title text-black">Historia:</h5>
+                                <h5 class="card-title text-black">Descripcion:</h5>
                                 <p class="mb-2 mb-md-0 text-black">
                                     {{ valor.descripcion }}
                                 </p>
@@ -99,6 +99,86 @@
                         </div>
                     </div>
                 </div>
+                <!-- Observaciones -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md">
+                                <h5 class="card-title text-black">Observaciones:</h5>
+                                <p class="mb-2 mb-md-0 text-black">
+                                    {{ valor.observacion }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Entradas -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row justify-content-between align-items-center p-3">
+                                    <h5 class="card-title text-black m-0">Entradas:</h5>
+                                </div>
+                                <div class="row pr-3 pl-3">
+                                    {% for entrada in entradas %}
+                                        <button class="btn btn-falcon-info m-1" type="button">
+                                            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                            {{ entrada.descripcion }} S/.{{ entrada.precio }}
+                                        </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ACTIVIDADES TURISTICAS -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row justify-content-between align-items-center p-3">
+                                    <h5 class="card-title text-black m-0">Actividades Turísticas:</h5>
+                                </div>
+                                <div class="row pr-3 pl-3">
+                                    {% for actividad in actividades_turisticas %}
+                                        <div class="card btn-falcon-info h-25 m-1">
+                                            <div class="card-body">
+                                                <p class="m-0">Categoria: {{ actividad.categoria }}</p>
+                                                <p class="m-0">Tipo: {{ actividad.tipo }}</p>
+                                                <p class="m-0">Observaciones: {{ actividad.observacion }}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- SERVICIOS -->
+                <div class="card mb-3 rounded-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row justify-content-between align-items-center p-3">
+                                    <h5 class="card-title text-black m-0">Servicios:</h5>
+                                </div>
+                                <div class="row pr-3 pl-3">
+                                    {% for servicio in servicios %}
+                                        <div class="card btn-falcon-info h-25 m-1">
+                                            <div class="card-body">
+                                                <p class="m-0">Categoria: {{ servicio.categoria }}</p>
+                                                <p class="m-0">Tipo: {{ servicio.tipo }}</p>
+                                                <p class="m-0">Observaciones: {{ servicio.observacion }}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Valoraciones -->
                 <div class="col-sm-12 col-lg-12 px-0">
                     <div class="card bg-light">
                       <div class="card-body">
@@ -150,19 +230,17 @@
                                 <h5 class="card-title text-black">Datos de identificación:</h5>
                                 <h6 class="mb-2 mb-md-0 text-black">Categoría: {{ valor.categoria }}</h6>
                                 <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Tipo de Bien: {{ valor.tipoPatrimonio }}</h6>
+                                <h6 class="mb-2 mb-md-0 text-black">Tipo: {{ valor.tipo.1 }}</h6>
                                 <p></p>
                                 <h6 class="mb-2 mb-md-0 text-black">Título/Denominación: {{ valor.nombreTituloDemoninacion }}</h6>
                                 <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Autor: {{ valor.propietarios }}</h6>
+                                <h6 class="mb-2 mb-md-0 text-black">Propietario: {{ valor.propietario.nombre }}</h6>
                                 <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Firmada: {{ valor.propietarios }}</h6>
+                                <h6 class="mb-2 mb-md-0 text-black">Departamento: {{ valor.departamento }}</h6>
                                 <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Lugar de Manufactura: {{ valor.provincia }}</h6>
+                                <h6 class="mb-2 mb-md-0 text-black">Provincia: {{ valor.provincia }}</h6>
                                 <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Estilo: </h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Datación: 3000 a.c. - Periodo arcaico tardío</h6>
+                                <h6 class="mb-2 mb-md-0 text-black">Distrito: {{ valor.distrito }}</h6>
                             </div>
                         </div>
                     </div>
