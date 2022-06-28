@@ -64,7 +64,6 @@
         <!--Barra lateral-->
         <div class="col-md-4 pt-0" style="padding-left:30px; padding-top: 15px; overflow-y: scroll;">
             <nav class="mb-3" style="height: 75vh">
-
                 <div class="navbar-vertical-content pb-0">
                         <div class="row">
                                 <form class="col" id="form_buscar" method="post" action={% url 'mapaPatrimonioAvanzado' %} >
@@ -80,26 +79,35 @@
                                                 <input name="patrimonio_name" class="form-control" id="txtBuscar"
                                                        placeholder="Buscar patrimonio...">
                                         <span class="fas fa-search inputIcon2" data-fa-transform="shrink-3"></span>
+                                        <div id="rowPatrimonioTxt">
+
+                                        </div>
                                     </div>
 
                                     <div class="row px-3 pb-3">
-                                                <select class="form-control" id="formSelectCategoria" style="padding:3px"
-                                                        name="select_categoria">
-                                                    <option>Categoría</option>
-                                                    {% for cat in categorias %}
-                                                        <option> {{ cat.nombre }} </option>
-                                                    {% endfor %}
-                                                </select>
+                                        <select class="form-control" id="formSelectCategoria" style="padding:3px"
+                                                name="select_categoria">
+                                            <option>Categoría</option>
+                                            {% for cat in categorias %}
+                                                <option> {{ cat.nombre }} </option>
+                                            {% endfor %}
+                                        </select>
+                                        <div id="rowCategoria">
+
+                                        </div>
                                     </div>
 
                                     <div class="row px-3 pb-3">
-                                                <select class="form-control" id="formSelectDepartamento" style="padding:3px"
-                                                        name="select_departamento">
-                                                    <option value="-1" >Departamento</option>
-                                                    {%  for dep in departamentos %}
-                                                      <option value="{{ dep.id_representativo }}"> {{ dep.nombreDepartamento }}</option>
-                                                      {% endfor %}
-                                                </select>
+                                        <select class="form-control" id="formSelectDepartamento" style="padding:3px"
+                                                name="select_departamento">
+                                            <option value="-1" >Departamento</option>
+                                            {%  for dep in departamentos %}
+                                              <option value="{{ dep.id_representativo }}"> {{ dep.nombreDepartamento }}</option>
+                                              {% endfor %}
+                                        </select>
+                                        <div id="rowDepartamento">
+
+                                        </div>
                                     </div>
 
                                     <div class="row px-3 pb-3">
@@ -412,6 +420,9 @@
         const isAlpha = str => /^[a-zA-Z( )]*$/.test(str);
         const txtInput = document.getElementById('txtBuscar');
         const categoriaInput = document.getElementById('formSelectCategoria');
+        const rowDepartamento = document.getElementById('rowDepartamento');
+        const rowCategoria = document.getElementById('rowCategoria');
+        const rowTxt = document.getElementById('rowPatrimonioTxt');
         $(document).ready(function () {
             $('#btn-submit').click(function() {
                 var valueDepa = departamentoInput.value;

@@ -849,7 +849,7 @@ def detalle(request, pk):
         return HttpResponseRedirect(reverse(detalle, args=[pk]))
 
     valor = Patrimonio.objects.get(pk=pk)
-    if int(valor.tipoPatrimonio) > 1:
+    if int(valor.tipoPatrimonio) == 3:
         zona = PuntoGeografico.objects.get(institucion_id=valor.institucion.pk)
     else:
         zona = PuntoGeografico.objects.get(patrimonio_id=pk)
