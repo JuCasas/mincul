@@ -861,8 +861,19 @@ def detalle(request, pk):
     if len(valoraciones):
         puntuacion = puntuacion / len(valoraciones)
 
-    context = {'puntacion': puntuacion, 'valor': PatrimonioSerializer(valor).data, 'valoraciones': valoraciones,
-               'afectaciones': [c[1] for c in Incidente.AFECTACION]}
+    actividadesTuristicas = ActividadTuristica.objects.filter(patrimonio_id=pk)
+    entradas = Entrada.objects.filter(patrimonio_id=pk)
+    servicios = Servicio.objects.filter(patrimonio_id=pk)
+
+    context = {
+        'puntacion': puntuacion,
+        'valor': PatrimonioSerializer(valor).data,
+        'actividades_turisticas': actividadesTuristicas,
+        'entradas': entradas,
+        'servicios': servicios,
+        'valoraciones': valoraciones,
+        'afectaciones': [c[1] for c in Incidente.AFECTACION]
+    }
 
     return render(request, 'patrimonio/templateDetail.html', context)
 

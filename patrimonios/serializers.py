@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from authentication.models import User
 from mincul_app.models import Documento
-from patrimonios.models import Institucion, Patrimonio, Categoria
+from patrimonios.models import Institucion, Patrimonio, Categoria, Propietario
 
 
 class InstitucionSerializer(serializers.ModelSerializer):
@@ -44,6 +44,7 @@ class PatrimonioSerializer(serializers.ModelSerializer):
     imagen = serializers.SerializerMethodField('getImg')
     categoria = serializers.SerializerMethodField('getCategory')
     tipo = serializers.SerializerMethodField('getTipo')
+    propietario = serializers.SerializerMethodField('getProp')
 
     def getImg(self, obj):
         doc = Documento.objects.filter(patrimonio__id=obj.pk).first()
@@ -59,6 +60,10 @@ class PatrimonioSerializer(serializers.ModelSerializer):
         tipo = Patrimonio._meta.get_field('tipoPatrimonio').choices[int(obj.tipoPatrimonio) - 1]
         return tipo
 
+    def getProp(self, obj):
+        prop = Propietario.objects.filter(patrimonio__id=obj.pk).first()
+        return prop
+
     class Meta:
         model = Patrimonio
-        fields = ['id','nombreTituloDemoninacion','descripcion','observacion','direccion','departamento','provincia','distrito','tipo','categoria','imagen']
+        fields = ['id','nombreTituloDemoninacion','descripcion','observacion','direccion','departamento','provincia','distrito','tipo','categoria','propietario','imagen']
