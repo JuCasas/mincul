@@ -111,6 +111,10 @@
             background-color: #EEEEEE !important;
         }
 
+        .form-control:disabled{
+            background-color: #EEEEEE !important;
+        }
+
     </style>
 
 {% endblock %}
@@ -219,7 +223,7 @@
                             <div class="col-4">
                                 <div class="d-flex flex-row justify-content-end">
                                     <a href="{% url 'listTasks' pk=activity.id %}"
-                                       class="btn second mr-3 d-flex align-items-center">Regresar</a>
+                                       class="btn second d-flex align-items-center">Volver</a>
                                 </div>
                             </div>
                         </div>
