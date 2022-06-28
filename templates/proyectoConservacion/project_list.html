@@ -1,4 +1,5 @@
 {% extends 'proyectoConservacion/components/base.html' %}
+{% load has_group %}
 {% load static %}
 
 {% block extrastyle %}
@@ -71,6 +72,10 @@
           cursor: pointer !important;
       }
 
+      .form-control:disabled {
+          background-color: #EEEEEE !important;
+      }
+
       .second {
           background-color: white !important;
           color: #2B2D42 !important;
@@ -118,7 +123,7 @@
       }
 
       input:disabled {
-          background-color: #D2D2D2 !important;
+          background-color: #EEEEEE !important;
       }
 
   </style>
@@ -138,7 +143,7 @@
   </div>
   <div class="card mb-3">
     <div class="card-body">
-      <div class="row filterBar mr-0">
+      <div class="row filterBar mr-0 justify-content-end">
         <div class="form-group col-sm-3 mb-0">
           <div class="position-relative">
             <input class="form-control" id="search" type="text" placeholder="Nombre">
@@ -160,7 +165,8 @@
             {% endfor %}
           </select>
         </div>
-        <div class="form-group col-sm-2 mb-0">
+
+        <div class="form-group col-sm-2 {% if request.user|has_group:"Gestor de Conservación y Traslados" %}pr-0{% endif %}">
           <select class="form-control" id="type_filter">
             <option value="" selected>Tipos</option>
             {% for mykey,myvalue in typeProjects %}
@@ -169,9 +175,12 @@
           </select>
         </div>
 
-        <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
-          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Proyecto
-        </button>
+        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+          <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
+            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Proyecto
+          </button>
+        {% endif %}
+
       </div>
     </div>
   </div>
@@ -218,14 +227,14 @@
               <div class="form-group col-lg-6 col-sm-12">
                 <label for="nombre"><span class="glyphicon glyphicon-file"></span> Nombre</label>
                 <input type="text" class="form-control" id="nombre" name="nombre"
-                       placeholder="">
+                       placeholder="" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
               </div>
             </div>
 
             <div class="row">
               <div class="form-group col-lg-6 col-sm-12">
                 <label for="tipoPlan"><span class="glyphicon glyphicon-eye-open"></span> Tipo de Plan</label>
-                <select class="form-control" name="tipoPlan" id="tipoPlan">
+                <select class="form-control" name="tipoPlan" id="tipoPlan" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
                   <option value=0>Preventivo</option>
                   <option value=1>Correctivo</option>
                   <option value=2>Curativo</option>
@@ -240,14 +249,20 @@
 
             <div class="row justify-content-end mt-2 mr-1">
 
+                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
               <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
 
-              <div>
-                <input type="hidden" id="type" name="type" value="">
-                <button id="submit" class="btn btn-primary"><span
-                    class="glyphicon glyphicon-ok"></span> Guardar
-                </button>
-              </div>
+
+                  <div>
+                        <input type="hidden" id="type" name="type" value="">
+                        <button id="submit" class="btn btn-primary"><span
+                            class="glyphicon glyphicon-ok"></span> Guardar
+                        </button>
+                      </div>
+                 {% else %}
+                    <button type="button" data-dismiss="modal" class="btn second ">Volver</button>
+                {% endif %}
+
             </div>
 
           </form>
@@ -413,6 +428,216 @@
           $(this).off("select2:opening.cancelOpen");
         });
       });
+
+      let table = $('#tabla_autores').DataTable({
+  "searching": false,
+  "serverSide": true,
+  "processing": true,
+  "lengthChange": false,
+  "pageLength": 10,
+  "scrollX": true,
+  "ajax": function (data, callback, settings) {
+    let order_column = data.order[0].column
+    let order = data.order[0].dir
+
+    $.ajax({
+      url: '',
+      type: 'get',
+      data: {
+        length: data.length,
+        start: data.start,
+        search_value: $('#search').val(),
+        type_filter: $('#type_filter').val(),
+        status_filter: $('#status_filter').val(),
+        patrimony_filter: $('#patrimonio').val(),
+        order_column: order_column,
+        order: order
+      },
+      success: function (data, textStatus, jQxhr) {
+        callback({
+          recordsTotal: data.recordsTotal,
+          recordsFiltered: data.recordsFiltered,
+          data: data.data
+        });
+      },
+      error: function (jqXhr, textStatus, errorThrown) {
+      }
+    });
+  },
+  "columns": [
+    {"data": "codigo"},
+    {"data": "nombre"},
+    {
+      "data": "tipoProyecto", render: function (data, type, row) {
+        console.log(data);
+        if (data == '0') {
+          resp = 'Preventivo'
+        } else if (data == '1') {
+          resp = 'Correctivo'
+        } else {
+          resp = 'Curativo'
+        }
+        return resp;
+      }
+    },
+    {
+      "data": "cantidadAct",
+      "data": "cantidadActR", render: function (data, type, row) {
+
+        return row.cantidadActR + '/' + row.cantidadAct
+      },
+
+    },
+    {"data": "fechaInicio"},
+    {
+      "data": "status", render: function (data, type, row) {
+        if (data == '0') {
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
+        } else if (data == '1') {
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrado" + '</span>'
+        } else {
+          resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
+        }
+        return resp;
+      }
+    },
+    {
+      "data": null,
+      "orderable": false,
+      "defaultContent": '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+          '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
+          '{% if request.user|has_group:"Gestor de Conservación y Traslados" %}<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>{% endif %}'
+    }
+  ],
+  "language": {
+    "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',
+    "sLengthMenu": "Mostrar _MENU_ registros",
+    "sZeroRecords": "No se encontraron resultados",
+    "sEmptyTable": "Ningún dato disponible en esta tabla",
+    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+    "sInfoPostFix": "",
+    "sSearch": "Buscar:",
+    "sUrl": "",
+    "sInfoThousands": ",",
+    "sLoadingRecords": "Cargando...",
+    "oPaginate": {
+      "sFirst": "Primero",
+      "sLast": "Último",
+      "sNext": "Siguiente",
+      "sPrevious": "Anterior"
+    },
+    "oAria": {
+      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    }
+  },
+});
+
+
+$('#search').keyup(function () {
+  $('#tabla_autores').DataTable().search($(this).val()).draw();
+})
+$('#status_filter').change(function () {
+  $('#tabla_autores').DataTable().draw();
+});
+$('#type_filter').change(function () {
+  $('#tabla_autores').DataTable().draw();
+});
+$('#patrimonio').change(function () {
+  $('#tabla_autores').DataTable().draw();
+});
+
+
+$('#tabla_autores tbody').on('click', 'button', function () {
+  let data = table.row($(this).parents('tr')).data();
+  let class_name = $(this).attr('class');
+
+  id = data['id'];
+
+  if (class_name == 'btn btn-edit') {
+    // EDIT button
+    $('#nombre').val(data['nombre']);
+    $('#codigo').val(data['codigo']);
+    let opt = parseInt(data['tipoProyecto'])
+    $("#tipoPlan").val(opt)
+    fecha = data['fechaInicio']
+    var parts = fecha.split("/");
+    var dt = new Date(parseInt(parts[2], 10),
+        parseInt(parts[1], 10) - 1,
+        parseInt(parts[0], 10));
+    var currentDate = dt.toISOString().slice(0, 10);
+    $('#fechaRegistro').val(currentDate);
+    $('#fechaRegistro').prop("disabled", true);
+    $('#type').val('edit');
+    $('#modal_title').text('Editar Proyecto');
+    $("#myModal").modal();
+  } else if (class_name == 'btn btn-show') {
+    window.location.pathname = "/conservacion/proyectos/" + id + "/actividades/";
+  } else {
+    // DELETE button
+    $('#modal_title').text('DELETE');
+    $("#confirm").modal();
+  }
+
+
+});
+
+$('#confirm').on('click', '#delete', function (e) {
+  $('#cover-spin').show(0)
+  $.ajax({
+    url: '/conservacion/proyectos/delete/' + id + '/',
+    method: 'POST',
+    success: function (response) {
+            $('#cover-spin').hide()
+            if (response["success"] !== undefined) {
+              $.toast({
+                text: 'No se pudo eliminar el proyecto',
+                icon: 'warning',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#c67a71',
+                  textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
+              })
+            } else {
+              $('#myModal').modal('hide')
+              $("#tabla_autores").DataTable().draw();
+              $.toast({
+                text: 'Proyecto eliminado con éxito',
+                icon: 'success',
+                loader: false,        // Change it to false to disable loader
+                bgColor: '#B7E6CA',  // To change the background
+                textColor: '#000000',
+                position: 'bottom-right',
+                hideAfter: 3000,
+              })
+            }
+          },
+    error: function (error) {
+      $('#cover-spin').hide()
+      console.log(error)
+    }
+  });
+});
+
+
+$('#new').on('click', function (e) {
+  $('#codigo').val('');
+  $('#nombre').val('');
+  $('#type').val('new');
+  $("form[name='formProyecto']").validate().resetForm();
+  let today = new Date()
+  today = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+  console.log(today.toISOString())
+  var currentDate = today.toISOString().slice(0, 10);
+  $('#fechaRegistro').val(currentDate);
+  $('#fechaRegistro').prop("disabled", true);
+  $('#modal_title').text('Nuevo Proyecto');
+  $("#myModal").modal();
+});
+
 
 
     });

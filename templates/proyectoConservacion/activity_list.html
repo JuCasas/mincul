@@ -1,4 +1,5 @@
 {% extends 'proyectoConservacion/components/base.html' %}
+{% load has_group %}
 {% load static %}
 
 {% block extrastyle %}
@@ -138,8 +139,12 @@
         }
 
         input:disabled {
-            background-color: #D2D2D2 !important;
+            background-color: #EEEEEE !important;
         }
+
+        .form-control:disabled {
+          background-color: #EEEEEE !important;
+      }
 
     </style>
 
@@ -192,23 +197,27 @@
                 </div>
                 <div class="form-group col-sm-2 mb-0">
                     <select class="form-control" id="status_filter">
-                        <option value="" selected>Todos los estados</option>
+                        <option value="" selected>Estados</option>
                         {% for mykey,myvalue in status_choices %}
                             <option value="{{ mykey }}">{{ myvalue }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="form-group col-sm-2 mb-0">
+                <div class="form-group col-sm-2 mb-0 {% if request.user|has_group:"Gestor de Conservación y Traslados" %}pr-0{% endif %}">
                     <select class="form-control" id="type_filter">
-                        <option value="" selected>Todos los patrimonios</option>
+                        <option value="" selected>Patrimonios</option>
                         {% for patrimonio in patrimonios %}
                             <option value="{{ patrimonio.pk }}">{{ patrimonio.nombreTituloDemoninacion }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
+
+
+                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                  <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
                     <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Crear Actividad
                 </button>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -251,31 +260,31 @@
                             <div class="form-group col-lg-12 col-sm-12">
                                 <label for="nombre">Nombre:</label>
                                 <input class="form-control" id="nombre" name="nombre" type="text" required
-                                       placeholder="Nombre de la Actividad">
+                                       placeholder="Nombre de la Actividad" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-12 col-sm-12">
                                 <label for="descripcion">Descripcion:</label>
                                 <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
-                                          placeholder="Descripción de la Actividad"></textarea>
+                                          placeholder="Descripción de la Actividad" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-6 col-sm-12">
                                 <label for="fechaInicio">Fecha de Inicio:</label>
-                                <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required>
+                                <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
                             </div>
                             <div class="form-group col-lg-6 col-sm-12">
                                 <label for="fechaFin">Fecha de Fin:</label>
-                                <input class="form-control" id="fechaFin" name="fechaFin" type="date" required>
+                                <input class="form-control" id="fechaFin" name="fechaFin" type="date" required {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="form-group col-lg-12 col-sm-12">
                                 <label for="patrimonio">Patrimonio Asociado:</label>
-                                <select class="form-control selectpicker" id="patrimonio" name="patrimonio">
+                                <select class="form-control selectpicker" id="patrimonio" name="patrimonio" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
 
                                 </select>
                             </div>
@@ -284,16 +293,22 @@
                         <div class="row justify-content-between">
                             <div class="form-group col-9">
                                 <label for="conservadores">Conservador(es):</label>
-                                <select class="form-control selectpicker" id="conservadores" name="conservadores"
-                                        data-placeholder='Seleccione conservador...'>
+                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                                  <select class="form-control selectpicker" id="conservadores" name="conservadores"
+                                        data-placeholder='Seleccione conservador...' {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
 
                                 </select>
+                                {% endif %}
                             </div>
-                            <div class="form-group col-auto d-flex align-items-end">
+
+                            {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                              <div class="form-group col-auto d-flex align-items-end">
                                 <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
                                         onclick="agregarConservadorTabla()">Agregar Conservador
                                 </button>
                             </div>
+                            {% endif %}
+
                             <div class="form-group col-lg-12 col-sm-12">
                                 <table class="table table-responsive-sm">
                                     <thead class="thead-dark">
@@ -309,21 +324,23 @@
                                             <td>{{ conservador.codigo }}</td>
                                             <td>{{ conservador.first_name }} {{ conservador.last_name }}</td>
                                             <td>
-                                                <button class="btn" href="#" type="button"
+                                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                                                      <button class="btn" href="#" type="button"
                                                         onclick="eliminarConservador(this,{{ conservador.pk }})">
                                                     <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
                                                 </button>
+                                                {% endif %}
+
                                             </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
-
-
                         </div>
 
-                        <div class="row justify-content-between">
+                        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                            <div class="row justify-content-between">
                             <div class="form-group col-9">
                                 <h5>Documentos nuevos:</h5>
                             </div>
@@ -341,27 +358,32 @@
                             </div>
 
                         </div>
-
+                        {% endif %}
 
                         <div class="row justify-content-between mt-2 mr-1">
                             <div class="col-3 ">
-                                <button id="actualizar" class="btn btn-primary mx-1" type="button"
+                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                              <button id="actualizar" class="btn btn-primary mx-1" type="button"
                                         data-toggle="modal" data-target="#actualizarEstado">
                                     Actualizar estado
                                 </button>
+                            {% endif %}
                             </div>
                             <div class="col-5">
                                 <div class="row justify-content-end">
-                                    <div class="col-auto">
-                                        <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar
-                                        </button>
-                                    </div>
-                                    <input type="hidden" id="type" name="type" value="">
-                                    <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary btn-block"><span
-                                                class="glyphicon glyphicon-ok"></span> Guardar
-                                        </button>
-                                    </div>
+                                    {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+              <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+
+
+                  <div>
+                        <input type="hidden" id="type" name="type" value="">
+                        <button id="submit" class="btn btn-primary"><span
+                            class="glyphicon glyphicon-ok"></span> Guardar
+                        </button>
+                      </div>
+                 {% else %}
+                    <button type="button" data-dismiss="modal" class="btn second ">Volver</button>
+                {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -533,7 +555,7 @@
                         } else if (data == '0') {
                             resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-                                '<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>';
+                                '{% if request.user|has_group:"Gestor de Conservación y Traslados" %}<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>{% endif %}';
                         } else if (data == '2') {
                             resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp';
@@ -636,9 +658,7 @@
                         '<td>' + conservadores[i].codigo + '</td>' +
                         ' <td>' + conservadores[i].first_name + '</td>' +
                         '<td>' +
-                        '<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadores[i].id + ')">' +
-                        '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                        '</button>' +
+                        '{% if request.user|has_group:"Gestor de Conservación y Traslados" %}<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadores[i].id + ')"><i class="fas fa-trash" data-fa-transform="shrink-3"></i></button>{% endif %}' +
                         '</td>' +
                         '</tr>';
 

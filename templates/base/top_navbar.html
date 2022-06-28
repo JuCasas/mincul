@@ -54,7 +54,15 @@
     </li>{% endcomment %}
     <li class="nav-item align-items-end">
       <div class="col-md pr-0">
-        <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Admin</h5>
+{#        {% if request.user|has_group:"Administrador" %}#}
+{#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Admin</h5>#}
+{#        {% endif %}#}
+{#        {% if request.user|has_group:"Conservador" %}#}
+{#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Conservador</h5>#}
+{#        {% endif %}#}
+{#        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}#}
+{#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Gestor de Conservación y Traslados</h5>#}
+{#        {% endif %}#}
         <p class="m-0" id="top_navbar_rol" style="color: #f5803e">{{ request.user }} </p>
         <p class="m-0">{{ user.groups.get }}</p>
       </div>
