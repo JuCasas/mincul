@@ -424,6 +424,7 @@
             let long1menor=false;
             distanciaDispersion= dispersion==-1 ? PORCENTAJE_DISPERSION*distanciaEntreDosCoordenadas(lat1,long1,lat2,long2) : dispersion;
             if(distanciaDispersion>MAX_DISPERSION){
+                console.log("dispersion muy grande");
                 distanciaDispersion=MAX_DISPERSION;
             }
             //esta en metros
@@ -452,7 +453,7 @@
                     patrimoniosEnRuta=datos.data;
                     numPatrimoniosEnRuta=datos.numPatrimonios;
                     success=datos.success;
-                    console.log(datos);
+                    console.log("enrutamiento entre puntos");
                     console.log(patrimoniosEnRuta);
                 });
             await enrutamientoConPatrimonios(lat1,long1,lat2,long2);
