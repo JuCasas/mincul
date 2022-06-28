@@ -18,15 +18,27 @@
     .cardLogin{
         background-color: rgba(255, 255, 255, 0.9) !important;
         position: absolute!important;
-        right: calc(50% - 325px) !important;
-        top: calc(50% - 275px) !important;
-        width: 506px!important;
-        height: 486px!important;
+        right: calc(50% - 250px) !important;
+        top: calc(50% - 250px) !important;
+        width: 500px!important;
+        height: 500px!important;
         display: flex!important;
         flex-direction: column!important;
         text-align: center!important;
         border-radius: 10px!important;
         padding: 32px 72px!important;
+    }
+
+    .card-header{
+        background-color: rgba(255, 255, 255, 0) !important; ;
+    }
+
+    input{
+        background-color: white;!important;
+    }
+
+    .form-control{
+        background-color: white;!important;
     }
     </style>
 
@@ -37,30 +49,32 @@
     <img src="{% static '/img/loginbg.png' %}" style="height: 100vh;width: 100%"/>
     <div class="card mb-3 cardLogin">
         <div class="card-header">
-            <img src="{% static '/img/logos/mincult.png' %}" style="height: 50px;"/>
+            <img src="{% static '/img/loginIcon.png' %}" style="height: 50px;"/>
         </div>
 
         <div class="card-body">
             <form id="formTareas" name="formTareas" method="post" action="{% url 'loginProjects'  %}">
                 {% csrf_token %}
-                <label for="username">Iniciar Sesión</label>
+                <div class="flex justify-content-start text-left">
+                    <h5 class="mb-3">Iniciar Sesión</h5>
+                </div>
 
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12">
                         <input class="form-control" id="username" name="username" type="text"
-                               placeholder="Ingrese su correo electrónico">
+                               placeholder="Ingrese su correo electrónico" style="background-color: white!important;">
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12">
                         <input class="form-control" id="password" name="password" type="password"
-                               placeholder="Ingrese su contraseña">
+                               placeholder="Ingrese su contraseña" style="background-color: white!important;">
                     </div>
                 </div>
 
 
-                <div class="form-group  row justify-content-end mt-2 mr-0">
-                    <div>
+                <div class="form-group  row justify-content-end mt-2 mx-0">
+                    <div class="w-100">
                         <button type="submit" class="btn btn-primary btn-block w-100">
                             <span class="glyphicon glyphicon-ok"></span>Ingresar
                         </button>
