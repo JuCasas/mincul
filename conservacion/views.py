@@ -58,7 +58,7 @@ def query_projects_by_args(**kwargs):
     }
 
 
-def query_activities_by_args(pk, **kwargs):
+def query_activities_by_args(request,pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
@@ -68,12 +68,18 @@ def query_activities_by_args(pk, **kwargs):
     order = kwargs.get('order', None)[0]
 
     project = ProyectoConservacion.objects.get(pk=pk)
-    queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(proyecto=project).filter(
-        estado='1')
 
-    # if(request.user is not None):
-    #     if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
-    #         print("XD")
+
+    if(request.user is not None):
+        if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
+            user = User.objects.get(username=request.user)
+            queryset = user.actividad_set.all().filter(estado='1')
+            queryset= queryset.annotate(conservadores_count=Count('conservadores')).filter(
+        proyecto=project)
+        else:
+            queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(
+                proyecto=project).filter(
+                estado='1')
 
     total = queryset.count()
 
@@ -321,7 +327,7 @@ def eliminarDocumentoActividad(request):
 @api_view(('GET',))
 def listActivities(request, pk):
     if request.is_ajax():
-        activity = query_activities_by_args(pk, **request.GET)
+        activity = query_activities_by_args(request,pk, **request.GET)
         serializer = ActividadSerializer((activity['items']), many=True)
         result = dict()
         result['data'] = serializer.data
