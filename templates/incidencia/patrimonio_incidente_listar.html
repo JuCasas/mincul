@@ -701,7 +701,7 @@
             $('#descripcion').val(incidente['descripcion']);
             $('select[name=status] option:first').html(status_filter[incidente['status']]['name']);
             if (incidente['proyecto']['nombre'] === undefined) {
-              $('select[name=proyecto] option:first').html('');
+              $('select[name=proyecto] option:first').html('No asignado');
             } else {
               $('select[name=proyecto] option:first').html(incidente['proyecto']['nombre']);
             }
