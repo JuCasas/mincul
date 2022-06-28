@@ -113,7 +113,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--Tipo de Patrimonio y Lugar de Manufactura-->
+                        <!--Tipo de Patrimonio y Categoría-->
 						<div class="row">
 							<!--Tipo de Patrimonio-->
                             <div class="col-md-6">
@@ -138,26 +138,6 @@
                                     </div>
                                 </div>
                             </div>
-							<!--Lugar de manufactura-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Lugar de Manufactura:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            Perú
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Categoria y Estilo-->
-						<div class="row">
 							<!--Categoria-->
                             <div class="col-md-6">
                                 <div class="row">
@@ -171,23 +151,6 @@
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
                                             {{ patrimony.categoria.nombre }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-							<!--Estilo-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Estilo:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            No determinado
                                         </div>
                                     </div>
                                 </div>
@@ -213,211 +176,387 @@
                                 </div>
                             </div>
 							<!--Datacion-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Datación:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.categoria.id == 6 %}
-                                                {{ dataCategoria.periodo }}
-                                            {% elif patrimony.categoria.id >= 7 and patrimony.categoria.id <= 9 %}
-                                                {{ dataCategoria.datacion }}
-                                            {% elif patrimony.categoria.id == 10 %}
-                                                {{ dataCategoria.eraGeologica }}, {{ dataCategoria.epocaGeologica }}
-                                            {% else %}
-                                            --
-                                            {% endif %}
+                            {% if patrimony.tipoPatrimonio == "3" %}
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Datación:
+                                            </h3>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Autor-->
-						<div class="row">
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Autor:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            <!--Tiene autor solo si no es Inmueble-->
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                Anónimo
-                                            {% else %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.categoria.id == 6 %}
+                                                    {{ dataCategoria.periodo }}
+                                                {% elif patrimony.categoria.id >= 7 and patrimony.categoria.id <= 9 %}
+                                                    {{ dataCategoria.datacion }}
+                                                {% elif patrimony.categoria.id == 10 %}
+                                                    {{ dataCategoria.eraGeologica }}, {{ dataCategoria.epocaGeologica }}
+                                                {% else %}
                                                 --
-                                            {% endif %}
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--Tehnical Data and dimensions-->
-        <div class="row">
-            <!--Technical Data-->
-            <div class="col-md-8">
-                <div class="card mb-3 rounded-3">
-                    <div class="card-header">
-                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
-                            Datos técnicos
-                        </h1>
-                    </div>
-                    <div class="card-body bg-200">
-						<!--Material principal y secundario-->
-                        <div class="row">
-							<!--Material principal-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Material Principal:
-                                        </h3>
+        {% if patrimony.tipoPatrimonio == "3" %}
+            <!--Tehnical Data and dimensions - MUEBLE -->
+            <div class="row">
+                <!--Technical Data-->
+                <div class="col-md-8">
+                    <div class="card mb-3 rounded-3">
+                        <div class="card-header">
+                            <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                                Datos técnicos
+                            </h1>
+                        </div>
+                        <div class="card-body bg-200">
+                            <!--Material principal y secundario-->
+                            <div class="row">
+                                <!--Material principal-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Material Principal:
+                                            </h3>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {% if patrimony.categoria.id == 6  %}
-                                                    {{ dataCategoria.material }}
-                                                {% endif %}
-                                                {% if patrimony.categoria.id == 7  %}
-                                                    {{ dataCategoria.material }}
-                                                {% endif %}
-                                                {% if patrimony.categoria.id == 8  %}
-                                                    {{ dataCategoria.materialSoporte }}
-                                                {% endif %}
-                                                {% if patrimony.categoria.id == 9  %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {% if patrimony.categoria.id == 6  %}
+                                                        {{ dataCategoria.material }}
+                                                    {% endif %}
+                                                    {% if patrimony.categoria.id == 7  %}
+                                                        {{ dataCategoria.material }}
+                                                    {% endif %}
+                                                    {% if patrimony.categoria.id == 8  %}
+                                                        {{ dataCategoria.materialSoporte }}
+                                                    {% endif %}
+                                                    {% if patrimony.categoria.id == 9  %}
+                                                        --
+                                                    {% endif %}
+                                                    {% if patrimony.categoria.id == 10  %}
+                                                        {{ dataCategoria.materialSoporte }}
+                                                    {% endif %}
+                                                {% else %}
                                                     --
                                                 {% endif %}
-                                                {% if patrimony.categoria.id == 10  %}
-                                                    {{ dataCategoria.materialSoporte }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Material secundario-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Material(es) Secundario(s):
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {{ materialesSecundarios }}
+                                                {% else %}
+                                                    --
                                                 {% endif %}
-                                            {% else %}
-                                                --
-                                            {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-							<!--Material secundario-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Material(es) Secundario(s):
-                                        </h3>
+                            <!--Tecnica de Manufactura y Tecnica de acabado-->
+                            <div class="row">
+                                <!--Tecnica de manufactura-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Técnica(s) de Manufactura
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {{ tecnicasManufactura }}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {{ materialesSecundarios }}
-                                            {% else %}
-                                                --
-                                            {% endif %}
+                                <!--Tecnica de acabado-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Técnica(s) de acabado:
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {{ tecnicasAcabado }}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Tecnica de decoracion-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Técnica(s) de decoración:
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {{ tecnicasDecoracion }}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Descripción-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Descripción
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {{ patrimony.descripcion }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!--Tecnica de Manufactura y Tecnica de acabado-->
-						<div class="row">
-							<!--Tecnica de manufactura-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Técnica(s) de Manufactura
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {{ tecnicasManufactura }}
-                                            {% else %}
-                                                --
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-							<!--Tecnica de acabado-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Técnica(s) de acabado:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {{ tecnicasAcabado }}
-                                            {% else %}
-                                                --
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <!--Dimensions-->
+                <div class="col-md-4">
+                    <div class="card mb-3 rounded-3">
+                        <div class="card-header">
+                            <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                                Dimensiones
+                            </h1>
                         </div>
-                        <!--Tecnica de decoracion-->
-						<div class="row">
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Técnica(s) de decoración:
-                                        </h3>
+                        <div class="card-body bg-200">
+                            <!--Alto y Fondo-->
+                            <div class="row">
+                                <!--Alto-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Alto (cm):
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {% if patrimonioMuebleData.alto == -1 %}
+                                                        --
+                                                    {% else %}
+                                                        {{ patrimonioMuebleData.alto }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {{ tecnicasDecoracion }}
-                                            {% else %}
-                                                --
-                                            {% endif %}
+                                <!--Fondo-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Fondo (cm):
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.categoria.id == 7 or patrimony.categoria.id == 8 or patrimony.categoria.id == 10 %}
+                                                    {% if dataCategoria.fondo == -1 %}
+                                                        --
+                                                    {% else %}
+                                                        {{ dataCategoria.fondo }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-						<!--Descripción-->
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Descripción
-                                        </h3>
+                            <!--Largo y Diametro-->
+                            <div class="row">
+                                <!--Largo-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Largo (cm):
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {% if patrimonioMuebleData.largo == -1 or patrimonioMuebleData.largo == "-1" %}
+                                                        --
+                                                    {% else %}
+                                                        {{ patrimonioMuebleData.largo }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {{ patrimony.descripcion }}
+                                <!--Diametro-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Diametro (cm):
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.categoria.id == 6 %}
+                                                    {% if dataCategoria.diametroBase == -1 or dataCategoria.diametroBase == "-1" %}
+                                                        --
+                                                    {% else %}
+                                                        {{ dataCategoria.diametroBase }}
+                                                    {% endif %}
+                                                {% elif patrimony.categoria.id == 7 or patrimony.categoria.id == 8 or patrimony.categoria.id == 10 %}
+                                                    {% if dataCategoria.diametro == -1 or dataCategoria.diametro == "-1" %}
+                                                        --
+                                                    {% else %}
+                                                        {{ dataCategoria.diametro }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Ancho y Peso-->
+                            <div class="row">
+                                <!--Ancho-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Ancho (cm):
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {% if patrimonioMuebleData.ancho == -1 %}
+                                                        --
+                                                    {% else %}
+                                                        {{ patrimonioMuebleData.ancho }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Peso-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Peso (g):
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                --
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Espesor-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Espesor (cm):
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {% if patrimonioMuebleData.ancho == -1 %}
+                                                        --
+                                                    {% else %}
+                                                        {{ patrimonioMuebleData.ancho }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -426,194 +565,173 @@
                     </div>
                 </div>
             </div>
-            <!--Dimensions-->
-            <div class="col-md-4">
-                <div class="card mb-3 rounded-3">
-                    <div class="card-header">
-                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
-                            Dimensiones
-                        </h1>
+            <!--Preservation and origins - MUEBLE -->
+            <div class="row">
+                <!--Preservation of data-->
+                <div class="col-md-8">
+                    <div class="card mb-3 rounded-3">
+                        <div class="card-header">
+                            <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                                Datos de Conservación
+                            </h1>
+                        </div>
+                        <div class="card-body bg-200">
+                        <!--Estado y Tratamiento-->
+                            <div class="row">
+                                <!--Estado-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Estado de Conservación:
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {{ patrimonioMuebleData.conservacion }}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Tratamiento-->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Tratamiento:
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {{ patrimonioMuebleData.detalleTratamiento }}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Integridad-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Estado de Integridad:
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {{ patrimonioMuebleData.integridad }}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Detalle de conservación-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Detalle de conservación:
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {% if patrimony.tipoPatrimonio == "3" %}
+                                                    {{ patrimonioMuebleData.detalleConservacion }}
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body bg-200">
-						<!--Alto y Fondo-->
-                        <div class="row">
-							<!--Alto-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Alto (cm):
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {% if patrimonioMuebleData.alto == -1 %}
-                                                    --
-                                                {% else %}
-                                                    {{ patrimonioMuebleData.alto }}
-                                                {% endif %}
-                                            {% else %}
-                                                --
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-							<!--Fondo-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Fondo (cm):
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.categoria.id == 7 or patrimony.categoria.id == 8 or patrimony.categoria.id == 10 %}
-                                                {% if dataCategoria.fondo == -1 %}
-                                                    --
-                                                {% else %}
-                                                    {{ dataCategoria.fondo }}
-                                                {% endif %}
-                                            {% else %}
-                                                --
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+                <!--Origins-->
+                <div class="col-md-4">
+                    <div class="card mb-3 rounded-3">
+                        <div class="card-header">
+                            <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                                Datos de procedencia
+                            </h1>
                         </div>
-						<!--Largo y Diametro-->
-                        <div class="row">
-							<!--Largo-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Largo (cm):
-                                        </h3>
+                        <div class="card-body bg-200">
+                            <!--departamento-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Departamento:
+                                            </h3>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {% if patrimonioMuebleData.largo == -1 or patrimonioMuebleData.largo == "-1" %}
-                                                    --
-                                                {% else %}
-                                                    {{ patrimonioMuebleData.largo }}
-                                                {% endif %}
-                                            {% else %}
-                                                --
-                                            {% endif %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {{ patrimony.departamento }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-							<!--Diametro-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Diametro (cm):
-                                        </h3>
+                            <!--provincia-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Provincia:
+                                            </h3>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.categoria.id == 6 %}
-                                                {% if dataCategoria.diametroBase == -1 or dataCategoria.diametroBase == "-1" %}
-                                                    --
-                                                {% else %}
-                                                    {{ dataCategoria.diametroBase }}
-                                                {% endif %}
-                                            {% elif patrimony.categoria.id == 7 or patrimony.categoria.id == 8 or patrimony.categoria.id == 10 %}
-                                                {% if dataCategoria.diametro == -1 or dataCategoria.diametro == "-1" %}
-                                                    --
-                                                {% else %}
-                                                    {{ dataCategoria.diametro }}
-                                                {% endif %}
-                                            {% else %}
-                                                --
-                                            {% endif %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {{ patrimony.provincia }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!--Ancho y Peso-->
-						<div class="row">
-							<!--Ancho-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Ancho (cm):
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {% if patrimonioMuebleData.ancho == -1 %}
-                                                    --
-                                                {% else %}
-                                                    {{ patrimonioMuebleData.ancho }}
-                                                {% endif %}
-                                            {% else %}
-                                                --
-                                            {% endif %}
+                            <!--Distrito-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Distrito:
+                                            </h3>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-							<!--Peso-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Peso (g):
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            --
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Espesor-->
-						<div class="row">
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Espesor (cm):
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {% if patrimonioMuebleData.ancho == -1 %}
-                                                    --
-                                                {% else %}
-                                                    {{ patrimonioMuebleData.ancho }}
-                                                {% endif %}
-                                            {% else %}
-                                                --
-                                            {% endif %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {{ patrimony.distrito }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -622,104 +740,102 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <!--Preservation and origins-->
-        <div class="row">
-            <!--Preservation of data-->
-            <div class="col-md-8">
-                <div class="card mb-3 rounded-3">
-                    <div class="card-header">
-                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
-                            Datos de Conservación
-                        </h1>
+        {% else %}
+            <!--Tehnical Data and origins - OTHER PATRIMONIES -->
+            <div class="row">
+                <!--Technical Data-->
+                <div class="col-md-8">
+                    <div class="card mb-3 rounded-3">
+                        <div class="card-header">
+                            <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                                Datos técnicos
+                            </h1>
+                        </div>
+                        <div class="card-body bg-200">
+                            <!--Descripción-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Descripción
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {{ patrimony.descripcion }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body bg-200">
-					<!--Estado y Tratamiento-->
-                        <div class="row">
-							<!--Estado-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Estado de Conservación:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {{ patrimonioMuebleData.conservacion }}
-                                            {% else %}
-                                                --
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-							<!--Tratamiento-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Tratamiento:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {{ patrimonioMuebleData.detalleTratamiento }}
-                                            {% else %}
-                                                --
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+                <!--Origins-->
+                <div class="col-md-4">
+                    <div class="card mb-3 rounded-3">
+                        <div class="card-header">
+                            <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
+                                Datos de procedencia
+                            </h1>
                         </div>
-                        <!--Integridad-->
-						<div class="row">
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Estado de Integridad:
-                                        </h3>
+                        <div class="card-body bg-200">
+                            <!--departamento-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Departamento:
+                                            </h3>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {{ patrimonioMuebleData.integridad }}
-                                            {% else %}
-                                                --
-                                            {% endif %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {{ patrimony.departamento }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-						<!--Detalle de conservación-->
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Detalle de conservación:
-                                        </h3>
+                            <!--provincia-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Provincia:
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {{ patrimony.provincia }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {% if patrimony.tipoPatrimonio == "3" %}
-                                                {{ patrimonioMuebleData.detalleConservacion }}
-                                            {% else %}
-                                                --
-                                            {% endif %}
+                            </div>
+                            <!--Distrito-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="text-black" style="font-size: medium">
+                                                Distrito:
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
+                                                {{ patrimony.distrito }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -728,134 +844,8 @@
                     </div>
                 </div>
             </div>
-            <!--Origins-->
-            <div class="col-md-4">
-                <div class="card mb-3 rounded-3">
-                    <div class="card-header">
-                        <h1 class="mb-2 mb-md-0 text-black" style="font-size: large">
-                            Datos de procedencia
-                        </h1>
-                    </div>
-                    <div class="card-body bg-200">
-						<!--Area Geografica-->
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Área geográfica:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            Costa Central
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Excavacion arqueologica-->
-						<div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Excavación Arqueológica:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            No presenta
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Denominación del inmueble-->
-						<div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Denominación del inmueble:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            10.0
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--departamento-->
-						<div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Departamento:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {{ patrimony.departamento }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--provincia-->
-						<div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Provincia:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {{ patrimony.provincia }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Distrito-->
-						<div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Distrito:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            {{ patrimony.distrito }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Aditional Data-->
+        {% endif %}
+        <!--Aditional Data / Observations-->
         <div class="row">
             <div class="col">
                 <div class="card mb-3 rounded-3">
@@ -866,34 +856,7 @@
                     </div>
                     <div class="card-body bg-200">
                         <div class="row">
-                            <!--Cultural value-->
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-black" style="font-size: medium">
-                                            Valor cultural:
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            La definición de lo que son valores culturales no es sencilla de establecer, ya que
-                                            varían de acuerdo a las distintas tradiciones que constituyen el acervo cultural
-                                            de la humanidad. A grandes rasgos pueden definirse como el conjunto inmaterial
-                                            de bienes ideas, consideraciones e ideales por los que un grupo humano considera
-                                            digno esforzarse y luchar. Por ejemplo: tradición, empatía, libertad, educación.
-                                            Esto no quiere decir que se traduzcan a rajatabla en conductas específicas, ya
-                                            que a menudo pertenecen a la esfera de lo idealizado o la imaginación, razón por
-                                            la cual el arte se hace portavoz de dichos valores. Entonces como lo que son
-                                            valores culturales de una sociedad a menudo se contradicen con los de otra:
-                                            entonces sobreviene el conflicto.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Observations-->
-                            <div class="col-md-6">
+                            <div class="col">
                                 <div class="row">
                                     <div class="col">
                                         <h3 class="text-black" style="font-size: medium">
@@ -904,7 +867,11 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="card mb-3 text-black" style="font-size: medium; padding: 5px">
-                                            --
+                                            {% if patrimony.observacion == "" %}
+                                                --
+                                            {% else %}
+                                                {{ patrimony.observacion }}
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
