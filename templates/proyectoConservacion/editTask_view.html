@@ -234,7 +234,7 @@
                             {% endif %}
 
 
-                            {% if task.status == '3' and request.user|has_group:"Gestor de Conservación y traslados" %}
+                            {% if task.status == '3' and request.user|has_group:"Gestor de Conservación y Traslados" %}
 
                                 <div class="col-3 ">
                                     <button id="actualizar" class="btn btn-primary mx-1" type="button">
@@ -248,7 +248,7 @@
                     </div>
                 </div>
 
-                {% if request.user|has_group:"Gestor de Conservación y traslados" and task.status == '1' %}
+                {% if request.user|has_group:"Gestor de Conservación y Traslados" and task.status == '1' %}
 
                     <div class="form-group  row justify-content-end mt-2 mr-0">
                         <a href="{% url 'listTasks' pk=activity.id %}"

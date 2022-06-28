@@ -58,7 +58,7 @@ def query_projects_by_args(**kwargs):
     }
 
 
-def query_activities_by_args(pk, **kwargs):
+def query_activities_by_args(request,pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
@@ -70,6 +70,10 @@ def query_activities_by_args(pk, **kwargs):
     project = ProyectoConservacion.objects.get(pk=pk)
     queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(proyecto=project).filter(
         estado='1')
+
+    if(request.user is not None):
+        if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
+            print("XD")
 
     total = queryset.count()
 
