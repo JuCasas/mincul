@@ -164,8 +164,8 @@
             }
         });
         map.on('moveend',function(){
-            obtenerCoordenadasEsquinaMapa();
-            distanciaEntreDosCoordenadas(esquinasMapa.noroeste.lat,esquinasMapa.noroeste.lng,esquinasMapa.sureste.lat,esquinasMapa.sureste.lng);
+            grupoMarcadoresFueraRuta.clearLayers();
+            anadirPatrimoniosFueraRuta();
         });
 
         function obtenerCoordenadasEsquinaMapa(){
@@ -220,16 +220,35 @@
             });
         }
         function crearDivPatrimonio(patrimonioDatos){
+            hrefLink=window.location.origin+"/patrimonios/detalle/"+patrimonioDatos.id+"/";
             return '<div>' + '<h3 style="text-align: center">'+patrimonioDatos.nombre+'</h3>'+
-                '<img src="'+ patrimonioDatos.url+'" height="100px" width="300px"/>'+'</div>';
+                '<img src="'+ patrimonioDatos.url+'" height="100px" width="300px"/>'+
+                '<a href="'+ hrefLink +'"><button class="btn btn-dark mr-1 mb-1 w-100" type="button" style="font-size: 10px">' +
+                'Ver Ficha </button> </a>'
+                + '</div>';
         }
         async function obtenerPatrimoniosFueraRuta(){
+            let patrimoniosEnrutados=[];
+            let institucionesEnrutadas=[];
+            for(let i=0;i<patrimoniosEnRuta.length;i++){
+                if(patrimoniosEnRuta[i].tipo==2){//inmueble
+                    patrimoniosEnrutados.push(patrimoniosEnRuta[i].id);
+                }else{
+                    institucionesEnrutadas.push(patrimoniosEnRuta[i].id);
+                }
+            }
             return $.ajax({
                 type: "POST",
                 url: "/mapa_patrimonio/mapa/patrimoniosFueraRuta",
                 data: {
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-                    //insertar las esquinas
+                    noroesteLat:esquinasMapa.noroeste.lat,
+                    noroesteLong:esquinasMapa.noroeste.lng,
+                    suresteLat:esquinasMapa.sureste.lat,
+                    suresteLong:esquinasMapa.sureste.lng,
+                    idPatrimoniosEnrutados:patrimoniosEnrutados,
+                    idInstitucionesEnrutadas:institucionesEnrutadas,
+                    numEnrutados:20-numPatrimoniosEnRuta,
                 },
             });
         }
@@ -237,7 +256,26 @@
             if(patrimoniosEnRuta==null){
                 return;
             }
-            
+            obtenerCoordenadasEsquinaMapa();
+            await obtenerPatrimoniosFueraRuta().
+                then(datos=>{
+                    patrimoniosFueraRuta=datos.data;
+                    console.log(datos);
+                    console.log(patrimoniosFueraRuta);
+                });
+            for(let i=0;i<patrimoniosFueraRuta.length;i++){
+                if(patrimoniosFueraRuta[i].tipo==2){
+                    let markerInicio = L.marker([patrimoniosFueraRuta[i].lat, patrimoniosFueraRuta[i].long], {
+                        icon: patrimonioIcon,
+                        title: patrimoniosFueraRuta[i].nombre,
+                    }).addTo(grupoMarcadoresFueraRuta).bindPopup(crearDivPatrimonio(patrimoniosFueraRuta[i]));
+                }else{
+                    let markerInicio = L.marker([patrimoniosFueraRuta[i].lat, patrimoniosFueraRuta[i].long], {
+                        icon: institucionesIcon,
+                        title: patrimoniosFueraRuta[i].nombre,
+                    }).addTo(grupoMarcadoresFueraRuta).bindPopup(crearDivPatrimonio(patrimoniosFueraRuta[i]));
+                }
+            }
         }
         function anadirPatrimoniosEnRuta(){//tipo 2 para inmuebles, 4 para institucion
             for(let i=0;i<patrimoniosEnRuta.length;i++){
@@ -364,7 +402,6 @@
 
                     let linkFicha=document.createElement("a");
                     linkFicha.href=window.location.origin+"/patrimonios/detalle/"+patrimoniosEnRuta[i].id+"/";
-                    console.log(window.location.origin);
                     let btnFichaLink=document.createElement("button");
                     classLink.forEach((clas)=>{
                         btnFichaLink.classList.add(clas);
@@ -387,6 +424,7 @@
             let long1menor=false;
             distanciaDispersion= dispersion==-1 ? PORCENTAJE_DISPERSION*distanciaEntreDosCoordenadas(lat1,long1,lat2,long2) : dispersion;
             if(distanciaDispersion>MAX_DISPERSION){
+                console.log("dispersion muy grande");
                 distanciaDispersion=MAX_DISPERSION;
             }
             //esta en metros
@@ -415,13 +453,13 @@
                     patrimoniosEnRuta=datos.data;
                     numPatrimoniosEnRuta=datos.numPatrimonios;
                     success=datos.success;
-                    console.log(datos);
+                    console.log("enrutamiento entre puntos");
                     console.log(patrimoniosEnRuta);
                 });
             await enrutamientoConPatrimonios(lat1,long1,lat2,long2);
-            anadirPatrimoniosEnRuta();
+            await anadirPatrimoniosEnRuta();
+            await anadirListaPatrimonios();
             await anadirPatrimoniosFueraRuta();
-            anadirListaPatrimonios();
         }
         async function generarRuta() {
             if(controlRuta!=null){
