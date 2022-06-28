@@ -135,6 +135,10 @@
           color: #BDC1D2 !important;
       }
 
+      #anchoIncidente {
+          width: 35%;
+      }
+
       .inputIcon2 {
           color: #393e44 !important;
           font-size: 10px !important;
@@ -142,16 +146,25 @@
       }
 
       input:disabled {
-          background-color: #EEEEEE !important;
+          background-color: #edf2f9 !important;
       }
 
-      select:disabled{
-          background-color: #EEEEEE !important;
+      select:disabled {
+          background-color: #edf2f9 !important;
       }
 
-      textarea:disabled{
-          background-color: #EEEEEE !important;
+      textarea:disabled {
+          background-color: #edf2f9 !important;
       }
+
+      select:disabled {
+          background-color: #edf2f9 !important;
+      }
+
+      textarea:disabled {
+          background-color: #edf2f9 !important;
+      }
+
   </style>
 
 {% endblock %}
@@ -252,7 +265,7 @@
 
   <!-- NEW and EDIT Modal -->
   <div class="modal fade" id="modalIncidente" role="dialog">
-    <div class="modal-dialog mw-100 w-25">
+    <div id="anchoIncidente" class="modal-dialog mw-100">
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -313,11 +326,19 @@
               </div>
             </div>
 
+              <div class="row">
+              <div class="form-group col-lg-12 col-sm-12" id="seccionExistentes">
+
+              </div>
+            </div>
+
             <div class="row">
               <div class="form-group col-lg-12 col-sm-12">
                 <label for="nombre">Proyecto de conservación:</label>
-                <input class="form-control" id="proyecto" name="proyecto" type="text" required
-                       placeholder="proyecto" disabled>
+                <select class="form-control" id="proyecto" name="proyecto" type="text" required
+                        disabled>
+                  <option value="first" selected="selected"></option>
+                </select>
               </div>
             </div>
 
@@ -391,6 +412,15 @@
   <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
   <script src="{% static 'project/projects/incidents.js' %}"></script>
   <script>
+
+     function toDate(date) {
+      let parts = date.split("/");
+      let dt = new Date(parseInt(parts[2], 10),
+          parseInt(parts[1], 10) - 1,
+          parseInt(parts[0], 10));
+      return dt.toISOString().slice(0, 10);
+    }
+
     let types = {
       '1': 'Invasión/Ocupación Ilegal/Ampliación de Invasión',
       '2': 'Deterioro de patrimonio por efectos de la persona',
@@ -536,6 +566,85 @@
           $(this).off("select2:opening.cancelOpen");
         });
       });
+
+      //Programación de opciones en DataTable
+        $('#tabla_autores tbody').on('click', 'button', function () {
+
+          let data = table.row($(this).parents('tr')).data();
+          console.log("DATAAAAAAAAA")
+
+          let class_name = $(this).attr('class');
+          id = data['id'];
+
+           if (class_name === 'btn btn-show') {
+            console.log(data)
+            $('#cover-spin').show(0)
+            console.log("BTN SHOWWWW");
+            $.ajax({
+              url: '/incidentes/' + id + '/detalle/',
+              type: 'get',
+              data: {},
+              success: function (data, textStatus, jQxhr) {
+
+                $('#cover-spin').hide()
+
+                let incidente = data['data'][0]
+                let documentos = incidente['documentos'];
+                console.log(documentos)
+
+                  console.log("NOMBRE DE INCIDENTE")
+                  console.log(incidente['proyecto']['nombre'])
+                let tamDocumentos = incidente['documentos'].length;
+
+                $('#modal_title').text("Incidente " + incidente['codigo']);
+                $('#informante').val(incidente['nombre']);
+                $('select[name=tipo] option:first').html(types[incidente['tipoAfectacion']]);
+                $('#fecha').val(toDate(incidente['fechaRegistro']));
+                $('#correo').val(incidente['correo']);
+                $('#telefono').val(incidente['telefono']);
+                $('#descripcion').val(incidente['descripcion']);
+                $('select[name=status] option:first').html(status_filter[incidente['status']]['name']);
+                if (incidente['proyecto']['nombre'] === undefined) {
+                  $('select[name=proyecto] option:first').html('No asignado');
+                } else {
+                  $('select[name=proyecto] option:first').html(incidente['proyecto']['nombre']);
+                }
+
+                //DOCUMENTOS
+                if (tamDocumentos == 0) {
+                    data = ''
+                }
+                else {
+                    data = '<h5 class="mb-4">Documentos existentes:</h5>';
+                    for (let i = 0; i < tamDocumentos; i++) {
+                    data += '<div>' +
+                                '<a class="notification notification-flush bg-0"' +
+                                    'href="' + documentos[i].url + '" download>' + documentos[i].name +
+                                        '<button class="btn" href="' + documentos[i].url + '" type="button">' +
+                                            '<i class="fas fa-download" data-fa-transform="shrink-3"></i>' +
+                                        '</button>' +
+                                '</a>'+
+                                '<hr>' +
+                            '</div>';
+                    }
+                }
+
+
+                $("#seccionExistentes").html(data);
+
+                $("#modalIncidente").modal();
+              },
+              error: function (jqXhr, textStatus, errorThrown) {
+
+                $('#cover-spin').hide()
+              }
+            });
+          } else {
+            // DELETE button
+            $('#idIncidenteDenegar').val(id)
+            $("#modalDenegar").modal();
+          }
+        });
 
 
     });
