@@ -416,7 +416,7 @@
         let order = data.order[0].dir
 
         $.ajax({
-          url: '',
+          url: '/conservacion/proyectos/'+'{{ project.id }}'+'/incidentes/',
           type: 'get',
           data: {
             length: data.length,

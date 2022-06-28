@@ -605,7 +605,8 @@
           "data": "status", render: function (data, type, row) {
 
             let resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
-                '<button type="button" class="btn btn-check"' + (data === '3' || data === '4' ? ' disabled ' : '') + '><i class="fas fa-check"></i></button>' + '&nbsp;&nbsp' +
+                '<button type="button" class="btn btn-check"' + (data === '3' || data === '4' ? ' disabled ' : '') + '>' +
+                (data === '1' ? '<i class="fas fa-check"></i></button>' : data === '2' ? '<i class="fas fa-times-circle"></i></button>':'<i class="fas fa-ban"></i></button>') + '&nbsp;&nbsp' +
                 '<button type="button" class="btn btn-delete"' + (data === '3' || data === '4' ? ' disabled ' : '') + '><i class="fas fa-trash-alt"></i></button>'
             return resp;
           }
@@ -762,6 +763,7 @@
           method: 'POST',
           data: {
             'proyecto': project.val(),
+              csrfmiddlewaretoken: '{{ csrf_token }}',
           },
           success: function (response) {
             $('#cover-spin').hide();
@@ -788,6 +790,7 @@
         method: 'POST',
         data: {
           'proyecto': project.val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
         },
         success: function (response) {
           $('#cover-spin').hide();

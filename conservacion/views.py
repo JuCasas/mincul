@@ -142,7 +142,7 @@ def query_tasks_by_args(request,pk, **kwargs):
     }
 
 
-def query_incidents_by_args(**kwargs):
+def query_incidents_by_args(pk,**kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
@@ -151,11 +151,14 @@ def query_incidents_by_args(**kwargs):
     zone_filter = kwargs.get('zone_filter', None)[0]
     order_column = kwargs.get('order_column', None)[0]
     order = kwargs.get('order', None)[0]
+
+    project = ProyectoConservacion.objects.get(pk=pk)
+
     if (len(zone_filter) == 0):
-        queryset = Incidente.objects.filter(estado='1')
+        queryset = Incidente.objects.filter(estado='1').filter(proyectoconservacion=project)
     else:
         zona = PuntoGeografico.objects.get(pk=int(zone_filter))
-        queryset = Incidente.objects.filter(zona=zona)
+        queryset = Incidente.objects.filter(zona=zona).filter(proyectoconservacion=project)
 
     total = queryset.count()
 
@@ -285,6 +288,7 @@ def deleteProject(request, pk):
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 @api_view(('POST',))
 def deletePatrimony(request, pk):
     project = ProyectoConservacion.objects.get(pk=pk)
@@ -332,8 +336,11 @@ def listActivities(request, pk):
 
 @api_view(('GET',))
 def listIncidents(request, pk):
+    print("ENTRO A LISTINCIDENTS")
+    print("ESTO ES EL PK")
+    print(pk)
     if request.is_ajax():
-        incident = query_incidents_by_args(**request.GET)
+        incident = query_incidents_by_args(pk,**request.GET)
         for inc in incident['items']:
             print(inc.zona.nombre)
         serializer = IncidenteSerializer((incident['items']), many=True)
