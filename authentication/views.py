@@ -8,9 +8,10 @@ def signin(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        print("Hola")
         if user is not None:
-            login(request,user)
+            login(request, user)
+            print("ESTO!")
+            print(user.groups)
             return redirect('listProjects')
         else:
             error_message = "Sus credenciales de inicio de sesión no son correctas. " + \
