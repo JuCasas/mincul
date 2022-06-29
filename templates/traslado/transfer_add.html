@@ -70,7 +70,7 @@
       }
 
       input:disabled {
-          background-color: #EEEEEE !important;
+          background-color: #edf2f9 !important;
       }
 
       .second {
@@ -119,7 +119,7 @@
                             <div class="form-group position-relative">
                                 <label for="tipoTraslado">Tipo de Traslado:</label>
                                 <select class="form-control selectpicker" id="tipoTraslado" name="tipoTraslado" required
-                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %} onchange="validarPais()">
+                                        {% if traslado.estado != '1' and idEditar != 0  or request.user|has_group:"Gestor de Conservación y Traslados"  %}disabled{% endif %} onchange="validarPais()">
                                     <option value="1" {% if traslado.tipoTraslado == '1' %} selected {% endif %}>Exposición en el
                                         extranjero
                                     </option>
@@ -136,7 +136,7 @@
                                 <label for="pais">País destino:</label>
                                 <select class="form-control selectpicker" id="pais" name="pais"
                                         data-placeholder='Seleccione país...' required
-                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
+                                        {% if traslado.estado != '1' and idEditar != 0 or request.user|has_group:"Gestor de Conservación y Traslados"  %}disabled{% endif %}>
                                     {% include 'traslado/paises.html' %}
                                 </select>
                                 <span class="fas fa-chevron-down inputIcon2"></span>
@@ -145,7 +145,7 @@
                                 <label for="ubigeo">Dirección de destino:</label>
                                 <input class="form-control" id="destino" name="destino" type="text"
                                        value="{{ traslado.destino }}" required
-                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
+                                       {% if traslado.estado != '1' and idEditar != 0 or request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
                             </div>
 
                             <div class="form-group ">
@@ -153,14 +153,14 @@
                                 <input class="form-control" id="nombreExposicion" name="nombreExposicion"
                                        type="text"
                                        value="{{ traslado.nombreExposicion }}" required
-                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
+                                       {% if traslado.estado != '1' and idEditar != 0 or request.user|has_group:"Gestor de Conservación y Traslados"  %}disabled{% endif %}>
                             </div>
 
                             <div class="form-group position-relative">
                                 <label for="comisario">Comisario:</label>
                                 <select class="form-control selectpicker" id="comisario" name="comisario"
                                         data-placeholder='Seleccione comisario...'
-                                        {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
+                                        {% if traslado.estado != '1' and idEditar != 0 or request.user|has_group:"Gestor de Conservación y Traslados"  %}disabled{% endif %}>
                                     {% for c in comisarios %}
                                         <option value="{{ c.pk }}">{{ c.first_name }} {{ c.last_name }}</option>
                                     {% endfor %}
@@ -196,7 +196,7 @@
                                         <select class="form-control selectpicker" id="nombreInstitucion"
                                                 name="nombreInstitucion"
                                                 data-placeholder='Seleccione entidad...' onchange="getEmail(this)"
-                                                {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
+                                                {% if traslado.estado != '1' and idEditar != 0 or request.user|has_group:"Gestor de Conservación y Traslados"  %}disabled{% endif %}>
                                             {% for e in entidades %}
                                                 <option value="{{ e.pk }}">{{ e.nombreSolicitante }}</option>
                                             {% endfor %}
@@ -224,11 +224,11 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group">
-                                                <label for="fechaSalidaProgramada">Fecha de Salida Programada: </label>
+                                                <label for="fechaSalidaProgramada">Fecha de Salida Programada:  </label>
                                                 <input class="form-control" id="fechaSalidaProgramada"
                                                        name="fechaSalidaProgramada" type="date"
                                                        value="{{ traslado.fechaSalidaProgramada|date:'Y-m-d' }}"
-                                                       {% if traslado.estado != '1' and idEditar != 0 %}disabled{% endif %}>
+                                                       {% if traslado.estado != '1' and idEditar != 0  or request.user|has_group:"Gestor de Conservación y Traslados"  %}disabled{% endif %}>
                                             </div>
 
                                             {% if traslado.estado == '4' or traslado.estado == '5' or traslado.estado == '6' %}
@@ -266,11 +266,12 @@
                                     <h5>Patrimonios a ser trasladados</h5>
                                 </div>
                                 {% if  estado  == '1' or estado == '0' or operacion == 'agregar' %}
+                                    {% if request.user|has_group:"Gestor de Patrimonios" %}
                                     <div class="form-group col-auto d-flex justify-content-between mx-2">
                                         <div class="position-relative w-100">
                                             <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
                                                 data-placeholder='Seleccione patrimonio...'
-                                                {% if traslado.estado != '1' and idEditar != 0 %} hidden {% endif %} >
+                                                {% if traslado.estado != '1' and idEditar != 0  %} hidden {% endif %} >
                                         </select>
                                         <span class="fas fa-chevron-down inputIcon2"></span>
                                         </div>
@@ -278,11 +279,12 @@
                                         <button id="btnAgregarPatrimonio" class="btn btn-primary btn-sm ml-2"
                                                 type="button"
                                                 onclick="agregarPatrimonioTabla()"
-                                                {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}
+                                                {% if traslado.estado != '1' and idEditar != 0  or request.user|has_group:"Gestor de Conservación y Traslados"  %}  hidden{% endif %}
                                         >Agregar
                                         </button>
 
                                     </div>
+                                        {% endif %}
                                 {% endif %}
 
                                 <div class="card-body bg-light">
@@ -295,7 +297,9 @@
                                             <th scope="col">Tipo de bien</th>
                                             <th scope="col">Estado</th>
                                             {% if  estado  == '1' or estado == '0' or operacion == "agregar" %}
+                                                {% if request.user|has_group:"Gestor de Patrimonios" %}
                                                 <th scope="col">Acciones</th>
+                                                {% endif %}
                                             {% endif %}
                                         </tr>
                                         </thead>
@@ -308,13 +312,15 @@
                                                 <td>{{ patrimonio.get_tipoPatrimonio_display }}</td>
                                                 <td>{{ patrimonio.get_estado_display }}</td>
 
-                                                {% if  estado  == '1' or estado == '0' %}
+                                                {% if  estado  == '1' or estado == '0'%}
+                                                    {% if request.user|has_group:"Gestor de Patrimonios" %}
                                                     <td>
                                                         <button class="btn" href="#" type="button"
                                                                 onclick="eliminarPatrimonio(this,{{ patrimonio.pk }})">
                                                             <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
                                                         </button>
                                                     </td>
+                                                        {% endif %}
                                                 {% endif %}
 
                                             </tr>
@@ -329,6 +335,7 @@
                 </div>
             </div>
 
+            {% if request.user|has_group:"Gestor de Patrimonios" %}
             <div class="card my-3" {% if traslado.estado != '1' and idEditar != 0 %}  hidden{% endif %}>
                 <div class="card-header">
                     <h5>Documentos nuevos:</h5>
@@ -373,6 +380,7 @@
                     </div>
                 </div>
             </div>
+        {% endif %}
 
 
             {% if operacion == "editar" %}
@@ -1660,6 +1668,7 @@
                 $("#lista").val(patrimoniosLista);
 
                 if (("{{ estado }}" === '1') || ("{{ estado }}" === '0')) {
+                    console.log("ENTRA A ESTA TABLA")
                     data = '<tr>' +
                         '<td>' + patrimonioAgregar[0].id + '</td>' +
                         ' <td>' + patrimonioAgregar[0].text + '</td>' +
