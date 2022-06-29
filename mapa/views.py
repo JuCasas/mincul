@@ -65,6 +65,8 @@ def ficha(request,my_id):
         if (patrimonio.categoria.pk == 10):
             dataCategoria = PatrimonioIndustrial.objects.get(patrimonioMueble=patrimonioMueble)
         try:
+            urlPatrimonio = urlPatrimonio[0].url
+            urlPatrimonio = urlPatrimonio.name
             context = {
                 'patrimony': patrimonio,
                 'patrimonioMuebleData': patrimonioMueble,
@@ -73,7 +75,7 @@ def ficha(request,my_id):
                 'tecnicasDecoracion': tecnicasDecoracionString,
                 'tecnicasManufactura': tecnicasManufacturaString,
                 'dataCategoria':dataCategoria,
-                'urlPatrimonio': '/'+urlPatrimonio[0].url
+                'urlPatrimonio': '/'+urlPatrimonio
             }
         except:
             context = {
@@ -88,9 +90,11 @@ def ficha(request,my_id):
             }
         return render(request, 'map/ficha.html', context)
     try:
+        urlPatrimonio = urlPatrimonio[0].url
+        urlPatrimonio = urlPatrimonio.name
         context = {
             'patrimony': patrimonio,
-            'urlPatrimonio': urlPatrimonio[0].url
+            'urlPatrimonio': '/'+urlPatrimonio
         }
     except:
         context={
@@ -116,8 +120,10 @@ def mapaPatrimonioSimple(request):
                         if insti not in instituciones:
                             instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
                             try:
+                                instiUrl = instiUrl[0].url
+                                instiUrl = instiUrl.name
                                 instituciones.append({'institucion': insti,
-                                                      'url': '/'+instiUrl[0].url})
+                                                      'url': '/'+instiUrl})
                             except:
                                 instituciones.append({'institucion': insti,
                                                       'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -125,8 +131,10 @@ def mapaPatrimonioSimple(request):
                     else:
                         urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
                         try:
+                            urlPatrimonio = urlPatrimonio[0].url
+                            urlPatrimonio = urlPatrimonio.name
                             patri.append({'patrimonio':p,
-                                          'url':'/'+urlPatrimonio[0].url})
+                                          'url':'/'+urlPatrimonio})
                         except:
                             patri.append({'patrimonio': p,
                                           'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -219,16 +227,20 @@ def mapaPatrimonioAvanzado(request):
                         if insti not in instituciones:
                             instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
                             try:
+                                instiUrl = instiUrl[0].url
+                                instiUrl = instiUrl.name
                                 instituciones.append({'institucion': insti,
-                                                      'url': '/'+instiUrl[0].url})
+                                                      'url': '/'+instiUrl})
                             except:
                                 instituciones.append({'institucion': insti,
                                                       'url': '/static/img/landmarks/notAvailable.jpg'})
                     else:
                         urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
                         try:
+                            urlPatrimonio = urlPatrimonio[0].url
+                            urlPatrimonio = urlPatrimonio.name
                             patrimons.append({'patrimonio': p,
-                                            'url': '/'+urlPatrimonio[0].url})
+                                            'url': '/'+urlPatrimonio})
                         except:
                             patrimons.append({'patrimonio': p,
                                              'url': '/static/img/landmarks/notAvailable.jpg'})
