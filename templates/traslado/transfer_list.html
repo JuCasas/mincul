@@ -133,9 +133,9 @@
                     </div>
                 </div>
 
-                <div class="form-group col-sm-2 mb-0">
+                <div class="form-group col-sm-2 mb-0 {% if not request.user|has_group:"Gestor de Patrimonios" %}pr-0{% endif %}">
                     <select class="form-control" id="status_filter">
-                        <option value="" selected>Todos los estados</option>
+                        <option value="" selected>Estados</option>
                         <option value="1">Registrada</option>
                         <option value="2">En evaluación</option>
                         <option value="3">Rechazada</option>
