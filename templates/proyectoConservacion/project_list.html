@@ -355,7 +355,8 @@
           data: {
             'codigo': $("#codigo").val(),
             'nombre': $("#nombre").val(),
-            'tipoPlan': $("#tipoPlan").val()
+            'tipoPlan': $("#tipoPlan").val(),
+              csrfmiddlewaretoken: '{{ csrf_token }}',
           },
           success: function (response) {
             $('#cover-spin').hide()
