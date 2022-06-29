@@ -188,16 +188,10 @@ def listPatrimonys_Project(request):
     length = 10
     search = request.GET['search']
     page = int(request.GET['page'])
-    project_pk = request.GET['project_pk']
-    project = ProyectoConservacion.objects.get(pk=project_pk)
-
-    # Deben ser solo los patrominos registrados en el proyecto de conservación
-    queryset = project.patrimonios.filter(nombreTituloDemoninacion__icontains=search).order_by(
-        'nombreTituloDemoninacion')
-
     start = (page - 1) * length
     end = start + length
-
+    queryset = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=search).exclude(tipoPatrimonio=1).order_by(
+        'nombreTituloDemoninacion')
     count = queryset.count()
     queryset = queryset[start:end]
     serializer = PatrimonioSerializer(queryset, many=True)

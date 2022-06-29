@@ -22,6 +22,8 @@ urlpatterns = [
     path('proyectos/<pk>/actividades/delete/<pkActividad>', views.deleteActivity, name='deleteActivity'),
     path('actividades/<pk>/tareas/', views.listTasks, name='listTasks'),
     path('actividades/validateEndActivity/', views.validateEndActivity, name='validateEndActivity'),
+
+
     path('proyectos/patrimonios/', views.listPatrimonys_Project, name='listPatrimonys_Project'),
 
     path('actividades/<pk>/tareas/add/view/', views.addTaskView, name='addTaskView'),
