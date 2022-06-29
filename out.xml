@@ -1,118 +1,208 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="iso-8859-1" ?>
 <django-objects version="1.0">
-    <object model="auth.group" pk="1">
+    <object model="auth.group">
         <field name="name" type="CharField">Administrador</field>
         <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>
-    <object model="auth.group" pk="2">
-        <field name="name" type="CharField">Gestor de Conservacion y Traslados</field>
+    <object model="auth.group">
+        <field name="name" type="CharField">Gestor de Conservaci�n y Traslados</field>
         <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>
-    <object model="authentication.user" pk="1">
+    <object model="auth.group">
+        <field name="name" type="CharField">Gestor de Patrimonios</field>
+        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
+    </object>
+    <object model="auth.group">
+        <field name="name" type="CharField">Conservador</field>
+        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
+    </object>
+    <object model="patrimonios.categoria" pk="1">
+        <field name="nombre" type="CharField">Sitios Naturales</field>
+        <field name="tipo" type="CharField">2</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="patrimonios.categoria" pk="2">
+        <field name="nombre" type="CharField">Manifestaciones Culturales</field>
+        <field name="tipo" type="CharField">2</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="patrimonios.categoria" pk="3">
+        <field name="nombre" type="CharField">Realizaciones Tecnicas, Cientificas y Artisticas Contemporaneas</field>
+        <field name="tipo" type="CharField">2</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="patrimonios.categoria" pk="4">
+        <field name="nombre" type="CharField">Folclore</field>
+        <field name="tipo" type="CharField">1</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="patrimonios.categoria" pk="5">
+        <field name="nombre" type="CharField">Acontecimientos Programados</field>
+        <field name="tipo" type="CharField">1</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="patrimonios.categoria" pk="6">
+        <field name="nombre" type="CharField">Arqueologica</field>
+        <field name="tipo" type="CharField">3</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="patrimonios.categoria" pk="7">
+        <field name="nombre" type="CharField">Historica-Artistica</field>
+        <field name="tipo" type="CharField">3</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="patrimonios.categoria" pk="8">
+        <field name="nombre" type="CharField">Etnografica</field>
+        <field name="tipo" type="CharField">3</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="patrimonios.categoria" pk="9">
+        <field name="nombre" type="CharField">Paleontologica</field>
+        <field name="tipo" type="CharField">3</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="patrimonios.categoria" pk="10">
+        <field name="nombre" type="CharField">Industrial</field>
+        <field name="tipo" type="CharField">3</field>
+        <field name="estado" type="CharField">1</field>
+    </object>
+    <object model="authentication.user">
         <field name="password" type="CharField">
-            pbkdf2_sha256$260000$OML1YByhgnXzkv4UI7oFWu$laq+CowpcjnSlkn894Hu4FYQjlSLhIyF+XghwQQalwg=
+            pbkdf2_sha256$260000$yM3YE5vsuHUmPKKYeFKjxv$8dyC5ngEbn2xeVnEzFCQOHiCmge4cdILCwLkOJzLezc=
         </field>
-        <field name="last_login" type="DateTimeField">2022-06-23T05:35:41.082080+00:00</field>
+        <field name="last_login" type="DateTimeField">
+            <None></None>
+        </field>
         <field name="is_superuser" type="BooleanField">True</field>
-        <field name="username" type="CharField">admin</field>
-        <field name="first_name" type="CharField">Pablo</field>
-        <field name="last_name" type="CharField">Castro</field>
-        <field name="email" type="CharField">admin@admin.pe</field>
+        <field name="username" type="CharField">asusanibar</field>
+        <field name="first_name" type="CharField">Alexis</field>
+        <field name="last_name" type="CharField">Susanibar Rosas</field>
+        <field name="email" type="CharField">asusanibar@mincetur.gob.pe</field>
         <field name="is_staff" type="BooleanField">True</field>
         <field name="is_active" type="BooleanField">True</field>
-        <field name="date_joined" type="DateTimeField">2022-06-13T08:22:55.774000+00:00</field>
-        <field name="doi" type="CharField"></field>
-        <field name="celular" type="CharField"></field>
-        <field name="codigo" type="CharField">
-            <None></None>
-        </field>
+        <field name="date_joined" type="DateTimeField">2022-06-29T21:01:07.937303+00:00</field>
+        <field name="doi" type="CharField">48427704</field>
+        <field name="celular" type="CharField">996768123</field>
+        <field name="codigo" type="CharField">20110999</field>
         <field name="foto" rel="ManyToOneRel" to="mincul_app.documento">
             <None></None>
         </field>
         <field name="groups" rel="ManyToManyRel" to="auth.group">
-            <object pk="1"></object>
+            <object>
+                <natural>Gestor de Conservaci�n y Traslados</natural>
+            </object>
         </field>
         <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>
-    <object model="authentication.user" pk="2">
+    <object model="authentication.user">
         <field name="password" type="CharField">
-            pbkdf2_sha256$260000$scVbqCRLwLumWqBvesmWfF$JXNvcCeIXubqOMhgPQFoN0xBKUs2dDBcarMYGe65mQg=
+            pbkdf2_sha256$260000$yM3YE5vsuHUmPKKYeFKjxv$8dyC5ngEbn2xeVnEzFCQOHiCmge4cdILCwLkOJzLezc=
         </field>
-        <field name="last_login" type="DateTimeField">2022-06-23T05:36:36.220627+00:00</field>
-        <field name="is_superuser" type="BooleanField">False</field>
-        <field name="username" type="CharField">comisario1</field>
+        <field name="last_login" type="DateTimeField">
+            <None></None>
+        </field>
+        <field name="is_superuser" type="BooleanField">True</field>
+        <field name="username" type="CharField">rjeri</field>
+        <field name="first_name" type="CharField">Raul</field>
+        <field name="last_name" type="CharField">Jeri Lara</field>
+        <field name="email" type="CharField">rjeri@mincetur.gob.pe</field>
+        <field name="is_staff" type="BooleanField">True</field>
+        <field name="is_active" type="BooleanField">True</field>
+        <field name="date_joined" type="DateTimeField">2022-06-29T21:01:07.937303+00:00</field>
+        <field name="doi" type="CharField">48427705</field>
+        <field name="celular" type="CharField">996768123</field>
+        <field name="codigo" type="CharField">20111000</field>
+        <field name="foto" rel="ManyToOneRel" to="mincul_app.documento">
+            <None></None>
+        </field>
+        <field name="groups" rel="ManyToManyRel" to="auth.group">
+            <object>
+                <natural>Gestor de Patrimonios</natural>
+            </object>
+        </field>
+        <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
+    </object>
+    <object model="authentication.user">
+        <field name="password" type="CharField">
+            pbkdf2_sha256$260000$yM3YE5vsuHUmPKKYeFKjxv$8dyC5ngEbn2xeVnEzFCQOHiCmge4cdILCwLkOJzLezc=
+        </field>
+        <field name="last_login" type="DateTimeField">
+            <None></None>
+        </field>
+        <field name="is_superuser" type="BooleanField">True</field>
+        <field name="username" type="CharField">mzenteno</field>
         <field name="first_name" type="CharField">Miguel</field>
+        <field name="last_name" type="CharField">Zenteno</field>
+        <field name="email" type="CharField">mzenteno@mincetur.gob.pe</field>
+        <field name="is_staff" type="BooleanField">True</field>
+        <field name="is_active" type="BooleanField">True</field>
+        <field name="date_joined" type="DateTimeField">2022-06-29T21:01:07.937303+00:00</field>
+        <field name="doi" type="CharField">48427706</field>
+        <field name="celular" type="CharField">996768123</field>
+        <field name="codigo" type="CharField">20111001</field>
+        <field name="foto" rel="ManyToOneRel" to="mincul_app.documento">
+            <None></None>
+        </field>
+        <field name="groups" rel="ManyToManyRel" to="auth.group">
+            <object>
+                <natural>Conservador</natural>
+            </object>
+        </field>
+        <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
+    </object>
+    <object model="authentication.user">
+        <field name="password" type="CharField">
+            pbkdf2_sha256$260000$yM3YE5vsuHUmPKKYeFKjxv$8dyC5ngEbn2xeVnEzFCQOHiCmge4cdILCwLkOJzLezc=
+        </field>
+        <field name="last_login" type="DateTimeField">
+            <None></None>
+        </field>
+        <field name="is_superuser" type="BooleanField">True</field>
+        <field name="username" type="CharField">jcasas</field>
+        <field name="first_name" type="CharField">Juan</field>
         <field name="last_name" type="CharField">Casas</field>
-        <field name="email" type="CharField">comisario1@pucp.pe</field>
+        <field name="email" type="CharField">jcasas@mincetur.gob.pe</field>
         <field name="is_staff" type="BooleanField">True</field>
         <field name="is_active" type="BooleanField">True</field>
-        <field name="date_joined" type="DateTimeField">2022-06-23T05:34:54.017075+00:00</field>
-        <field name="doi" type="CharField"></field>
-        <field name="celular" type="CharField"></field>
-        <field name="codigo" type="CharField">
-            <None></None>
-        </field>
+        <field name="date_joined" type="DateTimeField">2022-06-29T21:01:07.937303+00:00</field>
+        <field name="doi" type="CharField">48427707</field>
+        <field name="celular" type="CharField">996768123</field>
+        <field name="codigo" type="CharField">20111002</field>
         <field name="foto" rel="ManyToOneRel" to="mincul_app.documento">
             <None></None>
         </field>
         <field name="groups" rel="ManyToManyRel" to="auth.group">
-            <object pk="2"></object>
+            <object>
+                <natural>Conservador</natural>
+            </object>
         </field>
         <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>
-    <object model="authentication.user" pk="3">
+    <object model="authentication.user">
         <field name="password" type="CharField">
-            pbkdf2_sha256$260000$ekwJQavlEPMHAj9KDpffSs$RsA0iqQDnQIHLRqiCBO2r5j3ltPDkZWJROCzAIowXss=
+            pbkdf2_sha256$260000$yM3YE5vsuHUmPKKYeFKjxv$8dyC5ngEbn2xeVnEzFCQOHiCmge4cdILCwLkOJzLezc=
         </field>
         <field name="last_login" type="DateTimeField">
             <None></None>
         </field>
-        <field name="is_superuser" type="BooleanField">False</field>
-        <field name="username" type="CharField">comisario2</field>
+        <field name="is_superuser" type="BooleanField">True</field>
+        <field name="username" type="CharField">gcabrera</field>
         <field name="first_name" type="CharField">Gilmer</field>
-        <field name="last_name" type="CharField">Garcia</field>
-        <field name="email" type="CharField">com2@pucp.pe</field>
-        <field name="is_staff" type="BooleanField">True</field>
-        <field name="is_active" type="BooleanField">True</field>
-        <field name="date_joined" type="DateTimeField">2022-06-23T05:35:13.279216+00:00</field>
-        <field name="doi" type="CharField"></field>
-        <field name="celular" type="CharField"></field>
-        <field name="codigo" type="CharField">
-            <None></None>
-        </field>
-        <field name="foto" rel="ManyToOneRel" to="mincul_app.documento">
-            <None></None>
-        </field>
-        <field name="groups" rel="ManyToManyRel" to="auth.group">
-            <object pk="2"></object>
-        </field>
-        <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
-    </object>
-    <object model="authentication.user" pk="4">
-        <field name="password" type="CharField">
-            pbkdf2_sha256$260000$GFIXBdbP0Dgq1QWU14Q64V$iUQNra6MaFMql3BHyjW8SF1aeQ2DOVJEE7FTKNCAC60=
-        </field>
-        <field name="last_login" type="DateTimeField">
-            <None></None>
-        </field>
-        <field name="is_superuser" type="BooleanField">False</field>
-        <field name="username" type="CharField">comisario3</field>
-        <field name="first_name" type="CharField">Maximo</field>
         <field name="last_name" type="CharField">Cabrera</field>
-        <field name="email" type="CharField">com3@pucp.pe</field>
+        <field name="email" type="CharField">gcabrera@mincetur.gob.pe</field>
         <field name="is_staff" type="BooleanField">True</field>
         <field name="is_active" type="BooleanField">True</field>
-        <field name="date_joined" type="DateTimeField">2022-06-23T05:37:14.445053+00:00</field>
-        <field name="doi" type="CharField"></field>
-        <field name="celular" type="CharField"></field>
-        <field name="codigo" type="CharField">
-            <None></None>
-        </field>
+        <field name="date_joined" type="DateTimeField">2022-06-29T21:01:07.937303+00:00</field>
+        <field name="doi" type="CharField">48427708</field>
+        <field name="celular" type="CharField">996768123</field>
+        <field name="codigo" type="CharField">20111003</field>
         <field name="foto" rel="ManyToOneRel" to="mincul_app.documento">
             <None></None>
         </field>
         <field name="groups" rel="ManyToManyRel" to="auth.group">
-            <object pk="2"></object>
+            <object>
+                <natural>Conservador</natural>
+            </object>
         </field>
         <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>

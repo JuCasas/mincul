@@ -59,7 +59,7 @@ def query_projects_by_args(**kwargs):
     }
 
 
-def query_activities_by_args(request,pk, **kwargs):
+def query_activities_by_args(request, pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
@@ -70,13 +70,12 @@ def query_activities_by_args(request,pk, **kwargs):
 
     project = ProyectoConservacion.objects.get(pk=pk)
 
-
-    if(request.user is not None):
-        if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
+    if (request.user is not None):
+        if (len(request.user.groups.filter(name__iexact='Conservador')) > 0):
             user = User.objects.get(username=request.user)
             queryset = user.actividad_set.all().filter(estado='1')
-            queryset= queryset.annotate(conservadores_count=Count('conservadores')).filter(
-        proyecto=project)
+            queryset = queryset.annotate(conservadores_count=Count('conservadores')).filter(
+                proyecto=project)
         else:
             queryset = Actividad.objects.annotate(conservadores_count=Count('conservadores')).filter(
                 proyecto=project).filter(
@@ -105,7 +104,7 @@ def query_activities_by_args(request,pk, **kwargs):
     }
 
 
-def query_tasks_by_args(request,pk, **kwargs):
+def query_tasks_by_args(request, pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     # search_value = kwargs.get('search_value', None)[0]
@@ -117,8 +116,8 @@ def query_tasks_by_args(request,pk, **kwargs):
     activity = Actividad.objects.get(pk=pk)
     queryset = Tarea.objects.filter(actividad=activity).filter()
 
-    if(request.user is not None):
-        if(len(request.user.groups.filter(name__iexact='Conservador'))>0):
+    if (request.user is not None):
+        if (len(request.user.groups.filter(name__iexact='Conservador')) > 0):
             queryset = queryset.filter(responsable_id=request.user.id)
 
     total = queryset.count()
@@ -143,7 +142,7 @@ def query_tasks_by_args(request,pk, **kwargs):
     }
 
 
-def query_incidents_by_args(pk,**kwargs):
+def query_incidents_by_args(pk, **kwargs):
     length = int(kwargs.get('length', None)[0])
     start = int(kwargs.get('start', None)[0])
     search_value = kwargs.get('search_value', None)[0]
@@ -182,6 +181,7 @@ def query_incidents_by_args(pk,**kwargs):
         'total': total,
     }
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listPatrimonys_Project(request):
@@ -203,7 +203,7 @@ def listPatrimonys_Project(request):
 
 @api_view(('GET',))
 def addConservador(request):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(groups__name='Conservador')
     count = queryset.count()
     serializer = ConservadorSerializer(queryset, many=True)
     result = dict()
@@ -243,6 +243,7 @@ def listProjects(request, **kwargs):
         }
         return render(request, 'proyectoConservacion/project_list.html', context)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def addProject(request):
@@ -265,6 +266,7 @@ def addProject(request):
         result['message'] = str(e)  # or custom message
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def editProject(request, pk):
@@ -282,6 +284,7 @@ def editProject(request, pk):
         result['message'] = str(e)  # or custom message
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def deleteProject(request, pk):
@@ -289,6 +292,7 @@ def deleteProject(request, pk):
     project.estado = '2'
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
@@ -298,6 +302,7 @@ def deletePatrimony(request, pk):
     project.patrimonios.remove(patrimonio)
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 
 @login_required(login_url='/auth/login/')
 def eliminarDocumentoActividad(request):
@@ -311,16 +316,20 @@ def eliminarDocumentoActividad(request):
     actividad.save()
     return JsonResponse({}, status=200)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listActivities(request, pk):
     if request.is_ajax():
-        activity = query_activities_by_args(request,pk, **request.GET)
+        activity = query_activities_by_args(request, pk, **request.GET)
         serializer = ActividadSerializer((activity['items']), many=True)
         result = dict()
         result['data'] = serializer.data
         result['recordsTotal'] = activity['total']
         result['recordsFiltered'] = activity['count']
+
+        print('Result:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', result)
+
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
     else:
         proyecto = ProyectoConservacion.objects.get(pk=pk)
@@ -335,6 +344,7 @@ def listActivities(request, pk):
         }
         return render(request, 'proyectoConservacion/activity_list.html', context)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listIncidents(request, pk):
@@ -342,7 +352,7 @@ def listIncidents(request, pk):
     print("ESTO ES EL PK")
     print(pk)
     if request.is_ajax():
-        incident = query_incidents_by_args(pk,**request.GET)
+        incident = query_incidents_by_args(pk, **request.GET)
         for inc in incident['items']:
             print(inc.zona.nombre)
         serializer = IncidenteSerializer((incident['items']), many=True)
@@ -360,6 +370,7 @@ def listIncidents(request, pk):
         }
         return render(request, 'proyectoConservacion/incident_list.html', context)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listPatrimonys(request, pk):
@@ -376,6 +387,7 @@ def verifyPatrimony(request, pk):
         return JsonResponse({"existe": False}, status=200)
     else:
         return JsonResponse({"existe": True}, status=200)
+
 
 @login_required(login_url='/auth/login/')
 @api_view(('GET',))
@@ -395,6 +407,7 @@ def listPatrimonysForProject(request, pk):
     result['total_count'] = count
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def addPatrimony(request, pk):
@@ -404,11 +417,12 @@ def addPatrimony(request, pk):
     proyecto.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listTasks(request, pk):
     if request.is_ajax():
-        task = query_tasks_by_args(request,pk, **request.GET)
+        task = query_tasks_by_args(request, pk, **request.GET)
         serializer = TareaSerializer((task['items']), many=True)
         result = dict()
         result['data'] = serializer.data
@@ -421,6 +435,24 @@ def listTasks(request, pk):
             'project': Actividad.objects.get(pk=pk).proyecto
         }
         return render(request, 'proyectoConservacion/task_list.html', context)
+
+
+@login_required(login_url='/auth/login/')
+@api_view(('GET',))
+def addActivityView(request, pk):
+    proyecto = ProyectoConservacion.objects.get(pk=pk)
+    patrimonios = proyecto.patrimonios.all()
+    media_path = MEDIA_URL
+    context = {
+        'media_path': media_path,
+        'status_choices': Actividad.STATUS,
+        'project': proyecto,
+        'patrimonios': patrimonios,
+        'type': 'new',
+    }
+
+    return render(request, 'proyectoConservacion/addActivity_view.html', context)
+
 
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
@@ -467,6 +499,28 @@ def addActivity(request, pk):
         result['message'] = str(e)  # or custom message
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
+def editActivityView(request, pk, pkActividad):
+    proyecto = ProyectoConservacion.objects.get(pk=pk)
+    patrimonios = proyecto.patrimonios.all()
+    media_path = MEDIA_URL
+
+    actividad = Actividad.objects.get(pk=pkActividad)
+    conservadores = actividad.conservadores.all()
+
+    context = {
+        'media_path': media_path,
+        'status_choices': Actividad.STATUS,
+        'project': proyecto,
+        'actividad': actividad,
+        'patrimonios': patrimonios,
+        'conservadores': conservadores,
+        'type': 'edit',
+    }
+
+    return render(request, 'proyectoConservacion/addActivity_view.html', context)
+
+
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def editActivity(request, pk, pkActividad):
@@ -505,6 +559,7 @@ def editActivity(request, pk, pkActividad):
         result['message'] = str(e)  # or custom message
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def deleteActivity(request, pk, pkActividad):
@@ -512,6 +567,7 @@ def deleteActivity(request, pk, pkActividad):
     actividad.estado = '2'
     actividad.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 
 @login_required(login_url='/auth/login/')
 @api_view(('GET',))
@@ -524,6 +580,7 @@ def addTaskView(request, pk):
         'conservadores': conservadores
     }
     return render(request, 'proyectoConservacion/addTask_view.html', context)
+
 
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
@@ -551,17 +608,21 @@ def addTask(request, pk):
     tarea.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def editTask(request, pk):
     tarea = Tarea.objects.get(pk=pk)
     tarea.nombre = request.POST['nombre']
     tarea.descripcion = request.POST['descripcion']
+    responsable = User.objects.get(pk=request.POST['conservador'])
+    tarea.responsable = responsable
     tarea.presupuesto = request.POST['presupuesto']
     tarea.fechaRegistro = datetime.datetime.strptime(request.POST['fechaRegistro'], "%Y-%m-%d").date()
     tarea.fecha = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d").date()
     tarea.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 
 @login_required(login_url='/auth/login/')
 @api_view(('GET',))
@@ -572,23 +633,42 @@ def editTaskView(request, pk):
 
     estadosEditables = [('4', 'Observar'), ('5', 'Aprobar')]
 
+    actividad = Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
+    conservadores = actividad.conservadores.all()
+
     context = {
         'media_path': media_path,
         'task': tarea,
         'secciones': secciones,
         'estadosEditables': estadosEditables,
-        'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
+        'activity': actividad,
+        'conservadores': conservadores,
     }
     return render(request, 'proyectoConservacion/editTask_view.html', context)
+
 
 @login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def detailTaskView(request, pk):
+    actividad = Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
+    conservadores = actividad.conservadores.all()
     context = {
         'task': Tarea.objects.get(pk=pk),
-        'activity': Actividad.objects.get(pk=Tarea.objects.get(pk=pk).actividad.pk)
+        'activity': actividad,
+        'conservadores': conservadores,
     }
     return render(request, 'proyectoConservacion/detailTask_view.html', context)
+
+
+@login_required(login_url='/auth/login/')
+def updateActivityState(request):
+    actividad_pk = request.POST.get('actividad_pk')
+    actividad = Actividad.objects.get(pk=actividad_pk)
+    nuevo_estado = request.POST.get('nuevo_estado')
+    actividad.status = nuevo_estado
+    actividad.save()
+    return JsonResponse({}, status=200)
+
 
 @login_required(login_url='/auth/login/')
 def updateTaskState(request):
@@ -607,6 +687,7 @@ def updateTaskState(request):
     task.save()
     return JsonResponse({}, status=200)
 
+
 @login_required(login_url='/auth/login/')
 def updateTaskState2(request):
     task_pk = request.POST.get('task_pk')
@@ -622,6 +703,7 @@ def updateTaskState2(request):
     task.save()
 
     return JsonResponse({}, status=200)
+
 
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
@@ -649,12 +731,14 @@ def addSection(request, pk):
 
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
+
 @login_required(login_url='/auth/login/')
 def listSections(request, pk):
     secciones = Campo.objects.filter(tarea_id=pk)
     ser_instance = SecionSerializer((secciones), many=True)
     secciones = json.dumps(ser_instance.data)
     return JsonResponse({"secciones": secciones}, status=200)
+
 
 @login_required(login_url='/auth/login/')
 def deleteSection(request):
@@ -672,6 +756,7 @@ def deleteSection(request):
 
     return JsonResponse({}, status=200)
 
+
 @login_required(login_url='/auth/login/')
 def validateSections(request):
     tarea_pk = request.POST['task_pk']
@@ -680,3 +765,20 @@ def validateSections(request):
     if (len(secciones) > 0):
         tiene_secciones = True
     return JsonResponse({"tiene_secciones": tiene_secciones}, status=200)
+
+
+@login_required(login_url='/auth/login/')
+def validateEndActivity(request):
+    actividad_pk = request.POST['actividad_pk']
+
+    tareas = Tarea.objects.filter(actividad_id=actividad_pk)
+
+    cont=0
+    puede_eliminarse =False
+    for tarea in tareas:
+        if tarea.status != '5':
+            cont+=1
+
+    if (cont == 0):
+        puede_eliminarse = True
+    return JsonResponse({"puede_eliminarse": puede_eliminarse}, status=200)

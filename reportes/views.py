@@ -27,11 +27,12 @@ def traerData(request):
 def traerData2(request):
     result = Incidente.objects.annotate(month=ExtractMonth('fechaOcurrencia'),
                              year=ExtractYear('fechaOcurrencia'),
-                               ).filter(year='2022').order_by().values('month', 'year').annotate(total=Count('*')).values('month', 'year', 'total')
+                               ).order_by().values('month').annotate(total=Count('*')).values('month', 'total')
 
+    print(result)
     numeros = ['0']*12
     for i in range(0,result.count()):
-        numeros[result[i]['month']-1] = result[i]['total']
+        numeros[result[i]['month']+4] = result[i]['total']
             # etiquetas.append(result[i][1])
 
     # return JsonResponse({"data": numeros, "labels":etiquetas}, status=200)
