@@ -11,7 +11,7 @@ class Institucion(models.Model):
         ('2', 'Inactivo'),
     )
     nombre = models.CharField(max_length=200)
-    direccion = models.CharField(max_length=200, null=True)
+    direccion = models.CharField(max_length=300, null=True)
     lat = models.DecimalField(max_digits=16, decimal_places=7, null=True)
     long = models.DecimalField(max_digits=16, decimal_places=7, null=True)
     documentos = models.ManyToManyField(Documento)

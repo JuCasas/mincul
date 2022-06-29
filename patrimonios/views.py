@@ -285,10 +285,14 @@ def patrimonio_list(request):
                         else:
                             inst = Institucion()
                             inst.nombre = pat['datosPropiedad']['custodio']
-                            resGM = gmaps.geocode(pat['datosPropiedad']['custodio'])
 
+                            resGM = gmaps.geocode(pat['datosPropiedad']['custodio'])
                             inst.lat = resGM[0]['geometry']['location']['lat']
                             inst.long = resGM[0]['geometry']['location']['lng']
+
+                            resGM = gmaps.reverse_geocode((resGM[0]['geometry']['location']['lat'],resGM[0]['geometry']['location']['lng']))
+                            inst.direccion = resGM[0]['formatted_address']
+
                             inst.save()
                         patrimonio.institucion = inst
                     patrimonio.save()
