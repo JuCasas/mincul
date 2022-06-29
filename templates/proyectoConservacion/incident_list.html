@@ -498,7 +498,7 @@
             let resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>'
             if (data == '2') {
               resp = resp + '&nbsp;&nbsp' +
-                  '<button type="button" class="btn btn-edit"><i class="fas fa-check"></i></button>'
+                  '<button type="button" class="btn btn-check"><i class="fas fa-times-circle"></i></button>'
             }
             return resp;
           }
@@ -577,7 +577,19 @@
           let class_name = $(this).attr('class');
           id = data['id'];
 
-           if (class_name === 'btn btn-show') {
+          if (class_name === 'btn btn-check') {
+
+            if (data['status'] === '1') {
+              $('#idIncidenteAsignar').val(id)
+              $("#modalAsignar").modal();
+            } else if (data['status'] === '2') {
+              $('#idIncidenteRetirar').val(id)
+              $('select[name=proyecto_retirar] option:first').html(data['proyecto']['nombre']);
+              $("#modalRetirar").modal();
+            }
+          }
+
+           else if (class_name === 'btn btn-show') {
             console.log(data)
             $('#cover-spin').show(0)
             console.log("BTN SHOWWWW");
@@ -647,7 +659,7 @@
           }
         });
 
-
+      
     });
   </script>
 {% endblock %}
