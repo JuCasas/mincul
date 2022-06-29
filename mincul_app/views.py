@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from patrimonios.models import Patrimonio
@@ -19,3 +19,6 @@ def login(request):
 
 def material(request):
     return render(request, 'materialKit.html')
+
+def origin(request):
+    return redirect('mapaPatrimonioSimple')
