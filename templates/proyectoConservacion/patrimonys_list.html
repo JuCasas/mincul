@@ -460,6 +460,7 @@
         url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/add/',
         method: 'POST',
         data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
           'patrimonio': $("#patrimonio").val()
         },
         success: function (response) {
@@ -498,6 +499,7 @@
         url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/delete/',
         method: 'POST',
         data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
           'patrimonio': $("#idPat").val()
         },
         success: function (response) {
