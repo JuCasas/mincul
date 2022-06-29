@@ -73,7 +73,7 @@ def ficha(request,my_id):
                 'tecnicasDecoracion': tecnicasDecoracionString,
                 'tecnicasManufactura': tecnicasManufacturaString,
                 'dataCategoria':dataCategoria,
-                'urlPatrimonio':urlPatrimonio[0].url
+                'urlPatrimonio': '/'+urlPatrimonio[0].url
             }
         except:
             context = {
@@ -111,7 +111,7 @@ def mapaPatrimonioSimple(request):
                             instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
                             try:
                                 instituciones.append({'institucion': insti,
-                                                      'url': instiUrl[0].url})
+                                                      'url': '/'+instiUrl[0].url})
                             except:
                                 instituciones.append({'institucion': insti,
                                                       'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -120,7 +120,7 @@ def mapaPatrimonioSimple(request):
                         urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
                         try:
                             patri.append({'patrimonio':p,
-                                          'url':urlPatrimonio[0].url})
+                                          'url':'/'+urlPatrimonio[0].url})
                         except:
                             patri.append({'patrimonio': p,
                                           'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -214,7 +214,7 @@ def mapaPatrimonioAvanzado(request):
                             instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
                             try:
                                 instituciones.append({'institucion': insti,
-                                                      'url': instiUrl[0].url})
+                                                      'url': '/'+instiUrl[0].url})
                             except:
                                 instituciones.append({'institucion': insti,
                                                       'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -222,7 +222,7 @@ def mapaPatrimonioAvanzado(request):
                         urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
                         try:
                             patrimons.append({'patrimonio': p,
-                                            'url': urlPatrimonio[0].url})
+                                            'url': '/'+urlPatrimonio[0].url})
                         except:
                             patrimons.append({'patrimonio': p,
                                              'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -287,8 +287,12 @@ def patrimonioJson(request,id_patrimonio):
     id_patri = int(id_patrimonio)
     patrimonio = Patrimonio.objects.get(id=id_patri)
     urlPatri = Documento.objects.filter(patrimonio=patrimonio).order_by('id')
-    urlPatrimonio = (urlPatri[0].url)
-    urlPatrimonio = urlPatrimonio.name
+    urlPatrimonio=None
+    try:
+        urlPatrimonio = (urlPatri[0].url)
+        urlPatrimonio = '/'+urlPatrimonio.name
+    except:
+        urlPatrimonio = '/static/img/landmarks/notAvailable.jpg'
     nombre = patrimonio.nombreTituloDemoninacion
     lat = patrimonio.lat
     long = patrimonio.long
@@ -304,8 +308,12 @@ def institucionJson(request,id_institucion):
     id_insti = int(id_institucion)
     institucion = Institucion.objects.get(id=id_insti)
     urlInsti = Documento.objects.filter(institucion=institucion).order_by('id')
-    urlInstitucion = urlInsti[0].url
-    urlInstitucion = urlInstitucion.name
+    urlInstitucion = None
+    try:
+        urlInstitucion = urlInsti[0].url
+        urlInstitucion = '/'+urlInstitucion.name
+    except:
+        urlInstitucion = '/static/img/landmarks/notAvailable.jpg'
     nombre = institucion.nombre
     lat = institucion.lat
     long = institucion.long
