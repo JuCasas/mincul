@@ -40,6 +40,18 @@
         .ubicacionImg{
             max-width: 100%;
             max-height: 100%;
+            margin-right: 12px!important;
+            position: absolute!important;
+            right: 8px!important;
+            bottom: 144px!important;
+        }
+        .ubicacionImg2{
+            max-width: 100%;
+            max-height: 100%;
+            margin-right: 12px!important;
+            position: absolute!important;
+            right: 8px!important;
+            bottom: 92px!important;
         }
         .divUbicacionActual:hover{
             cursor:pointer;
@@ -60,18 +72,15 @@
                                     <a class="nav-link col-md-6 btn-2" href="{% url 'mapaPatrimonioSimple' %}">Patrimonios</a>
                                         <button class="nav-link col-md-6 btn-1" disabled>Ruta Patrimonial</button>
                                 </div>
-                                <span class="row px-3 pb-3 position-relative flex align-items-center">
-                                    
-                                    <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida"
-                                    style="margin-right: 25px;width: 340px;">
-                                    
-                                        <img class="ubicacionImg ubicacionActual" alt ="Ubicación Actual" src="../../static/img/icons/ubicacionActual.png"
-                                        width="20" height="20"/>
-                                    
-                                    
-                                </span>
+                                <div class="row px-3 pb-3">
+                                    <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
+                                    <img class="ubicacionImg ubicacionActual" alt ="Ubicación Actual" src="../../static/img/icons/ubicacionActual.png"
+                                    width="20" height="20"/>
+                                </div>
                                 <div class="row px-3 pb-3">
                                     <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
+                                    <img class="ubicacionImg2 ubicacionActual" alt ="Ubicación Actual" src="../../static/img/icons/ubicacionActual.png"
+                                    width="20" height="20"/>
                                 </div>
                                 <div class="row px-3 pb-3">
                                     <button class="btn btn-primary w-100" id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
