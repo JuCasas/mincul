@@ -945,7 +945,7 @@ def send_email(request, pk):
     if request.POST:
         try:
             subject = "Confirma tu correo electrónico"
-            sender = 'info@inova.team'
+            sender = 'cleons@pucp.pe'
 
             #enviar enlace a una vista de confirmacion
             context = {
