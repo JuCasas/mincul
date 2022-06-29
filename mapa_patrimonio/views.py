@@ -11,6 +11,7 @@ from random import randint
 from random import sample
 
 # Create your views here.
+from mincul_app.models import Documento
 from patrimonios.models import Patrimonio
 from patrimonios.models import Institucion
 
@@ -42,23 +43,49 @@ def datos(request):
     if (numPatri+numInstit) <= 10:
         numPatriInstit = numPatri + numInstit
         for i in range(numPatri):
-            patriInstit.append({
-                "id": patri[i].id,
-                "lat": patri[i].lat,
-                "long": patri[i].long,
-                "nombre": patri[i].nombreTituloDemoninacion,
-                "url": patri[i].url,
-                "tipo": 2,
-            })
+            try:
+                patrUrl = Documento.objects.filter(patrimonio=patri[i]).first()
+                patriUrl = patrUrl[0].url
+                patriUrl = patriUrl.name
+                patriInstit.append({
+                    "id": patri[i].id,
+                    "lat": patri[i].lat,
+                    "long": patri[i].long,
+                    "nombre": patri[i].nombreTituloDemoninacion,
+                    "url": '/'+patriUrl,
+                    "tipo": 2,
+                })
+            except:
+                patriInstit.append({
+                    "id": patri[i].id,
+                    "lat": patri[i].lat,
+                    "long": patri[i].long,
+                    "nombre": patri[i].nombreTituloDemoninacion,
+                    "url": '/static/img/imageNotAvailable.jpg',
+                    "tipo": 2,
+                })
         for j in range(numInstit):
-            patriInstit.append({
-                "id": instit[i].id,
-                "lat": instit[i].lat,
-                "long": instit[i].long,
-                "nombre": instit[i].nombre,
-                "url": instit[i].url,
-                "tipo": 4,
-            })
+            try:
+                instiUrl = Documento.objects.filter(institucion=instit[i]).first()
+                instiUrl = instiUrl[0].url
+                instiUrl = instiUrl.name
+                patriInstit.append({
+                    "id": instit[i].id,
+                    "lat": instit[i].lat,
+                    "long": instit[i].long,
+                    "nombre": instit[i].nombre,
+                    "url": '/'+instiUrl,
+                    "tipo": 4,
+                })
+            except:
+                patriInstit.append({
+                    "id": instit[i].id,
+                    "lat": instit[i].lat,
+                    "long": instit[i].long,
+                    "nombre": instit[i].nombre,
+                    "url": '/static/img/imageNotAvailable.jpg',
+                    "tipo": 4,
+                })
         success = 1
     else:#escoger al azar
         numPatriInstit = 10
