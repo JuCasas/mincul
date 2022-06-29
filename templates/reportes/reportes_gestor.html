@@ -25,7 +25,9 @@
         </div>
     </div>
 
-    <div class="card mb-3 p-0">
+
+<div class="row card-deck">
+    <div class="card mb-3 mr-2 col-6">
         <div class="card-body row">
             <div class="col-md-12">
                 <div id="canvas-holder">
@@ -35,6 +37,18 @@
         </div>
     </div>
 
+
+    <div class="card mb-3 col-6">
+        <div class="card-body row">
+            <div class="col-md-12">
+                <div id="canvas-holder">
+                    <canvas id="inea"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
     <div class="col-md-12 d-flex justify-content-center">
         <button class="btn btn-primary btn-sm ml-0" id="changeCircleSize">Semi/Full Circle</button>
@@ -108,11 +122,12 @@
             options: {
                 responsive: true,
                 legend: {
-                    position: 'top',
+                    position: 'left',
                 },
                 title: {
                     display: true,
-                    text: 'Incidentes por patrimonio'
+                    text: 'Incidentes por patrimonio',
+                    position: 'top',
                 },
                 animation: {
                     animateScale: true,
@@ -124,6 +139,8 @@
         window.onload = function () {
             var ctx = document.getElementById('chart-area').getContext('2d');
             window.myDoughnut = new Chart(ctx, config);
+            var ctx2 = document.getElementById('inea').getContext('2d');
+            window.myLine = new Chart(ctx2, config2);
         };
 
         {#document.getElementById('addData').addEventListener('click', function () {#}
@@ -155,5 +172,69 @@
         });
 
     </script>
+
+
+    <script>
+
+        let etiquetas2 = []
+
+        var cargaInicial2 = function () {
+
+            var num = []
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'traerData2'%}",
+                async: false,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (response) {
+                    console.log(response['data']);
+                    num = response['data']
+                    etiquetas2 = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    console.log(response);
+                }
+            });
+
+            return num;
+        };
+
+        var config2 = {
+            type: 'line',
+            data: {
+                datasets: [{
+                    data: cargaInicial2(),
+                    backgroundColor:'rgba(43,45,66,0.7)',
+                    label: 'Numero de incidentes',
+                    fill: false,
+                    borderColor: 'rgb(43,45,66)',
+                    tension: 0.1
+                }],
+                labels: etiquetas2
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Incidentes por mes'
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                },
+            }
+        };
+
+
+
+    </script>
+
 
 {% endblock %}
