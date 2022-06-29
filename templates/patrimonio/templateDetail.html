@@ -356,7 +356,7 @@
 
                                 <label for="telefono">¿Cual es tu teléfono?</label>
                                 <input id="telefono" name="telefono" class="form-control" placeholder="Teléfono...">
-                                <button class="btn btn-primary btn-block" type="submit" >Registrar Incidente</button>
+                                <button class="btn btn-primary btn-block" >Registrar Incidente</button>
                             </form>
 
 
@@ -569,6 +569,115 @@
                 lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
                 buttons: []
             });
+
+            $("form[id='formRegistroIncidente']").validate({
+            rules: {
+                fechaOcurrencia: {
+                    required: true,
+                },
+                descripcion: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                },
+                nombre: {
+                    required: true,
+                },
+                telefono: {
+                    required: true,
+                },
+            },
+            messages: {
+                fechaOcurrencia: {
+                    required: "Debe ingresar una fecha de Ocurrencia",
+                },
+                descripcion: {
+                    required: "Debe ingresar una descripción",
+                },
+                email: {
+                    required: "Debe ingresar un correo electrónico",
+                    email: "Debe ingresar un formato de correo válido"
+                },
+                nombre: {
+                    required: "Debe ingresar una nombre",
+                },
+                telefono: {
+                    required: "Debe ingresar una telefono",
+                },
+            },
+            submitHandler: function (form, e) {
+                e.preventDefault();
+                if ($("#formRegistroIncidente").valid()) {
+                    console.log("ES VALIDO");
+                    enviarform();
+                }
+                return false;
+            }
+        });
+
+            function enviarform() {
+            let fd = new FormData();
+
+            let files = $("#file")[0].files
+            for (let i = 0, len = files.length; i < len; i++) {
+                fd.append("file", files[i]);
+            }
+
+            fd.append("csrfmiddlewaretoken", "{{ csrf_token }}")
+
+            fd.append("tipo", $("#tipo").val())
+            fd.append("fechaOcurrencia", $("#fechaOcurrencia").val())
+            fd.append("descripcion", $("#descripcion").val())
+            fd.append("nombre", $("#nombre").val())
+            fd.append("email", $("#email").val())
+            fd.append("telefono", $("#telefono").val())
+
+            let type = $('#type').val();
+            let method = 'POST';
+            let url = '/patrimonios/detalle/area/addIncidente/';
+            url = url + "{{ valor.id }}"
+            console.log(url)
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: fd,
+                contentType: false,
+                processData: false,
+                mimeType: "multipart/form-data",
+                success: function (response) {
+                    $.toast({
+                        text: 'Incidente Registrado. Gracias por informarnos.',
+                        icon: 'success',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#B7E6CA',  // To change the background
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 5000,
+                    })
+                $("#fechaOcurrencia").val(null)
+                $("#descripcion").val("")
+                $("#nombre").val("")
+                $("#email").val("")
+                $("#telefono").val("")
+
+                },
+                error: function (error) {
+                    $.toast({
+                        text: 'OcurriÃ³ un error inesperado',
+                        icon: 'warning',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#c67a71',
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 3000,
+                    })
+                }
+            });
+        };
+
         });
 
         function lessThan2Stars(){
