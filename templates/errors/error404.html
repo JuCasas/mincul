@@ -1,17 +1,24 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Error 404</title>
-</head>
-<body>
+{% load static %}
 
+
+{% block extrastyle %}
+{% endblock %}
+
+{% block body %}
     <div class="container d-flex justify-content-center align-items-center" style="background-color: #EEF3F9!important; width: 100%!important; height: 100vh!important; position: absolute!important; left: 0!important; top: 0!important;">
         <div class="" style="display: flex!important;flex-direction: column!important;align-items: center!important;; background-color: #EEF3F9!important; height: 500px; width: 500px; position: absolute!important; top: calc(50% - 250px)!important; left: calc(50% - 250px)!important;">
             <h1 class="" style="font-size: 100px!important; margin: 0px!important;">404</h1>
             <h5 style="font-size: 30px; margin-bottom: 20px!important"><strong>UPS!</strong> Página no encontrada</h5>
+            <img src="{% static '/img/logos/mincult.png' %}" style="height: 50px;"/>
             <p class="text-center" style="font-size: 20px;">La página que estás buscando no existe.</p>
+            <a href="{% url 'mapaPatrimonioSimple' %}">
+        <button class="btn btn-primary px-3 mr-2" type="button">
+          Regresar
+         </button>
+        </a>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
+
+{% block extrajs %}
+{% endblock %}
