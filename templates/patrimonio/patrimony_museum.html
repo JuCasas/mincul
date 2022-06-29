@@ -5,16 +5,17 @@
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
     <link href="{% static 'lib/raty-js/jquery.raty.css' %}" rel="stylesheet">
     <style>
-        .standar-img{
-            min-height: 20rem;
-            max-height: 20rem;
+        .standar-img {
+            min-height: 30rem;
+            max-height: 30rem;
         }
-        .bord-font{
-          background-color: rgba(108, 117, 125, 0.6);
-          color: white;
-          padding: 4px 8px;
-          text-align: center;
-          border-radius: 5px;
+
+        .bord-font {
+            background-color: rgba(108, 117, 125, 0.6);
+            color: white;
+            padding: 4px 8px;
+            text-align: center;
+            border-radius: 5px;
         }
     </style>
 {% endblock %}
@@ -39,37 +40,37 @@
                 <div class="position-relative">
                     <div>
                         <img class="img-fluid w-100"
-                             style="height: 320px; object-fit: fill; border-radius: 3px"
-                             src={{ institucion.url }}/>
+                             style="height: 320px; object-fit: fill; border-radius: 3px; filter: brightness(75%)"
+                             src="/static/img/museos-de-peru.png"/>
                     </div>
                     <div class="card-img-overlay d-flex align-items-end text-white pb-2">
-                        <p class="card-text "
-                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ institucion.nombre }}
-                            </p>
+                        <p class="card-text text-black" style="font-size: 25px;font-weight: bold;">
+                            {{ institucion.nombre }}
+                        </p>
                         <div class="col text-right">
                             {% if puntuacion >= 1 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
+                            {% else %}
                                 <span class="fa fa-star"></span>
                             {% endif %}
                             {% if puntuacion >= 2 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
+                            {% else %}
                                 <span class="fa fa-star"></span>
                             {% endif %}
                             {% if puntuacion >= 3 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
+                            {% else %}
                                 <span class="fa fa-star"></span>
                             {% endif %}
                             {% if puntuacion >= 4 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
+                            {% else %}
                                 <span class="fa fa-star"></span>
                             {% endif %}
                             {% if puntuacion >= 5 %}
                                 <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
+                            {% else %}
                                 <span class="fa fa-star"></span>
                             {% endif %}
                         </div>
@@ -82,59 +83,103 @@
         <!-- Info de patrimonio -->
         <div class="row">
             <div class="col-8">
-                <div class="card mb-3">
+
+                <div class="card mb-3 ">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md">
-                                <h5 class="card-title text-black">Historia:</h5>
-                                <p class="mb-2 mb-md-0 text-black">
-                                    Se ubica en la provincia de Barranca, Región Lima. Constituye la manifestación más
-                                    antigua de la civilización en el Perú y en el continente americano debido a sus 5000
-                                    años de antigüedad. Está conformada por 32 edificios monumentales, comprendidos en
-                                    un complejo sistema de asentamientos que muestran una fuerte ideología religiosa,
-                                    entre los cuales se distinguen edificios ceremoniales, sectores residenciales para
-                                    gente de alto ranfo social, un conjunto de templos menores y talleres para la
-                                    producción. Caral lideró un sistema de asentamientos que congregó 17 sitios
-                                    similares,
-                                    aunque más pequeños, ubicados en el valle de Supe. Expresa la complejidad y el
-                                    desarrollo de un modelo de organización socio político y económico temprano durante
-                                    el Período Arcaico tardío (5000 - 3800 BP) originado de manera independiente por las
-                                    sociedades andinas que habitaron este pequeño valle fértil de la costa central
-                                    peruana.
-                                </p>
+                                <h5 class="card-title text-black">Datos del museo:</h5>
+                                <h6 class="mb-2 mb-md-0 text-black">Nombre completo: {{ institucion.nombre }}</h6>
+                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Dirección: {{ institucion.dir }}</h6>
+                                <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Patrimonios en posesion: {{ nPatrimonios }}</h6>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <div class="card mb-3">
+                    <div class="carousel slide" id="carouselExampleCaptions" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            {% for pat in patrimonios %}
+                                {% if forloop.counter == 1 %}
+                                    <li class="active" data-target="#carouselExampleCaptions"
+                                        data-slide-to="{{ forloop.counter0 }}"></li>
+                                {% else %}
+                                    <li data-target="#carouselExampleCaptions"
+                                        data-slide-to="{{ forloop.counter0 }}"></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ol>
+                        <div class="carousel-inner rounded">
+                            {% for pat in patrimonios %}
+                                {% if forloop.counter == 1 %}
+                                    <div class="carousel-item active bg-dark">
+                                        <div class="d-flex justify-content-center">
+                                            <img class="standar-img d-block" src="{{ pat.imagen }}" alt="First slide">
+                                        </div>
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h4 class="text-white font-weight-bold bord-font">{{ pat.nombreTituloDemoninacion }}</h4>
+                                            <a class="btn btn-primary pt-2" type="button"
+                                               href="{% url 'ficha' my_id=pat.pk %}">Ver ficha</a>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="carousel-item bg-dark">
+                                        <div class="d-flex justify-content-center">
+                                            <img class="standar-img deg-img d-block" src="{{ pat.imagen }}" alt="Second slide">
+                                        </div>
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h4 class="text-white font-weight-bold bord-font">{{ pat.nombreTituloDemoninacion }}</h4>
+                                            <a class="btn btn-primary pt-2" type="button"
+                                               href="{% url 'ficha' my_id=pat.pk %}">Ver ficha</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button"
+                           data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Anterior</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleCaptions" role="button"
+                           data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Siguiente</span>
+                        </a>
+                    </div>
+                </div>
+
                 <div class="card bg-light mb-3">
-                      <div class="card-body">
-                            <div class="card-title mb-0">Incidentes reportados</div>
-                            <table id="incidentesLista" class="table table-sm table-dashboard no-wrap mb-0 fs--1 w-100">
-                                <thead class="bg-200">
+                    <div class="card-body">
+                        <div class="card-title mb-0">Incidentes reportados</div>
+                        <table id="incidentesLista" class="table table-sm table-dashboard no-wrap mb-0 fs--1 w-100">
+                            <thead class="bg-200">
+                            <tr>
+                                <th class="sort" style="width: 15%">Código</th>
+                                <th class="sort" style="width: 65%">Descripción</th>
+                                <th class="sort" style="width: 20%">Fecha de Registro</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                            {% for inci in incidentes %}
                                 <tr>
-                                  <th class="sort" style="width: 15%">Código</th>
-                                  <th class="sort" style="width: 65%">Descripción</th>
-                                  <th class="sort" style="width: 20%">Fecha de Registro</th>
+                                    <td class="align-middle">
+                                        {{ inci.codigo }}
+                                    </td>
+                                    <td class="align-middle">
+                                        {{ inci.descripcion|default:'-' }}
+                                    </td>
+                                    <td class="align-middle">
+                                        {{ inci.fechaOcurrencia|date:'d/m/Y'|default:'-' }}
+                                    </td>
                                 </tr>
-                                </thead>
-                                <tbody class="bg-white">
-                                {% for inci in incidentes %}
-                                    <tr>
-                                        <td class="align-middle">
-                                            {{ inci.codigo}}
-                                        </td>
-                                        <td class="align-middle">
-                                            {{ inci.descripcion|default:'-' }}
-                                        </td>
-                                        <td class="align-middle">
-                                            {{ inci.fechaOcurrencia|date:'d/m/Y'|default:'-'}}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                      </div>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
 
@@ -148,27 +193,32 @@
                                 </div>
                                 <div class="col-8 pb-0">
                                     {% if v.valoracion >= 1 %}
-                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        <span class="fa fa-star"
+                                              style="color: gold; text-shadow: 1px 1px black;"></span>
                                     {% else %}
                                         <span class="fa fa-star"></span>
                                     {% endif %}
                                     {% if v.valoracion >= 2 %}
-                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        <span class="fa fa-star"
+                                              style="color: gold; text-shadow: 1px 1px black;"></span>
                                     {% else %}
                                         <span class="fa fa-star"></span>
                                     {% endif %}
                                     {% if v.valoracion >= 3 %}
-                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        <span class="fa fa-star"
+                                              style="color: gold; text-shadow: 1px 1px black;"></span>
                                     {% else %}
                                         <span class="fa fa-star"></span>
                                     {% endif %}
                                     {% if v.valoracion >= 4 %}
-                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        <span class="fa fa-star"
+                                              style="color: gold; text-shadow: 1px 1px black;"></span>
                                     {% else %}
                                         <span class="fa fa-star"></span>
                                     {% endif %}
                                     {% if v.valoracion >= 5 %}
-                                        <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                                        <span class="fa fa-star"
+                                              style="color: gold; text-shadow: 1px 1px black;"></span>
                                     {% else %}
                                         <span class="fa fa-star"></span>
                                     {% endif %}
@@ -181,131 +231,46 @@
 
             </div>
             <div class="col-4">
-                <div class="card mb-3 ">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md">
-                                <h5 class="card-title text-black">Datos del museo:</h5>
-                                <h6 class="mb-2 mb-md-0 text-black">Nombre completo: {{ institucion.nombre }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Dirección: {{ institucion.direccion }}</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel slide" id="carouselExampleCaptions" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        {% for pat in patrimonios %}
-                            {% if forloop.counter == 1 %}
-                                <li class="active" data-target="#carouselExampleCaptions" data-slide-to="{{ forloop.counter0 }}"></li>
-                            {% else %}
-                                <li data-target="#carouselExampleCaptions" data-slide-to="{{ forloop.counter0 }}"></li>
-                            {% endif %}
-                        {% endfor %}
-                    </ol>
-                    <div class="carousel-inner rounded">
-                        {% for pat in patrimonios %}
-                            {% if forloop.counter == 1 %}
-                                <div class="carousel-item active"><img class="standar-img d-block w-100" src="{{ pat.url }}" alt="First slide">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h4 class="text-white font-weight-bold bord-font">{{ pat.nombreTituloDemoninacion}}</h4>
-                                        <a class="btn btn-primary pt-2" type="button" href="{% url 'ficha' my_id=pat.pk %}">Ver ficha</a>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="carousel-item"><img class="standar-img deg-img d-block w-100" src="{{ pat.url }}" alt="Second slide">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h4 class="text-white font-weight-bold bord-font">{{ pat.nombreTituloDemoninacion}}</h4>
-                                        <a class="btn btn-primary pt-2" type="button" href="{% url 'ficha' my_id=pat.pk %}">Ver ficha</a>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Anterior</span>
-                    </a>
-                     <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Siguiente</span>
-                     </a>
-                </div>
-
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Valora a {{ institucion.nombre }}:</h5>
-                        <form id="valoracion_form" method="post" action="{% url 'valor_museo' pk=institucion.pk %}">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="form-name">Nombre:</label>
-                                <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
-                                      title="Campo requerido">*</abbr>
-                                <input class="form-control" type="text" name="name" placeholder="Nombre y Apellido..." id="name">
-                            </div>
-                            <div class="form-group">
-                                <label for="form-email">¿Cual es tu correo electrónico?:</label>
-                                <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
-                                      title="Campo requerido">*</abbr>
-                                <input class="form-control" type="email" name="email" placeholder="Correo electrónico..." id="email">
-                            </div>
-                            <div class="form-group">
-                                <label for="contact-form-message">Cuentanos tu experiencia:</label>
-                                <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
-                                      title="Campo requerido">*</abbr>
-                                <textarea class="form-control" rows="3" id="contact-form-message" name="comment" id="comment"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <div class="row pl-3 pt-lg-3">
-                                    <div class="pt-1 mr-3">
-                                        <label for="value">Puntuación:</label>
-                                    </div>
-                                    <div class="raty" id="raty" onclick="lessThan2Stars()"></div>
-                                </div>
-                                <p id="errorv" class="text-danger font-weight-medium" style="font-size: 0.83333rem;letter-spacing: 0.02em;filter: none;"></p>
-                            </div>
-                            <button class="btn btn-primary btn-block" type="submit" onclick="validar()">Guardar</button>
-                        </form>
-                    </div>
-                </div>
-
-
                 <div class="card mt-3">
                     <div class="card-body">
                         <h5 class="card-title text-black">Registar incidente</h5>
-                        <form id="incidente_form" method="post" action="{% url 'incidete_museo' pk=institucion.pk %}" enctype="multipart/form-data">
+                        <form id="incidente_form" method="post" action="{% url 'incidete_museo' pk=institucion.pk %}"
+                              enctype="multipart/form-data">
                             {% csrf_token %}
                             <label for="tipo">Seleccione el tipo de afectación:</label>
-                            <select class="form-control" id="tipoAfectacion" name="tipo" data-placeholder='Tipo de afectación'>
-                            {% for a in afectaciones %}
-                                <option data="{{ a }}" value={{ a }}>{{ a }}</option>
-                            {% endfor %}
+                            <select class="form-control" id="tipoAfectacion" name="tipo"
+                                    data-placeholder='Tipo de afectación'>
+                                {% for a in afectaciones %}
+                                    <option data="{{ a }}" value={{ a }}>{{ a }}</option>
+                                {% endfor %}
                             </select>
 
                             <label for="fecha">¿Cuándo sucedió el hecho?</label>
                             <input type="date" name="fecha" class="form-control">
 
                             <label for="descripcion">Descripción:</label>
-                            <textarea name="descripcion" class="form-control" style="height: 8em" placeholder="Descripción..."></textarea>
+                            <textarea name="descripcion" class="form-control" style="height: 8em"
+                                      placeholder="Descripción..."></textarea>
 
                             <label for="descripcion">Evidencia: peso máximo 50 mb</label>
                             <input type="file" id="actual-btn" hidden multiple/>
 
-                            <label for="actual-btn" class="btn btn-primary mr-1 mb-1 form-control" type="button">Adjuntar Archivos</label>
+                            <label for="actual-btn" class="btn btn-primary mr-1 mb-1 form-control" type="button">Adjuntar
+                                Archivos</label>
                             <span id="file-chosen-0" class="form-control">No se eligió ningún archivo</span>
                             <span id="file-chosen-1" class="form-control" hidden></span>
                             <span id="file-chosen-2" class="form-control" hidden></span>
                             <script>
                                 const actualBtn = document.getElementById('actual-btn');
-                                actualBtn.addEventListener('change', function(){
+                                actualBtn.addEventListener('change', function () {
                                     console.log(actualBtn.files)
                                     console.log(actualBtn.files.length)
-                                    for(var i=1; i<3; i++){
-                                        const fileChosen  = document.getElementById('file-chosen-' + i);
+                                    for (var i = 1; i < 3; i++) {
+                                        const fileChosen = document.getElementById('file-chosen-' + i);
                                         fileChosen.hidden = true;
                                     }
-                                    for(var i=0; i<actualBtn.files.length; i++){
-                                        const fileChosen  = document.getElementById('file-chosen-' + i);
+                                    for (var i = 0; i < actualBtn.files.length; i++) {
+                                        const fileChosen = document.getElementById('file-chosen-' + i);
                                         fileChosen.textContent = this.files[i].name;
                                         fileChosen.hidden = false;
                                     }
@@ -326,6 +291,46 @@
                     </div>
                 </div>
 
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title text-black">Valora a {{ institucion.nombre }}:</h5>
+                        <form id="valoracion_form" method="post" action="{% url 'valor_museo' pk=institucion.pk %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="form-name">Nombre:</label>
+                                <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
+                                      title="Campo requerido">*</abbr>
+                                <input class="form-control" type="text" name="name" placeholder="Nombre y Apellido..."
+                                       id="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="form-email">¿Cual es tu correo electrónico?:</label>
+                                <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
+                                      title="Campo requerido">*</abbr>
+                                <input class="form-control" type="email" name="email"
+                                       placeholder="Correo electrónico..." id="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-form-message">Cuentanos tu experiencia:</label>
+                                <abbr class="ml-1 text-danger" data-toggle="tooltip" data-placement="top"
+                                      title="Campo requerido">*</abbr>
+                                <textarea class="form-control" rows="3" id="contact-form-message" name="comment"
+                                          id="comment"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="row pl-3 pt-lg-3">
+                                    <div class="pt-1 mr-3">
+                                        <label for="value">Puntuación:</label>
+                                    </div>
+                                    <div class="raty" id="raty" onclick="lessThan2Stars()"></div>
+                                </div>
+                                <p id="errorv" class="text-danger font-weight-medium"
+                                   style="font-size: 0.83333rem;letter-spacing: 0.02em;filter: none;"></p>
+                            </div>
+                            <button class="btn btn-primary btn-block" type="submit" onclick="validar()">Guardar</button>
+                        </form>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -333,69 +338,75 @@
         <!-- Incident Modal -->
         <div class="modal fade px-1" id="incidentModal" role="dialog" oncancel="closeModal()">
             <div class="modal-dialog">
-              <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header justify-content-center">
-                  <h4 class="card-title text-black mb-0">Registar Incidente</h4>
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header justify-content-center">
+                        <h4 class="card-title text-black mb-0">Registar Incidente</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="incidente_form" method="post" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="tipo">Seleccione el tipo de afectación:</label>
+                            <select class="form-control" id="tipoAfectacion" name="tipo"
+                                    data-placeholder='Tipo de afectación'>
+                                {% for a in afectaciones %}
+                                    <option data="{{ a }}" value={{ a }}>{{ a }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <label for="fecha">¿Cuándo sucedió el hecho?</label>
+                            <input type="date" name="fecha" class="form-control">
+
+                            <label for="descripcion">Descripción:</label>
+                            <textarea name="descripcion" class="form-control" style="height: 8em"
+                                      placeholder="Descripción..."></textarea>
+
+                            <label for="descripcion">Evidencia: peso máximo 50 mb</label>
+
+                            <input type="file" id="actual-btn" hidden multiple/>
+
+                            <label for="actual-btn"
+                                   class="btn btn-primary mr-1 mb-1 form-control d-flex align-items-center justify-content-center"
+                                   type="button">Adjuntar Archivos</label>
+                            <span id="file-chosen-0"
+                                  class="form-control d-flex align-items-center justify-content-center">No se eligió ningún archivo</span>
+                            <span id="file-chosen-1" class="form-control" hidden></span>
+                            <span id="file-chosen-2" class="form-control" hidden></span>
+                            <script>
+                                const actualBtn = document.getElementById('actual-btn');
+                                actualBtn.addEventListener('change', function () {
+                                    console.log(actualBtn.files)
+                                    console.log(actualBtn.files.length)
+                                    for (var i = 1; i < 3; i++) {
+                                        const fileChosen = document.getElementById('file-chosen-' + i);
+                                        fileChosen.hidden = true;
+                                    }
+                                    for (var i = 0; i < actualBtn.files.length; i++) {
+                                        const fileChosen = document.getElementById('file-chosen-' + i);
+                                        fileChosen.textContent = this.files[i].name;
+                                        fileChosen.hidden = false;
+                                    }
+                                })
+                            </script>
+
+                            <label for="nombre">¿Cómo te llamas?</label>
+                            <input name="nombre" class="form-control" placeholder="Nombre y Apellido...">
+
+                            <label for="email">¿Cual es tu correo electrónico?</label>
+                            <input name="email" class="form-control" placeholder="Correo electrónico...">
+
+                            <label for="telefono">¿Cual es tu teléfono?</label>
+                            <input name="telefono" class="form-control" placeholder="Teléfono...">
+                        </form>
+                        <div class="row justify-content-between m-0 mt-3">
+                            <button type="button" data-dismiss="modal" class="btn second col-5">Cancelar</button>
+                            <button class="btn btn-primary col-5" type="submit" form="incidente_form" name="accion"
+                                    value="incidente">Registar Incidente
+                            </button>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="modal-body">
-                  <form id="incidente_form" method="post" action="" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <label for="tipo">Seleccione el tipo de afectación:</label>
-                    <select class="form-control" id="tipoAfectacion" name="tipo"
-                            data-placeholder='Tipo de afectación'>
-                      {% for a in afectaciones %}
-                        <option data="{{ a }}" value={{ a }}>{{ a }}</option>
-                      {% endfor %}
-                    </select>
-
-                    <label for="fecha">¿Cuándo sucedió el hecho?</label>
-                    <input type="date" name="fecha" class="form-control">
-
-                    <label for="descripcion">Descripción:</label>
-                    <textarea name="descripcion" class="form-control" style="height: 8em" placeholder="Descripción..."></textarea>
-
-                    <label for="descripcion">Evidencia: peso máximo 50 mb</label>
-
-                    <input type="file" id="actual-btn" hidden multiple/>
-
-                    <label for="actual-btn" class="btn btn-primary mr-1 mb-1 form-control d-flex align-items-center justify-content-center" type="button">Adjuntar Archivos</label>
-                    <span id="file-chosen-0" class="form-control d-flex align-items-center justify-content-center">No se eligió ningún archivo</span>
-                    <span id="file-chosen-1" class="form-control" hidden></span>
-                    <span id="file-chosen-2" class="form-control" hidden></span>
-                    <script>
-                        const actualBtn = document.getElementById('actual-btn');
-                        actualBtn.addEventListener('change', function(){
-                            console.log(actualBtn.files)
-                            console.log(actualBtn.files.length)
-                            for(var i=1; i<3; i++){
-                                const fileChosen  = document.getElementById('file-chosen-' + i);
-                                fileChosen.hidden = true;
-                            }
-                            for(var i=0; i<actualBtn.files.length; i++){
-                                const fileChosen  = document.getElementById('file-chosen-' + i);
-                                fileChosen.textContent = this.files[i].name;
-                                fileChosen.hidden = false;
-                            }
-                        })
-                    </script>
-
-                    <label for="nombre">¿Cómo te llamas?</label>
-                    <input name="nombre" class="form-control" placeholder="Nombre y Apellido...">
-
-                    <label for="email">¿Cual es tu correo electrónico?</label>
-                    <input name="email" class="form-control" placeholder="Correo electrónico...">
-
-                    <label for="telefono">¿Cual es tu teléfono?</label>
-                    <input name="telefono" class="form-control" placeholder="Teléfono...">
-                </form>
-                <div class="row justify-content-between m-0 mt-3">
-                    <button type="button" data-dismiss="modal" class="btn second col-5">Cancelar</button>
-                    <button class="btn btn-primary col-5" type="submit" form="incidente_form" name="accion" value="incidente">Registar Incidente</button>
-                  </div>
-
-                </div>
-              </div>
             </div>
         </div>
     </div>
@@ -413,14 +424,13 @@
     <script src="{% static 'lib/jquery-validation/jquery.validate.min.js' %}"></script>
     <script>
 
-        function validar(){
-            let val =  $("input[name*='score']");
+        function validar() {
+            let val = $("input[name*='score']");
             let err = $("#errorv");
-            if (val.val()==''){
+            if (val.val() == '') {
                 val.val(0)
                 err.text("Se debe ingresar una validación")
-            }
-            else{
+            } else {
                 err.text(" ")
             }
             console.log(val.val())
@@ -429,44 +439,44 @@
 
         $(document).ready(function () {
             $("form[id='valoracion_form']").validate({
-            rules: {
-                name: {
-                    required: true,
+                rules: {
+                    name: {
+                        required: true,
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    comment: {
+                        required: true,
+                    },
+                    score: {
+                        required: true,
+                    },
                 },
-                email: {
-                    required: true,
-                    email: true,
+                messages: {
+                    name: {
+                        required: "Debe ingresar su nombre",
+                    },
+                    email: {
+                        required: "Debe ingresar su correo electrónico",
+                        email: "Debe ingresar un formato de correo válido"
+                    },
+                    comment: {
+                        required: "Debe ingresar un comentario válido",
+                    },
+                    score: {
+                        required: "Debe ingresar una puntuación",
+                    },
                 },
-                comment: {
-                    required: true,
-                },
-                score: {
-                    required: true,
-                },
-            },
-            messages: {
-                name: {
-                    required: "Debe ingresar su nombre",
-                },
-                email: {
-                    required: "Debe ingresar su correo electrónico",
-                    email: "Debe ingresar un formato de correo válido"
-                },
-                comment: {
-                    required: "Debe ingresar un comentario válido",
-                },
-                score: {
-                    required: "Debe ingresar una puntuación",
-                },
-            },
-            submitHandler: function (form, e) {
-                e.preventDefault();
-                if ($("#valoracion_form").valid()) {
-                    form.submit();
+                submitHandler: function (form, e) {
+                    e.preventDefault();
+                    if ($("#valoracion_form").valid()) {
+                        form.submit();
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
 
 
             $('#incidentesLista').DataTable({
@@ -495,19 +505,18 @@
             });
         });
 
-        function lessThan2Stars(){
-            if($('#raty').raty('score') <= 2){
+        function lessThan2Stars() {
+            if ($('#raty').raty('score') <= 2) {
                 console.log("got in");
                 $("#incidentModal").modal();
                 $("#ratySubmit").attr("disabled", true);
-            }
-            else{
+            } else {
                 $("#ratySubmit").removeAttr("disabled");
             }
         }
 
         $('#incidentModal').on('hidden.bs.modal', function (e) {
-            if($('#raty').raty('score') <= 2){
+            if ($('#raty').raty('score') <= 2) {
                 $('#raty').raty('reload');
                 $("#ratySubmit").removeAttr("disabled");
             }

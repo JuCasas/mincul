@@ -37,46 +37,43 @@
         </div>
 
         <!--Cabecera card imagen-->
-        <div class="card rounded-3">
-            <div class="card" style="width: 100%;">
-                <div class="position-relative">
-                    <div class="card-img-top" style="height: 400px; overflow: hidden; object-fit: cover;">
-                        <img class="w-100"
-                             style="transform: translate(0, -30%); border-radius: 3px;"
-                             src="{{ valor.imagen }}"
-                             alt="Card image">
-                    </div>
-                    <div class="card-img-overlay d-flex align-items-end text-white pb-2">
-                        <p class="card-text "
-                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ valor.nombreTituloDemoninacion }}
-                            </p>
-                        <div class="col text-right">
-                            {% if puntacion >= 1 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntacion >= 2 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntacion >= 3 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntacion >= 4 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntacion >= 5 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                                {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                        </div>
+        <div class="card rounded-3" style="width: 100%; background-color: #000;">
+            <div class="position-relative">
+                <div class="d-flex justify-content-center card-img-top">
+                    <img style="border-radius: 3px;"
+                         src="{{ valor.imagen }}"
+                         alt="Card image">
+                </div>
+                <div class="card-img-overlay d-flex align-items-end text-white pb-2">
+                    <p class="card-text "
+                       style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ valor.nombreTituloDemoninacion }}
+                        </p>
+                    <div class="col text-right">
+                        {% if puntacion >= 1 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntacion >= 2 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntacion >= 3 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntacion >= 4 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntacion >= 5 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -112,72 +109,87 @@
                         </div>
                     </div>
                 </div>
-                <!-- Entradas -->
-                <div class="card mb-3 rounded-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <div class="row justify-content-between align-items-center p-3">
-                                    <h5 class="card-title text-black m-0">Entradas:</h5>
-                                </div>
-                                <div class="row pr-3 pl-3">
-                                    {% for entrada in entradas %}
-                                        <button class="btn btn-falcon-info m-1" type="button">
-                                            <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
-                                            {{ entrada.descripcion }} S/.{{ entrada.precio }}
-                                        </button>
-                                    {% endfor %}
+
+                {% if valor.tipo.0 < '3' %}
+
+                    <!-- Entradas -->
+                    <div class="card mb-3 rounded-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row justify-content-between align-items-center p-3">
+                                        {% if nEntradas > 0 %}
+                                            <h5 class="card-title text-black m-0">Entradas:</h5>
+                                        {% else %}
+                                            <h5 class="card-title text-black m-0">Entradas: </h5>
+                                        {% endif %}
+                                    </div>
+                                    <div class="row pr-3 pl-3">
+                                        {% for entrada in entradas %}
+                                            <button class="btn btn-falcon-info m-1" type="button">
+                                                <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>
+                                                {{ entrada.descripcion }} S/.{{ entrada.precio }}
+                                            </button>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- ACTIVIDADES TURISTICAS -->
-                <div class="card mb-3 rounded-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <div class="row justify-content-between align-items-center p-3">
-                                    <h5 class="card-title text-black m-0">Actividades Turísticas:</h5>
-                                </div>
-                                <div class="row pr-3 pl-3">
-                                    {% for actividad in actividades_turisticas %}
-                                        <div class="card btn-falcon-info h-25 m-1">
-                                            <div class="card-body">
-                                                <p class="m-0">Categoria: {{ actividad.categoria }}</p>
-                                                <p class="m-0">Tipo: {{ actividad.tipo }}</p>
-                                                <p class="m-0">Observaciones: {{ actividad.observacion }}</p>
+                    <!-- ACTIVIDADES TURISTICAS -->
+                    <div class="card mb-3 rounded-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row justify-content-between align-items-center p-3">
+                                        <h5 class="card-title text-black m-0">Actividades Turísticas:</h5>
+                                    </div>
+                                    <div class="row pr-3 pl-3">
+                                        {% for actividad in actividades_turisticas %}
+                                            <div class="card btn-falcon-info h-25 m-1">
+                                                <div class="card-body">
+                                                    <p class="m-0">Categoria: {{ actividad.categoria }}</p>
+                                                    <p class="m-0">Tipo: {{ actividad.tipo }}</p>
+                                                    <p class="m-0">Observaciones: {{ actividad.observacion }}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    {% endfor %}
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- SERVICIOS -->
-                <div class="card mb-3 rounded-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <div class="row justify-content-between align-items-center p-3">
-                                    <h5 class="card-title text-black m-0">Servicios:</h5>
-                                </div>
-                                <div class="row pr-3 pl-3">
-                                    {% for servicio in servicios %}
-                                        <div class="card btn-falcon-info h-25 m-1">
-                                            <div class="card-body">
-                                                <p class="m-0">Categoria: {{ servicio.categoria }}</p>
-                                                <p class="m-0">Tipo: {{ servicio.tipo }}</p>
-                                                <p class="m-0">Observaciones: {{ servicio.observacion }}</p>
-                                            </div>
+
+                    {% if valor.tipo.0 == '2' %}
+
+                        <!-- SERVICIOS -->
+                        <div class="card mb-3 rounded-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row justify-content-between align-items-center p-3">
+                                            <h5 class="card-title text-black m-0">Servicios:</h5>
                                         </div>
-                                    {% endfor %}
+                                        <div class="row pr-3 pl-3">
+                                            {% for servicio in servicios %}
+                                                <div class="card btn-falcon-info h-25 m-1">
+                                                    <div class="card-body">
+                                                        <p class="m-0">Categoria: {{ servicio.categoria }}</p>
+                                                        <p class="m-0">Tipo: {{ servicio.tipo }}</p>
+                                                        <p class="m-0">Observaciones: {{ servicio.observacion }}</p>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+
+                    {% endif %}
+
+                {% endif %}
+
                 <!-- Valoraciones -->
                 <div class="col-sm-12 col-lg-12 px-0">
                     <div class="card bg-light">
@@ -236,11 +248,15 @@
                                 <p></p>
                                 <h6 class="mb-2 mb-md-0 text-black">Propietario: {{ valor.propietario.nombre }}</h6>
                                 <p></p>
+                                <h6 class="mb-2 mb-md-0 text-black">Responsable: {{ valor.responsable.nombre }}</h6>
+                                <p></p>
                                 <h6 class="mb-2 mb-md-0 text-black">Departamento: {{ valor.departamento }}</h6>
                                 <p></p>
                                 <h6 class="mb-2 mb-md-0 text-black">Provincia: {{ valor.provincia }}</h6>
                                 <p></p>
                                 <h6 class="mb-2 mb-md-0 text-black">Distrito: {{ valor.distrito }}</h6>
+                                <p></p>
+                                <a class="btn btn-primary pt-2" type="button" href="{% url 'ficha' my_id=valor.pk %}">Ver ficha</a>
                             </div>
                         </div>
                     </div>

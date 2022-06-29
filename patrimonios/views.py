@@ -868,9 +868,13 @@ def detalle(request, pk):
     context = {
         'puntacion': puntuacion,
         'valor': PatrimonioSerializer(valor).data,
+        'nActividades': len(actividadesTuristicas),
         'actividades_turisticas': actividadesTuristicas,
+        'nEntradas': len(entradas),
         'entradas': entradas,
+        'nServicios': len(servicios),
         'servicios': servicios,
+        'nValoraciones': len(valoraciones),
         'valoraciones': valoraciones,
         'afectaciones': [c[1] for c in Incidente.AFECTACION]
     }
@@ -879,12 +883,9 @@ def detalle(request, pk):
 
 def detalle_museo(request, pk):
     institucion = Institucion.objects.get(pk=pk)
-    #lista de patrimonio dentro del museo
-    patrimonios = Patrimonio.objects.filter(institucion_id=pk)
-    #lista de valoraciones general de la institucion
-    valoraciones = PatrimonioValoracion.objects.filter(zona__institucion_id=pk).filter(estado=2)
-    #lista de incidentes
-    incidentes = Incidente.objects.filter(zona__institucion_id=pk)
+    patrimonios = Patrimonio.objects.filter(institucion_id__isnull=False,institucion_id=pk,estado=1)
+    valoraciones = PatrimonioValoracion.objects.filter(zona__institucion_id__isnull=False,zona__institucion_id=pk,estado=2)
+    incidentes = Incidente.objects.filter(zona__institucion_id__isnull=False,zona__institucion_id=pk)
 
     puntuacion = 0
     for v in valoraciones:
@@ -892,8 +893,9 @@ def detalle_museo(request, pk):
     if len(valoraciones):
         puntuacion = puntuacion / len(valoraciones)
 
-    context = {"institucion": institucion,
-               "patrimonios": patrimonios,
+    context = {"institucion": InstitucionSerializer(institucion).data,
+               "nPatrimonios": len(patrimonios),
+               "patrimonios": PatrimonioListSerializer(patrimonios,many=True).data,
                "valoraciones": valoraciones,
                "incidentes": incidentes,
                'afectaciones': [c[1] for c in Incidente.AFECTACION],
