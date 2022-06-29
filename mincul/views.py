@@ -1,5 +1,10 @@
-from django.views.defaults import page_not_found
+from django.shortcuts import render
+
 
 def error_404_view(request, exception):
-    template_name = 'error404/error.html'
-    return page_not_found(request, template_name=template_name)
+    template_name = 'errors/error404.html'
+    return render(request, template_name=template_name)
+
+def error_500_view(request):
+    template_name = 'errors/error500.html'
+    return render(request, template_name=template_name)
