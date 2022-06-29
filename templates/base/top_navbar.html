@@ -66,7 +66,7 @@
     {% endif %}
 
     {% if request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados"%}
-          <a href="{% url 'listProjects' %}">
+          <a href="{% url 'patrimonio_incidente_listar' %}">
         <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:12" in "/incidentes/" %} style="color: #CD2323!important"{% endif %}>
             <strong>Incidentes</strong>
         </div>
