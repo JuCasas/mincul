@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from mincul.db import PostgresDB
+#from mincul.db import PostgresDB
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-soi^i6lqgo19m5wg(6xjy((3-loonl6g4l%18=_xn3gs_+50@d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*','.mincul.duckdns.org']
 
 
 # Application definition
@@ -86,7 +86,16 @@ WSGI_APPLICATION = 'mincul.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = PostgresDB.local
+DATABASES = {
+	'default':{
+		'ENGINE':'django.db.backends.postgresql_psycopg2',
+		'NAME':'postgres',
+		'USER':'root',
+		'PASSWORD':'Huawei+2022',
+		'HOST':'192.168.1.93', #si tienes otra dirección host debes remplazar esta
+		'PORT':'5432', #si lo dejas vacío tomara el puerto por default
+	}
+}
 
 
 # Password validation
