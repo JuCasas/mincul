@@ -40,6 +40,18 @@
         .ubicacionImg{
             max-width: 100%;
             max-height: 100%;
+            margin-right: 12px!important;
+            position: absolute!important;
+            right: 8px!important;
+            bottom: 144px!important;
+        }
+        .ubicacionImg2{
+            max-width: 100%;
+            max-height: 100%;
+            margin-right: 12px!important;
+            position: absolute!important;
+            right: 8px!important;
+            bottom: 92px!important;
         }
         .divUbicacionActual:hover{
             cursor:pointer;
@@ -60,15 +72,15 @@
                                     <a class="nav-link col-md-6 btn-2" href="{% url 'mapaPatrimonioSimple' %}">Patrimonios</a>
                                         <button class="nav-link col-md-6 btn-1" disabled>Ruta Patrimonial</button>
                                 </div>
-                                <div class="row px-3 pb-3 position-relative flex align-items-center">
+                                <div class="row px-3 pb-3">
                                     <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
-                                    <div class="divUbicacionActual" onclick="obtenerUbicacionActual()">
-                                        <img class="ubicacionImg" alt ="Ubicación Actual" src="../../static/img/icons/ubicacionActual.png"
-                                        width="20" height="20"/>
-                                    </div>
+                                    <img class="ubicacionImg ubicacionActual" alt ="Ubicación Actual" src="../../static/img/icons/ubicacionActual.png"
+                                    width="20" height="20"/>
                                 </div>
                                 <div class="row px-3 pb-3">
                                     <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
+                                    <img class="ubicacionImg2 ubicacionActual" alt ="Ubicación Actual" src="../../static/img/icons/ubicacionActual.png"
+                                    width="20" height="20"/>
                                 </div>
                                 <div class="row px-3 pb-3">
                                     <button class="btn btn-primary w-100" id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
@@ -106,7 +118,6 @@
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh5T6LTIqW_gSbFZITGcZFJkOVHsqqrMY"></script>
-    
 
     <script>
         const LATITUD_CENTRO_PERU=-11;
@@ -239,8 +250,7 @@
                 divPatriLista.removeChild(divPatriLista.firstChild);
             }
         }
-        function enfocarPatrimonio(patrimonio){
-            map.flyTo([patrimonio.lat,patrimonio.long]);
+        function enfocarPatrimonio(){
             //enfocar con el fly
         }
         async function obtenerPatrimoniosCercanos(lat1,long1,lat2,long2,lat1menor,long1menor){
@@ -506,6 +516,10 @@
             }
             let direccionPartida = $("#txtDireccionPartida").val();
             let direccionLlegada = $("#txtDireccionLlegada").val();
+            if(direccionPartida!="" && direccionLlegada!=""){
+                alert("Falta ingresar la dirección de partida o de llegada");
+                return;
+            }
             let latLongPartida = await obtenerLatitudLongitudConDireccion(direccionPartida);
             let latLongLlegada = await obtenerLatitudLongitudConDireccion(direccionLlegada);
             let latitudDireccionPartida = latLongPartida[0];
