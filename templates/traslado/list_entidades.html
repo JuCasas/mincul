@@ -1,5 +1,6 @@
 {% extends 'traslado/components/base.html' %}
 {% load static %}
+{% load has_group %}
 
 {% block extrastyle %}
     <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
@@ -150,9 +151,11 @@
                         <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center" data-toggle="modal" data-target="#ModalAgregar">
-                    <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Entidad
-                </button>
+                {% if request.user|has_group:"Gestor de Patrimonios"%}
+                    <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center" data-toggle="modal" data-target="#ModalAgregar">
+                        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Entidad
+                    </button>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -170,7 +173,9 @@
                     <th class="sort">Dirección</th>
                     <th class="sort">Teléfono</th>
                     <th class="sort">Correo</th>
-                    <th class="no-sort">Acciones</th>
+                    {% if request.user|has_group:"Gestor de Patrimonios"%}
+                        <th class="no-sort">Acciones</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -400,30 +405,32 @@
                 {"data": "direccion"},
                 {"data": "telefono"},
                 {"data": "correo"},
-                {
-                    "data": "doiSolicitante",
-                    "data": "nombreSolicitante",
-                    "data": "direccion",
-                    "data": "telefono",
-                    "data": "correo",
-                    "data": "pais",
-                    "data": "id", render: function (data, type, row) {
+                {% if request.user|has_group:"Gestor de Patrimonios"%}
+                    {
+                        "data": "doiSolicitante",
+                        "data": "nombreSolicitante",
+                        "data": "direccion",
+                        "data": "telefono",
+                        "data": "correo",
+                        "data": "pais",
+                        "data": "id", render: function (data, type, row) {
 
-                        return '            <button type="button" id="btnEditar" class="btn btn btn-outline-light"' +
-                            '                   data-toggle="modal" data-target="#ModalEditar" data-id="' + row.id + '"' +
-                            '                  data-doi="' + row.doiSolicitante + '" data-nombre="' + row.nombreSolicitante + '"' +
-                            '                 data-correo="' + row.correo + '"' +
-                            '                data-pais="' + row.pais + '" data-direccion="' + row.direccion + '"' +
-                            '              data-telefono="' + row.telefono + '">' +
-                            '          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="secondary"' +
-                            '              class="bi bi-pencil-square" viewBox="0 0 16 16">' +
-                            '            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>' +
-                            '          <path fill-rule="evenodd"' +
-                            '                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>' +
-                            '     </svg>' +
-                            '</button>';
+                            return '            <button type="button" id="btnEditar" class="btn btn btn-outline-light"' +
+                                '                   data-toggle="modal" data-target="#ModalEditar" data-id="' + row.id + '"' +
+                                '                  data-doi="' + row.doiSolicitante + '" data-nombre="' + row.nombreSolicitante + '"' +
+                                '                 data-correo="' + row.correo + '"' +
+                                '                data-pais="' + row.pais + '" data-direccion="' + row.direccion + '"' +
+                                '              data-telefono="' + row.telefono + '">' +
+                                '          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="secondary"' +
+                                '              class="bi bi-pencil-square" viewBox="0 0 16 16">' +
+                                '            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>' +
+                                '          <path fill-rule="evenodd"' +
+                                '                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>' +
+                                '     </svg>' +
+                                '</button>';
+                        },
                     },
-                },
+                {% endif %}
             ],
             "language": {
                 "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>',

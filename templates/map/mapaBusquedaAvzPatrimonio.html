@@ -79,7 +79,7 @@
                                                 <input name="patrimonio_name" class="form-control" id="txtBuscar"
                                                        placeholder="Buscar patrimonio...">
                                         <span class="fas fa-search inputIcon2" data-fa-transform="shrink-3"></span>
-                                        <div id="rowPatrimonioTxt">
+                                        <div id="rowPatrimonioTxt"  class="font-weight-bold text-danger">
 
                                         </div>
                                     </div>
@@ -92,7 +92,7 @@
                                                 <option> {{ cat.nombre }} </option>
                                             {% endfor %}
                                         </select>
-                                        <div id="rowCategoria">
+                                        <div id="rowCategoria" class="font-weight-bold text-danger">
 
                                         </div>
                                     </div>
@@ -105,7 +105,7 @@
                                               <option value="{{ dep.id_representativo }}"> {{ dep.nombreDepartamento }}</option>
                                               {% endfor %}
                                         </select>
-                                        <div id="rowDepartamento">
+                                        <div id="rowDepartamento" class="font-weight-bold text-danger">
 
                                         </div>
                                     </div>
@@ -185,7 +185,7 @@
                                     <a href="{% url 'detalle' pk=p.patrimonio.pk %}">
                                         <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
                                                 style="font-size: 10px">
-                                                    Ver Ficha
+                                                    Ver Detalle
                                         </button>
                                     </a>
                                 </div>
@@ -218,7 +218,7 @@
                                 <a href="{% url 'detalle_museo' pk=i.institucion.pk %}">
                                     <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
                                             style="font-size: 10px">
-                                                Ver detalle
+                                                Ver Detalle
                                     </button>
                                 </a>
                             </div>
@@ -428,23 +428,37 @@
                 var valueDepa = departamentoInput.value;
                 var txtInputValue = txtInput.value.trim();
                 var categoriaInputValue = categoriaInput.value;
-                if(valueDepa == "-1") {
-                    alert("Debe seleccionar un Departamento");
-                    return false;
-                }
-                if(txtInputValue== "" && categoriaInputValue == "Categoría") {
-                    alert("Debe escribir una palabra en el cuadro de texto de Patrimonio o Seleccionar una categoria");
-                    txtInput.value = txtInputValue;
-                    return false;
-                }
-                if(txtInputValue != ""){
-                    if(isAlpha(txtInputValue)){ {% comment %} Nothing {% endcomment %} }
-                    else{
-                        alert("Solo debe escribir letras");
-                        return false;
+                if (valueDepa=="-1" || (txtInputValue== "" && categoriaInputValue == "Categoría") || txtInputValue != ""){
+                    if(valueDepa == "-1") {
+                        rowDepartamento.innerHTML="Debe seleccionar un departamento";
+
                     }
+                    if(txtInputValue== "" && categoriaInputValue == "Categoría") {
+                        rowTxt.innerHTML="Debe escribir una palabra";;
+                        rowCategoria.innerHTML="Debe seleccionar una categoría";
+                        txtInput.value = txtInputValue;
+
+                    }
+                    if(txtInputValue != ""){
+                        if(isAlpha(txtInputValue)){ {% comment %} Nothing {% endcomment %} }
+                        else{
+                            rowTxt.innerHTML="Solo debe escribir letras";
+                        }
+                    }
+                    return false;
                 }
             });
+        });
+        departamentoInput.addEventListener('change',ev => {
+           rowDepartamento.innerHTML="";
+        });
+        categoriaInput.addEventListener('change',ev => {
+            rowTxt.innerHTML="";
+            rowCategoria.innerHTML="";
+        });
+        txtInput.addEventListener('input',ev=>{
+            rowTxt.innerHTML="";
+            rowCategoria.innerHTML="";
         });
     </script>
 {% endblock %}
