@@ -8,6 +8,30 @@
     }
   },
   {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Gestor de Conservación y Traslados",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "Gestor de Patrimonios",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+      "name": "Conservador",
+      "permissions": []
+    }
+  },
+  {
     "model": "patrimonios.categoria",
     "pk": 1,
     "fields": {
