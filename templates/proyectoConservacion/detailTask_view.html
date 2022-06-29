@@ -111,7 +111,7 @@
             background-color: #EEEEEE !important;
         }
 
-        .form-control:disabled{
+        .form-control:disabled {
             background-color: #EEEEEE !important;
         }
 
@@ -155,12 +155,25 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12">
-                        <label for="descripcion">Descripcion:</label>
+                        <label for="descripcion">Descripción:</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" type="text"
                                   placeholder="Descripción de la Actividad" disabled>{{ task.descripcion }}</textarea>
                     </div>
                 </div>
                 <div class="row">
+
+
+                    <div class="form-group col-lg-3 col-sm-12">
+                        <label for="conservador">Conservador:</label>
+                        <select class="form-control selectpicker" id="conservador" name="conservador"
+                                disabled>
+                            {% for conservador in conservadores %}
+                                <option value="{{ conservador.pk }}" {% if task.responsable.pk == conservador.pk %}
+                                        selected{% endif %}>{{ conservador.first_name }} {{ conservador.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
                     <div class="form-group col-lg-3 col-sm-12">
                         <label for="fechaRegistro">Fecha de Inicio:</label>
                         <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date"
@@ -176,11 +189,12 @@
                         <input class="form-control" id="presupuesto" name="presupuesto" type="text"
                                placeholder="S/" value={{ task.presupuesto }} disabled>
                     </div>
-                    <div class="form-group col-lg-3 col-sm-12">
-                        <label for="gasto">Gasto Total:</label>
-                        <input class="form-control" id="gasto" name="gasto" type="text"
-                               placeholder="S/" disabled value={{ task.gasto }} disabled>
-                    </div>
+
+                    {#                    <div class="form-group col-lg-3 col-sm-12">#}
+                    {#                        <label for="gasto">Gasto Total:</label>#}
+                    {#                        <input class="form-control" id="gasto" name="gasto" type="text"#}
+                    {#                               placeholder="S/" disabled value={{ task.gasto }} disabled>#}
+                    {#                    </div>#}
 
                 </div>
 

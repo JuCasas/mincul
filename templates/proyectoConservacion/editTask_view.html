@@ -153,13 +153,27 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12">
-                        <label for="descripcion">Descripcion:</label>
+                        <label for="descripcion">Descripción:</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" type="text"
                                   placeholder="Descripción de la Actividad"
-                                  {% if request.user|has_group:"Conservador" or task.status != '1'%}Disabled {% endif %}>{{ task.descripcion }}</textarea>
+                                  {% if request.user|has_group:"Conservador" or task.status != '1' %}Disabled {% endif %}>{{ task.descripcion }}</textarea>
                     </div>
                 </div>
                 <div class="row">
+
+                    <div class="form-group col-lg-3 col-sm-12">
+                        <label for="conservador">Responsable:</label>
+                        <select class="form-control selectpicker" id="conservador" name="conservador"
+                                data-placeholder='Seleccione el conservador responsable...'
+                                {% if request.user|has_group:"Conservador" or task.status != '1' %}Disabled
+                                {% endif %}>
+                            {% for conservador in conservadores %}
+                                <option value="{{ conservador.pk }}" {% if task.responsable.pk == conservador.pk %}
+                                        selected{% endif %}>{{ conservador.first_name }} {{ conservador.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
                     <div class="form-group col-lg-3 col-sm-12">
                         <label for="fechaRegistro">Fecha de Inicio:</label>
                         <input class="form-control" id="fechaRegistro" name="fechaRegistro" type="date"
@@ -178,16 +192,16 @@
                                placeholder="S/" value={{ task.presupuesto }}
                                        {% if request.user|has_group:"Conservador" or task.status != '1' %}Disabled {% endif %}>
                     </div>
-                    <div class="form-group col-lg-3 col-sm-12">
+                    {% comment %}<div class="form-group col-lg-3 col-sm-12">
                         <label for="gasto">Gasto Total:</label>
                         <input class="form-control" id="gasto" name="gasto" type="text"
                                placeholder="S/" disabled value={{ task.gasto }}>
-                    </div>
+                    </div>{% endcomment %}
                     <div class="form-group col-lg-6 col-sm-12 mt-3">
 
                         <div class="row">
                             <div class="col-3 flex-center mt-auto mb-auto ">
-                                <h5 class="flex-center mt-auto mb-auto">Estado: {{ task.status }} </h5>
+                                <h5 class="flex-center mt-auto mb-auto">Estado:</h5>
                             </div>
                             <div class="col-3">
                                 <span class="btn
@@ -755,9 +769,10 @@
                                 '                    <div class="d-flex flex-row justify-content-end" >')
                             if (("{{ task.status }}" == "2" || "{{ task.status }}" == "4")) {
                                 data += (
-                                    ' <button type="button" class="btn" onclick="seccionesEliminar(\'' + secciones[i].nombre + '\',' + secciones[i].id + ')" '+
-                                     {% if request.user|has_group:"Gestor de Conservación y Traslados"  %}' hidden ' {% else %} '' {% endif %} + '><i class="fas fa-trash"></i>'
-                                )
+                                    ' <button type="button" class="btn" onclick="seccionesEliminar(\'' + secciones[i].nombre + '\',' + secciones[i].id + ')" ' +
+                                    {% if request.user|has_group:"Gestor de Conservación y Traslados"  %}
+                                        ' hidden ' {% else %} '' {% endif %} + '><i class="fas fa-trash"></i>'
+                            )
                             }
                             data += (
                                 '                        </button>' +
@@ -879,6 +894,7 @@
                         'nombre': $("#nombre").val(),
                         'descripcion': $("#descripcion").val(),
                         'fechaRegistro': $("#fechaRegistro").val(),
+                        'conservador': $("#conservador").val(),
                         'fecha': $("#fecha").val(),
                         'presupuesto': $("#presupuesto").val(),
                         'gasto': $("#gasto").val(),
