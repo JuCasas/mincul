@@ -293,8 +293,9 @@
         }
         function crearDivPatrimonio(patrimonioDatos){
             hrefLink=window.location.origin+"/patrimonios/detalle/"+patrimonioDatos.id+"/";
+            urlImgPatrimonio= patrimonioDatos.url==null ? "/static/img/landmarks/notAvailable.jpg" : patrimonioDatos.url;
             return '<div>' + '<h3 style="text-align: center">'+patrimonioDatos.nombre+'</h3>'+
-                '<img src="'+ patrimonioDatos.url+'" height="100px" width="300px"/>'+
+                '<img src="'+ urlImgPatrimonio+'" height="100px" width="300px"/>'+
                 '<a href="'+ hrefLink +'"><button class="btn btn-dark mr-1 mb-1 w-100" type="button" style="font-size: 10px">' +
                 'Ver Ficha </button> </a>'
                 + '</div>';
@@ -427,7 +428,7 @@
                         img.classList.add(clas);
                     });
                     //img.src=patrimoniosEnRuta[i].url;
-                    img.src="/static/img/landmarks/notAvailable.jpg";
+                    img.src=patrimoniosEnRuta[i].url==null ? "/static/img/landmarks/notAvailable.jpg" : patrimoniosEnRuta[i].url;
                     img.style.height="130px";
                     img.style.objectFit="cover";
                     img.style.borderTopLeftRadius="20px";

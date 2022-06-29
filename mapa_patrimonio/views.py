@@ -44,7 +44,7 @@ def datos(request):
         numPatriInstit = numPatri + numInstit
         for i in range(numPatri):
             try:
-                patrUrl = Documento.objects.filter(patrimonio=patri[i]).first()
+                patrUrl = Documento.objects.filter(patrimonio=patri[i]).order_by('id')
                 patriUrl = patrUrl[0].url
                 patriUrl = patriUrl.name
                 patriInstit.append({
@@ -66,14 +66,14 @@ def datos(request):
                 })
         for j in range(numInstit):
             try:
-                instiUrl = Documento.objects.filter(institucion=instit[i]).first()
+                instiUrl = Documento.objects.filter(institucion=instit[j]).order_by('id')
                 instiUrl = instiUrl[0].url
                 instiUrl = instiUrl.name
                 patriInstit.append({
-                    "id": instit[i].id,
-                    "lat": instit[i].lat,
-                    "long": instit[i].long,
-                    "nombre": instit[i].nombre,
+                    "id": instit[j].id,
+                    "lat": instit[j].lat,
+                    "long": instit[j].long,
+                    "nombre": instit[j].nombre,
                     "url": '/'+instiUrl,
                     "tipo": 4,
                 })
@@ -100,23 +100,53 @@ def datos(request):
         patrimoniosAzar = sample(list(patri.values()), numAzarPatri)
         institucionesAzar = sample(list(instit.values()), numAzarInstit)
         for patriAzar in patrimoniosAzar:
-            patriInstit.append({
-                "id": patriAzar['id'],
-                "lat": patriAzar['lat'],
-                "long": patriAzar['long'],
-                "nombre": patriAzar['nombreTituloDemoninacion'],
-                "url": patriAzar['url'],
-                "tipo": 2,
-            })
+            try:
+                ppatrUrl = Documento.objects.filter(patrimonio__id=patriAzar['id']).order_by('id')
+                ppatriUrl = ppatrUrl[0].url
+                print(ppatriUrl)
+                print(type(ppatriUrl))
+                ppatriUrl = ppatriUrl.name
+                patriInstit.append({
+                    "id": patriAzar["id"],
+                    "lat": patriAzar["lat"],
+                    "long": patriAzar["long"],
+                    "nombre": patriAzar["nombreTituloDemoninacion"],
+                    "url": '/'+ppatriUrl,
+                    "tipo": 2,
+                })
+            except:
+                patriInstit.append({
+                    "id": patriAzar["id"],
+                    "lat": patriAzar["lat"],
+                    "long": patriAzar["long"],
+                    "nombre": patriAzar["nombreTituloDemoninacion"],
+                    "url": '/static/img/imageNotAvailable.jpg',
+                    "tipo": 2,
+                })
         for institAzar in institucionesAzar:
-            patriInstit.append({
-                "id": institAzar['id'],
-                "lat": institAzar['lat'],
-                "long": institAzar['long'],
-                "nombre": institAzar['nombre'],
-                "url": institAzar['url'],
-                "tipo": 4,
-            })
+            try:
+                instiUrl = Documento.objects.filter(institucion__id=institAzar['id']).order_by('id')
+                instiUrl = instiUrl[0].url
+                print(instiUrl)
+                print(type(instiUrl))
+                instiUrl = instiUrl.name
+                patriInstit.append({
+                    "id": institAzar.id,
+                    "lat": institAzar.lat,
+                    "long": institAzar.long,
+                    "nombre": institAzar.nombre,
+                    "url": '/' + instiUrl,
+                    "tipo": 2,
+                })
+            except:
+                patriInstit.append({
+                    "id": institAzar.id,
+                    "lat": institAzar.lat,
+                    "long": institAzar.long,
+                    "nombre": institAzar.nombre,
+                    "url": '/' + '/static/img/imageNotAvailable.jpg',
+                    "tipo": 2,
+                })
         success = 1
     return JsonResponse({'data': patriInstit,
                          'numPatrimonios':numPatriInstit,
@@ -150,23 +180,49 @@ def patrimonioFueraRuta(request):
     if (numPatri + numInstit) <= numEnrutados:
         numPatriInstit = numPatri + numInstit
         for i in range(numPatri):
-            patriInstit.append({
-                "id": patri[i].id,
-                "lat": patri[i].lat,
-                "long": patri[i].long,
-                "nombre": patri[i].nombreTituloDemoninacion,
-                "url": patri[i].url,
-                "tipo": 2,
-            })
+            try:
+                patrUrl = Documento.objects.filter(patrimonio=patri[i]).order_by('id')
+                patriUrl = patrUrl[0].url
+                patriUrl = patriUrl.name
+                patriInstit.append({
+                    "id": patri[i].id,
+                    "lat": patri[i].lat,
+                    "long": patri[i].long,
+                    "nombre": patri[i].nombreTituloDemoninacion,
+                    "url": '/'+patriUrl,
+                    "tipo": 2,
+                })
+            except:
+                patriInstit.append({
+                    "id": patri[i].id,
+                    "lat": patri[i].lat,
+                    "long": patri[i].long,
+                    "nombre": patri[i].nombreTituloDemoninacion,
+                    "url": '/static/img/imageNotAvailable.jpg',
+                    "tipo": 2,
+                })
         for j in range(numInstit):
-            patriInstit.append({
-                "id": instit[i].id,
-                "lat": instit[i].lat,
-                "long": instit[i].long,
-                "nombre": instit[i].nombre,
-                "url": instit[i].url,
-                "tipo": 4,
-            })
+            try:
+                instiUrl = Documento.objects.filter(institucion=instit[j]).order_by('id')
+                instiUrl = instiUrl[0].url
+                instiUrl = instiUrl.name
+                patriInstit.append({
+                    "id": instit[j].id,
+                    "lat": instit[j].lat,
+                    "long": instit[j].long,
+                    "nombre": instit[j].nombre,
+                    "url": '/'+instiUrl,
+                    "tipo": 4,
+                })
+            except:
+                patriInstit.append({
+                    "id": instit[j].id,
+                    "lat": instit[j].lat,
+                    "long": instit[j].long,
+                    "nombre": instit[j].nombre,
+                    "url": '/static/img/imageNotAvailable.jpg',
+                    "tipo": 4,
+                })
         success = 1
     else:  # escoger al azar
         numPatriInstit = numEnrutados
@@ -181,23 +237,53 @@ def patrimonioFueraRuta(request):
         patrimoniosAzar = sample(list(patri.values()), numAzarPatri)
         institucionesAzar = sample(list(instit.values()), numAzarInstit)
         for patriAzar in patrimoniosAzar:
-            patriInstit.append({
-                "id": patriAzar['id'],
-                "lat": patriAzar['lat'],
-                "long": patriAzar['long'],
-                "nombre": patriAzar['nombreTituloDemoninacion'],
-                "url": patriAzar['url'],
-                "tipo": 2,
-            })
+            try:
+                ppatrUrl = Documento.objects.filter(patrimonio__id=patriAzar['id']).order_by('id')
+                ppatriUrl = ppatrUrl[0].url
+                print(ppatriUrl)
+                print(type(ppatriUrl))
+                ppatriUrl = ppatriUrl.name
+                patriInstit.append({
+                    "id": patriAzar["id"],
+                    "lat": patriAzar["lat"],
+                    "long": patriAzar["long"],
+                    "nombre": patriAzar["nombreTituloDemoninacion"],
+                    "url": '/'+ppatriUrl,
+                    "tipo": 2,
+                })
+            except:
+                patriInstit.append({
+                    "id": patriAzar["id"],
+                    "lat": patriAzar["lat"],
+                    "long": patriAzar["long"],
+                    "nombre": patriAzar["nombreTituloDemoninacion"],
+                    "url": '/static/img/imageNotAvailable.jpg',
+                    "tipo": 2,
+                })
         for institAzar in institucionesAzar:
-            patriInstit.append({
-                "id": institAzar['id'],
-                "lat": institAzar['lat'],
-                "long": institAzar['long'],
-                "nombre": institAzar['nombre'],
-                "url": institAzar['url'],
-                "tipo": 4,
-            })
+            try:
+                instiUrl = Documento.objects.filter(institucion__id=institAzar['id']).order_by('id')
+                instiUrl = instiUrl[0].url
+                print(instiUrl)
+                print(type(instiUrl))
+                instiUrl = instiUrl.name
+                patriInstit.append({
+                    "id": institAzar.id,
+                    "lat": institAzar.lat,
+                    "long": institAzar.long,
+                    "nombre": institAzar.nombre,
+                    "url": '/' + instiUrl,
+                    "tipo": 2,
+                })
+            except:
+                patriInstit.append({
+                    "id": institAzar.id,
+                    "lat": institAzar.lat,
+                    "long": institAzar.long,
+                    "nombre": institAzar.nombre,
+                    "url": '/' + '/static/img/imageNotAvailable.jpg',
+                    "tipo": 2,
+                })
         success = 1
 
     return JsonResponse({'data': patriInstit,
