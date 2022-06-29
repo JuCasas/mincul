@@ -22,23 +22,23 @@
 {#    Podemos realizar verificaciones por usuario#}
       {% if request.user|has_group:"Administrador" %}
         <button class="btn btn-primary px-3 mr-2" type="button">
-          <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Incidentes
+            Incidentes
         </button>
       {% endif %}
     </a>
     <a href="{% url 'listProjects' %}">
       <button class="btn btn-primary px-3 mr-2" type="button">
-        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Conservación
+          Conservación
       </button>
     </a>
     <a href="{% url 'list_transfers' %}">
       <button class="btn btn-primary px-3 mr-2" type="button">
-        <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Traslados
+          Traslados
       </button>
     </a>
     <a href="{% url 'reportes' %}">
     <button class="btn btn-primary px-3 mr-2" type="button">
-      <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Reportes
+        Reportes
     </button>
       </a>
   </div>
@@ -75,7 +75,7 @@
         </div>
 
         <div class="dropdown-menu position-absolute r-0 l-unset" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/auth/login/">Cerrar sesión <span class="fas fa-arrow-right topNavIcon" data-fa-transform="shrink-3"></span> </a>
+            <a class="dropdown-item" href="{% url 'signout' %}">Cerrar sesión <span class="fas fa-arrow-right topNavIcon" data-fa-transform="shrink-3"></span> </a>
         </div>
 
       </li>
