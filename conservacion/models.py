@@ -6,6 +6,7 @@ from patrimonios.models import Patrimonio
 from mincul_app.models import Documento
 from incidente.models import Incidente
 
+
 class ProyectoConservacion(models.Model):
     ORDER_COLUMN_CHOICES = {
         '0': 'codigo',
@@ -17,33 +18,34 @@ class ProyectoConservacion(models.Model):
     }
 
     TIPOS = (
-        ('0','Preventivo'),
-        ('1','Correctivo'),
+        ('0', 'Preventivo'),
+        ('1', 'Correctivo'),
         ('2', 'Curativo'),
     )
     ESTADOS = (
-        ('1','Activo'),
-        ('2','Inactivo'),
+        ('1', 'Activo'),
+        ('2', 'Inactivo'),
     )
     STATUS = (
         ('0', 'En Proceso'),
-        ('1','Registrado'),
-        ('2','Completado'),
+        ('1', 'Registrado'),
+        ('2', 'Completado'),
     )
     codigo = models.CharField(max_length=10, null=True)
     nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.CharField(max_length=200)
     fechaInicio = models.DateField(blank=True, null=True, verbose_name='fechaInicio')
     fechaFin = models.DateField(blank=True, null=True, verbose_name='fechaFin')
-    tipoProyecto = models.CharField(max_length=2,choices=TIPOS,default='0',null=True,blank=True)
+    tipoProyecto = models.CharField(max_length=2, choices=TIPOS, default='0', null=True, blank=True)
     responsable = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    cantidadAct = models.IntegerField(default=0,blank=True,null=True)
-    cantidadActR = models.IntegerField(default=0,blank=True,null=True)
+    cantidadAct = models.IntegerField(default=0, blank=True, null=True)
+    cantidadActR = models.IntegerField(default=0, blank=True, null=True)
     documentos = models.ManyToManyField(Documento)
     patrimonios = models.ManyToManyField(Patrimonio)
     incidentes = models.ManyToManyField(Incidente)
     estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
     status = models.CharField(max_length=2, choices=STATUS, default='1', null=True, blank=True)
+
 
 class Actividad(models.Model):
     ORDER_COLUMN_CHOICES = {
@@ -57,10 +59,10 @@ class Actividad(models.Model):
     }
 
     STATUS = (
-        ('0', 'Registrado'),
-        ('1','En proceso'),
-        ('2','Finalizado'),
-        ('3','Anulada'),
+        ('0', 'Registrada'),
+        ('1', 'En proceso'),
+        ('2', 'Finalizada'),
+        ('3', 'Anulada'),
     )
     ESTADOS = (
         ('1', 'Activo'),
@@ -70,7 +72,7 @@ class Actividad(models.Model):
     nombre = models.CharField(max_length=50)
     fechaInicio = models.DateField(blank=True, null=True, verbose_name='fechaInicio')
     fechaFin = models.DateField(blank=True, null=True, verbose_name='fechaFin')
-    descripcion = models.CharField(max_length=200,blank=True, null=True)
+    descripcion = models.CharField(max_length=200, blank=True, null=True)
     presupuesto = models.FloatField()
     gastoTotal = models.FloatField()
     patrimonio = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
@@ -78,7 +80,7 @@ class Actividad(models.Model):
     relaciones = models.ManyToManyField("self", blank=True)
     documentos = models.ManyToManyField(Documento)
     conservadores = models.ManyToManyField(settings.AUTH_USER_MODEL)
-    estado = models.CharField(max_length=2,choices=ESTADOS,default='1',null=True,blank=True)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='1', null=True, blank=True)
     status = models.CharField(max_length=2, choices=STATUS, default='0', null=True, blank=True)
 
 
