@@ -82,6 +82,9 @@
                             <input name="patrimonio_name" class="form-control" id="txtBuscar"
                                    placeholder="Buscar patrimonio...">
                             <span class="fas fa-search inputIcon2" data-fa-transform="shrink-3"></span>
+                            <div id="rowPatrimonioTxt" class="font-weight-bold text-danger">
+
+                            </div>
                         </div>
 
                         <div class="justify-content-end d-flex row px-3">
@@ -144,7 +147,7 @@
                                 <a href="{% url 'detalle' pk=p.patrimonio.pk %}">
                                     <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
                                             style="font-size: 10px">
-                                                Ver Ficha
+                                                Ver Detalle
                                     </button>
                                 </a>
                             </div>
@@ -175,7 +178,7 @@
                                 <a href="{% url 'detalle_museo' pk=i.institucion.pk %}">
                                     <button class="btn btn-dark mr-1 mb-1 w-100" type="button"
                                             style="font-size: 10px">
-                                                Ver detalle
+                                                Ver Detalle
                                     </button>
                                 </a>
                             </div>
@@ -314,22 +317,26 @@
     <script>
     const isAlpha = str => /^[a-zA-Z( )]*$/.test(str);
     const txtInput = document.getElementById('txtBuscar');
+    const rowTxt = document.getElementById('rowPatrimonioTxt');
     $(document).ready(function () {
         $('#btn-submit').click(function() {
             var txtInputValue = txtInput.value.trim();
             if(txtInputValue== "") {
-                alert("Debe escribir una palabra en el cuadro de texto");
+                rowTxt.innerHTML="Debe escribir algo";
                 txtInput.value = txtInputValue;
                 return false;
             }
             if(txtInputValue != ""){
                 if(isAlpha(txtInputValue)){ {% comment %} Nothing {% endcomment %} }
                 else{
-                    alert("Solo debe escribir letras");
+                    rowTxt.innerHTML="Solo debe escribir letras";
                     return false;
                 }
             }
         });
+    });
+    txtInput.addEventListener('input',ev => {
+       rowTxt.innerHTML="";
     });
     </script>
 {% endblock %}
