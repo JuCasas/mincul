@@ -154,7 +154,7 @@
                         <input class="form-control" id="nombre" name="nombre" type="text" required
                                placeholder="Nombre de la Actividad"
                                value="{{ actividad.nombre }}"
-                               {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                               {% if not request.user|has_group:"Gestor de Conservación y Traslados"  or actividad.status != '0' %}disabled{% endif %}>
                     </div>
                 </div>
                 <div class="row">
@@ -162,7 +162,7 @@
                         <label for="descripcion">Descripción:</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
                                   placeholder="Descripción de la Actividad"
-                                  {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>{{ actividad.descripcion }}</textarea>
+                                  {% if not request.user|has_group:"Gestor de Conservación y Traslados" or actividad.status != '0' %}disabled{% endif %}>{{ actividad.descripcion }}</textarea>
                     </div>
                 </div>
                 <div class="row">
@@ -170,13 +170,13 @@
                         <label for="fechaInicio">Fecha de Inicio:</label>
                         <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required
                                value={{ actividad.fechaInicio|date:"Y-m-d" }}
-                                       {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                                       {% if not request.user|has_group:"Gestor de Conservación y Traslados" or actividad.status != '0' %}disabled{% endif %}>
                     </div>
                     <div class="form-group col-lg-6 col-sm-12">
                         <label for="fechaFin">Fecha de Fin:</label>
                         <input class="form-control" id="fechaFin" name="fechaFin" type="date" required
                                value={{ actividad.fechaFin|date:"Y-m-d" }}
-                                       {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                                       {% if not request.user|has_group:"Gestor de Conservación y Traslados" or actividad.status != '0' %}disabled{% endif %}>
                     </div>
                 </div>
 
@@ -184,7 +184,7 @@
                     <div class="form-group col-lg-12 col-sm-12">
                         <label for="patrimonio">Patrimonio Asociado:</label>
                         <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
-                                {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                                {% if not request.user|has_group:"Gestor de Conservación y Traslados"  or actividad.status != '0' %}disabled{% endif %}>
                         </select>
                     </div>
                 </div>
@@ -195,13 +195,13 @@
                         {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
                             <select class="form-control selectpicker" id="conservadores" name="conservadores"
                                     data-placeholder='Seleccione conservador...'
-                                    {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                                    {% if not request.user|has_group:"Gestor de Conservación y Traslados"  or actividad.status != '0' %}disabled{% endif %}>
 
                             </select>
                         {% endif %}
                     </div>
 
-                    {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                    {% if request.user|has_group:"Gestor de Conservación y Traslados"  and  actividad.status == '0' %}
                         <div class="form-group col-auto d-flex align-items-end">
                             <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
                                     onclick="agregarConservadorTabla()">Agregar Conservador
@@ -213,9 +213,16 @@
                         <table class="table table-responsive-sm">
                             <thead class="thead-dark">
                             <tr>
-                                <th scope="col">Código</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Acciones</th>
+                                {% if actividad.status == '0' %}
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Acciones</th>
+                                {% else %}
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Nombre</th>
+                                {% endif %}
+
+
                             </tr>
                             </thead>
                             <tbody id="conservadorAgregar">
@@ -240,10 +247,8 @@
 
                 {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
                     <div class="row justify-content-between">
-                        <div class="form-group col-9">
+                        <div class="form-group ml-3">
                             <h5>Documentos nuevos:</h5>
-                        </div>
-                        <div class="card-body bg-light">
                             <input type="file" name="file" id="file" multiple>
                         </div>
                         <div class="col-lg-12 col-sm-12" id="seccionExistentes">
@@ -251,7 +256,7 @@
                     </div>
                 {% endif %}
 
-                <div class="row justify-content-between mt-2 mr-1">
+                <div class="row justify-content-between mt-3 mr-1">
 
                     <div class="col-3">
                         <h5 class="flex-center mt-auto mb-auto">Estado:</h5>
@@ -275,7 +280,7 @@
                     {% if actividad.status == '0' %}
                         <div class="col-3">
                             <button class="btn btn-primary mx-1" type="button"
-                            data-toggle="modal" data-target="#iniciarActividad">
+                                    data-toggle="modal" data-target="#iniciarActividad">
                                 Iniciar actividad
                             </button>
                         </div>
@@ -284,12 +289,12 @@
                     {% if actividad.status == '1' %}
                         <div class="col-3">
                             <div class="row">
-                                <button  class="btn btn-primary mx-1" type="button"
-                                onclick="validarEstadoTareas()" >Finalizar
+                                <button class="btn btn-primary mx-1" type="button"
+                                        onclick="validarEstadoTareas()">Finalizar
                                     actividad
                                 </button>
-                                <button  class="btn btn-primary mx-1" type="button"
-                                data-toggle="modal" data-target="#anularActividad">Anular
+                                <button class="btn btn-primary mx-1" type="button"
+                                        data-toggle="modal" data-target="#anularActividad">Anular
                                     actividad
                                 </button>
                             </div>
@@ -304,9 +309,11 @@
                                    class="btn second mr-3 d-flex align-items-center">Cancelar</a>
 
                                 <div>
-                                    <button type="submit" class="btn btn-primary btn-block">
-                                        <span class="glyphicon glyphicon-ok"></span> Guardar
-                                    </button>
+                                    {% if actividad.status == '0' %}
+                                        <button type="submit" class="btn btn-primary btn-block">
+                                            <span class="glyphicon glyphicon-ok"></span> Guardar
+                                        </button>
+                                    {% endif %}
                                 </div>
                             {% else %}
                                 <button type="button" data-dismiss="modal" class="btn second ">Volver</button>
@@ -373,7 +380,6 @@
     </div>
 
 
-
     <!-- Modal finalizar actividad -->
     <div class="modal fade" id="finalizarActividad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -411,7 +417,7 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                       Para poder finalizar una actividad todas las tareas deben haberse finalizado.
+                        Para poder finalizar una actividad todas las tareas deben haberse finalizado.
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -710,11 +716,15 @@
                 data = '<tr>' +
                     '<td>' + conservadorAgregar[0].codigo + '</td>' +
                     ' <td>' + conservadorAgregar[0].first_name + '</td>' +
+
+                    {% if actividad.status == '0' %}
                     '<td>' +
                     '<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadorAgregar[0].id + ')">' +
                     '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
                     '</button>' +
                     '</td>' +
+                    {% else %} ''
+                    {% endif %}
                     '</tr>';
 
                 $("#conservadorAgregar").append(data);
