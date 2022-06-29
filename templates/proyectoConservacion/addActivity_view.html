@@ -129,11 +129,11 @@
             <div class="row justify-content-between align-items-center">
                 <div class="col-md-6">
                     <h5 class="mb-2 mb-md-0 text-black">
-                    {% if type == 'new' %}
-                        Crear Actividad
-                    {% else %}
-                        Editar Actividad
-                    {% endif %}
+                        {% if type == 'new' %}
+                            Crear Actividad
+                        {% else %}
+                            Editar Actividad
+                        {% endif %}
                     </h5>
                 </div>
             </div>
@@ -162,9 +162,7 @@
                         <label for="descripcion">Descripción:</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
                                   placeholder="Descripción de la Actividad"
-                                  {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-                         {{ actividad.descripcion }}
-                        </textarea>
+                                  {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>{{ actividad.descripcion }}</textarea>
                     </div>
                 </div>
                 <div class="row">
@@ -172,13 +170,13 @@
                         <label for="fechaInicio">Fecha de Inicio:</label>
                         <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required
                                value={{ actividad.fechaInicio|date:"Y-m-d" }}
-                               {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                                       {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
                     </div>
                     <div class="form-group col-lg-6 col-sm-12">
                         <label for="fechaFin">Fecha de Fin:</label>
                         <input class="form-control" id="fechaFin" name="fechaFin" type="date" required
-                                 value={{ actividad.fechaFin|date:"Y-m-d" }}
-                               {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                               value={{ actividad.fechaFin|date:"Y-m-d" }}
+                                       {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
                     </div>
                 </div>
 
@@ -245,35 +243,65 @@
                         <div class="form-group col-9">
                             <h5>Documentos nuevos:</h5>
                         </div>
-
                         <div class="card-body bg-light">
-                            {#                                <div class="dropzone dropzone-multiple p-0" data-dropzone>#}
-                            {#                                    <div class="fallback">#}
                             <input type="file" name="file" id="file" multiple>
-                            {#                                    </div>#}
-                            {#                                </div>#}
                         </div>
-
                         <div class="col-lg-12 col-sm-12" id="seccionExistentes">
-
                         </div>
-
                     </div>
                 {% endif %}
 
                 <div class="row justify-content-between mt-2 mr-1">
-                    <div class="col-3 ">
-                        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                            <button id="actualizar" class="btn btn-primary mx-1" type="button"
-                                    data-toggle="modal" data-target="#actualizarEstado">
-                                Actualizar estado
-                            </button>
-                        {% endif %}
+
+                    <div class="col-3">
+                        <h5 class="flex-center mt-auto mb-auto">Estado:</h5>
                     </div>
-                    <div class="col-5">
+
+                    <div class="col-3">
+                                <span class="btn
+                                    {% if actividad.status == '0' %}
+                                       btn-info
+                                    {% elif actividad.status == '1' %}
+                                       btn-info
+                                    {% elif actividad.status == '2' %}
+                                        btn-success
+                                    {% elif actividad.status == '3' %}
+                                        btn-danger
+                                    {% endif %} ">
+                                {{ actividad.get_status_display }}
+                            </span>
+                    </div>
+
+                    {% if actividad.status == '0' %}
+                        <div class="col-3">
+                            <button class="btn btn-primary mx-1" type="button"
+                            data-toggle="modal" data-target="#iniciarActividad">
+                                Iniciar actividad
+                            </button>
+                        </div>
+                    {% endif %}
+
+                    {% if actividad.status == '1' %}
+                        <div class="col-3">
+                            <div class="row">
+                                <button  class="btn btn-primary mx-1" type="button"
+                                onclick="validarEstadoTareas()" >Finalizar
+                                    actividad
+                                </button>
+                                <button  class="btn btn-primary mx-1" type="button"
+                                data-toggle="modal" data-target="#anularActividad">Anular
+                                    actividad
+                                </button>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                    <div class="col-3 flex-center mt-auto mb-auto">
                         <div class="row justify-content-end">
                             {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                                 <a href="{% url 'listActivities' pk=project.id %}" class="btn second mr-3 d-flex align-items-center">Cancelar</a>
+                                <a href="{% url 'listActivities' pk=project.id %}"
+                                   class="btn second mr-3 d-flex align-items-center">Cancelar</a>
 
                                 <div>
                                     <button type="submit" class="btn btn-primary btn-block">
@@ -286,13 +314,113 @@
                         </div>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
 
 
     <div id="cover-spin"></div>
+
+    <!-- Modal iniciar actividad -->
+    <div class="modal fade" id="iniciarActividad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar estado</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        A continuación se procederá a actualizar el estado de la actividad a "EN PROCESO".
+                        ¿Esta seguro que desea confirmar esta acción?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="updateState('1')">Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal anular actividad -->
+    <div class="modal fade" id="anularActividad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar estado</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        A continuación se procederá a actualizar el estado de la actividad a "ANULADA".
+                        ¿Esta seguro que desea confirmar esta acción?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="updateState('3')">Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal finalizar actividad -->
+    <div class="modal fade" id="finalizarActividad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar estado</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        A continuación se procederá a actualizar el estado de la actividad a "Finalizada".
+                        ¿Esta seguro que desea confirmar esta acción?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="updateState('2')">Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informar finalizar tareas-->
+    <div class="modal fade" id="informarFinalizarTareas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Notificación:</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                       Para poder finalizar una actividad todas las tareas deben haberse finalizado.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
@@ -604,6 +732,62 @@
             $("#lista").val(conservadoresLista);
             console.log("Eliminado");
             console.log(conservadoresLista);
+        }
+
+        function actualizarEstadoActividad() {
+            nuevo_estado = ''
+            if ("{{ actividad.status }}" == '0') {
+                nuevo_estado = "1"
+            } else {
+            }
+
+        }
+
+        $("#iniciarActividad").on('click', function () {
+
+        });
+
+
+        function updateState(nuevoEstado) {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'updateActivityState'%}",
+                async: false,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    actividad_pk: {{ actividad.pk }},
+                    nuevo_estado: nuevoEstado,
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        }
+
+
+        function validarEstadoTareas() {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'validateEndActivity'%}",
+                async: false,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    actividad_pk: {{ actividad.pk }},
+                },
+                success: function (response) {
+                    if (response['puede_eliminarse']) {
+                        $("#finalizarActividad").modal('show');
+                    } else {
+                        $("#informarFinalizarTareas").modal('show');
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
         }
 
 

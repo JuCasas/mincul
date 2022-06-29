@@ -463,7 +463,6 @@ def addActivityView(request, pk):
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def addActivity(request, pk):
-
     try:
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
@@ -668,6 +667,16 @@ def detailTaskView(request, pk):
 
 
 @login_required(login_url='/auth/login/')
+def updateActivityState(request):
+    actividad_pk = request.POST.get('actividad_pk')
+    actividad = Actividad.objects.get(pk=actividad_pk)
+    nuevo_estado = request.POST.get('nuevo_estado')
+    actividad.status = nuevo_estado
+    actividad.save()
+    return JsonResponse({}, status=200)
+
+
+@login_required(login_url='/auth/login/')
 def updateTaskState(request):
     task_pk = request.POST.get('task_pk')
     task = Tarea.objects.get(pk=task_pk)
@@ -762,3 +771,20 @@ def validateSections(request):
     if (len(secciones) > 0):
         tiene_secciones = True
     return JsonResponse({"tiene_secciones": tiene_secciones}, status=200)
+
+
+@login_required(login_url='/auth/login/')
+def validateEndActivity(request):
+    actividad_pk = request.POST['actividad_pk']
+
+    tareas = Tarea.objects.filter(actividad_id=actividad_pk)
+
+    cont=0
+    puede_eliminarse =False
+    for tarea in tareas:
+        if tarea.status != '5':
+            cont+=1
+
+    if (cont == 0):
+        puede_eliminarse = True
+    return JsonResponse({"puede_eliminarse": puede_eliminarse}, status=200)
