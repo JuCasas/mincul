@@ -13,6 +13,8 @@
 
 {% block body %}
 
+    <div id="Contenido">
+
     <div class="card mb-3">
         <div class="card-body row">
             <div class="col-md-6 col-sm-12">
@@ -25,39 +27,66 @@
         </div>
     </div>
 
+    <button type="button" class="btn btn-default" onclick="imprime()">Take a Screenshot!</button>
 
-<div class="row card-deck">
-    <div class="card mb-3 mr-2 col-6">
-        <div class="card-body row">
-            <div class="col-md-12">
-                <div id="canvas-holder">
-                    <canvas id="chart-area"></canvas>
+
+    <div class="row card-deck">
+        <div class="card mb-3 mr-2 col-6">
+            <div class="card-body row">
+                <div class="col-md-12">
+                    <div id="canvas-holder">
+                        <canvas id="chart-area"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
-    <div class="card mb-3 col-6">
-        <div class="card-body row">
-            <div class="col-md-12">
-                <div id="canvas-holder">
-                    <canvas id="inea"></canvas>
+        <div class="card mb-3 col-6">
+            <div class="card-body row">
+                <div class="col-md-12">
+                    <div id="canvas-holder">
+                        <canvas id="inea"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 
     <div class="col-md-12 d-flex justify-content-center">
         <button class="btn btn-primary btn-sm ml-0" id="changeCircleSize">Semi/Full Circle</button>
     </div>
 
-
+</div>
 {% endblock %}
 
 {% block extrajs %}
+    <script src="{% static '/lib/captura/html2canvas.js' %}"></script>
+    <script src="{% static '/lib/captura/jspdf.debug.js' %}"></script>
+    <script>
+
+        function imprime(){
+            var doc = new jsPDF('p','pt','letter');
+            var margin = 10;
+            var scale = (doc.internal.pageSize.width - margin*2)/document.body.scrollWidth;
+            doc.html(document.getElementById('Contenido'),{
+                x: margin,
+                y: margin,
+                html2canvas: {
+                    scale: scale,
+                },
+                callback: function (doc){
+                    doc.save("reporte.pdf");
+                }
+            })
+
+        }
+
+
+    </script>
+
+
     <script>
 
         let etiquetas = []
@@ -192,7 +221,7 @@
                 success: function (response) {
                     console.log(response['data']);
                     num = response['data']
-                    etiquetas2 = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+                    etiquetas2 = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
                 },
                 error: function (response) {
                     // alert the error if any error occured
@@ -208,7 +237,7 @@
             data: {
                 datasets: [{
                     data: cargaInicial2(),
-                    backgroundColor:'rgba(43,45,66,0.7)',
+                    backgroundColor: 'rgba(43,45,66,0.7)',
                     label: 'Numero de incidentes',
                     fill: false,
                     borderColor: 'rgb(43,45,66)',
@@ -231,7 +260,6 @@
                 },
             }
         };
-
 
 
     </script>
