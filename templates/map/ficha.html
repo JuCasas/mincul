@@ -949,11 +949,12 @@
             var doc = new jsPDF('p', 'pt', 'letter');
             var margin = 10;
             var scale = (doc.internal.pageSize.width - margin * 2) / document.body.scrollWidth;
+            console.log(scale);
             doc.html(document.getElementById('Contenido'), {
-                x: 50,
+                x: 60,
                 y: 50,
                 html2canvas: {
-                    scale: scale,
+                    scale: 0.46,
                 },
                 callback: function (doc) {
                     doc.save("reporte.pdf");
