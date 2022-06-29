@@ -44,6 +44,8 @@
             position: absolute!important;
             right: 8px!important;
             bottom: 144px!important;
+        }.ubicacionImg:hover{
+            cursor: pointer;
         }
         .ubicacionImg2{
             max-width: 100%;
@@ -52,6 +54,9 @@
             position: absolute!important;
             right: 8px!important;
             bottom: 92px!important;
+        }
+        .ubicacionImg2:hover{
+            cursor: pointer;
         }
         .divUbicacionActual:hover{
             cursor:pointer;
@@ -75,12 +80,12 @@
                                 <div class="row px-3 pb-3">
                                     <input type="text" id="txtDireccionPartida" class="form-control" placeholder="Ingrese su dirección de partida">
                                     <img class="ubicacionImg ubicacionActual" alt ="Ubicación Actual" src="../../static/img/icons/ubicacionActual.png"
-                                    width="20" height="20"/>
+                                    width="20" height="20" onclick="obtenerUbicacionActualPartida()"/>
                                 </div>
                                 <div class="row px-3 pb-3">
                                     <input type="text" id="txtDireccionLlegada" class="form-control" placeholder="Ingrese su dirección de llegada">
                                     <img class="ubicacionImg2 ubicacionActual" alt ="Ubicación Actual" src="../../static/img/icons/ubicacionActual.png"
-                                    width="20" height="20"/>
+                                    width="20" height="20" onclick="obtenerUbicacionActualLlegada()"/>
                                 </div>
                                 <div class="row px-3 pb-3">
                                     <button class="btn btn-primary w-100" id="btnGenerarRuta" onclick="generarRuta()">Generar Ruta</button>
@@ -221,7 +226,7 @@
             });
             return [lat, long];
         }
-        async function obtenerUbicacionActual(){
+        async function obtenerUbicacionActualPartida(){
             navigator.geolocation.getCurrentPosition((position)=>{
                 let txtDireccionPartida=document.getElementById("txtDireccionPartida");
                 let dirLatLong=new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
@@ -234,6 +239,23 @@
                         txtDireccionPartida.value=results[1].formatted_address;
                     }else{
                         alert("Error al obtener la ubicación actual");
+                    }
+                });
+            });
+        }
+        async function obtenerUbicacionActualLlegada(){
+            navigator.geolocation.getCurrentPosition((position)=>{
+                let txtDireccionPartida=document.getElementById("txtDireccionLlegada");
+                let dirLatLong=new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+                console.log(position.coords.latitude,position.coords.longitude);
+                geocoder.geocode({
+                    'latLng':dirLatLong
+                }, function(results,status){
+                    if(status===google.maps.GeocoderStatus.OK){
+                        console.log(results[1]);
+                        txtDireccionPartida.value=results[1].formatted_address;
+                    }else{
+                        alert("Error al obtener la ubicación de llegada");
                     }
                 });
             });
