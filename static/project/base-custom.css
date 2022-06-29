@@ -167,7 +167,7 @@ h4 {
 }
 
 .cambio-left {
-    margin-left: 10rem;
+    margin-left: 3rem;
 }
 
 @media only screen and (max-width: 1440px) {
@@ -177,7 +177,7 @@ h4 {
 }
 
 .cambio-right {
-    margin-right: 10rem;
+    margin-right: 3rem;
 }
 
 @media only screen and (max-width: 1440px) {
