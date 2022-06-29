@@ -322,14 +322,14 @@
         $('#btn-submit').click(function() {
             var txtInputValue = txtInput.value.trim();
             if(txtInputValue== "") {
-                rowTxt.innerHTML="Debe escribir algo";
+                rowTxt.innerHTML="Debe escribir el nombre de un patrimonio";
                 txtInput.value = txtInputValue;
                 return false;
             }
             if(txtInputValue != ""){
                 if(isAlpha(txtInputValue)){ {% comment %} Nothing {% endcomment %} }
                 else{
-                    rowTxt.innerHTML="Solo debe escribir letras";
+                    rowTxt.innerHTML="Solo se permiten letras y espacios";
                     return false;
                 }
             }

@@ -434,7 +434,7 @@
 
                     }
                     if(txtInputValue== "" && categoriaInputValue == "Categoría") {
-                        rowTxt.innerHTML="Debe escribir una palabra";;
+                        rowTxt.innerHTML="Debe escribir el nombre de un patrimonio";
                         rowCategoria.innerHTML="Debe seleccionar una categoría";
                         txtInput.value = txtInputValue;
 
@@ -442,7 +442,7 @@
                     if(txtInputValue != ""){
                         if(isAlpha(txtInputValue)){ {% comment %} Nothing {% endcomment %} }
                         else{
-                            rowTxt.innerHTML="Solo debe escribir letras";
+                            rowTxt.innerHTML="Solo se permiten letras y espacios";
                         }
                     }
                     return false;

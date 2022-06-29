@@ -100,8 +100,7 @@ def mapaPatrimonioSimple(request):
         patrimonioNombre.strip()
         if len(patrimonioNombre)>0 :
             success = 0
-            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1")
-            #patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1",tipoPatrimonio="2")
+            patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
             if len(patrimonios) > 0:
                 instituciones = []
                 patri = []
@@ -145,7 +144,7 @@ def mapaPatrimonioSimple(request):
     return render(request, 'map/mapaBusquedaSimplePatrimonio.html',{'success':success})
 
 def mapaPatrimonioAvanzado(request):
-    categorias = Categoria.objects.filter()
+    categorias = Categoria.objects.filter().exclude(tipo="1")
     dep = Patrimonio.objects.filter(estado="1").distinct('departamento').exclude(tipoPatrimonio="1")
     departamentos = []
     for d in dep:
@@ -160,8 +159,7 @@ def mapaPatrimonioAvanzado(request):
         patrimoniodistrito = request.POST['select_distrito']
         patrimonioNombre.strip()
         success=0
-        patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1")
-        #patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1",tipoPatrimonio="2")
+        patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
         if len(patrimonios) > 0:
             if(patrimonioCategoria=="Categoría"):
                 pass
