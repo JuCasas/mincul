@@ -19,6 +19,7 @@ from mincul_app.models import Documento
 from patrimonios.models import Patrimonio, Institucion, PuntoGeografico
 from incidente.models import Incidente
 from incidente.serializers import IncidenteSerializer, PuntoGeograficoSerializer
+from django.contrib.auth.decorators import login_required
 
 
 def query_projects_by_args(**kwargs):
@@ -181,7 +182,7 @@ def query_incidents_by_args(pk,**kwargs):
         'total': total,
     }
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listPatrimonys_Project(request):
     length = 10
@@ -223,6 +224,7 @@ def addRelacion(request, pk):
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listProjects(request, **kwargs):
     print(request.user)
@@ -241,7 +243,7 @@ def listProjects(request, **kwargs):
         }
         return render(request, 'proyectoConservacion/project_list.html', context)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def addProject(request):
     try:
@@ -263,7 +265,7 @@ def addProject(request):
         result['message'] = str(e)  # or custom message
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def editProject(request, pk):
     try:
@@ -280,7 +282,7 @@ def editProject(request, pk):
         result['message'] = str(e)  # or custom message
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def deleteProject(request, pk):
     project = ProyectoConservacion.objects.get(pk=pk)
@@ -288,7 +290,7 @@ def deleteProject(request, pk):
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def deletePatrimony(request, pk):
     project = ProyectoConservacion.objects.get(pk=pk)
@@ -297,7 +299,7 @@ def deletePatrimony(request, pk):
     project.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 def eliminarDocumentoActividad(request):
     print(request.POST)
     actividad = Actividad.objects.get(pk=request.POST['actividad'])
@@ -309,7 +311,7 @@ def eliminarDocumentoActividad(request):
     actividad.save()
     return JsonResponse({}, status=200)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listActivities(request, pk):
     if request.is_ajax():
@@ -333,7 +335,7 @@ def listActivities(request, pk):
         }
         return render(request, 'proyectoConservacion/activity_list.html', context)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listIncidents(request, pk):
     print("ENTRO A LISTINCIDENTS")
@@ -358,7 +360,7 @@ def listIncidents(request, pk):
         }
         return render(request, 'proyectoConservacion/incident_list.html', context)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listPatrimonys(request, pk):
     context = {
@@ -375,7 +377,7 @@ def verifyPatrimony(request, pk):
     else:
         return JsonResponse({"existe": True}, status=200)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listPatrimonysForProject(request, pk):
     project = ProyectoConservacion.objects.get(pk=pk)
@@ -393,7 +395,7 @@ def listPatrimonysForProject(request, pk):
     result['total_count'] = count
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def addPatrimony(request, pk):
     patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
@@ -402,7 +404,7 @@ def addPatrimony(request, pk):
     proyecto.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listTasks(request, pk):
     if request.is_ajax():
@@ -420,7 +422,7 @@ def listTasks(request, pk):
         }
         return render(request, 'proyectoConservacion/task_list.html', context)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def addActivity(request, pk):
     try:
@@ -465,7 +467,7 @@ def addActivity(request, pk):
         result['message'] = str(e)  # or custom message
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def editActivity(request, pk, pkActividad):
     try:
@@ -503,7 +505,7 @@ def editActivity(request, pk, pkActividad):
         result['message'] = str(e)  # or custom message
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def deleteActivity(request, pk, pkActividad):
     actividad = Actividad.objects.get(pk=pkActividad)
@@ -511,7 +513,7 @@ def deleteActivity(request, pk, pkActividad):
     actividad.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def addTaskView(request, pk):
     actividad = Actividad.objects.get(pk=pk)
@@ -523,7 +525,7 @@ def addTaskView(request, pk):
     }
     return render(request, 'proyectoConservacion/addTask_view.html', context)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def addTask(request, pk):
     print('Request:', request.POST)
@@ -549,7 +551,7 @@ def addTask(request, pk):
     tarea.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def editTask(request, pk):
     tarea = Tarea.objects.get(pk=pk)
@@ -561,7 +563,7 @@ def editTask(request, pk):
     tarea.save()
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def editTaskView(request, pk):
     media_path = MEDIA_URL
@@ -579,7 +581,7 @@ def editTaskView(request, pk):
     }
     return render(request, 'proyectoConservacion/editTask_view.html', context)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def detailTaskView(request, pk):
     context = {
@@ -588,7 +590,7 @@ def detailTaskView(request, pk):
     }
     return render(request, 'proyectoConservacion/detailTask_view.html', context)
 
-
+@login_required(login_url='/auth/login/')
 def updateTaskState(request):
     task_pk = request.POST.get('task_pk')
     task = Tarea.objects.get(pk=task_pk)
@@ -605,7 +607,7 @@ def updateTaskState(request):
     task.save()
     return JsonResponse({}, status=200)
 
-
+@login_required(login_url='/auth/login/')
 def updateTaskState2(request):
     task_pk = request.POST.get('task_pk')
     task = Tarea.objects.get(pk=task_pk)
@@ -621,7 +623,7 @@ def updateTaskState2(request):
 
     return JsonResponse({}, status=200)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def addSection(request, pk):
     print('Dentro de agregar sección>>>>>>>>')
@@ -647,14 +649,14 @@ def addSection(request, pk):
 
     return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
-
+@login_required(login_url='/auth/login/')
 def listSections(request, pk):
     secciones = Campo.objects.filter(tarea_id=pk)
     ser_instance = SecionSerializer((secciones), many=True)
     secciones = json.dumps(ser_instance.data)
     return JsonResponse({"secciones": secciones}, status=200)
 
-
+@login_required(login_url='/auth/login/')
 def deleteSection(request):
     seccion_pk = request.POST['seccion_pk']
     seccion = Campo.objects.get(pk=seccion_pk)
@@ -670,7 +672,7 @@ def deleteSection(request):
 
     return JsonResponse({}, status=200)
 
-
+@login_required(login_url='/auth/login/')
 def validateSections(request):
     tarea_pk = request.POST['task_pk']
     secciones = Campo.objects.filter(tarea_id=tarea_pk)

@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from conservacion.models import Actividad
+from authentication.models import User
 
 
 def signin(request):
@@ -24,11 +24,13 @@ def signin(request):
     }
     return render(request, 'authentication/signin.html', context)
 
-def logout(request):
-    # user = User.objects.get(pk=request.user.pk)
-    # user.rol_actual = None
-    # user.save()
-    # logout(request)
-    context = {
-    }
-    return render(request, 'authentication/signin.html', context)
+def signout(request):
+    user = getattr(request, 'user', None)
+    if not getattr(user, 'is_authenticated', True):
+        user = None
+    request.session.flush()
+    if hasattr(request, 'user'):
+        from django.contrib.auth.models import AnonymousUser
+        request.user = AnonymousUser()
+
+    return signin(request)
