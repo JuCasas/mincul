@@ -191,8 +191,9 @@ def listPatrimonys_Project(request):
     project_pk = request.GET['project_pk']
     project = ProyectoConservacion.objects.get(pk=project_pk)
 
-    #Deben ser solo los patrominos registrados en el proyecto de conservación
-    queryset = project.patrimonios.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
+    # Deben ser solo los patrominos registrados en el proyecto de conservación
+    queryset = project.patrimonios.filter(nombreTituloDemoninacion__icontains=search).order_by(
+        'nombreTituloDemoninacion')
 
     start = (page - 1) * length
     end = start + length
@@ -448,12 +449,12 @@ def addActivityView(request, pk):
     proyecto = ProyectoConservacion.objects.get(pk=pk)
     patrimonios = proyecto.patrimonios.all()
     media_path = MEDIA_URL
-
     context = {
         'media_path': media_path,
         'status_choices': Actividad.STATUS,
         'project': proyecto,
-        'patrimonios': patrimonios
+        'patrimonios': patrimonios,
+        'type': 'new',
     }
 
     return render(request, 'proyectoConservacion/addActivity_view.html', context)
@@ -462,6 +463,7 @@ def addActivityView(request, pk):
 @login_required(login_url='/auth/login/')
 @api_view(('POST',))
 def addActivity(request, pk):
+
     try:
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
@@ -503,6 +505,27 @@ def addActivity(request, pk):
         result['success'] = False
         result['message'] = str(e)  # or custom message
         return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+
+def editActivityView(request, pk, pkActividad):
+    proyecto = ProyectoConservacion.objects.get(pk=pk)
+    patrimonios = proyecto.patrimonios.all()
+    media_path = MEDIA_URL
+
+    actividad = Actividad.objects.get(pk=pkActividad)
+    conservadores = actividad.conservadores.all()
+
+    context = {
+        'media_path': media_path,
+        'status_choices': Actividad.STATUS,
+        'project': proyecto,
+        'actividad': actividad,
+        'patrimonios': patrimonios,
+        'conservadores': conservadores,
+        'type': 'edit',
+    }
+
+    return render(request, 'proyectoConservacion/addActivity_view.html', context)
 
 
 @login_required(login_url='/auth/login/')

@@ -325,11 +325,11 @@
                         if (data == '1') {
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
                         } else if (data == '0') {
-                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrado" + '</span>'
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrada" + '</span>'
                         } else if (data == '2') {
-                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Finalizado" + '</span>'
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Finalizada" + '</span>'
                         } else {
-                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Anulado" + '</span>'
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Anulada" + '</span>'
                         }
                         return resp;
                     }
@@ -435,6 +435,31 @@
                 }
             });
         };
+
+
+
+        $('#tabla_actividades tbody').on('click', 'button', function () {
+            let data = table.row($(this).parents('tr')).data();
+            let class_name = $(this).attr('class');
+
+            console.log(data)
+            console.log(class_name)
+            id = data['id'];
+
+            if (class_name == 'btn btn-edit') {
+                window.location.pathname = "/conservacion/proyectos/" + {{ project.id }} +"/actividades/edit/" + id + "/view/" ;
+            } else if (class_name == 'btn btn-show') {
+                window.location.pathname = "/conservacion/actividades/" + id + "/tareas/";
+            } else {
+                $("#confirm").modal();
+            }
+        });
+
+
+
+
+
+
 
     </script>
 {% endblock %}

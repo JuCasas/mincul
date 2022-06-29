@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('proyectos/<pk>/actividades/add/view/',views.addActivityView, name='addActivityView'),
     path('proyectos/<pk>/actividades/add/',views.addActivity, name='addActivity'),
+    path('proyectos/<pk>/actividades/edit/<pkActividad>/view/', views.editActivityView, name='editActivityView'),
     path('proyectos/<pk>/actividades/edit/<pkActividad>',views.editActivity, name='editActivity'),
     path('proyectos/<pk>/actividades/delete/<pkActividad>',views.deleteActivity, name='deleteActivity'),
     path('actividades/<pk>/tareas/',views.listTasks, name='listTasks'),

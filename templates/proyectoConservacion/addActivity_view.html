@@ -121,14 +121,20 @@
     <div class="card mb-3">
         <div class="card-body">
             <div class="row justify-content-between align-items-center">
-                <a class="nav-link py-0" href="{% url 'listActivities' pk=project %}"><span
+                <a class="nav-link py-0" href="{% url 'listActivities' pk=project.id %}"><span
                         class="fas fa-angle-left mr-2"
                         data-fa-transform="shrink-3"></span>Tareas</a>
             </div>
 
             <div class="row justify-content-between align-items-center">
                 <div class="col-md-6">
-                    <h5 class="mb-2 mb-md-0 text-black">Crear Actividad</h5>
+                    <h5 class="mb-2 mb-md-0 text-black">
+                    {% if type == 'new' %}
+                        Crear Actividad
+                    {% else %}
+                        Editar Actividad
+                    {% endif %}
+                    </h5>
                 </div>
             </div>
         </div>
@@ -140,141 +146,148 @@
         </div>
         <div class="card-body cbody px-5 py-4">
             <form role="form" id="formActividad">
-                        {% csrf_token %}
+                {% csrf_token %}
 
-                        <div class="row">
-                            <div class="form-group col-lg-12 col-sm-12">
-                                <label for="nombre">Nombre:</label>
-                                <input class="form-control" id="nombre" name="nombre" type="text" required
-                                       placeholder="Nombre de la Actividad" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-lg-12 col-sm-12">
-                                <label for="descripcion">Descripcion:</label>
-                                <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
-                                          placeholder="Descripción de la Actividad" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-lg-6 col-sm-12">
-                                <label for="fechaInicio">Fecha de Inicio:</label>
-                                <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-                            </div>
-                            <div class="form-group col-lg-6 col-sm-12">
-                                <label for="fechaFin">Fecha de Fin:</label>
-                                <input class="form-control" id="fechaFin" name="fechaFin" type="date" required {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="form-group col-lg-12 col-sm-12">
+                        <label for="nombre">Nombre:</label>
+                        <input class="form-control" id="nombre" name="nombre" type="text" required
+                               placeholder="Nombre de la Actividad"
+                               value="{{ actividad.nombre }}"
+                               {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-12 col-sm-12">
+                        <label for="descripcion">Descripción:</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
+                                  placeholder="Descripción de la Actividad"
+                                  {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                         {{ actividad.descripcion }}
+                        </textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-6 col-sm-12">
+                        <label for="fechaInicio">Fecha de Inicio:</label>
+                        <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required
+                               value={{ actividad.fechaInicio|date:"Y-m-d" }}
+                               {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                    </div>
+                    <div class="form-group col-lg-6 col-sm-12">
+                        <label for="fechaFin">Fecha de Fin:</label>
+                        <input class="form-control" id="fechaFin" name="fechaFin" type="date" required
+                                 value={{ actividad.fechaFin|date:"Y-m-d" }}
+                               {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                    </div>
+                </div>
 
-                        <div class="row">
-                            <div class="form-group col-lg-12 col-sm-12">
-                                <label for="patrimonio">Patrimonio Asociado:</label>
-                                <select class="form-control selectpicker" id="patrimonio" name="patrimonio" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                <div class="row">
+                    <div class="form-group col-lg-12 col-sm-12">
+                        <label for="patrimonio">Patrimonio Asociado:</label>
+                        <select class="form-control selectpicker" id="patrimonio" name="patrimonio"
+                                {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
+                        </select>
+                    </div>
+                </div>
 
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row justify-content-between">
-                            <div class="form-group col-9">
-                                <label for="conservadores">Conservador(es):</label>
-                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                                  <select class="form-control selectpicker" id="conservadores" name="conservadores"
-                                        data-placeholder='Seleccione conservador...' {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-
-                                </select>
-                                {% endif %}
-                            </div>
-
-                            {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                              <div class="form-group col-auto d-flex align-items-end">
-                                <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
-                                        onclick="agregarConservadorTabla()">Agregar Conservador
-                                </button>
-                            </div>
-                            {% endif %}
-
-                            <div class="form-group col-lg-12 col-sm-12">
-                                <table class="table table-responsive-sm">
-                                    <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">Código</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Acciones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="conservadorAgregar">
-                                    {% for conservador in conservadores %}
-                                        <tr>
-                                            <td>{{ conservador.codigo }}</td>
-                                            <td>{{ conservador.first_name }} {{ conservador.last_name }}</td>
-                                            <td>
-                                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                                                      <button class="btn" href="#" type="button"
-                                                        onclick="eliminarConservador(this,{{ conservador.pk }})">
-                                                    <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
-                                                </button>
-                                                {% endif %}
-
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
+                <div class="row justify-content-between">
+                    <div class="form-group col-9">
+                        <label for="conservadores">Conservador(es):</label>
                         {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                            <div class="row justify-content-between">
-                            <div class="form-group col-9">
-                                <h5>Documentos nuevos:</h5>
-                            </div>
+                            <select class="form-control selectpicker" id="conservadores" name="conservadores"
+                                    data-placeholder='Seleccione conservador...'
+                                    {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
 
-                            <div class="card-body bg-light">
-                                {#                                <div class="dropzone dropzone-multiple p-0" data-dropzone>#}
-                                {#                                    <div class="fallback">#}
-                                <input type="file" name="file" id="file" multiple>
-                                {#                                    </div>#}
-                                {#                                </div>#}
-                            </div>
-
-                            <div class="col-lg-12 col-sm-12" id="seccionExistentes">
-
-                            </div>
-
-                        </div>
+                            </select>
                         {% endif %}
+                    </div>
 
-                        <div class="row justify-content-between mt-2 mr-1">
-                            <div class="col-3 ">
-                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                              <button id="actualizar" class="btn btn-primary mx-1" type="button"
-                                        data-toggle="modal" data-target="#actualizarEstado">
-                                    Actualizar estado
-                                </button>
-                            {% endif %}
-                            </div>
-                            <div class="col-5">
-                                <div class="row justify-content-end">
-                                    {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-              <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
+                    {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                        <div class="form-group col-auto d-flex align-items-end">
+                            <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
+                                    onclick="agregarConservadorTabla()">Agregar Conservador
+                            </button>
+                        </div>
+                    {% endif %}
 
+                    <div class="form-group col-lg-12 col-sm-12">
+                        <table class="table table-responsive-sm">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Código</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody id="conservadorAgregar">
+                            {% for conservador in conservadores %}
+                                <tr>
+                                    <td>{{ conservador.codigo }}</td>
+                                    <td>{{ conservador.first_name }} {{ conservador.last_name }}</td>
+                                    <td>
+                                        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                                            <button class="btn" href="#" type="button"
+                                                    onclick="eliminarConservador(this,{{ conservador.pk }})">
+                                                <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
+                                            </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                  <div>
-                        <input type="hidden" id="type" name="type" value="">
-                        <button id="submit" class="btn btn-primary"><span
-                            class="glyphicon glyphicon-ok"></span> Guardar
-                        </button>
-                      </div>
-                 {% else %}
-                    <button type="button" data-dismiss="modal" class="btn second ">Volver</button>
-                {% endif %}
-                                </div>
-                            </div>
+                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                    <div class="row justify-content-between">
+                        <div class="form-group col-9">
+                            <h5>Documentos nuevos:</h5>
                         </div>
 
-                    </form>
+                        <div class="card-body bg-light">
+                            {#                                <div class="dropzone dropzone-multiple p-0" data-dropzone>#}
+                            {#                                    <div class="fallback">#}
+                            <input type="file" name="file" id="file" multiple>
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                        </div>
+
+                        <div class="col-lg-12 col-sm-12" id="seccionExistentes">
+
+                        </div>
+
+                    </div>
+                {% endif %}
+
+                <div class="row justify-content-between mt-2 mr-1">
+                    <div class="col-3 ">
+                        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                            <button id="actualizar" class="btn btn-primary mx-1" type="button"
+                                    data-toggle="modal" data-target="#actualizarEstado">
+                                Actualizar estado
+                            </button>
+                        {% endif %}
+                    </div>
+                    <div class="col-5">
+                        <div class="row justify-content-end">
+                            {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+                                 <a href="{% url 'listActivities' pk=project.id %}" class="btn second mr-3 d-flex align-items-center">Cancelar</a>
+
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        <span class="glyphicon glyphicon-ok"></span> Guardar
+                                    </button>
+                                </div>
+                            {% else %}
+                                <button type="button" data-dismiss="modal" class="btn second ">Volver</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
     </div>
 
@@ -294,58 +307,152 @@
         let conservadoresLista = [];
 
 
-        $('#formActividad').on('submit', function (e) {
-            e.preventDefault();
-            let $this = $(this);
-            let fd = new FormData();
+        jQuery.validator.addMethod("alphanumeric", function (value, element) {
+            return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
+        }, "Letras, números, y solo guiones abajo por favor");
 
-            let files = $("#file")[0].files
-            for (let i = 0, len = files.length; i < len; i++) {
-                fd.append("file", files[i]);
-            }
 
-            fd.append("csrfmiddlewaretoken", "{{ csrf_token }}")
-            fd.append("conservadoresLista", conservadoresLista)
-            fd.append("relacionesLista", relacionesLista)
+        jQuery.validator.addMethod("minDate", function (value, element) {
+            if ($("#fechaFin").val() > $("#fechaInicio").val())
+                return true;
+            return false;
+        }, "La fecha de fin no puede ser inferior a la fecha inicio");
 
-            fd.append("nombre", $("#nombre").val())
-            fd.append("descripcion", $("#descripcion").val())
-            fd.append("fechaInicio", $("#fechaInicio").val())
-            fd.append("fechaFin", $("#fechaFin").val())
-            fd.append("patrimonio", $("#patrimonio").val())
+        jQuery.validator.addMethod("maxDate", function (value, element) {
+            if ($("#fechaFin").val() > $("#fechaInicio").val())
+                return true;
+            return false;
+        }, "La fecha de inicio no puede ser superior a la fecha fin");
 
-            let type = $('#type').val();
-            let method = '';
-            let url = '/conservacion/proyectos/';
-            if (type == 'new') {
-                // new
-                url = url + $('#idProject').val() + '/actividades/add/';
-                idEnviar = '0'
-                method = 'POST';
-            } else {
-                // edit
-                url = url + $('#idProject').val() + '/actividades/edit/' + id;
-                console.log(id);
-                idEnviar = id;
-                console.log(idEnviar);
-                method = 'POST';
-            }
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: fd,
-                contentType: false,
-                processData: false,
-                mimeType: "multipart/form-data",
-                success: function (response) {
-                    $('#modalActividad').modal('hide')
-                    $("#tabla_actividades").DataTable().draw();
+        $("form[name='formActividad']").validate({
+            rules: {
+                nombre: {
+                    required: true,
+                    maxlength: 50,
+                    alphanumeric: true
                 },
-                error: function (error) {
-                    console.log(error)
+                descripcion: {
+                    required: true,
+                    maxlength: 200,
+                },
+                fechaInicio: {
+                    required: true,
+                    date: true,
+                    maxDate: true
+                },
+                fechaFin: {
+                    required: true,
+                    date: true,
+                    minDate: true
+                },
+            },
+            messages: {
+                nombre: {
+                    required: "Debe ingresar el nombre de la actividad",
+                    maxlength: "El nombre no debe tener más de 50 caracteres",
+                    alphanumeric: "El nombre solo debe contener carácteres alfanuméricos con 1 solo espacio en blanco entre palabras"
+                },
+                descripcion: {
+                    required: "Debe ingresar la descripción de la actividad",
+                    maxlength: "La descripción no debe tener más de 200 caracteres",
+                },
+
+                fechaInicio: {
+                    required: "Debe ingresar la fecha de inicio de la actividad",
+                    //max: "La fecha de inicio no puede ser superior a la fecha fin"
+                },
+
+                fechaFin: {
+                    required: "Debe ingresar la fecha de fin de la actividad",
+                    //max: "La fecha de inicio no puede ser superior a la fecha fin"
+                },
+            },
+
+            submitHandler: function (form, e) {
+                e.preventDefault();
+                $('#cover-spin').show(0)
+
+                let fd = new FormData();
+
+                let files = $("#file")[0].files
+                for (let i = 0, len = files.length; i < len; i++) {
+                    fd.append("file", files[i]);
                 }
-            });
+
+                fd.append("csrfmiddlewaretoken", "{{ csrf_token }}")
+                fd.append("conservadoresLista", conservadoresLista)
+                fd.append("nombre", $("#nombre").val())
+                fd.append("descripcion", $("#descripcion").val())
+                fd.append("fechaInicio", $("#fechaInicio").val())
+                fd.append("fechaFin", $("#fechaFin").val())
+                fd.append("patrimonio", $("#patrimonio").val())
+
+                let type = $('#type').val();
+                let method = '';
+                let url = '/conservacion/proyectos/';
+                if (type == 'new') {
+                    // new
+                    url += {{ project.id }} +'/actividades/add/'
+                    idEnviar = '0'
+                    method = 'POST';
+                } else {
+                    // edit
+                    url += {{ project.id }} +'/actividades/edit/' + {{ actividad.id }}
+                        console.log({{ actividad.id }})
+                    idEnviar = {{ actividad.id }}
+                        console.log(idEnviar)
+                    method = 'POST';
+                }
+
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    mimeType: "multipart/form-data",
+                    success: function (response) {
+                        if (response["success"] !== undefined) {
+                            $.toast({
+                                text: 'No se pudo crear la tarea',
+                                icon: 'warning',
+                                loader: false,        // Change it to false to disable loader
+                                bgColor: '#c67a71',
+                                textColor: '#000000',
+                                position: 'bottom-right',
+                                hideAfter: 3000,
+                            })
+                        } else {
+                            $("#nombre").val(null)
+                            $("#descripcion").val(null)
+                            $("#fechaRegistro").val(null)
+                            $("#fecha").val(null)
+                            $("#presupuesto").val(null)
+                            $.toast({
+                                text: 'Tarea creada con éxito',
+                                icon: 'success',
+                                loader: false,        // Change it to false to disable loader
+                                bgColor: '#B7E6CA',  // To change the background
+                                textColor: '#000000',
+                                position: 'bottom-right',
+                                hideAfter: 3000,
+                            })
+                        }
+                    },
+                    error: function (error) {
+                        $.toast({
+                            text: 'Ha ocurrido un error inesperado',
+                            icon: 'warning',
+                            loader: false,        // Change it to false to disable loader
+                            bgColor: '#B7E6CA',  // To change the background
+                            textColor: '#000000',
+                            position: 'bottom-right',
+                            hideAfter: 3000,
+                        })
+                    }
+                });
+                return false;
+            }
         });
 
 
@@ -379,8 +486,6 @@
             cache: false
         });
 
-
-
         $('#conservadores').prepend('<option selected=""></option>').select2({
             ajax: {
                 url: '/conservacion/actividades/conservadores',
@@ -412,7 +517,6 @@
             allowClear: true,
             cache: false
         });
-
 
         function eliminarDocumento(button, pk) {
             var columna = button.parentNode;
@@ -469,8 +573,6 @@
             });
         }
 
-
-
         function agregarConservadorTabla() {
             let conservadorAgregar = $("#conservadores").select2('data');
             if (!conservadoresLista.includes(Number(conservadorAgregar[0].id))) {
@@ -493,8 +595,7 @@
             }
         }
 
-
-         function eliminarConservador(btn, idEliminar) {
+        function eliminarConservador(btn, idEliminar) {
             var row = btn.parentNode.parentNode;
             conservadoresLista = jQuery.grep(conservadoresLista, function (value) {
                 return value != idEliminar;
@@ -504,7 +605,6 @@
             console.log("Eliminado");
             console.log(conservadoresLista);
         }
-
 
 
     </script>
