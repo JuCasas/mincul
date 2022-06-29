@@ -250,7 +250,8 @@
                 divPatriLista.removeChild(divPatriLista.firstChild);
             }
         }
-        function enfocarPatrimonio(){
+        function enfocarPatrimonio(patrimonio){
+            map.flyTo([patrimonio.lat,patrimonio.long]);
             //enfocar con el fly
         }
         async function obtenerPatrimoniosCercanos(lat1,long1,lat2,long2,lat1menor,long1menor){
@@ -516,10 +517,6 @@
             }
             let direccionPartida = $("#txtDireccionPartida").val();
             let direccionLlegada = $("#txtDireccionLlegada").val();
-            if(direccionPartida!="" && direccionLlegada!=""){
-                alert("Falta ingresar la dirección de partida o de llegada");
-                return;
-            }
             let latLongPartida = await obtenerLatitudLongitudConDireccion(direccionPartida);
             let latLongLlegada = await obtenerLatitudLongitudConDireccion(direccionLlegada);
             let latitudDireccionPartida = latLongPartida[0];
