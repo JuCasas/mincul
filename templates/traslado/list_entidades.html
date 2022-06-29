@@ -144,13 +144,14 @@
     <div class="card mb-3">
         <div class="card-body">
             <div class="row filterBar justify-content-end mr-0">
-                <div class="form-group col-sm-3 mb-0">
+                <div class="form-group col-sm-3 mb-0 {% if not request.user|has_group:"Gestor de Patrimonios" %}pr-0{% endif %}">
                     <div class="position-relative">
                         <input class="form-control" id="search" name="search" type="text"
                                placeholder="Nombre de la Entidad">
                         <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
                     </div>
                 </div>
+
                 {% if request.user|has_group:"Gestor de Patrimonios"%}
                     <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center" data-toggle="modal" data-target="#ModalAgregar">
                         <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Agregar Entidad

@@ -118,15 +118,13 @@
                         class="fas fa-angle-left mr-2" data-fa-transform="shrink-3"></span>Actividades</a>
             </div>
 
-            <div class="row justify-content-between align-items-center">
-                <div class="col-md-6">
-                    <h5 class="mb-2 mb-md-0 text-black">Tareas de Actividad: {{ activity.nombre }}</h5>
-                </div>
-                <div class="col-md-2">
+            <div class="row align-items-center">
+                <div class="col-md-12 d-flex">
+                    <h5 class="mb-2 mb-sm-0 text-black mr-4">Tareas de Actividad: {{ activity.nombre }}</h5>
                     {% if activity.status == '0' %}
                         <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
                     {% elif activity.status == '1' %}
-                        <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
+                        <span class="badge badge rounded-capsule d-block badge-soft-warning">Registrado</span>
                     {% else %}
                         <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
                     {% endif %}
