@@ -87,10 +87,16 @@ def ficha(request,my_id):
                 'urlPatrimonio': '/static/img/landmarks/notAvailable.jpg'
             }
         return render(request, 'map/ficha.html', context)
-    context={
-        'patrimony':patrimonio,
-        'urlPatrimonio':urlPatrimonio[0].url
-    }
+    try:
+        context = {
+            'patrimony': patrimonio,
+            'urlPatrimonio': urlPatrimonio[0].url
+        }
+    except:
+        context={
+            'patrimony':patrimonio,
+            'urlPatrimonio':'/static/img/landmarks/notAvailable.jpg'
+        }
     return render(request,'map/ficha.html',context)
 
 def mapaPatrimonioSimple(request):
