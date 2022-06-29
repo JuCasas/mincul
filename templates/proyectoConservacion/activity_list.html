@@ -725,7 +725,6 @@
                 url: '/conservacion/proyectos/' + $('#idProject').val() + '/actividades/delete/' + id,
                 method: 'POST',
                 success: function (response) {
-                success: function (response) {
                     $('#cover-spin').hide()
                     if (response["success"] !== undefined) {
                         $.toast({
