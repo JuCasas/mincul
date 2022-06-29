@@ -11,13 +11,19 @@ urlpatterns = [
     path('proyectos/<pk>/patrimonios/add/',views.addPatrimony, name='addPatrimony'),
     path('proyectos/<pk>/patrimonios/delete/',views.deletePatrimony, name='deletePatrimony'),
     path('proyectos/<pk>/patrimonios/verify/',views.verifyPatrimony, name='verifyPatrimony'),
+
     path('proyectos/<pk>/actividades/',views.listActivities, name='listActivities'),
     path('proyectos/<pk>/incidentes/',views.listIncidents, name='listIncidents'),
+
+    path('proyectos/<pk>/actividades/add/view/',views.addActivityView, name='addActivityView'),
     path('proyectos/<pk>/actividades/add/',views.addActivity, name='addActivity'),
+    path('proyectos/<pk>/actividades/edit/<pkActividad>/view/', views.editActivityView, name='editActivityView'),
     path('proyectos/<pk>/actividades/edit/<pkActividad>',views.editActivity, name='editActivity'),
     path('proyectos/<pk>/actividades/delete/<pkActividad>',views.deleteActivity, name='deleteActivity'),
     path('actividades/<pk>/tareas/',views.listTasks, name='listTasks'),
     path('proyectos/patrimonios/',views.listPatrimonys_Project, name='listPatrimonys_Project'),
+
+
     path('actividades/<pk>/tareas/add/view/',views.addTaskView, name='addTaskView'),
     path('actividades/<pk>/tareas/add/',views.addTask, name='addTask'),
     path('tareas/edit/<pk>/', views.editTask, name='editTask'),

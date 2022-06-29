@@ -214,9 +214,9 @@
 
 
                 {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                  <button class="btn btn-primary col-sm-2 mb-0" type="button" data-dismiss="modal" id="new">
+                  <button class="btn btn-primary col-sm-2 mb-0" type="button" onclick="redirectAddActivity()">
                     <span class="fas fa-plus mr-1" data-fa-transform="shrink-3"></span>Crear Actividad
-                </button>
+                  </button>
                 {% endif %}
             </div>
         </div>
@@ -244,155 +244,6 @@
         </div>
     </div>
 
-    <!-- NEW and EDIT Modal -->
-    <div class="modal fade" id="modalActividad" role="dialog">
-        <div class="modal-dialog mw-100 w-50">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modal_title"></h4>
-                </div>
-                <div class="modal-body">
-                    <form role="form" id="formActividad">
-                        {% csrf_token %}
-
-                        <div class="row">
-                            <div class="form-group col-lg-12 col-sm-12">
-                                <label for="nombre">Nombre:</label>
-                                <input class="form-control" id="nombre" name="nombre" type="text" required
-                                       placeholder="Nombre de la Actividad" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-lg-12 col-sm-12">
-                                <label for="descripcion">Descripcion:</label>
-                                <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
-                                          placeholder="Descripción de la Actividad" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-lg-6 col-sm-12">
-                                <label for="fechaInicio">Fecha de Inicio:</label>
-                                <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-                            </div>
-                            <div class="form-group col-lg-6 col-sm-12">
-                                <label for="fechaFin">Fecha de Fin:</label>
-                                <input class="form-control" id="fechaFin" name="fechaFin" type="date" required {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-lg-12 col-sm-12">
-                                <label for="patrimonio">Patrimonio Asociado:</label>
-                                <select class="form-control selectpicker" id="patrimonio" name="patrimonio" {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row justify-content-between">
-                            <div class="form-group col-9">
-                                <label for="conservadores">Conservador(es):</label>
-                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                                  <select class="form-control selectpicker" id="conservadores" name="conservadores"
-                                        data-placeholder='Seleccione conservador...' {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
-
-                                </select>
-                                {% endif %}
-                            </div>
-
-                            {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                              <div class="form-group col-auto d-flex align-items-end">
-                                <button id="btnAgregarConservador" class="btn btn-primary btn-sm" type="button"
-                                        onclick="agregarConservadorTabla()">Agregar Conservador
-                                </button>
-                            </div>
-                            {% endif %}
-
-                            <div class="form-group col-lg-12 col-sm-12">
-                                <table class="table table-responsive-sm">
-                                    <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">Código</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Acciones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="conservadorAgregar">
-                                    {% for conservador in conservadores %}
-                                        <tr>
-                                            <td>{{ conservador.codigo }}</td>
-                                            <td>{{ conservador.first_name }} {{ conservador.last_name }}</td>
-                                            <td>
-                                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                                                      <button class="btn" href="#" type="button"
-                                                        onclick="eliminarConservador(this,{{ conservador.pk }})">
-                                                    <i class="fas fa-trash" data-fa-transform="shrink-3"></i>
-                                                </button>
-                                                {% endif %}
-
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                            <div class="row justify-content-between">
-                            <div class="form-group col-9">
-                                <h5>Documentos nuevos:</h5>
-                            </div>
-
-                            <div class="card-body bg-light">
-                                {#                                <div class="dropzone dropzone-multiple p-0" data-dropzone>#}
-                                {#                                    <div class="fallback">#}
-                                <input type="file" name="file" id="file" multiple>
-                                {#                                    </div>#}
-                                {#                                </div>#}
-                            </div>
-
-                            <div class="col-lg-12 col-sm-12" id="seccionExistentes">
-
-                            </div>
-
-                        </div>
-                        {% endif %}
-
-                        <div class="row justify-content-between mt-2 mr-1">
-                            <div class="col-3 ">
-                                {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-                              <button id="actualizar" class="btn btn-primary mx-1" type="button"
-                                        data-toggle="modal" data-target="#actualizarEstado">
-                                    Actualizar estado
-                                </button>
-                            {% endif %}
-                            </div>
-                            <div class="col-5">
-                                <div class="row justify-content-end">
-                                    {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
-              <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
-
-
-                  <div>
-                        <input type="hidden" id="type" name="type" value="">
-                        <button id="submit" class="btn btn-primary"><span
-                            class="glyphicon glyphicon-ok"></span> Guardar
-                        </button>
-                      </div>
-                 {% else %}
-                    <button type="button" data-dismiss="modal" class="btn second ">Volver</button>
-                {% endif %}
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Delete Modal -->
     <div class="modal fade" id="confirm" role="dialog">
@@ -422,75 +273,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
     <script>
-        let conservadoresLista = [];
-        let relacionesLista = [];
-        let idEnviar = '0';
-        let objetoFila;
 
-        $('#new').on('click', function (e) {
-            $('#nombre').val('');
-            $('#descripcion').val("");
-            $('#fechaInicio').val("");
-            $('#fechaFin').val("");
-            $('#type').val('new');
-            $('#modal_title').text('Nueva Actividad');
-            $("#seccionExistentes").html('');
-            $("#modalActividad").modal();
-        });
+        function redirectAddActivity(){
+             window.location.pathname = "/conservacion/proyectos/" + {{ project.pk }} + "/actividades/add/view/";
+        }
 
-        $('#formActividad').on('submit', function (e) {
-            e.preventDefault();
-            let $this = $(this);
-            let fd = new FormData();
-
-            let files = $("#file")[0].files
-            for (let i = 0, len = files.length; i < len; i++) {
-                fd.append("file", files[i]);
-            }
-
-            fd.append("csrfmiddlewaretoken", "{{ csrf_token }}")
-            fd.append("conservadoresLista", conservadoresLista)
-            fd.append("relacionesLista", relacionesLista)
-
-            fd.append("nombre", $("#nombre").val())
-            fd.append("descripcion", $("#descripcion").val())
-            fd.append("fechaInicio", $("#fechaInicio").val())
-            fd.append("fechaFin", $("#fechaFin").val())
-            fd.append("patrimonio", $("#patrimonio").val())
-
-            let type = $('#type').val();
-            let method = '';
-            let url = '/conservacion/proyectos/';
-            if (type == 'new') {
-                // new
-                url = url + $('#idProject').val() + '/actividades/add/';
-                idEnviar = '0'
-                method = 'POST';
-            } else {
-                // edit
-                url = url + $('#idProject').val() + '/actividades/edit/' + id;
-                console.log(id);
-                idEnviar = id;
-                console.log(idEnviar);
-                method = 'POST';
-            }
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: fd,
-                contentType: false,
-                processData: false,
-                mimeType: "multipart/form-data",
-                success: function (response) {
-                    $('#modalActividad').modal('hide')
-                    $("#tabla_actividades").DataTable().draw();
-                },
-                error: function (error) {
-                    console.log(error)
-                }
-            });
-        });
 
         let table = $('#tabla_actividades').DataTable({
             "searching": false,
@@ -538,25 +325,26 @@
                         if (data == '1') {
                             resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
                         } else if (data == '0') {
-                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrado" + '</span>'
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrada" + '</span>'
                         } else if (data == '2') {
-                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Finalizado" + '</span>'
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Finalizada" + '</span>'
                         } else {
-                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Anulado" + '</span>'
+                            resp = '<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Anulada" + '</span>'
                         }
                         return resp;
                     }
                 },
                 {
+                    "data": "id",
                     "data": "status", render: function (data, type, row) {
-                        if (data == '1') {
+                        if (row.status == '1') {
                             resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp';
-                        } else if (data == '0') {
+                        } else if (row.status == '0') {
                             resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp' +
-                                '{% if request.user|has_group:"Gestor de Conservación y Traslados" %}<button type="button" class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>{% endif %}';
-                        } else if (data == '2') {
+                                '{% if request.user|has_group:"Gestor de Conservación y Traslados" %}<button type="button" class="btn btn-delete"  onclick="eliminarActividad('+row.id+')" ><i class="fas fa-trash-alt"></i></button>{% endif %}';
+                        } else if (row.status == '2') {
                             resp = '<button type="button" class="btn btn-show"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit"><i class="fas fa-edit"></i></button>' + '&nbsp;&nbsp';
                         } else {
@@ -607,123 +395,15 @@
         });
 
 
-        $('#tabla_actividades tbody').on('click', 'button', function () {
-            let data = table.row($(this).parents('tr')).data();
-            let class_name = $(this).attr('class');
-            objetoFila = this;
 
-            id = data['id'];
-
-            if (class_name == 'btn btn-edit') {
-                // EDIT button
-                $('#nombre').val(data['nombre']);
-                $('#descripcion').val(data['descripcion']);
-                fechaInicio = data['fechaInicio'];
-                if (typeof fechaInicio === 'string') {
-                    var partsInicio = fechaInicio.split("/");
-                    var dtInicio = new Date(parseInt(partsInicio[2], 10),
-                        parseInt(partsInicio[1], 10) - 1,
-                        parseInt(partsInicio[0], 10));
-                    var currentDateInicio = dtInicio.toISOString().slice(0, 10);
-                    $('#fechaInicio').val(currentDateInicio);
-                }
-
-                fechaFin = data['fechaFin']
-                if (typeof fechaFin === 'string') {
-                    var partsFin = fechaFin.split("/");
-                    var dtFin = new Date(parseInt(partsFin[2], 10),
-                        parseInt(partsFin[1], 10) - 1,
-                        parseInt(partsFin[0], 10));
-                    var currentDateFin = dtFin.toISOString().slice(0, 10);
-                    $('#fechaFin').val(currentDateFin);
-                }
-
-                let tamConservadores = data['conservadores'].length;
-                let conservadores = data['conservadores'];
-                let documentos = data['documentos'];
-                console.log(documentos);
-                let tamDocumentos = data['documentos'].length;
-                let relaciones = data['relaciones'];
-                let tamRelaciones = relaciones.length;
-
-                $("#patrimonio").html('<option value="' + data['patrimonioPk'] + '">' + data['patrimonio'] + '</option>')
-                $("#patrimonio").val(data['patrimonioPk']).change();
-
-                $("#conservadorAgregar").empty()
-                for (let i = 0; i < tamConservadores; i++) {
-                    conservadoresLista.push(conservadores[i].id);
-                    $("#lista").val(conservadoresLista);
-
-                    data = '<tr>' +
-                        '<td>' + conservadores[i].codigo + '</td>' +
-                        ' <td>' + conservadores[i].first_name + '</td>' +
-                        '<td>' +
-                        '{% if request.user|has_group:"Gestor de Conservación y Traslados" %}<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadores[i].id + ')"><i class="fas fa-trash" data-fa-transform="shrink-3"></i></button>{% endif %}' +
-                        '</td>' +
-                        '</tr>';
-
-                    $("#conservadorAgregar").append(data);
-                }
-
-                {#$("#relacionAgregar").empty()#}
-
-                data = '<h5 class="mb-4">Documentos existentes:</h5>';
-                for (let i = 0; i < tamDocumentos; i++) {
-                    {#relacionesLista.push(relaciones[0].id);#}
-                    {#$("#lista").val(relacionesLista);#}
-
-                    console.log(documentos[i])
-                    console.log(documentos[i].name)
-
-                    data += '<div>' +
-                        '<a class="notification notification-flush bg-0"' +
-                        'href="' + documentos[i].url + '" download>' + documentos[i].name + '</a>' +
-                        '<button class="btn" href="#" type="button" onclick="eliminarDocumento(this,' + documentos[i].id + ')">' +
-                        '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                        '</button>' +
-                        '<hr>' +
-                        '</div>';
-
-                }
-                $("#seccionExistentes").html(data);
-
-                $("#relacionAgregar").empty()
-                for (let i = 0; i < tamRelaciones; i++) {
-                    relacionesLista.push(relaciones[0].id);
-                    $("#lista").val(relacionesLista);
-
-                    data = '<tr>' +
-                        '<td>' + relaciones[0].codigo + '</td>' +
-                        ' <td>' + relaciones[0].nombre + '</td>' +
-                        '<td>' +
-                        '<button class="btn" href="#" type="button" onclick="eliminarRelacion(this,' + relaciones[0].id + ')">' +
-                        '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                        '</button>' +
-                        '</td>' +
-                        '</tr>';
-
-                    $("#relacionAgregar").append(data);
-                }
-
-
-                $('#type').val('edit');
-                idEnviar = id;
-                $('#modal_title').text('Editar Actividad');
-                $("#modalActividad").modal();
-            } else if (class_name == 'btn btn-show') {
-                window.location.pathname = "/conservacion/actividades/" + id + "/tareas/";
-            } else {
-                // DELETE button
-                $('#modal_title').text('DELETE');
-                $("#confirm").modal();
-            }
-        });
-
-        $('#confirm').on('click', '#delete', function (e) {
+       function eliminarActividad(pk){
             $('#cover-spin').show(0)
             $.ajax({
-                url: '/conservacion/proyectos/' + $('#idProject').val() + '/actividades/delete/' + id,
+                url: '/conservacion/proyectos/' + $('#idProject').val() + '/actividades/delete/' + pk,
                 method: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
                 success: function (response) {
                     $('#cover-spin').hide()
                     if (response["success"] !== undefined) {
@@ -754,228 +434,32 @@
                     console.log(error)
                 }
             });
-        });
-        $('#patrimonio').prepend('<option selected=""></option>').select2({
-            ajax: {
-                url: '/conservacion/proyectos/patrimonios',
-                datatype: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        search: params.term || '',
-                        page: params.page || 1
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-                    console.log(data.items)
-                    return {
-                        results: $.map(data.items, function (obj, index) {
-                            return {id: obj.id, text: obj.nombreTituloDemoninacion};
-                        }),
-                        pagination: {
-                            more: (params.page * 10) < data.total_count
-                        }
-                    }
-                }
-            },
-            placeholder: "Patrimonio",
-            allowClear: true,
-            cache: false
-        });
-        $('#conservadores').prepend('<option selected=""></option>').select2({
-            ajax: {
-                url: '/conservacion/actividades/conservadores',
-                datatype: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        search: params.term || '',
-                        page: params.page || 1
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-                    console.log(data.items)
-                    return {
-                        results: $.map(data.items, function (obj, index) {
-                            return {
-                                id: obj.id, text: obj.username, codigo: obj.codigo, first_name: obj.first_name,
-                                last_name: obj.last_name
-                            };
-                        }),
-                        pagination: {
-                            more: (params.page * 10) < data.total_count
-                        }
-                    }
-                }
-            },
-            placeholder: "Conservador",
-            allowClear: true,
-            cache: false
-        });
+        };
 
-        function eliminarDocumento(button, pk) {
-            var columna = button.parentNode;
-            let data = table.row($(objetoFila).parents('tr')).data();
 
-            let lista = []
-            var numDoc = data.documentos.length;
 
-            for (var i = 0; i < numDoc; i++) {
-                if (data.documentos[i].id !== pk) {
-                    lista.push(data.documentos[i]);
-                }
+        $('#tabla_actividades tbody').on('click', 'button', function () {
+            let data = table.row($(this).parents('tr')).data();
+            let class_name = $(this).attr('class');
+
+            console.log(data)
+            console.log(class_name)
+            id = data['id'];
+
+            if (class_name == 'btn btn-edit') {
+                window.location.pathname = "/conservacion/proyectos/" + {{ project.id }} +"/actividades/edit/" + id + "/view/" ;
+            } else if (class_name == 'btn btn-show') {
+                window.location.pathname = "/conservacion/actividades/" + id + "/tareas/";
+            } else {
+                $("#confirm").modal();
             }
-
-            data.documentos = lista;
-
-            console.log(data.documentos);
-
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'eliminarDocumentoActividad'%}",
-                async: false,
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    documento: pk,
-                    actividad: Number(idEnviar)
-                },
-                success: function (response) {
-                    let resultado = response['existe'];
-                    columna.parentNode.removeChild(columna);
-                    $.toast({
-                        text: 'Documento eliminado con éxito',
-                        icon: 'success',
-                        loader: false,        // Change it to false to disable loader
-                        bgColor: '#B7E6CA',  // To change the background
-                        textColor: '#000000',
-                        position: 'bottom-right',
-                        hideAfter: 3000,
-                    })
-                },
-                error: function (response) {
-                    // alert the error if any error occured
-                    console.log(response);
-                    $.toast({
-                        text: 'Ocurrió un error inesperado',
-                        icon: 'warning',
-                        loader: false,        // Change it to false to disable loader
-                        bgColor: '#c67a71',
-                        textColor: '#000000',
-                        position: 'bottom-right',
-                        hideAfter: 3000,
-                    })
-                }
-            });
-        }
-
-        function agregarConservadorTabla() {
-            let conservadorAgregar = $("#conservadores").select2('data');
-            if (!conservadoresLista.includes(Number(conservadorAgregar[0].id))) {
-                conservadoresLista.push(Number(conservadorAgregar[0].id));
-                $("#lista").val(conservadoresLista);
-
-                data = '<tr>' +
-                    '<td>' + conservadorAgregar[0].codigo + '</td>' +
-                    ' <td>' + conservadorAgregar[0].first_name + '</td>' +
-                    '<td>' +
-                    '<button class="btn" href="#" type="button" onclick="eliminarConservador(this,' + conservadorAgregar[0].id + ')">' +
-                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                    '</button>' +
-                    '</td>' +
-                    '</tr>';
-
-                $("#conservadorAgregar").append(data);
-                console.log("Agregado");
-                console.log(conservadoresLista);
-            }
-        }
-
-        function eliminarConservador(btn, idEliminar) {
-            var row = btn.parentNode.parentNode;
-            conservadoresLista = jQuery.grep(conservadoresLista, function (value) {
-                return value != idEliminar;
-            });
-            row.parentNode.removeChild(row);
-            $("#lista").val(conservadoresLista);
-            console.log("Eliminado");
-            console.log(conservadoresLista);
-        }
-
-        $('#relaciones').prepend('<option selected=""></option>').select2({
-            ajax: {
-                url: "{% url 'addRelacion' project.id %}",
-                datatype: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        search: params.term || '',
-                        page: params.page || 1
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-                    console.log(data.items)
-                    return {
-                        results: $.map(data.items, function (obj, index) {
-                            return {id: obj.id, text: obj.codigo, nombre: obj.nombre};
-                        }),
-                        pagination: {
-                            more: (params.page * 10) < data.total_count
-                        }
-                    }
-                }
-            },
-            placeholder: "Relacion",
-            allowClear: true,
-            cache: false
         });
 
-        function agregarRelacionTabla() {
-            let relacionAgregar = $("#relaciones").select2('data');
-            if (!relacionesLista.includes(relacionAgregar[0].id)) {
-                relacionesLista.push(relacionAgregar[0].id);
-                $("#lista").val(relacionesLista);
 
-                data = '<tr>' +
-                    '<td>' + relacionAgregar[0].text + '</td>' +
-                    ' <td>' + relacionAgregar[0].nombre + '</td>' +
-                    '<td>' +
-                    '<button class="btn" href="#" type="button" onclick="eliminarRelacion(this,' + relacionAgregar[0].id + ')">' +
-                    '<i class="fas fa-trash" data-fa-transform="shrink-3"></i>' +
-                    '</button>' +
-                    '</td>' +
-                    '</tr>';
 
-                $("#relacionAgregar").append(data);
-                console.log("Agregado");
-                console.log(relacionesLista);
-            }
-        }
 
-        function eliminarRelacion(btn, idEliminar) {
-            var row = btn.parentNode.parentNode;
-            relacionesLista = jQuery.grep(relacionesLista, function (value) {
-                return value != idEliminar;
-            });
-            row.parentNode.removeChild(row);
-            $("#lista").val(relacionesLista);
-            console.log("Eliminado");
-            console.log(relacionesLista);
-        }
 
-        $('#modalActividad').on('hide.bs.modal', function () {
-            $("#file").val(null);
-            $("#conservadorAgregar").empty();
-            $("#relacionAgregar").empty();
-            $("#seccionExistentes").html('');
-            conservadoresLista = [];
-            relacionesLista = [];
-            $("#conservadores").val(null).trigger('change');
-            $("#relaciones").val(null).trigger('change');
-            $("#patrimonio").val(null).trigger('change');
-            $("#tabla_actividades").DataTable().draw();
-        });
+
+
     </script>
 {% endblock %}

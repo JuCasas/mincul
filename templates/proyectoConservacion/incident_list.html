@@ -181,22 +181,22 @@
     <div class="card-body row">
       <div class="col-md-6 col-sm-12">
           <div class="row justify-content-between align-items-center mb-1">
-        <a class="nav-link py-0 back" href="{% url 'listProjects' %}"><span class="fas fa-angle-left mr-2"
+        <a class="nav-link py-0 back" href="{% url 'listProjects' %}" style="font-size: 14px!important"><span class="fas fa-angle-left mr-2"
                                                                        data-fa-transform="shrink-3"></span>Proyectos</a>
       </div>
 
-      <div class="row align-items-center justify-content-between">
-        <div class="col-md-6 d-flex">
-          <h5 class="mb-2 mb-sm-0 text-black mr-4">{{ project.nombre }}</h5>
-            {% if project.status == '0' %}
-            <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
-          {% elif project.status == '1' %}
-            <span class="badge badge rounded-capsule d-block badge-soft-warning">Pendiente</span>
-          {% else %}
-            <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
-          {% endif %}
-        </div>
-      </div>
+      <div class="row align-items-center">
+                    <div class="col-md-12 d-flex">
+                        <h5 class="mb-2 mb-sm-0 text-black mr-4">{{ project.nombre }}</h5>
+                        {% if project.status == '0' %}
+                            <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
+                        {% elif project.status == '1' %}
+                            <span class="badge badge rounded-capsule d-block badge-soft-warning">Registrado</span>
+                        {% else %}
+                            <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
+                        {% endif %}
+                    </div>
+                </div>
       </div>
 
     <div class="col-md-6 col-sm-12">
