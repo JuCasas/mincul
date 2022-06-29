@@ -25,8 +25,6 @@
         <img src="{% static '/img/logos/mincult.png' %}" style="height: 50px;"/>
       </a>
     </div>
-
-    <a href="/incidentes/">
 {#    Podemos relizar verificaciones de seguridad en front, con "Usuario interno" que involucra que todo usuario registrado lo verá#}
 {#      {% if request.user|has_group:"Usuario Interno" %}#}
 {#        <button class="btn btn-primary px-3 mr-2" type="button">#}
@@ -34,40 +32,56 @@
 {#        </button>#}
 {#      {% endif %}#}
 {#    Podemos realizar verificaciones por usuario#}
-    <a href="{% url 'mapaPatrimonioSimple' %}">
-      <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:6" in "/mapa/" %} style="color: #CD2323!important"{% endif %}>
-          <strong>Mapa</strong>
-      </div>
-    </a>
-    <a href="{% url 'patrimonio_list' %}">
-      <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:13" in "/patrimonios/" %} style="color: #CD2323!important"{% endif %}>
-          <strong>Patrimonios</strong>
-      </div>
-    </a>
-    <a href="{% url 'list_transfers' %}">
-      <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:10" in "/traslado/" %} style="color: #CD2323!important"{% endif %}>
-          <strong>Traslados</strong>
-      </div>
-    </a>
-    <a href="{% url 'listProjects' %}">
-      <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:14" == "/conservacion/" %} style="color: #CD2323!important"{% endif %}>
-          <strong>Conservaciones</strong>
-      </div>
-    </a>
-    {% if request.user|has_group:"Administrador" %}
+
+    {% if request.user|has_group:"Usuario externo" or request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador"%}
+        <a href="{% url 'mapaPatrimonioSimple' %}">
+          <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:6" in "/mapa/" %} style="color: #CD2323!important"{% endif %}>
+              <strong>Mapa</strong>
+          </div>
+        </a>
+    {% endif %}
+
+    {% if request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador"%}
+        <a href="{% url 'patrimonio_list' %}">
+          <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:13" in "/patrimonios/" %} style="color: #CD2323!important"{% endif %}>
+              <strong>Patrimonios</strong>
+          </div>
+        </a>
+    {% endif %}
+
+    {% if request.user|has_group:"Gestor de Patrimonios"%}
+        <a href="{% url 'list_transfers' %}">
+          <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:10" in "/traslado/" %} style="color: #CD2323!important"{% endif %}>
+              <strong>Traslados</strong>
+          </div>
+        </a>
+    {% endif %}
+
+    {% if request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador"%}
+        <a href="{% url 'listProjects' %}">
+          <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:14" == "/conservacion/" %} style="color: #CD2323!important"{% endif %}>
+              <strong>Conservaciones</strong>
+          </div>
+        </a>
+    {% endif %}
+
+    {% if request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados"%}
           <a href="{% url 'listProjects' %}">
         <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:12" in "/incidentes/" %} style="color: #CD2323!important"{% endif %}>
             <strong>Incidentes</strong>
         </div>
           </a>
-      {% endif %}
-    </a>
-    <a href="{% url 'reportes' %}">
-    <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:10" in "/reportes/" %} style="color: #CD2323!important"{% endif %}>
-        <strong>Reportes</strong>
-    </div>
-      </a>
-  </div>
+    {% endif %}
+
+    {% if request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador"%}
+        <a href="{% url 'reportes' %}">
+            <div class="btn px-3 mr-2" type="button" {% if request.path|slice:"0:10" in "/reportes/" %} style="color: #CD2323!important"{% endif %}>
+                <strong>Reportes</strong>
+            </div>
+        </a>
+    {% endif %}
+
+ </div>
 
   <ul class="d-flex navbar-nav navbar-nav-icons ml-auto flex-row justify-content-end mt-2">
     {% comment %}<li class="d-flex flex-row nav-item mr-3">
