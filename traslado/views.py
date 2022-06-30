@@ -106,7 +106,7 @@ def addTransfer(request):
         return redirect('list_transfers')
     else:
         entidades = EntidadSolicitante.objects.filter()
-        comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
+        comisarios = User.objects.filter(groups__name="Gestor de Conservación y Traslados")
         patrimonios = Patrimonio.objects.filter()
         operacion = "agregar"
         estado = 0
@@ -305,7 +305,7 @@ def viewTranfer(request, pk):
     media_path = MEDIA_URL
     traslado = SolicitudTraslado.objects.get(pk=pk)
     entidades = EntidadSolicitante.objects.filter()
-    comisarios = User.objects.filter(groups__name="Gestor de Conservacion y Traslados")
+    comisarios = User.objects.filter(groups__name="Gestor de Conservación y Traslados")
 
     # Nota, se debe considerar los patrominos del traslado
     patrimonios = traslado.patrimonios.all()

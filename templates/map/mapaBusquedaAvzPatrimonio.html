@@ -75,17 +75,17 @@
                                         <a class="nav-link col-md-6 btn-2" href="{% url 'index' %}">Ruta Patrimonial</a>
                                     </div>
 
-                                    <div class="row px-3 pb-3 position-relative flex align-items-center">
+                                    <div class="row px-3 pb-2 position-relative flex align-items-center">
                                                 <label for="txtBuscar"></label>
                                                 <input name="patrimonio_name" class="form-control" id="txtBuscar"
                                                        placeholder="Buscar patrimonio...">
                                         <span class="fas fa-search inputIcon2" data-fa-transform="shrink-3"></span>
-                                        <div id="rowPatrimonioTxt"  class="font-weight-bold text-danger">
+                                    </div>
+                                    <div id="rowPatrimonioTxt"  class="font-weight-bold text-danger " style="font-size: 14px!important;">
 
-                                        </div>
                                     </div>
 
-                                    <div class="row px-3 pb-3">
+                                    <div class="row px-3 pt-2 pb-2">
                                         <select class="form-control" id="formSelectCategoria" style="padding:3px"
                                                 name="select_categoria">
                                             <option>Categoría</option>
@@ -93,12 +93,12 @@
                                                 <option> {{ cat.nombre }} </option>
                                             {% endfor %}
                                         </select>
-                                        <div id="rowCategoria" class="font-weight-bold text-danger">
+                                    </div>
+                                    <div id="rowCategoria" class="font-weight-bold text-danger " style="font-size: 14px!important;">
 
                                         </div>
-                                    </div>
 
-                                    <div class="row px-3 pb-3">
+                                    <div class="row px-3 pt-2 pb-2">
                                         <select class="form-control" id="formSelectDepartamento" style="padding:3px"
                                                 name="select_departamento">
                                             <option value="-1" >Departamento</option>
@@ -106,19 +106,19 @@
                                               <option value="{{ dep.id_representativo }}"> {{ dep.nombreDepartamento }}</option>
                                               {% endfor %}
                                         </select>
-                                        <div id="rowDepartamento" class="font-weight-bold text-danger">
+                                    </div>
+                                    <div id="rowDepartamento" class="font-weight-bold text-danger " style="font-size: 14px!important;">
 
                                         </div>
-                                    </div>
 
-                                    <div class="row px-3 pb-3">
+                                    <div class="row px-3 pt-2 pb-2">
                                                 <select class="form-control" id="formSelectProvincia" style="padding:3px"
                                                         name="select_provincia">
                                                   <option selected value="-1" id="provinciaText">Provincia</option>
                                                 </select>
                                     </div>
 
-                                    <div class="row px-3 pb-3">
+                                    <div class="row px-3 pt-2 pb-3">
                                                 <select class="form-control" id="formSelectDistrito" style="padding:3px"
                                                         name="select_distrito">
                                                   <option selected value="-1" id="distritoText">Distrito</option>

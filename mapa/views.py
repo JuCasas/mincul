@@ -116,18 +116,20 @@ def mapaPatrimonioSimple(request):
                 patri = []
                 for p in patrimonios:
                     if int(p.tipoPatrimonio) == 3:
-                        insti = Institucion.objects.get(pk=p.institucion.pk)
-                        if insti not in instituciones:
-                            instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
-                            try:
-                                instiUrl = instiUrl[0].url
-                                instiUrl = instiUrl.name
-                                instituciones.append({'institucion': insti,
-                                                      'url': '/'+instiUrl})
-                            except:
-                                instituciones.append({'institucion': insti,
-                                                      'url': '/static/img/landmarks/notAvailable.jpg'})
-
+                        try:
+                            insti = Institucion.objects.get(pk=p.institucion.pk)
+                            if insti not in instituciones:
+                                instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                try:
+                                    instiUrl = instiUrl[0].url
+                                    instiUrl = instiUrl.name
+                                    instituciones.append({'institucion': insti,
+                                                          'url': '/'+instiUrl})
+                                except:
+                                    instituciones.append({'institucion': insti,
+                                                          'url': '/static/img/landmarks/notAvailable.jpg'})
+                        except:
+                            pass
                     else:
                         urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
                         try:
@@ -144,16 +146,17 @@ def mapaPatrimonioSimple(request):
                     patrimonio0 = patri[0]
                 if len(instituciones)>0:
                     institucion0 = instituciones[0]
-                success=1
-                context = {
-                    'patrimonios': patri,
-                    'instituciones':instituciones,
-                    'patrimonio0': patrimonio0,
-                    'institucion0':institucion0,
-                    'lensearch':len(patri)+len(instituciones),
-                    'success':success
-                }
-                return render(request, 'map/mapaBusquedaSimplePatrimonio.html', context)
+                if(len(patri)+len(instituciones))>0:
+                    success=1
+                    context = {
+                        'patrimonios': patri,
+                        'instituciones':instituciones,
+                        'patrimonio0': patrimonio0,
+                        'institucion0':institucion0,
+                        'lensearch':len(patri)+len(instituciones),
+                        'success':success
+                    }
+                    return render(request, 'map/mapaBusquedaSimplePatrimonio.html', context)
             return render(request, 'map/mapaBusquedaSimplePatrimonio.html', {'success':success})
     return render(request, 'map/mapaBusquedaSimplePatrimonio.html',{'success':success})
 
@@ -223,17 +226,20 @@ def mapaPatrimonioAvanzado(request):
                 patrimons = []
                 for p in patrimonios:
                     if int(p.tipoPatrimonio) == 3:
-                        insti = Institucion.objects.get(pk=p.institucion.pk)
-                        if insti not in instituciones:
-                            instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
-                            try:
-                                instiUrl = instiUrl[0].url
-                                instiUrl = instiUrl.name
-                                instituciones.append({'institucion': insti,
-                                                      'url': '/'+instiUrl})
-                            except:
-                                instituciones.append({'institucion': insti,
-                                                      'url': '/static/img/landmarks/notAvailable.jpg'})
+                        try:
+                            insti = Institucion.objects.get(pk=p.institucion.pk)
+                            if insti not in instituciones:
+                                instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                try:
+                                    instiUrl = instiUrl[0].url
+                                    instiUrl = instiUrl.name
+                                    instituciones.append({'institucion': insti,
+                                                          'url': '/'+instiUrl})
+                                except:
+                                    instituciones.append({'institucion': insti,
+                                                          'url': '/static/img/landmarks/notAvailable.jpg'})
+                        except:
+                            pass
                     else:
                         urlPatrimonio = Documento.objects.filter(patrimonio=p).order_by('id')
                         try:
@@ -250,18 +256,19 @@ def mapaPatrimonioAvanzado(request):
                     patrimonio0 = patrimons[0]
                 if len(instituciones) > 0:
                     institucion0 = instituciones[0]
-                success = 1
-                context = {
-                    'categorias': categorias,
-                    'departamentos': departamentos,
-                    'patrimonios': patrimons,
-                    'instituciones':instituciones,
-                    'patrimonio0': patrimonio0,
-                    'institucion0':institucion0,
-                    'lensearch': len(patrimons)+len(instituciones),
-                    'success': success
-                }
-                return render(request, 'map/mapaBusquedaAvzPatrimonio.html', context)
+                if(len(patrimons)+len(instituciones))>0:
+                    success = 1
+                    context = {
+                        'categorias': categorias,
+                        'departamentos': departamentos,
+                        'patrimonios': patrimons,
+                        'instituciones':instituciones,
+                        'patrimonio0': patrimonio0,
+                        'institucion0':institucion0,
+                        'lensearch': len(patrimons)+len(instituciones),
+                        'success': success
+                    }
+                    return render(request, 'map/mapaBusquedaAvzPatrimonio.html', context)
     context = {
         'categorias': categorias,
         'departamentos': departamentos,

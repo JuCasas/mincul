@@ -460,8 +460,8 @@
         url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/add/',
         method: 'POST',
         data: {
-          csrfmiddlewaretoken: '{{ csrf_token }}',
-          'patrimonio': $("#patrimonio").val()
+          'patrimonio': $("#patrimonio").val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
         },
         success: function (response) {
 
