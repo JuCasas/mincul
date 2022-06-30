@@ -51,6 +51,23 @@
             box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
             /* Lowering the shadow */
         }
+
+
+        .cardMapa{
+            height: 75vh;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+        @media screen and (max-width: 576px){
+            .rowGeneral{
+                flex-direction: column-reverse;
+            }
+            .cardMapa{
+                height: 50vh;
+                object-fit: cover;
+                border-radius: 3px;
+            }
+        }
     </style>
 {% endblock %}
 
@@ -62,7 +79,7 @@
 
 {% block body %}
 <div class="card cardForm">
-    <div class="row">
+    <div class="row rowGeneral">
         <!--Barra lateral-->
         <div class="col-md-4 pt-0" style="padding-left:30px; padding-top: 15px; overflow-y: scroll; ">
             <nav class="mb-3" style="height: 75vh">
@@ -189,10 +206,10 @@
         </nav>
         </div>
         <!--Mapa-->
-        <div class="col-md-8" style="padding: 15px;padding-right: 30px;">
+        <div class="col-md-8" style="padding: 15px; padding-right: 30px;">
             <div class="card" style="width: 100%">
                 <div class="position-relative">
-                    <div id="map" style="height: 75vh; object-fit: cover; border-radius: 3px"></div>
+                    <div id="map" class="cardMapa"></div>
                 </div>
             </div>
         </div>
