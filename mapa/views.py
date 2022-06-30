@@ -119,12 +119,12 @@ def mapaPatrimonioSimple(request):
                         try:
                             insti = Institucion.objects.get(pk=p.institucion.pk)
                             if insti not in instituciones:
-                                instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                #instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
                                 try:
-                                    instiUrl = instiUrl[0].url
-                                    instiUrl = instiUrl.name
+                                    #instiUrl = instiUrl[0].url
+                                    #instiUrl = instiUrl.name
                                     instituciones.append({'institucion': insti,
-                                                          'url': '/'+instiUrl})
+                                                          'url': '/static/img/museos-de-peru.png'})
                                 except:
                                     instituciones.append({'institucion': insti,
                                                           'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -229,12 +229,12 @@ def mapaPatrimonioAvanzado(request):
                         try:
                             insti = Institucion.objects.get(pk=p.institucion.pk)
                             if insti not in instituciones:
-                                instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                #instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
                                 try:
-                                    instiUrl = instiUrl[0].url
-                                    instiUrl = instiUrl.name
+                                    #instiUrl = instiUrl[0].url
+                                    #instiUrl = instiUrl.name
                                     instituciones.append({'institucion': insti,
-                                                          'url': '/'+instiUrl})
+                                                          'url': '/static/img/museos-de-peru.png'})
                                 except:
                                     instituciones.append({'institucion': insti,
                                                           'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -332,11 +332,11 @@ def patrimonioJson(request,id_patrimonio):
 def institucionJson(request,id_institucion):
     id_insti = int(id_institucion)
     institucion = Institucion.objects.get(id=id_insti)
-    urlInsti = Documento.objects.filter(institucion=institucion).order_by('id')
+    #urlInsti = Documento.objects.filter(institucion=institucion).order_by('id')
     urlInstitucion = None
     try:
-        urlInstitucion = urlInsti[0].url
-        urlInstitucion = '/'+urlInstitucion.name
+        #urlInstitucion = urlInsti[0].url
+        urlInstitucion = '/static/img/museos-de-peru.png'
     except:
         urlInstitucion = '/static/img/landmarks/notAvailable.jpg'
     nombre = institucion.nombre
