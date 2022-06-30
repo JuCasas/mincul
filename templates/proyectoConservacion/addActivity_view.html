@@ -123,7 +123,7 @@
             <div class="row justify-content-between align-items-center">
                 <a class="nav-link py-0" href="{% url 'listActivities' pk=project.id %}"><span
                         class="fas fa-angle-left mr-2"
-                        data-fa-transform="shrink-3"></span>Tareas</a>
+                        data-fa-transform="shrink-3"></span>Actividades</a>
             </div>
 
             <div class="row justify-content-between align-items-center">
@@ -145,13 +145,13 @@
             <h5 class="mb-2 mb-md-0 text-black">General</h5>
         </div>
         <div class="card-body cbody px-5 py-4">
-            <form role="form" id="formActividad">
+            <form role="form" id="formActividad" name="formActividad">
                 {% csrf_token %}
 
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12">
                         <label for="nombre">Nombre:</label>
-                        <input class="form-control" id="nombre" name="nombre" type="text" required
+                        <input class="form-control" id="nombre" name="nombre" type="text"
                                placeholder="Nombre de la Actividad"
                                value="{{ actividad.nombre }}"
                                {% if not request.user|has_group:"Gestor de Conservación y Traslados"  != '0' %}disabled{% endif %}>
@@ -160,7 +160,7 @@
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12">
                         <label for="descripcion">Descripción:</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" type="text" required
+                        <textarea class="form-control" id="descripcion" name="descripcion" type="text"
                                   placeholder="Descripción de la Actividad"
                                   {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>{{ actividad.descripcion }}</textarea>
                     </div>
@@ -168,13 +168,13 @@
                 <div class="row">
                     <div class="form-group col-lg-6 col-sm-12">
                         <label for="fechaInicio">Fecha de Inicio:</label>
-                        <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required
+                        <input class="form-control" id="fechaInicio" name="fechaInicio" type="date"
                                value={{ actividad.fechaInicio|date:"Y-m-d" }}
                                        {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
                     </div>
                     <div class="form-group col-lg-6 col-sm-12">
                         <label for="fechaFin">Fecha de Fin:</label>
-                        <input class="form-control" id="fechaFin" name="fechaFin" type="date" required
+                        <input class="form-control" id="fechaFin" name="fechaFin" type="date"
                                value={{ actividad.fechaFin|date:"Y-m-d" }}
                                        {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}disabled{% endif %}>
                     </div>
@@ -439,6 +439,7 @@
 
     <script>
         let conservadoresLista = [];
+        let idEnviar;
 
 
         jQuery.validator.addMethod("alphanumeric", function (value, element) {
@@ -521,7 +522,7 @@
                 fd.append("fechaFin", $("#fechaFin").val())
                 fd.append("patrimonio", $("#patrimonio").val())
 
-                let type = $('#type').val();
+                let type = '{{ type }}';
                 let method = '';
                 let url = '/conservacion/proyectos/';
                 if (type == 'new') {
@@ -546,9 +547,10 @@
                     processData: false,
                     mimeType: "multipart/form-data",
                     success: function (response) {
+                        $('#cover-spin').hide()
                         if (response["success"] !== undefined) {
                             $.toast({
-                                text: 'No se pudo crear la tarea',
+                                text: 'No se pudo crear la actividad',
                                 icon: 'warning',
                                 loader: false,        // Change it to false to disable loader
                                 bgColor: '#c67a71',
@@ -559,11 +561,15 @@
                         } else {
                             $("#nombre").val(null)
                             $("#descripcion").val(null)
-                            $("#fechaRegistro").val(null)
-                            $("#fecha").val(null)
-                            $("#presupuesto").val(null)
+                            conservadoresLista = [];
+                            $("#conservadorAgregar").empty()
+                            $("#fechaInicio").val(null)
+                            $("#file").val(null)
+                            $("#fechaFin").val(null)
+                            $("#patrimonio").val(null).change()
+                            $("#conservadores").val(null).change()
                             $.toast({
-                                text: 'Tarea creada con éxito',
+                                text: 'Actividad creada con éxito',
                                 icon: 'success',
                                 loader: false,        // Change it to false to disable loader
                                 bgColor: '#B7E6CA',  // To change the background
@@ -574,6 +580,7 @@
                         }
                     },
                     error: function (error) {
+                        $('#cover-spin').hide()
                         $.toast({
                             text: 'Ha ocurrido un error inesperado',
                             icon: 'warning',
@@ -766,7 +773,7 @@
                 async: false,
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}',
-                    actividad_pk: {{ actividad.pk }},
+                    actividad_pk: idEnviar,
                     nuevo_estado: nuevoEstado,
                 },
                 success: function (response) {
@@ -786,7 +793,7 @@
                 async: false,
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}',
-                    actividad_pk: {{ actividad.pk }},
+                    actividad_pk: idEnviar,
                 },
                 success: function (response) {
                     if (response['puede_eliminarse']) {
