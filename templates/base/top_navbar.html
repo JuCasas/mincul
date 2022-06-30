@@ -22,7 +22,6 @@
     <div class="d-flex flex-row align-items-center">
         <div class="mr-5">
             <a
-                    {% if request.user|has_group:"Usuario externo" %}href="{% url 'mapaPatrimonioSimple' %}"{% endif %}
                     {% if request.user|has_group:"Gestor de Patrimonios" %}href="{% url 'patrimonio_list' %}"{% endif %}
                     {% if request.user|has_group:"Gestor de Conservación y Traslados" %}href="{% url 'listProjects' %}"{% endif %}
                     {% if request.user|has_group:"Conservador" %}href="{% url 'listProjects' %}"{% endif %}>
@@ -37,14 +36,14 @@
         {#      {% endif %}#}
         {#    Podemos realizar verificaciones por usuario#}
 
-        {% if request.user|has_group:"Usuario externo" or request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador" %}
+
             <a href="{% url 'mapaPatrimonioSimple' %}">
                 <div class="btn btnTopbar px-3 mr-2" type="button" {% if request.path|slice:"0:5" in "/mapa/" %}
                      style="color: #CD2323!important"{% endif %}>
                     <strong>Mapa</strong>
                 </div>
             </a>
-        {% endif %}
+
 
         {% if request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador" %}
             <a href="{% url 'patrimonio_list' %}">
@@ -105,6 +104,7 @@
     </li>{% endcomment %}
         <li class="nav-item align-items-end">
             <div class="col-md pr-0">
+              {% if not request.user == 'AnonymousUser'%}
                 {#        {% if request.user|has_group:"Administrador" %}#}
                 {#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Admin</h5>#}
                 {#        {% endif %}#}
@@ -116,10 +116,11 @@
                 {#        {% endif %}#}
                 <p class="m-0 text-right" id="top_navbar_name" style="color: #f5803e">{{ request.user }} </p>
                 <p class="m-0 text-right" id="top_navbar_rol">{{ user.groups.get }}</p>
+              {% endif %}
             </div>
         </li>
 
-        {% if 1 %}
+        {% if not request.user == 'AnonymousUser'%}
 
             <li class="nav-item">
                 <div class="btn p-0 pl-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
@@ -135,7 +136,7 @@
 
         {% else %}
             <li class="nav-item">
-                <a class="btn btn-falcon-primary mt-2" id="login" href="">Iniciar Sesión</a>
+                <a class="btn btn-falcon-primary mt-2" id="login" href="{% url 'signin' %}">Iniciar Sesión</a>
             </li>
         {% endif %}
     </ul>

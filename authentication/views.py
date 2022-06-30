@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from authentication.models import User
 
@@ -26,12 +26,5 @@ def signin(request):
     return render(request, 'authentication/signin.html', context)
 
 def signout(request):
-    user = getattr(request, 'user', None)
-    if not getattr(user, 'is_authenticated', True):
-        user = None
-    request.session.flush()
-    if hasattr(request, 'user'):
-        from django.contrib.auth.models import AnonymousUser
-        request.user = AnonymousUser()
-
-    return signin(request)
+    logout(request)
+    return redirect('signin')
