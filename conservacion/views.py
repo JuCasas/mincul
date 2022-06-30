@@ -711,6 +711,16 @@ def updateActivityState(request):
     actividad.save()
     return JsonResponse({}, status=200)
 
+@login_required(login_url='/auth/login/')
+def updateProjectState(request):
+    proyecto_pk = request.POST.get('proyecto_pk')
+    print(request.POST)
+    proyecto = ProyectoConservacion.objects.get(pk=proyecto_pk)
+    nuevo_estado = request.POST.get('nuevo_estado')
+    proyecto.status = nuevo_estado
+    proyecto.save()
+    return JsonResponse({}, status=200)
+
 
 @login_required(login_url='/auth/login/')
 def updateTaskState(request):
