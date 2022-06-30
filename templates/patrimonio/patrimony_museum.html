@@ -23,82 +23,67 @@
 
 {% block body %}
 
-    <div class="col-12">
-        <div class="card mb-3 bg-card-gradient">
-            <div class="card-body ">
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-md">
-                        <h5 class="mb-2 mb-md-0 text-white">Ministerio de Cultura</h5>
-                    </div>
+    <div class="div p-0">
+        <div class="row">
+            <div class="col-8" style="display: table-cell!important">
+                <div class="position-absolute"
+                     style="width: calc(100% - 16px); height: 100%; border-radius: 8px!important;">
+                    <img class="img-fluid w-100"
+                         style="width: 100%!important; height: 100%!important; border-radius: 8px!important"
+                         src="/static/img/museos-de-peru.png"/>
                 </div>
-            </div>
-        </div>
 
-        <!--Cabecera card imagen-->
-        <div class="card mb-3 rounded-3">
-            <div class="card" style="width: 100%;">
-                <div class="position-relative">
-                    <div>
-                        <img class="img-fluid w-100"
-                             style="height: 320px; object-fit: fill; border-radius: 3px; filter: brightness(75%)"
-                             src="/static/img/museos-de-peru.png"/>
+                <div class="card-img-overlay d-flex align-items-end text-white">
+                    <p class="col text-left mb-0" style="font-size: 25px;font-weight: bold;">
+                        {{ institucion.nombre }}
+                    </p>
+                    <div class="col text-right">
+                        {% if puntuacion >= 1 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntuacion >= 2 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntuacion >= 3 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntuacion >= 4 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntuacion >= 5 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
                     </div>
-                    <div class="card-img-overlay d-flex align-items-end text-white pb-2">
-                        <p class="card-text text-black" style="font-size: 25px;font-weight: bold;">
-                            {{ institucion.nombre }}
-                        </p>
-                        <div class="col text-right">
-                            {% if puntuacion >= 1 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntuacion >= 2 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntuacion >= 3 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntuacion >= 4 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntuacion >= 5 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                        </div>
+                </div>
+            </div>
+
+            <div class="col-4" style="display: table-cell!important">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title text-black">Datos del museo:</h5>
+                        <h6 class="mb-2 mb-md-0 text-black">Nombre completo: {{ institucion.nombre }}</h6>
+                        <p></p>
+                        <h6 class="mb-2 mb-md-0 text-black">Dirección: {{ institucion.dir }}</h6>
+                        <p></p>
+                        <h6 class="mb-2 mb-md-0 text-black">Patrimonios en posesion: {{ nPatrimonios }}</h6>
                     </div>
                 </div>
             </div>
         </div>
-        <!--Cabecera card imagen fin-->
 
         <!-- Info de patrimonio -->
         <div class="row">
             <div class="col-8">
-
-                <div class="card mb-3 ">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md">
-                                <h5 class="card-title text-black">Datos del museo:</h5>
-                                <h6 class="mb-2 mb-md-0 text-black">Nombre completo: {{ institucion.nombre }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Dirección: {{ institucion.dir }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Patrimonios en posesion: {{ nPatrimonios }}</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="card mb-3">
                     <div class="carousel slide" id="carouselExampleCaptions" data-ride="carousel">
                         <ol class="carousel-indicators">
@@ -128,7 +113,8 @@
                                 {% else %}
                                     <div class="carousel-item bg-dark">
                                         <div class="d-flex justify-content-center">
-                                            <img class="standar-img deg-img d-block" src="{{ pat.imagen }}" alt="Second slide">
+                                            <img class="standar-img deg-img d-block" src="{{ pat.imagen }}"
+                                                 alt="Second slide">
                                         </div>
                                         <div class="carousel-caption d-none d-md-block">
                                             <h4 class="text-white font-weight-bold bord-font">{{ pat.nombreTituloDemoninacion }}</h4>

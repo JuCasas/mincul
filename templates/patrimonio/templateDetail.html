@@ -26,7 +26,6 @@
 {% block body %}
 
     <div class="div p-0">
-
         <div class="row" style="display: table!important;">
             <div class="col-8" style="display: table-cell!important">
                     <div class="position-absolute" style="width: calc(100% - 16px); height: 100%; border-radius: 8px!important;">
@@ -92,9 +91,7 @@
                                 <p></p>
                                 <h6 class="mb-2 mb-md-0 text-black">Distrito: {{ valor.distrito }}</h6>
                                 <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Categoría: {{ valor.categoria }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Código de inscripción: {{ patrimony.codigo }}</h6>
+                                <h6 class="mb-2 mb-md-0 text-black">Código de inscripción: {{ valor.codigo }}</h6>
                                 <p></p>
                                 <a class="btn btn-primary pt-2" type="button" href="{% url 'ficha' my_id=valor.pk %}">Descargar
                                     ficha</a>
