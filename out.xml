@@ -1,71 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <django-objects version="1.0">
-    <object model="auth.group">
-        <field name="name" type="CharField">Administrador</field>
-        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
-    </object>
-    <object model="auth.group">
-        <field name="name" type="CharField">Gestor de Conservaci�n y Traslados</field>
-        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
-    </object>
-    <object model="auth.group">
-        <field name="name" type="CharField">Gestor de Patrimonios</field>
-        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
-    </object>
-    <object model="auth.group">
-        <field name="name" type="CharField">Conservador</field>
-        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
-    </object>
-    <object model="patrimonios.categoria" pk="1">
-        <field name="nombre" type="CharField">Sitios Naturales</field>
-        <field name="tipo" type="CharField">2</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
-    <object model="patrimonios.categoria" pk="2">
-        <field name="nombre" type="CharField">Manifestaciones Culturales</field>
-        <field name="tipo" type="CharField">2</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
-    <object model="patrimonios.categoria" pk="3">
-        <field name="nombre" type="CharField">Realizaciones Tecnicas, Cientificas y Artisticas Contemporaneas</field>
-        <field name="tipo" type="CharField">2</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
-    <object model="patrimonios.categoria" pk="4">
-        <field name="nombre" type="CharField">Folclore</field>
-        <field name="tipo" type="CharField">1</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
-    <object model="patrimonios.categoria" pk="5">
-        <field name="nombre" type="CharField">Acontecimientos Programados</field>
-        <field name="tipo" type="CharField">1</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
-    <object model="patrimonios.categoria" pk="6">
-        <field name="nombre" type="CharField">Arqueologica</field>
-        <field name="tipo" type="CharField">3</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
-    <object model="patrimonios.categoria" pk="7">
-        <field name="nombre" type="CharField">Historica-Artistica</field>
-        <field name="tipo" type="CharField">3</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
-    <object model="patrimonios.categoria" pk="8">
-        <field name="nombre" type="CharField">Etnografica</field>
-        <field name="tipo" type="CharField">3</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
-    <object model="patrimonios.categoria" pk="9">
-        <field name="nombre" type="CharField">Paleontologica</field>
-        <field name="tipo" type="CharField">3</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
-    <object model="patrimonios.categoria" pk="10">
-        <field name="nombre" type="CharField">Industrial</field>
-        <field name="tipo" type="CharField">3</field>
-        <field name="estado" type="CharField">1</field>
-    </object>
     <object model="authentication.user">
         <field name="password" type="CharField">
             pbkdf2_sha256$260000$yM3YE5vsuHUmPKKYeFKjxv$8dyC5ngEbn2xeVnEzFCQOHiCmge4cdILCwLkOJzLezc=
@@ -89,7 +23,7 @@
         </field>
         <field name="groups" rel="ManyToManyRel" to="auth.group">
             <object>
-                <natural>Gestor de Conservaci�n y Traslados</natural>
+                <natural>Gestor de Conservación y Traslados</natural>
             </object>
         </field>
         <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
