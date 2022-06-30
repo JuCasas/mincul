@@ -159,25 +159,21 @@
             sureste:null,
         }
         var puntoPartidaIcon = L.icon({
-            iconUrl : '../../static/img/icons/punto-partida.png',
+            iconUrl : '../../static/img/icons/image 53.png',
             iconSize: [24,35]
         });
         var puntoLlegadaIcon = L.icon({
-            iconUrl : '../../static/img/icons/punto-llegada.png',
+            iconUrl : '../../static/img/icons/image 56.png',
             iconSize: [24,35]
         });
         var institucionesIcon = L.icon({
-            iconUrl : '../../static/img/icons/instituciones.png',
-            iconSize: [30,30]
+            iconUrl : '../../static/img/icons/image 54.png',
+            iconSize: [15,15]
         });
         var patrimonioIcon = L.icon({
-            iconUrl : '../../static/img/icons/patrimonios.png',
-            iconSize: [30,30]
+            iconUrl : '../../static/img/icons/image 57.png',
+            iconSize: [15,15]
         });
-        var inmaterialesIcon = L.icon({
-            iconUrl : '../../static/img/icons/inmateriales.png',
-            iconSize: [30,30]
-        })
         var leyenda = L.control({position: 'bottomleft'});
         leyenda.onAdd = function (map){
             var div = L.DomUtil.create('div', 'info leyenda');
@@ -325,7 +321,7 @@
                     suresteLong:esquinasMapa.sureste.lng,
                     idPatrimoniosEnrutados:patrimoniosEnrutados,
                     idInstitucionesEnrutadas:institucionesEnrutadas,
-                    numEnrutados:20-numPatrimoniosEnRuta,
+                    numEnrutados:15-numPatrimoniosEnRuta,
                 },
             });
         }
