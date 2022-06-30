@@ -53,7 +53,7 @@
     "model": "patrimonios.categoria",
     "pk": 3,
     "fields": {
-      "nombre": "Realizaciones Tecnicas, Cientificas y Artisticas Contemporaneas",
+      "nombre": "Realizaciones Técnicas, Científicas y Artísticas Contemporáneas",
       "tipo": "2",
       "estado": "1"
     }
@@ -80,7 +80,7 @@
     "model": "patrimonios.categoria",
     "pk": 6,
     "fields": {
-      "nombre": "Arqueologica",
+      "nombre": "Arqueológica",
       "tipo": "3",
       "estado": "1"
     }
@@ -89,7 +89,7 @@
     "model": "patrimonios.categoria",
     "pk": 7,
     "fields": {
-      "nombre": "Historica-Artistica",
+      "nombre": "Histórica-Artística",
       "tipo": "3",
       "estado": "1"
     }
@@ -98,7 +98,7 @@
     "model": "patrimonios.categoria",
     "pk": 8,
     "fields": {
-      "nombre": "Etnografica",
+      "nombre": "Etnográfica",
       "tipo": "3",
       "estado": "1"
     }
@@ -107,7 +107,7 @@
     "model": "patrimonios.categoria",
     "pk": 9,
     "fields": {
-      "nombre": "Paleontologica",
+      "nombre": "Paleontológica",
       "tipo": "3",
       "estado": "1"
     }

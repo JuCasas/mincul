@@ -14,8 +14,8 @@
       }
 
       .jq-toast-wrap {
-            width: 500px;
-        }
+          width: 500px;
+      }
 
       ul.pagination li {
           display: inline-block;
@@ -111,17 +111,17 @@
         </div>
 
         <div class="row align-items-center">
-                    <div class="col-md-12 d-flex">
-                        <h5 class="mb-2 mb-sm-0 text-black mr-4">{{ project.nombre }}</h5>
-                        {% if project.status == '0' %}
-                            <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
-                        {% elif project.status == '1' %}
-                            <span class="badge badge rounded-capsule d-block badge-soft-warning">Registrado</span>
-                        {% else %}
-                            <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
-                        {% endif %}
-                    </div>
-                </div>
+          <div class="col-md-12 d-flex">
+            <h5 class="mb-2 mb-sm-0 text-black mr-4">{{ project.nombre }}</h5>
+            {% if project.status == '0' %}
+              <span class="badge badge rounded-capsule d-block badge-soft-primary">En Proceso</span>
+            {% elif project.status == '1' %}
+              <span class="badge badge rounded-capsule d-block badge-soft-warning">Registrado</span>
+            {% else %}
+              <span class="badge badge rounded-capsule d-block badge-soft-success">Completo</span>
+            {% endif %}
+          </div>
+        </div>
       </div>
 
       <div class="col-md-6 col-sm-12">
@@ -140,7 +140,8 @@
     <div class="card-body">
       <div class="row filterBar mr-0 justify-content-end">
 
-        <div class="form-group col-sm-3 mb-0 {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}pr-0{% endif %}">
+        <div
+            class="form-group col-sm-3 mb-0 {% if not request.user|has_group:"Gestor de Conservación y Traslados" %}pr-0{% endif %}">
           <div class="position-relative">
             <input class="form-control" id="search" type="text" placeholder="Nombre">
             <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
@@ -432,7 +433,18 @@
 
     $('#formPatrimonio').on('submit', function (e) {
       e.preventDefault();
-      if (verificarPatrimonio()) {
+      if ($("#patrimonio").val() == null) {
+        $.toast({
+          text: 'Debe seleccionar un patrimonio.',
+          icon: 'warning',
+          loader: false,        // Change it to false to disable loader
+          bgColor: '#c67a71',
+          textColor: '#000000',
+          position: 'bottom-right',
+          hideAfter: 3000,
+        })
+      } else {
+        if (verificarPatrimonio()) {
           console.log("VERIFICAR PATRIMONIO TRUE")
           $.toast({
             text: 'Patrimonio agregado correctamente.',
@@ -442,9 +454,8 @@
             textColor: '#000000',
             position: 'bottom-right',
             hideAfter: 3000,
-        })
-      }
-      else {
+          })
+        } else {
           console.log("VERIFICAR PATRIMONIO FALSE")
           $.toast({
             text: 'Este patrimonio ya ha sido agregado.',
@@ -454,39 +465,41 @@
             textColor: '#000000',
             position: 'bottom-right',
             hideAfter: 3000,
-        })
-      }
-      $.ajax({
-        url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/add/',
-        method: 'POST',
-        data: {
-          'patrimonio': $("#patrimonio").val(),
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-        },
-        success: function (response) {
-
-          $('#myModal').modal('hide')
-          init = true
-          getData(0, 9)
-
-        },
-        error: function (error) {
-          console.log(error)
+          })
         }
-      });
+        $.ajax({
+          url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/add/',
+          method: 'POST',
+          data: {
+            'patrimonio': $("#patrimonio").val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function (response) {
+
+            $('#myModal').modal('hide')
+            init = true
+            getData(0, 9)
+
+          },
+          error: function (error) {
+            console.log(error)
+          }
+        });
+      }
+
     });
 
-    function verificarPatrimonio(){
-        return $.ajax({
+    function verificarPatrimonio() {
+      return $.ajax({
         url: '/conservacion/proyectos/' + $("#idProject").val() + '/patrimonios/verify/',
         method: 'POST',
         async: false,
         data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}',
+          csrfmiddlewaretoken: '{{ csrf_token }}',
           'patrimonio': $("#patrimonio").val()
         },
         success: function (response) {
-            console.log(response);
+          console.log(response);
         },
         error: function (error) {
           console.log(error);

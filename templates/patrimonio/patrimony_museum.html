@@ -37,49 +37,45 @@
             </div>
         </div>
 
-        <div class="row mb-3">
+        <div class="row align-items-stretch mb-3">
             <div class="col-8">
-                <div class=" card position-absolute w-100"
-                     style="height: 100%; border-radius: 8px!important;">
-                    <img
-                            style="height: 100%!important; border-radius: 8px!important; filter: brightness(75%); object-fit: fill;"
-                            src="/static/img/museos-de-peru.png"
-                            alt="Card image">
-                </div>
-
-                <div class="card-img-overlay d-flex align-items-end text-white">
-                    <p class="col text-left mb-0"
-                       style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ institucion.nombre }}
-                    </p>
-                    <div class="col text-right">
-                        {% if puntacion >= 1 %}
-                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                        {% else %}
-                            <span class="fa fa-star"></span>
-                        {% endif %}
-                        {% if puntacion >= 2 %}
-                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                        {% else %}
-                            <span class="fa fa-star"></span>
-                        {% endif %}
-                        {% if puntacion >= 3 %}
-                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                        {% else %}
-                            <span class="fa fa-star"></span>
-                        {% endif %}
-                        {% if puntacion >= 4 %}
-                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                        {% else %}
-                            <span class="fa fa-star"></span>
-                        {% endif %}
-                        {% if puntacion >= 5 %}
-                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                        {% else %}
-                            <span class="fa fa-star"></span>
-                        {% endif %}
+                <div class="card bg-dark overflow-hidden h-100">
+                    <div class="position-absolute h-100 w-100">
+                        <img class="card-img h-100" style="filter: brightness(75%); object-fit: fill;" src="/static/img/museos-de-peru.png" alt="Card image">
+                    </div>
+                    <div class="card-img-overlay d-flex align-items-end text-white">
+                        <p class="col text-left mb-0"
+                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ institucion.nombre }}
+                        </p>
+                        <div class="col text-right">
+                            {% if puntacion >= 1 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 2 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 3 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 4 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                            {% if puntacion >= 5 %}
+                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-                <!--Cabecera card imagen fin-->
             </div>
 
             <div class="col-4">

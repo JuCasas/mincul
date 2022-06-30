@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from rest_framework import status
@@ -124,7 +125,7 @@ def addTransfer(request):
 
 def listarPatrimoniosTraslado(request):
     filtro = request.GET['q']
-    patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=filtro, estado='1')
+    patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=filtro, estado='1', tipoPatrimonio='3')
     serializer = PatrimonioSerializer((patrimonios), many=True)
     ser_instance = json.dumps(serializer.data)
     return JsonResponse({"patrimoniosAjax": ser_instance}, status=200)
@@ -277,7 +278,7 @@ def validarDOI(request):
     else:
         return JsonResponse(True, status=200, safe=False)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listTranfers(request):
     if request.is_ajax():

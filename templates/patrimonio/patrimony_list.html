@@ -3,131 +3,182 @@
 {% load has_group %}
 
 {% block extrastyle %}
-  <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
-  <style>
-      .degradado {
-          background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
-          opacity: .8;
-      }
-  </style>
-  <style type="text/css">
-      ul.pagination {
-          display: inline-block;
-          padding: 0;
-          margin: 0;
-      }
+    <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
+    <style>
+        .degradado {
+            background: linear-gradient(45deg, rgba(0, 0, 0, 1) 20%, transparent 100%);
+            opacity: .8;
+        }
 
-      .jq-toast-wrap {
-          width: 500px;
-      }
+        .jq-toast-wrap {
+            width: 350px;
+        }
 
-      ul.pagination li {
-          display: inline-block;
-      }
+        #cover-spin {
+            position: fixed;
+            width: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            display: none;
+        }
 
-      ul.pagination li a {
-          color: black;
-          float: left;
-          padding: 8px 16px;
-          text-decoration: none;
-          transition: background-color .3s;
-          border: 1px solid #ddd;
-      }
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
 
-      ul.pagination li.active a {
-          background-color: darkgray;
-          color: white;
-          border: 1px solid darkgray;
-          pointer-events: none;
-      }
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-      ul.pagination li a:hover:not(.active) {
-          background-color: #ddd;
-      }
-  </style>
+        #cover-spin::after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 48%;
+            top: 40%;
+            width: 40px;
+            height: 40px;
+            border-style: solid;
+            border-color: black;
+            border-top-color: transparent;
+            border-width: 4px;
+            border-radius: 50%;
+            -webkit-animation: spin .8s linear infinite;
+            animation: spin .8s linear infinite;
+        }
+    </style>
+    <style type="text/css">
+        ul.pagination {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+        }
+
+        .jq-toast-wrap {
+            width: 500px;
+        }
+
+        ul.pagination li {
+            display: inline-block;
+        }
+
+        ul.pagination li a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+        }
+
+        ul.pagination li.active a {
+            background-color: darkgray;
+            color: white;
+            border: 1px solid darkgray;
+            pointer-events: none;
+        }
+
+        ul.pagination li a:hover:not(.active) {
+            background-color: #ddd;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-  <div class="card mb-3">
-    <div class="card-body p-0">
-      <div class="navbar row mx-0">
+    <div class="card mb-3">
+        <div class="card-body p-0">
+            <div class="navbar row mx-0">
 
-        <div class="col-sm-2 mb-2 mb-sm-0">
-          <h6 class="mb-0" id="Cantidad"></h6>
-        </div>
+                <div class="col-sm-2 mb-2 mb-sm-0">
+                    <h6 class="mb-0" id="Cantidad"></h6>
+                </div>
 
 
-          <div class="form-group col-sm-2 my-1 pl-0">
-            <div class="position-relative">
-              <input class="form-control" id="search" type="text" placeholder="Nombre">
-              <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                <div class="form-group col-sm-2 my-1 pl-0">
+                    <div class="position-relative">
+                        <input class="form-control" id="search" type="text" placeholder="Nombre">
+                        <span class="fas fa-search inputIcon" data-fa-transform="shrink-3"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-2 my-1">
+                    <select class="form-control" id="tipoPatrimonio">
+                        <option value="0" selected>Tipo</option>
+                        <option value="1">Inmaterial</option>
+                        <option value="2">Material Inmueble</option>
+                        <option value="3">Material Mueble</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-sm-2 my-1">
+                    <select class="form-control" id="categoria">
+                    </select>
+                </div>
+                <div class="form-group col-sm-2 my-1">
+                    <select class="form-control" id="departamento">
+                        <option selected>Departamento</option>
+                        <option>Amazonas</option>
+                        <option>Ancash</option>
+                        <option>Apurimac</option>
+                        <option>Arequipa</option>
+                        <option>Ayacucho</option>
+                        <option>Cajamarca</option>
+                        <option>Callao</option>
+                        <option>Cusco</option>
+                        <option>Huancavelica</option>
+                        <option>Huanuco</option>
+                        <option>Ica</option>
+                        <option>Junín</option>
+                        <option>La Libertad</option>
+                        <option>Lambayeque</option>
+                        <option>Lima</option>
+                        <option>Loreto</option>
+                        <option>Madre de Dios</option>
+                        <option>Moquegua</option>
+                        <option>Pasco</option>
+                        <option>Piura</option>
+                        <option>Puno</option>
+                        <option>San Martin</option>
+                        <option>Tacna</option>
+                        <option>Tumbes</option>
+                        <option>Ucayali</option>
+                    </select>
+                </div>
+
+
+                {% if request.user|has_group:"Gestor de Patrimonios" %}
+                    <div class="form-group col-sm-2 my-1 p-0 w-100">
+                        <button class="btn btn-primary col-sm-auto w-100" type="button"
+                                onclick="showModalImport()">
+                            <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
+                        </button>
+                    </div>
+                {% endif %}
+
             </div>
-          </div>
 
-          <div class="form-group col-sm-2 my-1">
-            <select class="form-control" id="tipoPatrimonio">
-              <option value="0" selected>Tipo</option>
-              <option value="1">Inmaterial</option>
-              <option value="2">Material Inmueble</option>
-              <option value="3">Material Mueble</option>
-            </select>
-          </div>
-
-          <div class="form-group col-sm-2 my-1">
-            <select class="form-control" id="categoria">
-            </select>
-          </div>
-          <div class="form-group col-sm-2 my-1">
-            <select class="form-control" id="departamento">
-              <option selected>Departamento</option>
-              <option>Amazonas</option>
-              <option>Ancash</option>
-              <option>Apurimac</option>
-              <option>Arequipa</option>
-              <option>Ayacucho</option>
-              <option>Cajamarca</option>
-              <option>Callao</option>
-              <option>Cusco</option>
-              <option>Huancavelica</option>
-              <option>Huanuco</option>
-              <option>Ica</option>
-              <option>Junín</option>
-              <option>La Libertad</option>
-              <option>Lambayeque</option>
-              <option>Lima</option>
-              <option>Loreto</option>
-              <option>Madre de Dios</option>
-              <option>Moquegua</option>
-              <option>Pasco</option>
-              <option>Piura</option>
-              <option>Puno</option>
-              <option>San Martin</option>
-              <option>Tacna</option>
-              <option>Tumbes</option>
-              <option>Ucayali</option>
-            </select>
-          </div>
-
-
-          {% if request.user|has_group:"Gestor de Patrimonios"%}
-              <div class="form-group col-sm-2 my-1 p-0 w-100">
-                  <button class="btn btn-primary col-sm-auto w-100" type="button" data-toggle="modal"
-                          data-target="#importarModal">
-                      <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
-                  </button>
-              </div>
-          {% endif %}
-
-      </div>
-
+        </div>
     </div>
-  </div>
 
 
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="row" id="container">
-        {% comment %}        {% for pat in patrimonios %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row" id="container">
+                {% comment %}        {% for pat in patrimonios %}
           <div class="col-12 col-lg-4 col-md-4 col-sm-6">
             <div class="card">
               <div class="card-img-top" style="height: 13rem">
@@ -157,266 +208,348 @@
             <div><p></p></div>
           </div>
         {% endfor %}{% endcomment %}
-      </div>
-    </div>
-
-    <!--Paginacion-->
-    <div class="card-footer bg-light d-flex justify-content-center">
-
-      <div class="paginator">
-        <ul class="pagination"></ul>
-      </div>
-    </div>
-  </div>
-
-
-  <!--  Modal de importar archivo-->
-  <div class="modal fade" id="importarModal" tabindex="-1" role="dialog" aria-labelledby="importarModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="importarModalLabel">Importar patrimonios</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
-              class="font-weight-light" aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body">
-          <form id="formularioCargaMasiva" action="{% url 'patrimonio_list' %}" method="post"
-                enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-              <input type="file" name="file">
             </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
-          <button class="btn btn-primary btn-sm" type="submit" form="formularioCargaMasiva" value="Submit">
-            Importar patrimonios
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
+        <!--Paginacion-->
+        <div class="card-footer bg-light d-flex justify-content-center">
+
+            <div class="paginator">
+                <ul class="pagination"></ul>
+            </div>
+        </div>
+    </div>
+
+
+    <!--  Modal de importar archivo-->
+    <div class="modal fade" id="importarModal" tabindex="-1" role="dialog" aria-labelledby="importarModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importarModalLabel">Importar patrimonios</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formularioCargaMasiva" name="formularioCargaMasiva">
+                        <div class="form-group">
+                            <input type="file" id="file" name="file">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" type="submit" form="formularioCargaMasiva" value="Submit">
+                        Importar patrimonios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cover-spin"></div>
 
 
 
 {% endblock %}
 
 {% block extrajs %}
-  <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
-  <script src="{% static 'lib/bootstrap-pagy-master/bootstrap-pagy.js' %}"></script>
-  <script src="{% static 'lib/bootstrap-pagy-master/js/prettify.js' %}"></script>
-  <script>
-    let options = [
-      '<option value="0">Categoria</option>',
-      '<option value="0">Categoria</option>' +
-      '<option value="1">Folclore</option>' +
-      '<option value="2">Acontecimientos Programados</option>',
-      '<option value="0">Categoria</option>' +
-      '<option value="1">Manifestaciones Culturales</option>' +
-      '<option value="2">Realizaciones Tecnicas, Cientificas y Artisticas Contemporaneas</option>' +
-      '<option value="3">Sitios Naturales</option>',
-      '<option value="0">Categoria</option>' +
-      '<option value="1">Industrial</option>' +
-      '<option value="2">Arqueologica</option>' +
-      '<option value="3">Historica-Artistica</option>',
-      '<option value="4">Etnografica</option>',
-      '<option value="5">Paleontologica</option>',
-    ]
+    <script src="{% static 'lib/flatpickr/flatpickr.min.js' %}"></script>
+    <script src="{% static 'lib/bootstrap-pagy-master/bootstrap-pagy.js' %}"></script>
+    <script src="{% static 'lib/bootstrap-pagy-master/js/prettify.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+    <script>
+        let options = [
+            '<option value="0">Categoria</option>',
+            '<option value="0">Categoria</option>' +
+            '<option value="1">Folclore</option>' +
+            '<option value="2">Acontecimientos Programados</option>',
+            '<option value="0">Categoria</option>' +
+            '<option value="1">Manifestaciones Culturales</option>' +
+            '<option value="2">Realizaciones Técnicas, Científicas y Artísticas Contemporáneas</option>' +
+            '<option value="3">Sitios Naturales</option>',
+            '<option value="0">Categoria</option>' +
+            '<option value="1">Industrial</option>' +
+            '<option value="2">Arqueológica</option>' +
+            '<option value="3">Histórica-Artística</option>',
+            '<option value="4">Etnográfica</option>',
+            '<option value="5">Paleontológica</option>',
+        ]
 
-    //Programacion de selects dependientes
-    let type = $("#tipoPatrimonio")
-    let category = $("#categoria")
-    type.change(function () {
-      let value = $(this).val()
-      category.html(options[value])
-    })
+        //Setear opciones para el toastr
+        function setOptions(type, message, ubication, time) {
+            return {
+                heading: '<b>' + (type === 'error' ? 'Error:' : 'Info:') + '</b>',
+                text: '<span>' + message + '</span>',
+                icon: (type === 'error' ? 'error' : 'success'),
+                loader: true,
+                bgColor: (type === 'error' ? '#e63757' : '#00d27a'),
+                textColor: '#FFFFFF',
+                loaderBg: '#FFFFFF',
+                position: ubication,
+                hideAfter: time * 1000,
+                stack: false,
+            }
+        }
 
-    type.val('0').change();
-    category.val('0').change();
+        //Programacion de selects dependientes
+        let type = $("#tipoPatrimonio")
+        let category = $("#categoria")
+        type.change(function () {
+            let value = $(this).val()
+            category.html(options[value])
+        })
 
-    //Funcion renderiza patrimonios dinamicamente
+        type.val('0').change();
+        category.val('0').change();
 
-    let container = $("#container")
-    let cantidad = $("#Cantidad")
+        //Funcion renderiza patrimonios dinamicamente
 
-    //Funcion eliminar patrimonio
-    function eliminarPat(pk) {
-        $.ajax({
-            url: '{% url 'patrimonio_delete' %}',
-            type: 'POST',
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                pk: pk,
-            },
-            success: function (response) {
-                console.log('Patrimonio Eliminado')
-                location.reload()
-            },
-            error: function (response) {
-                alert(response["responseJSON"]["error"]);
+        let container = $("#container")
+        let cantidad = $("#Cantidad")
+
+        //Funcion eliminar patrimonio
+        function eliminarPat(pk) {
+            $.ajax({
+                url: '{% url 'patrimonio_delete' %}',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    pk: pk,
+                },
+                success: function (response) {
+                    console.log('Patrimonio Eliminado')
+                    location.reload()
+                },
+                error: function (response) {
+                    alert(response["responseJSON"]["error"]);
+                }
+            });
+            return 1;
+        }
+
+        function showModalImport() {
+            $("#file").val(null)
+            $("#importarModal").modal('show')
+        }
+
+        function loadContainer() {
+            container.empty();
+            cantidad.empty()
+            let data = result['items']
+            let inicio = result['inicio']
+            let fin = result['fin']
+            let count = result["total_count"]
+            console.log(data)
+            let content = ''
+            for (i = 0; i < data.length; i++) {
+                let div;
+                content += (
+                    '<div class="col-12 col-lg-4 col-md-4 col-sm-6">'
+                    + '<div class="card">'
+                    + '<div class="card-img-top" style="height: 13rem; overflow: hidden; object-fit: cover;">'
+                    + '<img class="w-100 rounded-top"'
+                    + 'style="transform: translate(0, -25%);"'
+                    + 'src="' + data[i]['imagen'] + '"'
+                    + 'alt="Card image cap">'
+                    + '</div>'
+                    + '<div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">'
+                    + '<h5 class="card-text pt-9" style="color: white">' + data[i]['nombreTituloDemoninacion'] + '</h5>'
+                    + '</div>'
+                    + '<div class="card-body">'
+                    + '<p class="card-text font-italic mb-0">' + data[i]['categoria'] + '</p>'
+                    + '<p class="card-text font-weight-semi-bold">' + data[i]['tipo'][1] + '</p>'
+                    + '<a href="/patrimonios/detalle/' + data[i].id + '"><button type="button" class="btn btn-primary btn-show" onclick=""><i class="fas fa-eye"></i></button></a>'
+                    //+ '<button type="button" class="btn btn-delete" onclick="eliminarPat(' + data[i].id + ')"><i class="fas fa-trash-alt"></i></button>'
+                    + '</div>'
+                    + '</div>'
+                    + '<div><p></p></div>'
+                    + '</div>'
+
+                )
+            }
+            container.html(content);
+            if (count > 0) {
+                cantidad.html(`Mostrando ${inicio}-${fin} de ${count} Patrimonios`)
+            }
+        }
+
+        //Variables globales de estado
+        let result = {};
+        let init = true
+
+        //Funcion que obtiene Data al hacer clic en una página
+        function getData(start, length) {
+            $.ajax({
+                url: '/patrimonios/listarAjax/',
+                type: 'get',
+                data: {
+                    length: length,
+                    start: start,
+                    search_value: $("#search").val(),
+                    tipo: $("#tipoPatrimonio").val(),
+                    category: $("#categoria").find('option:selected').text(),
+                    departamento: $("#departamento").find('option:selected').text(),
+                },
+                success: function (data, textStatus, jQxhr) {
+                    result["total_count"] = data.total_count
+                    result["items"] = data.items
+                    result["inicio"] = data.inicio
+                    result["fin"] = data.fin
+                    loadContainer()
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(jqXhr)
+                }
+            });
+            return 1;
+        }
+
+        //Funcion que obtiene Data cuando se interactua con filtros
+        function getInitialData(start, length) {
+            $.ajax({
+                url: '/patrimonios/listarAjax/',
+                type: 'get',
+                data: {
+                    length: length,
+                    start: start,
+                    search_value: $("#search").val(),
+                    tipo: $("#tipoPatrimonio").val(),
+                    category: $("#categoria").find('option:selected').text(),
+                    departamento: $("#departamento").find('option:selected').text(),
+                },
+                success: function (data, textStatus, jQxhr) {
+                    result["total_count"] = data.total_count
+                    result["items"] = data.items
+                    result["inicio"] = data.inicio
+                    result["fin"] = data.fin
+                    if (result["total_count"] === 0) {
+                        $(".paginator").hide()
+                        container.empty();
+                        cantidad.empty();
+                    } else {
+                        let mod = result["total_count"] % 9
+                        let div = (result["total_count"] - mod) / 9
+                        if (mod !== 0) {
+                            div = div + 1;
+                        }
+                        loadContainer()
+                        $(".paginator").pagy("page", 1, div);
+                    }
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(jqXhr)
+                }
+            });
+        }
+
+        //Instanciacion de librería para paginacion
+        $(".paginator").pagy({
+            totalPages: null,
+            currentPage: null,
+
+            page: function (page) {
+                if (!init) {
+                    let start = (page - 1) * 9
+                    getData(start, 9)
+                }
+                search = $('#search').val()
+                console.log(`page: ${page} , search: ${search}`)
+                init = false
+                return true;
             }
         });
-        return 1;
-    }
 
-    function loadContainer() {
-      container.empty();
-      cantidad.empty()
-      let data = result['items']
-      let inicio = result['inicio']
-      let fin = result['fin']
-      let count = result["total_count"]
-      console.log(data)
-      let content = ''
-      for (i = 0; i < data.length; i++) {
-        let div;
-        content += (
-            '<div class="col-12 col-lg-4 col-md-4 col-sm-6">'
-            + '<div class="card">'
-            + '<div class="card-img-top" style="height: 13rem; overflow: hidden; object-fit: cover;">'
-            + '<img class="w-100 rounded-top"'
-            + 'style="transform: translate(0, -25%);"'
-            + 'src="' + data[i]['imagen'] + '"'
-            + 'alt="Card image cap">'
-            + '</div>'
-            + '<div class="card-img-overlay align-text-bottom degradado" style="height: 13rem">'
-            + '<h5 class="card-text pt-9" style="color: white">' + data[i]['nombreTituloDemoninacion'] + '</h5>'
-            + '</div>'
-            + '<div class="card-body">'
-            + '<p class="card-text font-italic mb-0">' + data[i]['categoria'] + '</p>'
-            + '<p class="card-text font-weight-semi-bold">' + data[i]['tipo'][1] + '</p>'
-            + '<a href="/patrimonios/detalle/' + data[i].id + '"><button type="button" class="btn btn-primary btn-show" onclick=""><i class="fas fa-eye"></i></button></a>'
-            //+ '<button type="button" class="btn btn-delete" onclick="eliminarPat(' + data[i].id + ')"><i class="fas fa-trash-alt"></i></button>'
-            + '</div>'
-            + '</div>'
-            + '<div><p></p></div>'
-            + '</div>'
+        //Vinculacion de filtros a paginacion
+        $("#search").keyup(function () {
+            init = true
+            getInitialData(0, 9)
+        });
 
-        )
-      }
-      container.html(content);
-      if (count > 0) {
-        cantidad.html(`Mostrando ${inicio}-${fin} de ${count} Patrimonios`)
-      }
-    }
+        $("#tipoPatrimonio").change(function () {
+            init = true
+            getInitialData(0, 9)
+        });
 
-    //Variables globales de estado
-    let result = {};
-    let init = true
+        $("#categoria").change(function () {
+            init = true
+            getInitialData(0, 9)
+        });
 
-    //Funcion que obtiene Data al hacer clic en una página
-    function getData(start, length) {
-      $.ajax({
-        url: '/patrimonios/listarAjax/',
-        type: 'get',
-        data: {
-          length: length,
-          start: start,
-          search_value: $("#search").val(),
-          tipo: $("#tipoPatrimonio").val(),
-          category: $("#categoria").find('option:selected').text(),
-          departamento: $("#departamento").find('option:selected').text(),
-        },
-        success: function (data, textStatus, jQxhr) {
-          result["total_count"] = data.total_count
-          result["items"] = data.items
-          result["inicio"] = data.inicio
-          result["fin"] = data.fin
-          loadContainer()
-        },
-        error: function (jqXhr, textStatus, errorThrown) {
-          console.log(jqXhr)
-        }
-      });
-      return 1;
-    }
+        $("#departamento").change(function () {
+            init = true
+            getInitialData(0, 9)
+        });
 
-    //Funcion que obtiene Data cuando se interactua con filtros
-    function getInitialData(start, length) {
-      $.ajax({
-        url: '/patrimonios/listarAjax/',
-        type: 'get',
-        data: {
-          length: length,
-          start: start,
-          search_value: $("#search").val(),
-          tipo: $("#tipoPatrimonio").val(),
-          category: $("#categoria").find('option:selected').text(),
-          departamento: $("#departamento").find('option:selected').text(),
-        },
-        success: function (data, textStatus, jQxhr) {
-          result["total_count"] = data.total_count
-          result["items"] = data.items
-          result["inicio"] = data.inicio
-          result["fin"] = data.fin
-          if (result["total_count"] === 0) {
-            $(".paginator").hide()
-            container.empty();
-            cantidad.empty();
-          } else {
-            let mod = result["total_count"] % 9
-            let div = (result["total_count"] - mod) / 9
-            if (mod !== 0) {
-              div = div + 1;
+        //Inicializacion de Listado de cards
+        $(document).ready(function () {
+            init = true
+            $("#search").val('');
+            getInitialData(0, 9);
+        });
+
+
+        $("form[name='formularioCargaMasiva']").validate({
+            rules: {
+                file: {
+                    required: true,
+                },
+            },
+            messages: {
+                file: {
+                    required: "Debe seleccionar un archivo",
+                },
+            },
+            submitHandler: function (form, e) {
+                e.preventDefault();
+                $('#cover-spin').show(0)
+
+                let fd = new FormData();
+
+                console.log('Archivos', $("#file")[0].files)
+
+                let files = $("#file")[0].files
+                fd.append("file", files[0])
+                fd.append("csrfmiddlewaretoken", "{{ csrf_token }}")
+
+                $.ajax({
+                    method: "POST",
+                    url: '/patrimonios/listar/',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    mimeType: "multipart/form-data",
+
+                    success: function (response) {
+                        data = JSON.parse(response)
+                        $('#cover-spin').hide()
+
+                        if (response["success"] !== undefined) {
+                            $.toast(setOptions('error', 'Ocurrio un error al importar los patrimonios', 'top-center', 1))
+                        } else {
+
+                            $("#importarModal").modal('hide')
+                            init = true
+                            getInitialData(0, 9)
+                            if (data["importados"] != "0"){
+                                mess = data["importados"] + ' Patrimonios registrados correctamente y ' + data['repetidos'] + ' repetidos'
+                            } else {
+                                mess = 'Los patrimonios del archivo ya se encuentran ingresados'
+                            }
+                            $.toast(setOptions('success', mess, 'top-center', 3))
+                        }
+                    },
+                    error: function (error) {
+                        $('#cover-spin').hide()
+                        $.toast(setOptions('error', 'Ha ocurrido un error al cargar los patrimonios', 'top-center', 1))
+                    }
+                });
+                return false;
             }
-            loadContainer()
-            $(".paginator").pagy("page", 1, div);
-          }
-        },
-        error: function (jqXhr, textStatus, errorThrown) {
-          console.log(jqXhr)
-        }
-      });
-    }
-
-    //Instanciacion de librería para paginacion
-    $(".paginator").pagy({
-      totalPages: null,
-      currentPage: null,
-
-      page: function (page) {
-        if (!init) {
-          let start = (page - 1) * 9
-          getData(start, 9)
-        }
-        search = $('#search').val()
-        console.log(`page: ${page} , search: ${search}`)
-        init = false
-        return true;
-      }
-    });
-
-    //Vinculacion de filtros a paginacion
-    $("#search").keyup(function () {
-      init = true
-      getInitialData(0, 9)
-    });
-
-    $("#tipoPatrimonio").change(function () {
-      init = true
-      getInitialData(0, 9)
-    });
-
-    $("#categoria").change(function () {
-      init = true
-      getInitialData(0, 9)
-    });
-
-    $("#departamento").change(function () {
-      init = true
-      getInitialData(0, 9)
-    });
-
-    //Inicializacion de Listado de cards
-    $(document).ready(function () {
-      init = true
-      $("#search").val('');
-      getInitialData(0, 9);
-    });
+        });
 
 
-  </script>
+    </script>
 {% endblock %}

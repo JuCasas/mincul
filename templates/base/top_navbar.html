@@ -12,6 +12,10 @@
         .btnTopbar:hover {
             color: #CD2323;
         }
+
+        .btnLoginTopbar:hover {
+            color: #9a0d17;
+        }
     </style>
 
 {% endblock %}
@@ -37,12 +41,12 @@
         {#    Podemos realizar verificaciones por usuario#}
 
 
-            <a href="{% url 'mapaPatrimonioSimple' %}">
-                <div class="btn btnTopbar px-3 mr-2" type="button" {% if request.path|slice:"0:5" in "/mapa/" %}
-                     style="color: #CD2323!important"{% endif %}>
-                    <strong>Mapa</strong>
-                </div>
-            </a>
+        <a href="{% url 'mapaPatrimonioSimple' %}">
+            <div class="btn btnTopbar px-3 mr-2" type="button" {% if request.path|slice:"0:5" in "/mapa/" %}
+                 style="color: #CD2323!important"{% endif %}>
+                <strong>Mapa</strong>
+            </div>
+        </a>
 
 
         {% if request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador" %}
@@ -104,24 +108,24 @@
     </li>{% endcomment %}
         <li class="nav-item align-items-end">
             <div class="col-md pr-0">
-              {% if not request.user == 'AnonymousUser'%}
-                {#        {% if request.user|has_group:"Administrador" %}#}
-                {#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Admin</h5>#}
-                {#        {% endif %}#}
-                {#        {% if request.user|has_group:"Conservador" %}#}
-                {#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Conservador</h5>#}
-                {#        {% endif %}#}
-                {#        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}#}
-                {#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Gestor de Conservación y Traslados</h5>#}
-                {#        {% endif %}#}
-                <p class="m-0 text-right" id="top_navbar_name" style="color: #f5803e">{{ request.user }} </p>
-                <p class="m-0 text-right" id="top_navbar_rol">{{ user.groups.get }}</p>
-              {% endif %}
+                {% if request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador" %}
+                    {#        {% if request.user|has_group:"Administrador" %}#}
+                    {#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Admin</h5>#}
+                    {#        {% endif %}#}
+                    {#        {% if request.user|has_group:"Conservador" %}#}
+                    {#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Conservador</h5>#}
+                    {#        {% endif %}#}
+                    {#        {% if request.user|has_group:"Gestor de Conservación y Traslados" %}#}
+                    {#            <h5 class="mb-0 align-items-end text-right" id="top_navbar_name" style="font-size: 1rem">Gestor de Conservación y Traslados</h5>#}
+                    {#        {% endif %}#}
+                    <p class="m-0 text-right" id="top_navbar_name" style="color: #9a0d17">{{ request.user }} </p>
+                    <p class="m-0 text-right" id="top_navbar_rol"
+                       style="font-size: 12px!important">{{ user.groups.get }}</p>
+                {% endif %}
             </div>
         </li>
 
-        {% if not request.user == 'AnonymousUser'%}
-
+        {% if request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador" %}
             <li class="nav-item">
                 <div class="btn p-0 pl-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                      aria-haspopup="true" aria-expanded="false">
@@ -131,14 +135,20 @@
                     <a class="dropdown-item" href="{% url 'signout' %}">Cerrar sesión <span
                             class="fas fa-arrow-right topNavIcon" data-fa-transform="shrink-3"></span> </a>
                 </div>
-
-            </li>
-
-        {% else %}
-            <li class="nav-item">
-                <a class="btn btn-falcon-primary mt-2" id="login" href="{% url 'signin' %}">Iniciar Sesión</a>
             </li>
         {% endif %}
+
+        {% if not request.user|has_group:"Gestor de Patrimonios" and not request.user|has_group:"Gestor de Conservación y Traslados" and not request.user|has_group:"Conservador" %}
+            <li class="nav-item">
+                <a href="{% url 'signin' %}">
+                    <div class="btn btnLoginTopbar pr-0" type="button">
+                        Iniciar Sesión
+                    </div>
+                </a>
+            </li>
+        {% endif %}
+
+
     </ul>
 
 </nav>

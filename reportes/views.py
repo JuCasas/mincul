@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.db.models.functions import ExtractMonth, ExtractYear
 from django.shortcuts import render
@@ -7,10 +8,9 @@ from django.http import JsonResponse, HttpResponseRedirect
 from incidente.models import Incidente
 from patrimonios.models import Patrimonio, PuntoGeografico
 
-
+@login_required(login_url='/auth/login/')
 def reportes(request):
     return render(request, 'reportes/reportes_gestor.html')
-
 
 def traerData(request):
     p = PuntoGeografico.objects.annotate(num_incidentes=Count('incidente')).order_by('-num_incidentes')[:5]

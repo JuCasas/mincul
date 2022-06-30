@@ -30,6 +30,7 @@ class ProyectoConservacion(models.Model):
         ('0', 'En Proceso'),
         ('1', 'Registrado'),
         ('2', 'Completado'),
+        ('3', 'Cancelado'),
     )
     codigo = models.CharField(max_length=10, null=True)
     nombre = models.CharField(max_length=50, unique=True)

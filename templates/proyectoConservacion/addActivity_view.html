@@ -253,6 +253,52 @@
                         </div>
                         <div class="col-lg-12 col-sm-12" id="seccionExistentes">
                         </div>
+                        {% if type == "edit" %}
+                            <div class="card my-3 col-12">
+                                <div class="card-header">
+                                    <h5>Documentos actuales:</h5>
+                                </div>
+                                <div class="card-body bg-light">
+                                    <div class="row" id="documentosActuales">
+                                        {% for documento in documentos %}
+                                            <div class="col-lg-2 col-md-auto col-sm-auto mt-3">
+                                                <div class="card mx-1">
+
+                                                    {#                                                    {% if  estado  == '1' or estado == '0' %}#}
+                                                    <div class="card-header p-2 d-flex justify-content-end">
+                                                        <button class="close float-none" type="button"
+                                                                aria-label="Close"
+                                                                onclick="abrirModalEliminar(this,{{ documento.pk }}, '{{ documento.filename }}')">
+                                                            <span aria-hidden="true">×</span>
+                                                        </button>
+                                                    </div>
+                                                    {#                                                    {% endif %}#}
+
+
+                                                    <div class="card-body p-0" style="transform: rotate(0);">
+                                                        <div>
+                                                            <img class="img-fluid"
+                                                                 src="{% static 'img/icons/icono-archivo.jpg' %}">
+                                                        </div>
+                                                        <a class="notification notification-flush bg-0 stretched-link"
+                                                           href="{{ media_path }}{{ documento.url }}"
+                                                           download></a>
+                                                    </div>
+                                                    <div class="card-footer p-2" style="transform: rotate(0);">
+                                                        <a class="notification notification-flush bg-0 stretched-link"
+                                                           href="{{ media_path }}{{ documento.url }}"
+                                                           download></a>
+                                                        <h6>{{ documento.filename }}</h6>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endif %}
 
@@ -277,7 +323,7 @@
                             </span>
                     </div>
 
-                    {% if actividad.status == '0' %}
+                    {% if actividad.status == '0' and request.user|has_group:"Gestor de Conservación y Traslados" %}
                         <div class="col-3">
                             <button class="btn btn-primary mx-1" type="button"
                                     data-toggle="modal" data-target="#iniciarActividad">
@@ -286,7 +332,7 @@
                         </div>
                     {% endif %}
 
-                    {% if actividad.status == '1' %}
+                    {% if actividad.status == '1' and request.user|has_group:"Gestor de Conservación y Traslados"%}
                         <div class="col-3">
                             <div class="row">
                                 <button class="btn btn-primary mx-1" type="button"
@@ -428,6 +474,28 @@
         </div>
     </div>
 
+    <!-- Ver detalle de rechazo -->
+    <div class="modal fade" id="modalEliminarDocumento" tabindex="-1" role="dialog"
+         aria-labelledby="modalEliminarDocumentoLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEliminarDocumentoLabel">Confirmación</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="nombreModal">
+
+                </div>
+
+                <div class="modal-footer" id="botonesModal">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block extrajs %}
@@ -440,6 +508,102 @@
     <script>
         let conservadoresLista = [];
         let idEnviar;
+        var objeto;
+
+        $(document).ready(function () {
+            console.log("{{ actividad.patrimonio.pk }}");
+            console.log("{{ actividad.patrimonio.nombreTituloDemoninacion }}");
+            if ('{{ type }}' == 'new') {
+                idEnviar = '0';
+            } else {
+
+              {% if lista is not None %}
+                idEnviar = '{{ actividad.id }}';
+
+                console.log("Lista de antes de parse");
+                console.log({{ lista }});
+                var array = {{ lista }};
+                console.log("Despues del parse");
+                console.log(array);
+
+                for (let i = 0; i < array.length; i++) {
+                    conservadoresLista.push(array[i].toString());
+                }
+                {% endif %}
+
+                console.log(conservadoresLista);
+            }
+
+            var opcion = '<option value="{{ actividad.patrimonio.pk }}">{{ actividad.patrimonio.nombreTituloDemoninacion }}</option>'
+
+            console.log(opcion);
+
+            $("#patrimonio").html(opcion);
+            $("#patrimonio").val("{{ actividad.patrimonio.pk }}").change()
+        });
+
+        function abrirModalEliminar(btn, pk, archivo) {
+
+            $('#modalEliminarDocumento').modal('show');
+
+            objeto = btn;
+
+            var botones = '<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>' +
+                '<button class="btn btn-primary btn-sm" type="button" onclick="eliminaDocumento(' + pk + ')" data-dismiss="modal">Confirmar</button>';
+            var texto = '<p>Desea eliminar el archivo "' + archivo + '"</p>';
+
+            $("#nombreModal").html(texto);
+            $("#botonesModal").html(botones);
+        }
+
+
+        function eliminaDocumento(pk) {
+            console.log("Elimnar cocumneto");
+            console.log(pk);
+
+            var btn = objeto;
+
+            $('#modalEliminarDocumento').modal('show');
+
+            var columna = btn.parentNode.parentNode.parentNode;
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'eliminarDocumentoActividad'%}",
+                async: false,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    documento: pk,
+                    actividad: idEnviar,
+                },
+                success: function (response) {
+                    let resultado = response['existe'];
+                    columna.parentNode.removeChild(columna);
+                    $.toast({
+                        text: 'Documento eliminado con éxito',
+                        icon: 'success',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#B7E6CA',  // To change the background
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 3000,
+                    })
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    console.log(response);
+                    $.toast({
+                        text: 'Ocurrió un error inesperado',
+                        icon: 'warning',
+                        loader: false,        // Change it to false to disable loader
+                        bgColor: '#c67a71',
+                        textColor: '#000000',
+                        position: 'bottom-right',
+                        hideAfter: 3000,
+                    })
+                }
+            });
+        }
 
 
         jQuery.validator.addMethod("alphanumeric", function (value, element) {
@@ -559,15 +723,16 @@
                                 hideAfter: 3000,
                             })
                         } else {
-                            $("#nombre").val(null)
-                            $("#descripcion").val(null)
+                            $("#nombre").val(null);
+                            $("#descripcion").val(null);
                             conservadoresLista = [];
-                            $("#conservadorAgregar").empty()
-                            $("#fechaInicio").val(null)
-                            $("#file").val(null)
-                            $("#fechaFin").val(null)
-                            $("#patrimonio").val(null).change()
-                            $("#conservadores").val(null).change()
+                            $("#conservadorAgregar").empty();
+                            $("#documentosActuales").empty();
+                            $("#fechaInicio").val(null);
+                            $("#file").val(null);
+                            $("#fechaFin").val(null);
+                            $("#patrimonio").val(null).change();
+                            $("#conservadores").val(null).change();
                             $.toast({
                                 text: 'Actividad creada con éxito',
                                 icon: 'success',
@@ -683,7 +848,7 @@
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                     documento: pk,
-                    actividad: Number(idEnviar)
+                    actividad: idEnviar,
                 },
                 success: function (response) {
                     let resultado = response['existe'];
@@ -716,8 +881,8 @@
 
         function agregarConservadorTabla() {
             let conservadorAgregar = $("#conservadores").select2('data');
-            if (!conservadoresLista.includes(Number(conservadorAgregar[0].id))) {
-                conservadoresLista.push(Number(conservadorAgregar[0].id));
+            if (!conservadoresLista.includes(conservadorAgregar[0].id) && conservadorAgregar[0].id !=='' ) {
+                conservadoresLista.push(conservadorAgregar[0].id);
                 $("#lista").val(conservadoresLista);
 
                 data = '<tr>' +

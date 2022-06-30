@@ -272,11 +272,11 @@
                 title: "{{ patrimonio0.patrimonio.nombreTituloDemoninacion }}"
             }).addTo(map).bindPopup("<div>" +
                 "<p>" + "{{ patrimonio0.patrimonio.nombreTituloDemoninacion }}" +"</p>"  +
-                "<img width='300' src='" +
+                "<img height='90' width='100%' src='" +
                 "{{ patrimonio0.url }}" +
                 "'/>" +
-            "</div>").openPopup()
-            map.flyTo([{{ patrimonio0.patrimonio.lat }}, {{patrimonio0.patrimonio.long}}],15);
+            "</div>",{maxHeight:"125"}).openPopup()
+            map.flyTo([{{ patrimonio0.patrimonio.lat }}, {{patrimonio0.patrimonio.long}}],16);
         {% endif %}
         {% if institucion0 != None and patrimonio0 is None %}
             let markerInicio = L.marker([{{institucion0.institucion.lat}}, {{institucion0.institucion.long}}], {
@@ -284,10 +284,10 @@
                 title: "{{ institucion0.institucion.nombre }}"
             }).addTo(map).bindPopup("<div>" +
                 "<p>" + "{{ institucion0.institucion.nombre }}" +"</p>"  +
-                "<img width='300' src='" +
+                "<img height='90' width='100%' src='" +
                 "{{ institucion0.url }}" +
                 "'/>" +
-            "</div>").openPopup()
+            "</div>",{maxHeight:"125"}).openPopup()
             map.flyTo([{{ institucion0.institucion.lat }}, {{institucion0.institucion.long}}],18);
         {% endif %}
     </script>
@@ -314,11 +314,11 @@
                             title: nombre
                         }).addTo(map).bindPopup("<div>" +
                             "<p>" + nombre +"</p>"  +
-                            "<img width='300' src='" +
+                            "<img height='90' width='100%' src='" +
                             url +
                             "'/>" +
-                        "</div>").openPopup()
-                        map.flyTo([ lat, long],15);
+                        "</div>",{maxHeight:"125"}).openPopup()
+                        map.flyTo([ lat, long],16);
                     },
                     error: function (error){
                         console.log(error)
@@ -339,10 +339,10 @@
                             title: nombre
                         }).addTo(map).bindPopup("<div>" +
                             "<p>" + nombre +"</p>"  +
-                            "<img width='300' src='" +
+                            "<img height='90' width='100%' src='" +
                             url +
                             "'/>" +
-                        "</div>").openPopup()
+                        "</div>",{maxHeight:"125"}).openPopup()
                         map.flyTo([ lat, long],18);
                     },
                     error: function (error){
@@ -429,23 +429,25 @@
                 var valueDepa = departamentoInput.value;
                 var txtInputValue = txtInput.value.trim();
                 var categoriaInputValue = categoriaInput.value;
-                if (valueDepa=="-1" || (txtInputValue== "" && categoriaInputValue == "Categoría") || txtInputValue != ""){
-                    if(valueDepa == "-1") {
-                        rowDepartamento.innerHTML="Debe seleccionar un departamento";
-
+                var temp=false;
+                if(valueDepa == "-1") {
+                    rowDepartamento.innerHTML="Debe seleccionar un departamento";
+                    tamp=true;
+                }
+                if(txtInputValue== "" && categoriaInputValue == "Categoría") {
+                    rowTxt.innerHTML="Debe escribir el nombre de un patrimonio";
+                    rowCategoria.innerHTML="Debe seleccionar una categoría";
+                    txtInput.value = txtInputValue;
+                    temp=true;
+                }
+                if(txtInputValue != ""){
+                    if(isAlpha(txtInputValue)){ {% comment %} Nothing {% endcomment %} }
+                    else{
+                        rowTxt.innerHTML="Solo se permiten letras y espacios";
+                        temp=true;
                     }
-                    if(txtInputValue== "" && categoriaInputValue == "Categoría") {
-                        rowTxt.innerHTML="Debe escribir el nombre de un patrimonio";
-                        rowCategoria.innerHTML="Debe seleccionar una categoría";
-                        txtInput.value = txtInputValue;
-
-                    }
-                    if(txtInputValue != ""){
-                        if(isAlpha(txtInputValue)){ {% comment %} Nothing {% endcomment %} }
-                        else{
-                            rowTxt.innerHTML="Solo se permiten letras y espacios";
-                        }
-                    }
+                }
+                if(temp){
                     return false;
                 }
             });
