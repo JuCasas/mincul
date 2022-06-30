@@ -362,8 +362,21 @@
                         if (row.estado === '3' || row.estado === '6') {
                             resp = '<button type="button" class="btn btn-show" onclick="visualizarTraslado(' + row.id + ')"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp';
                         } else {
+                            {% if request.user|has_group:"Gestor de Patrimonios"  %}
+                                if (row.estado === '1') {
+                                     resp = '<button type="button" class="btn btn-show" onclick="visualizarTraslado(' + row.id + ')"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
+                                '<button type="button" class="btn btn-edit" onclick="editarTraslado(' + row.id + ')" ><i class="fas fa-edit""></i></button>' + '&nbsp;&nbsp';
+                                }
+                                else {
+                                     resp = '<button type="button" class="btn btn-show" onclick="visualizarTraslado(' + row.id + ')"><i class="fas fa-eye"></i></button>';
+                                }
+
+                            {% endif %}
+
+                            {% if request.user|has_group:"Gestor de Conservación y Traslados"  %}
                             resp = '<button type="button" class="btn btn-show" onclick="visualizarTraslado(' + row.id + ')"><i class="fas fa-eye"></i></button>' + '&nbsp;&nbsp' +
                                 '<button type="button" class="btn btn-edit" onclick="editarTraslado(' + row.id + ')" ><i class="fas fa-edit""></i></button>' + '&nbsp;&nbsp';
+                            {% endif %}
                         }
                         return resp;
                     },
