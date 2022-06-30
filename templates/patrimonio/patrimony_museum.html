@@ -38,48 +38,51 @@
         </div>
 
         <div class="row mb-3">
-            <div class="col-8" style="display: table-cell!important">
-                <div class="position-absolute"
-                     style="width: calc(100% - 32px); height: calc(100%-16px)!important; border-radius: 8px!important;">
-                    <img style="width: 100%!important; height: 100%!important; border-radius: 8px!important; filter: brightness(75%)!important;"
-                         src="/static/img/museos-de-peru.png"/>
+            <div class="col-8">
+                <div class=" card position-absolute w-100"
+                     style="height: 100%; border-radius: 8px!important;">
+                    <img
+                            style="height: 100%!important; border-radius: 8px!important; filter: brightness(75%); object-fit: fill;"
+                            src="/static/img/museos-de-peru.png"
+                            alt="Card image">
                 </div>
 
                 <div class="card-img-overlay d-flex align-items-end text-white">
-                    <p class="col text-left mb-0" style="font-size: 25px;font-weight: bold;">
-                        {{ institucion.nombre }}
+                    <p class="col text-left mb-0"
+                       style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ institucion.nombre }}
                     </p>
                     <div class="col text-right">
-                        {% if puntuacion >= 1 %}
+                        {% if puntacion >= 1 %}
                             <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                         {% else %}
                             <span class="fa fa-star"></span>
                         {% endif %}
-                        {% if puntuacion >= 2 %}
+                        {% if puntacion >= 2 %}
                             <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                         {% else %}
                             <span class="fa fa-star"></span>
                         {% endif %}
-                        {% if puntuacion >= 3 %}
+                        {% if puntacion >= 3 %}
                             <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                         {% else %}
                             <span class="fa fa-star"></span>
                         {% endif %}
-                        {% if puntuacion >= 4 %}
+                        {% if puntacion >= 4 %}
                             <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                         {% else %}
                             <span class="fa fa-star"></span>
                         {% endif %}
-                        {% if puntuacion >= 5 %}
+                        {% if puntacion >= 5 %}
                             <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
                         {% else %}
                             <span class="fa fa-star"></span>
                         {% endif %}
                     </div>
                 </div>
+                <!--Cabecera card imagen fin-->
             </div>
 
-            <div class="col-4" style="display: table-cell!important">
+            <div class="col-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-black">Datos del museo:</h5>
@@ -96,7 +99,7 @@
         <!-- Info de patrimonio -->
         <div class="row">
             <div class="col-8">
-                <div class="card mb-3">
+                <div class="card mt-3 mb-3">
                     <div class="carousel slide" id="carouselExampleCaptions" data-ride="carousel">
                         <ol class="carousel-indicators">
                             {% for pat in patrimonios %}

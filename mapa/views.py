@@ -75,7 +75,7 @@ def ficha(request,my_id):
                 'tecnicasDecoracion': tecnicasDecoracionString,
                 'tecnicasManufactura': tecnicasManufacturaString,
                 'dataCategoria':dataCategoria,
-                'urlPatrimonio': '/'+urlPatrimonio
+                'urlPatrimonio': urlPatrimonio
             }
         except:
             context = {
@@ -94,7 +94,7 @@ def ficha(request,my_id):
         urlPatrimonio = urlPatrimonio.name
         context = {
             'patrimony': patrimonio,
-            'urlPatrimonio': '/'+urlPatrimonio
+            'urlPatrimonio': urlPatrimonio
         }
     except:
         context={
@@ -139,7 +139,7 @@ def mapaPatrimonioSimple(request):
                             urlPatrimonio = urlPatrimonio[0].url
                             urlPatrimonio = urlPatrimonio.name
                             patri.append({'patrimonio':p,
-                                          'url':'/'+urlPatrimonio})
+                                          'url': urlPatrimonio})
                         except:
                             patri.append({'patrimonio': p,
                                           'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -252,7 +252,7 @@ def mapaPatrimonioAvanzado(request):
                             urlPatrimonio = urlPatrimonio[0].url
                             urlPatrimonio = urlPatrimonio.name
                             patrimons.append({'patrimonio': p,
-                                            'url': '/'+urlPatrimonio})
+                                            'url': urlPatrimonio})
                         except:
                             patrimons.append({'patrimonio': p,
                                              'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -321,7 +321,7 @@ def patrimonioJson(request,id_patrimonio):
     urlPatrimonio=None
     try:
         urlPatrimonio = (urlPatri[0].url)
-        urlPatrimonio = '/'+urlPatrimonio.name
+        urlPatrimonio = urlPatrimonio.name
     except:
         urlPatrimonio = '/static/img/landmarks/notAvailable.jpg'
     nombre = patrimonio.nombreTituloDemoninacion
