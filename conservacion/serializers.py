@@ -4,8 +4,8 @@ from rest_framework import serializers
 from conservacion.models import ProyectoConservacion, Tarea, Campo
 from conservacion.models import Actividad
 from mincul_app.models import Documento
-from patrimonios.models import Patrimonio
 from authentication.models import User
+from patrimonios.models import Institucion, Patrimonio, Categoria, Propietario, Responsable
 
 
 class ProyectoConservacionSerializer(serializers.ModelSerializer):
@@ -28,10 +28,27 @@ class TareaSerializer (serializers.ModelSerializer):
         #                                               fechaInicio   , fechaFin
 
 class PatrimonioSerializer(serializers.ModelSerializer):
+    imagen = serializers.SerializerMethodField('getImg')
+    categoria = serializers.SerializerMethodField('getCategory')
+    tipo = serializers.SerializerMethodField('getTipo')
+
+    def getImg(self, obj):
+        doc = Documento.objects.filter(patrimonio__id=obj.pk).first()
+        if doc != None:
+            return str(doc.url)
+        return '/static/img/imageNotAvailable.jpg'
+
+    def getCategory(self, obj):
+        cat = Categoria.objects.get(pk=obj.categoria_id).nombre
+        return cat
+
+    def getTipo(self, obj):
+        tipo = Patrimonio._meta.get_field('tipoPatrimonio').choices[int(obj.tipoPatrimonio) - 1]
+        return tipo
 
     class Meta:
         model = Patrimonio
-        fields = ['id','nombreTituloDemoninacion']
+        fields = ['pk', 'id', 'nombreTituloDemoninacion', 'tipo', 'categoria', 'imagen']
 
 class ConservadorSerializer(serializers.ModelSerializer):
 
