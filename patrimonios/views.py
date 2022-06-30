@@ -852,7 +852,13 @@ def detalle(request, pk):
     if request.POST.get("accion_valoracion") == "valoracion":
         print(request.POST)
         valoracion = PatrimonioValoracion.objects.create()
-        valoracion.patrimonio_id = pk;
+        patrimonioSeleccionado = Patrimonio.objects.get(pk = pk)
+        if (patrimonioSeleccionado.tipoPatrimonio == '3'):
+            zonaGeo = PuntoGeografico.objects.get(institucion_id=patrimonioSeleccionado.institucion_id)
+        else:
+            zonaGeo = PuntoGeografico.objects.get(patrimonio= patrimonioSeleccionado)
+
+        valoracion.zona_id = zonaGeo.pk
         valoracion.nombre = request.POST.get("name")
         valoracion.correo = request.POST.get("email")
         valoracion.comentario = request.POST.get("comment")
@@ -864,9 +870,13 @@ def detalle(request, pk):
     valor = Patrimonio.objects.get(pk=pk)
     if int(valor.tipoPatrimonio) == 3:
         zona = PuntoGeografico.objects.get(institucion_id=valor.institucion.pk)
+        print("Es institucion")
+        print(zona.nombre)
     else:
         zona = PuntoGeografico.objects.get(patrimonio_id=pk)
-    valoraciones = PatrimonioValoracion.objects.filter(zona=zona).filter(estado=2)
+        print("Es otra cosa")
+    valoraciones = PatrimonioValoracion.objects.filter(zona=zona).filter(estado=1)
+    print(valoraciones)
     puntuacion = 0
 
     for v in valoraciones:
@@ -897,7 +907,7 @@ def detalle(request, pk):
 def detalle_museo(request, pk):
     institucion = Institucion.objects.get(pk=pk)
     patrimonios = Patrimonio.objects.filter(institucion_id__isnull=False,institucion_id=pk,estado=1)
-    valoraciones = PatrimonioValoracion.objects.filter(zona__institucion_id__isnull=False,zona__institucion_id=pk,estado=2)
+    valoraciones = PatrimonioValoracion.objects.filter(zona__institucion_id__isnull=False,zona__institucion_id=pk,estado=1)
     incidentes = Incidente.objects.filter(zona__institucion_id__isnull=False,zona__institucion_id=pk)
 
     puntuacion = 0
