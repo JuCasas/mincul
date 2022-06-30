@@ -203,6 +203,28 @@ def listPatrimonys_Project(request):
     return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 
+@login_required(login_url='/auth/login/')
+@api_view(('GET',))
+def listPatrimonys_Activity(request):
+    length = 10
+    search = request.GET['search']
+    page = int(request.GET['page'])
+    project_pk = int(request.GET['project_pk'])
+    start = (page - 1) * length
+    end = start + length
+    project = ProyectoConservacion.objects.get(pk=project_pk)
+    queryset = project.patrimonios.all()
+    if search:
+        queryset = queryset.filter(nombreTituloDemoninacion__icontains=search).order_by('nombreTituloDemoninacion')
+    count = queryset.count()
+    queryset = queryset[start:start + length]
+    serializer = PatrimonioSerializer(queryset, many=True)
+    result = dict()
+    result['items'] = serializer.data
+    result['total_count'] = count
+    return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+
 @api_view(('GET',))
 def addConservador(request):
     queryset = User.objects.filter(groups__name='Conservador')
@@ -687,6 +709,16 @@ def updateActivityState(request):
     nuevo_estado = request.POST.get('nuevo_estado')
     actividad.status = nuevo_estado
     actividad.save()
+    return JsonResponse({}, status=200)
+
+@login_required(login_url='/auth/login/')
+def updateProjectState(request):
+    proyecto_pk = request.POST.get('proyecto_pk')
+    print(request.POST)
+    proyecto = ProyectoConservacion.objects.get(pk=proyecto_pk)
+    nuevo_estado = request.POST.get('nuevo_estado')
+    proyecto.status = nuevo_estado
+    proyecto.save()
     return JsonResponse({}, status=200)
 
 

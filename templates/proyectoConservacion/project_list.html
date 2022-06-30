@@ -269,11 +269,17 @@
             <div class="row justify-content-end mt-2 mr-1">
 
               {% if request.user|has_group:"Gestor de Conservación y Traslados" %}
+
+                  <div id="botonesEstado">
+
+                  </div>
                 <button type="button" data-dismiss="modal" class="btn second mr-3">Cancelar</button>
 
 
+
                 <div>
-                  <input type="hidden" id="type" name="type" value="">
+
+                    <input type="hidden" id="type" name="type" value="">
                   <button id="submit" class="btn btn-primary"><span
                       class="glyphicon glyphicon-ok"></span> Guardar
                   </button>
@@ -331,6 +337,27 @@
 
   <script>
 
+    let idParaEstado;
+    let nuevo_estadoProyecto = '';
+
+      function updateStateProyecto(nuevoEstado) {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'updateProjectState'%}",
+                async: false,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    proyecto_pk: idParaEstado,
+                    nuevo_estado: nuevoEstado,
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        }
 
     jQuery.validator.addMethod("alphanumeric", function (value, element) {
       return this.optional(element) || /^[a-z0-9]+([\s]{1}[a-z0-9]+)*$/i.test(value);
@@ -549,8 +576,10 @@
                 resp = '<span class="badge badge rounded-capsule d-block badge-soft-primary">' + "En Proceso" + '</span>'
               } else if (data == '1') {
                 resp = '<span class="badge badge rounded-capsule d-block badge-soft-warning">' + "Registrado" + '</span>'
-              } else {
+              } else if (data == '2') {
                 resp = '<span class="badge badge rounded-capsule d-block badge-soft-success">' + "Completo" + '</span>'
+              } else {
+                  resp ='<span class="badge badge rounded-capsule d-block badge-soft-danger">' + "Cancelado" + '</span>'
               }
               return resp;
             }
@@ -614,11 +643,14 @@
       });
 
 
+
+
       $('#tabla_autores tbody').on('click', 'button', function () {
         let data = table.row($(this).parents('tr')).data();
         let class_name = $(this).attr('class');
 
         id = data['id'];
+        idParaEstado = id;
 
         if (class_name == 'btn btn-edit') {
           // EDIT button
@@ -636,6 +668,20 @@
           $('#fechaRegistro').prop("disabled", true);
           $('#type').val('edit');
           $('#modal_title').text('Editar Proyecto');
+
+          var botones = '';
+          if (data['status']==='1'){
+              botones = '<button class="btn btn-primary btn-sm mr-3" type="button" onclick="updateStateProyecto(0)">Iniciar Proyecto</button>';
+          }else if (data['status']==='0'){
+              botones = ' <button class="btn btn-primary btn-sm mr-3" type="button" onclick="updateStateProyecto(2)">Completar Proyecto</button>'+
+                    '<button class="btn btn-secondary btn-sm mr-3" type="button" onclick="updateStateProyecto(3)">Cancelar Proyecto</button>';
+          }else {
+              $("#botonesEstado").empty();
+          }
+
+          $("#botonesEstado").html(botones);
+
+
           $("#myModal").modal();
         } else if (class_name == 'btn btn-show') {
           window.location.pathname = "/conservacion/proyectos/" + id + "/actividades/";
@@ -700,10 +746,16 @@
         console.log(today.toISOString())
         var currentDate = today.toISOString().slice(0, 10);
         $('#fechaRegistro').val(currentDate);
+        $('#botonesEstado').empty();
         $('#fechaRegistro').prop("disabled", true);
         $('#modal_title').text('Nuevo Proyecto');
         $("#myModal").modal();
       });
+
+
+      $('#myModal').on('hide.bs.modal', function () {
+            $("#tabla_autores").DataTable().draw();
+        });
 
 
     });
