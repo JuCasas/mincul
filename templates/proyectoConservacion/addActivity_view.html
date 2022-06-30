@@ -516,6 +516,8 @@
             if ('{{ type }}' == 'new') {
                 idEnviar = '0';
             } else {
+
+              {% if lista is not None %}
                 idEnviar = '{{ actividad.id }}';
 
                 console.log("Lista de antes de parse");
@@ -527,6 +529,7 @@
                 for (let i = 0; i < array.length; i++) {
                     conservadoresLista.push(array[i].toString());
                 }
+                {% endif %}
 
                 console.log(conservadoresLista);
             }

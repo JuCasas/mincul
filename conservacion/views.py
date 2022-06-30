@@ -453,6 +453,7 @@ def addActivityView(request, pk):
         'project': proyecto,
         'patrimonios': patrimonios,
         'type': 'new',
+        'lista': []
     }
 
     return render(request, 'proyectoConservacion/addActivity_view.html', context)
