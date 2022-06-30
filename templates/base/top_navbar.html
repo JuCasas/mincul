@@ -39,7 +39,7 @@
 
         {% if request.user|has_group:"Usuario externo" or request.user|has_group:"Gestor de Patrimonios" or request.user|has_group:"Gestor de Conservación y Traslados" or request.user|has_group:"Conservador" %}
             <a href="{% url 'mapaPatrimonioSimple' %}">
-                <div class="btn btnTopbar px-3 mr-2" type="button" {% if request.path|slice:"0:6" in "/mapa/" %}
+                <div class="btn btnTopbar px-3 mr-2" type="button" {% if request.path|slice:"0:5" in "/mapa/" %}
                      style="color: #CD2323!important"{% endif %}>
                     <strong>Mapa</strong>
                 </div>
