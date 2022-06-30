@@ -24,18 +24,24 @@
 {% block body %}
 
     <div class="div p-0">
-        <div class="row">
-            <div class="col-8 mb-3" style="display: table-cell!important">
-                <div class="row justify-content-between align-items-center mb-1 position-absolute z-index-10 " style="padding: 16px!important">
-                    <a class="nav-link py-0 back" href="{% url 'patrimonio_list' %}"><span
-                            class="fas fa-angle-left mr-2"
-                            data-fa-transform="shrink-3"></span>Patrimonios</a>
+        <div class="card col-sm-12 mb-3" style="padding: 20px!important">
+            <div class="row justify-content-between align-items-center mb-1">
+                <a class="nav-link py-0 back" href="{% url 'listProjects' %}"><span class="fas fa-angle-left mr-2"
+                                                                                    data-fa-transform="shrink-3"></span>Volver</a>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-md-12 d-flex">
+                    <h5 class="mb-2 mb-sm-0 text-black mr-4">Instituciones</h5>
                 </div>
-            
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-8" style="display: table-cell!important">
                 <div class="position-absolute"
                      style="width: calc(100% - 32px); height: calc(100%-16px)!important; border-radius: 8px!important;">
-                    <img class="img-fluid w-100"
-                         style="width: 100%!important; height: 100%!important; border-radius: 8px!important; filter: brightness(75%)!important;"
+                    <img style="width: 100%!important; height: 100%!important; border-radius: 8px!important; filter: brightness(75%)!important;"
                          src="/static/img/museos-de-peru.png"/>
                 </div>
 
@@ -73,7 +79,7 @@
                 </div>
             </div>
 
-            <div class="col-4 mb-3" style="display: table-cell!important">
+            <div class="col-4" style="display: table-cell!important">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-black">Datos del museo:</h5>
