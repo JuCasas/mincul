@@ -26,9 +26,7 @@ as
 $$
 Declare
 begin
-	IF new."tipoPatrimonio" = '1' or new."tipoPatrimonio" = '2' then
-		Insert into patrimonios_puntogeografico(nombre,patrimonio_id,tipo) VALUES (new."nombreTituloDemoninacion",new.id,'1');
-	END IF;
+	Insert into patrimonios_puntogeografico(nombre,patrimonio_id,tipo) VALUES (new."nombreTituloDemoninacion",new.id,'1');
 return new;
 end
 $$
