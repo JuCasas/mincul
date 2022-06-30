@@ -7,12 +7,19 @@
 {% block body %}
     <div class="container d-flex justify-content-center align-items-center" style="background-color: #EEF3F9!important; width: 100%!important; height: 100vh!important; position: absolute!important; left: 0!important; top: 0!important;">
         <div class="" style="display: flex!important;flex-direction: column!important;align-items: center!important;; background-color: #EEF3F9!important; height: 500px; width: 500px; position: absolute!important; top: calc(50% - 250px)!important; left: calc(50% - 250px)!important;">
-            <h1 class="" style="font-size: 100px!important; margin: 0px!important;">404</h1>
-            <h5 style="font-size: 30px; margin-bottom: 20px!important"><strong>UPS!</strong>Error Interno</h5>
+            <h1 class="" style="font-size: 100px!important; margin: 0px!important;">500</h1>
             <img src="{% static '/img/logos/mincult.png' %}" style="height: 50px;"/>
+            <h5 style="font-size: 30px; margin-bottom: 20px!important"><strong>UPS!</strong>Error Interno</h5>
             <p class="text-center" style="font-size: 20px;">¡Algo salió mal! Por favor, reintenta en un momento.</p>
             <a href="{% url 'mapaPatrimonioSimple' %}">
-        <button class="btn btn-primary px-3 mr-2" type="button">
+        <button class="btn btn-primary px-3 mr-2" type="button" style="background-color: #2B2D42;
+    border-color: #2B2D42;
+    color: white;
+    border-radius: 12px;
+    height: 36px;
+    width: 100px;
+    font-size: 14px;
+    cursor: pointer!important">
           Regresar
          </button>
         </a>

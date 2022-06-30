@@ -3,94 +3,108 @@
 
 {% block extrastyle %}
     <style>
-    .containerLogin{
-        position: absolute!important;
-        height: 100vh!important;
-        width: 100% !important;
-        left: 0;
-        top: 0;
-    }
+        .containerLogin {
+            position: absolute !important;
+            height: 100vh !important;
+            width: 100% !important;
+            left: 0;
+            top: 0;
+        }
 
-    .cardLogin{
-        background-color: rgba(255, 255, 255, 0.9) !important;
-        position: absolute!important;
-        right: calc(50% - 250px) !important;
-        top: calc(50% - 250px) !important;
-        width: 500px!important;
-        height: 500px!important;
-        display: flex!important;
-        flex-direction: column!important;
-        text-align: center!important;
-        border-radius: 10px!important;
-        padding: 32px 72px!important;
-    }
+        .cardLogin {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            position: absolute !important;
+            right: calc(50% - 250px) !important;
+            top: calc(50% - 250px) !important;
+            width: 500px !important;
+            height: 500px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            border-radius: 10px !important;
+            padding: 32px 72px !important;
+        }
 
-    .card-header{
-        background-color: rgba(255, 255, 255, 0) !important; ;
-    }
+        .card-header {
+            background-color: rgba(255, 255, 255, 0) !important;;
+        }
 
-    input{
-        background-color: white;!important;
-    }
+        input {
+            background-color: white;
+        !important;
+        }
 
-    .form-control{
-        background-color: white;!important;
-    }
+        .form-control {
+            background-color: white;
+        !important;
+        }
     </style>
 
 {% endblock %}
 
 {% block body %}
     <div class="containerLogin">
-    <img src="{% static '/img/loginbg.png' %}" style="height: 100vh;width: 100%"/>
-    <div class="card mb-3 cardLogin">
-        <div class="card-header">
-            <img src="{% static '/img/loginIcon.png' %}" style="height: 50px;"/>
+        <img src="{% static '/img/loginbg.png' %}" style="height: 100vh;width: 100%"/>
+        <div class="card mb-3 cardLogin">
+            <div class="card-header">
+                <img src="{% static '/img/loginIcon.png' %}" style="height: 50px;"/>
+            </div>
+
+            <div class="card-body">
+                <form id="formTareas" name="formTareas" method="post" action="{% url 'signin' %}">
+                    {% csrf_token %}
+                    <div class="flex justify-content-start text-left">
+                        <h5 class="mb-3">Iniciar Sesión</h5>
+                    </div>
+
+                    {% if error_message %}
+                        <div class="alert alert-warning alert-dismissible" role="alert" id="alert"
+                             style="padding: 5px 16px; display: flex!important; justify-content: space-between!important; align-items: center!important; height: 32px!important">
+                            <span class="text-left"
+                                  style="font-size: 12px!important">Usuario o contraseña incorrectos.</span>
+
+                            <div onclick="closeAlert()" type="button" class="close p-0" data-dismiss="alert"
+                                 aria-label="Close"
+                                 style="padding-right: 8px!important; height: 32px!important; margin-top: 3.5px!important">
+                                <span aria-hidden="true">&times;</span>
+                            </div>
+
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-sm-12">
+                            <input class="form-control" id="username" name="username" type="text"
+                                   placeholder="Ingrese su usuario" style="background-color: white!important;" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-sm-12">
+                            <input class="form-control" id="password" name="password" type="password"
+                                   placeholder="Ingrese su contraseña" style="background-color: white!important;"
+                                   required>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group  row justify-content-end mt-2 mx-0">
+                        <div class="w-100">
+                            <button type="submit" class="btn btn-primary btn-block w-100">
+                                <span class="glyphicon glyphicon-ok"></span>Ingresar
+                            </button>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'mapaPatrimonioSimple' %}">
+                        <div class="btn btnTopbar text-center flex justify-content-center align-items-center" type="button"
+                             style="font-size: 15px!important; color: #CD2323!important; text-decoration: underline #CD2323!important">
+                            Ir a inicio
+                        </div>
+                    </a>
+
+                </form>
+            </div>
         </div>
-
-        <div class="card-body">
-            <form id="formTareas" name="formTareas" method="post" action="{% url 'signin'  %}">
-                {% csrf_token %}
-                <div class="flex justify-content-start text-left">
-                    <h5 class="mb-3">Iniciar Sesión</h5>
-                </div>
-
-                {% if error_message %}
-                  <div class="alert alert-warning alert-dismissible" role="alert" id="alert" style="padding: 5px 16px; display: flex!important; justify-content: space-between!important; align-items: center!important; height: 32px!important">
-                      <span class="text-left" style="font-size: 12px!important">Usuario o contraseña incorrectos.</span>
-
-                      <div onclick="closeAlert()" type="button" class="close p-0" data-dismiss="alert" aria-label="Close"  style="padding-right: 8px!important; height: 32px!important; margin-top: 3.5px!important">
-                        <span aria-hidden="true">&times;</span>
-                      </div>
-
-                  </div>
-                {% endif %}
-
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12">
-                        <input class="form-control" id="username" name="username" type="text"
-                               placeholder="Ingrese su usuario" style="background-color: white!important;" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12">
-                        <input class="form-control" id="password" name="password" type="password"
-                               placeholder="Ingrese su contraseña" style="background-color: white!important;" required>
-                    </div>
-                </div>
-
-
-                <div class="form-group  row justify-content-end mt-2 mx-0">
-                    <div class="w-100">
-                        <button type="submit" class="btn btn-primary btn-block w-100">
-                            <span class="glyphicon glyphicon-ok"></span>Ingresar
-                        </button>
-                    </div>
-                </div>
-
-            </form>
-        </div>
-    </div>
     </div>
 
     <div id="cover-spin"></div>
@@ -99,7 +113,7 @@
 
 {% block extrajs %}
     <script>
-        function closeAlert(){
+        function closeAlert() {
             $('#alert').alert('close')
         }
     </script>
