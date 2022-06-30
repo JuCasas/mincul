@@ -22,15 +22,11 @@ def traerData(request):
     numeros = []
     etiquetas = []
     for tuple in result:
-        #if (result[i][0]!=0):
-        print(tuple)
-        numeros.append(tuple[0])
-        etiquetas.append(tuple[1])
-        # print("DATO"+str(i))
-        # print(numeros)
-        # print(etiquetas)
-        # print(result[i][0])
-        # print(result[i][1])
+        if (tuple[0]!=0):
+            print(tuple)
+            numeros.append(tuple[0])
+            etiquetas.append(tuple[1])
+
     print("ETIQUETAS")
     print(etiquetas)
     return JsonResponse({"data": numeros, "labels":etiquetas}, status=200)
@@ -43,7 +39,8 @@ def traerData2(request):
     print(result)
     numeros = ['0']*12
     for i in range(0,result.count()):
-        numeros[result[i]['month']+4] = result[i]['total']
+        posicion = (result[i]['month']+4)%12
+        numeros[posicion] = result[i]['total']
             # etiquetas.append(result[i][1])
 
     # return JsonResponse({"data": numeros, "labels":etiquetas}, status=200)
