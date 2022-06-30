@@ -21,6 +21,8 @@ from incidente.models import Incidente
 from incidente.serializers import IncidenteSerializer, PuntoGeograficoSerializer
 from django.contrib.auth.decorators import login_required
 
+from traslado.models import DocumentoPorSolicitud
+
 
 def query_projects_by_args(**kwargs):
     length = int(kwargs.get('length', None)[0])
@@ -509,6 +511,8 @@ def editActivityView(request, pk, pkActividad):
 
     actividad = Actividad.objects.get(pk=pkActividad)
     conservadores = actividad.conservadores.all()
+    documentos = actividad.documentos.all()
+    lista = list(conservadores.values_list('pk', flat=True))
 
     context = {
         'media_path': media_path,
@@ -517,10 +521,22 @@ def editActivityView(request, pk, pkActividad):
         'actividad': actividad,
         'patrimonios': patrimonios,
         'conservadores': conservadores,
+        'lista': lista,
         'type': 'edit',
+        'documentos': documentos,
     }
 
     return render(request, 'proyectoConservacion/addActivity_view.html', context)
+
+def eliminarDocumentoActividad(request):
+    print(request.POST)
+    actividad = Actividad.objects.get(pk=request.POST['actividad'])
+    documento = Documento.objects.get(pk=request.POST['documento'])
+    path = documento.url.path
+    os.remove(path)
+    documento.delete()
+    actividad.save()
+    return JsonResponse({}, status=200)
 
 
 @login_required(login_url='/auth/login/')
@@ -537,22 +553,23 @@ def editActivity(request, pk, pkActividad):
         actividad.fechaFin = datetime.datetime.strptime(request.POST['fechaFin'], "%Y-%m-%d").date()
         actividad.patrimonio = Patrimonio.objects.get(pk=int(request.POST['patrimonio']))
 
+        print(actividad.patrimonio.nombreTituloDemoninacion)
+
         actividad.conservadores.clear()
         if request.POST['conservadoresLista']:
             conservadores = list(request.POST['conservadoresLista'].split(","))
+            print('Entra conservador')
             for idConservador in conservadores:
+                print(idConservador)
                 actividad.conservadores.add(User.objects.get(pk=idConservador))
 
-        actividad.relaciones.clear()
-        if request.POST['relacionesLista']:
-            relaciones = list(request.POST['relacionesLista'].split(","))
-            for idRelacion in relaciones:
-                actividad.relaciones.add(Actividad.objects.get(pk=idRelacion))
+        print('Sale conservador')
 
         for f in request.FILES.getlist('file'):
             doc = Documento.objects.create(url=f)
             actividad.documentos.add(doc)
 
+        print()
         actividad.save()
         return Response({}, status=status.HTTP_200_OK, template_name=None, content_type=None)
     except Exception as e:
