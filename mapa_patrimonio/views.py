@@ -66,15 +66,15 @@ def datos(request):
                 })
         for j in range(numInstit):
             try:
-                instiUrl = Documento.objects.filter(institucion=instit[j]).order_by('id')
-                instiUrl = instiUrl[0].url
-                instiUrl = instiUrl.name
+                #instiUrl = Documento.objects.filter(institucion=instit[j]).order_by('id')
+                #instiUrl = instiUrl[0].url
+                #instiUrl = instiUrl.name
                 patriInstit.append({
                     "id": instit[j].id,
                     "lat": instit[j].lat,
                     "long": instit[j].long,
                     "nombre": instit[j].nombre,
-                    "url": '/'+instiUrl,
+                    "url": '/static/img/museos-de-peru.png',
                     "tipo": 4,
                 })
             except:
@@ -125,17 +125,17 @@ def datos(request):
                 })
         for institAzar in institucionesAzar:
             try:
-                instiUrl = Documento.objects.filter(institucion__id=institAzar['id']).order_by('id')
-                instiUrl = instiUrl[0].url
-                print(instiUrl)
-                print(type(instiUrl))
-                instiUrl = instiUrl.name
+                #instiUrl = Documento.objects.filter(institucion__id=institAzar['id']).order_by('id')
+                #instiUrl = instiUrl[0].url
+                #print(instiUrl)
+                #print(type(instiUrl))
+                #instiUrl = instiUrl.name
                 patriInstit.append({
                     "id": institAzar.id,
                     "lat": institAzar.lat,
                     "long": institAzar.long,
                     "nombre": institAzar.nombre,
-                    "url": '/' + instiUrl,
+                    "url": '/static/img/museos-de-peru.png',
                     "tipo": 2,
                 })
             except:
@@ -203,15 +203,15 @@ def patrimonioFueraRuta(request):
                 })
         for j in range(numInstit):
             try:
-                instiUrl = Documento.objects.filter(institucion=instit[j]).order_by('id')
-                instiUrl = instiUrl[0].url
-                instiUrl = instiUrl.name
+                #instiUrl = Documento.objects.filter(institucion=instit[j]).order_by('id')
+                #instiUrl = instiUrl[0].url
+                #instiUrl = instiUrl.name
                 patriInstit.append({
                     "id": instit[j].id,
                     "lat": instit[j].lat,
                     "long": instit[j].long,
                     "nombre": instit[j].nombre,
-                    "url": '/'+instiUrl,
+                    "url": '/static/img/museos-de-peru.png',
                     "tipo": 4,
                 })
             except:
@@ -262,17 +262,17 @@ def patrimonioFueraRuta(request):
                 })
         for institAzar in institucionesAzar:
             try:
-                instiUrl = Documento.objects.filter(institucion__id=institAzar['id']).order_by('id')
-                instiUrl = instiUrl[0].url
-                print(instiUrl)
-                print(type(instiUrl))
-                instiUrl = instiUrl.name
+                #instiUrl = Documento.objects.filter(institucion__id=institAzar['id']).order_by('id')
+                #instiUrl = instiUrl[0].url
+                #print(instiUrl)
+                #print(type(instiUrl))
+                #instiUrl = instiUrl.name
                 patriInstit.append({
                     "id": institAzar.id,
                     "lat": institAzar.lat,
                     "long": institAzar.long,
                     "nombre": institAzar.nombre,
-                    "url": '/' + instiUrl,
+                    "url": '/static/img/museos-de-peru.png',
                     "tipo": 2,
                 })
             except:

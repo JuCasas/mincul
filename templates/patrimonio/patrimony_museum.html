@@ -25,11 +25,17 @@
 
     <div class="div p-0">
         <div class="row">
-            <div class="col-8" style="display: table-cell!important">
+            <div class="col-8 mb-3" style="display: table-cell!important">
+                <div class="row justify-content-between align-items-center mb-1 position-absolute z-index-10 " style="padding: 16px!important">
+                    <a class="nav-link py-0 back" href="{% url 'patrimonio_list' %}"><span
+                            class="fas fa-angle-left mr-2"
+                            data-fa-transform="shrink-3"></span>Patrimonios</a>
+                </div>
+            
                 <div class="position-absolute"
-                     style="width: calc(100% - 16px); height: 100%; border-radius: 8px!important;">
+                     style="width: calc(100% - 32px); height: calc(100%-16px)!important; border-radius: 8px!important;">
                     <img class="img-fluid w-100"
-                         style="width: 100%!important; height: 100%!important; border-radius: 8px!important"
+                         style="width: 100%!important; height: 100%!important; border-radius: 8px!important; filter: brightness(75%)!important;"
                          src="/static/img/museos-de-peru.png"/>
                 </div>
 
@@ -67,8 +73,8 @@
                 </div>
             </div>
 
-            <div class="col-4" style="display: table-cell!important">
-                <div class="card mb-3">
+            <div class="col-4 mb-3" style="display: table-cell!important">
+                <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-black">Datos del museo:</h5>
                         <h6 class="mb-2 mb-md-0 text-black">Nombre completo: {{ institucion.nombre }}</h6>
