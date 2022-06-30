@@ -323,7 +323,7 @@
                             </span>
                     </div>
 
-                    {% if actividad.status == '0' %}
+                    {% if actividad.status == '0' and request.user|has_group:"Gestor de Conservación y Traslados" %}
                         <div class="col-3">
                             <button class="btn btn-primary mx-1" type="button"
                                     data-toggle="modal" data-target="#iniciarActividad">
@@ -332,7 +332,7 @@
                         </div>
                     {% endif %}
 
-                    {% if actividad.status == '1' %}
+                    {% if actividad.status == '1' and request.user|has_group:"Gestor de Conservación y Traslados"%}
                         <div class="col-3">
                             <div class="row">
                                 <button class="btn btn-primary mx-1" type="button"
