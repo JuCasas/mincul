@@ -74,6 +74,8 @@ def patrimonio_list(request):
         gmaps = gm.Client(key='AIzaSyDxdNwYXHCCpfoiNtGorfbdwGjtDsXk6MI')
         file = request.FILES['file']
         data = json.load(file)
+        nImportados = 0
+        nRepetidos = 0
         # beautify = json.dumps(data, indent=4)
         # print(beautify)
         for pat in data:
@@ -722,8 +724,11 @@ def patrimonio_list(request):
                         doc.save()
                         patrimonio.documentos.add(doc)
                     patrimonio.save()
+                nImportados += 1
+            else:
+                nRepetidos += 1
 
-        return JsonResponse({}, status=200)
+        return JsonResponse({'importados': nImportados, 'repetidos': nRepetidos}, status=200)
 
 
     patrimonios = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
