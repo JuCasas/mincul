@@ -22,9 +22,7 @@
             <None></None>
         </field>
         <field name="groups" rel="ManyToManyRel" to="auth.group">
-            <object>
-                <natural>Gestor de Conservación y Traslados</natural>
-            </object>
+            <None></None>
         </field>
         <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>
@@ -50,9 +48,7 @@
             <None></None>
         </field>
         <field name="groups" rel="ManyToManyRel" to="auth.group">
-            <object>
-                <natural>Gestor de Patrimonios</natural>
-            </object>
+            <None></None>
         </field>
         <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>
@@ -78,9 +74,7 @@
             <None></None>
         </field>
         <field name="groups" rel="ManyToManyRel" to="auth.group">
-            <object>
-                <natural>Conservador</natural>
-            </object>
+            <None></None>
         </field>
         <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>
@@ -106,9 +100,7 @@
             <None></None>
         </field>
         <field name="groups" rel="ManyToManyRel" to="auth.group">
-            <object>
-                <natural>Conservador</natural>
-            </object>
+            <None></None>
         </field>
         <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>
@@ -134,9 +126,7 @@
             <None></None>
         </field>
         <field name="groups" rel="ManyToManyRel" to="auth.group">
-            <object>
-                <natural>Conservador</natural>
-            </object>
+            <None></None>
         </field>
         <field name="user_permissions" rel="ManyToManyRel" to="auth.permission"></field>
     </object>
