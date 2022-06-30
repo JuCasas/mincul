@@ -33,7 +33,7 @@ class PatrimonioListSerializer(serializers.ModelSerializer):
         doc = Documento.objects.filter(patrimonio__id=obj.pk).first()
         if doc != None:
             return '/'+str(doc.url)
-        return 'static/img/imageNotAvailable.jpg'
+        return '/static/img/imageNotAvailable.jpg'
 
     def getCategory(self,obj):
         cat = Categoria.objects.get(pk=obj.categoria_id).nombre
@@ -58,7 +58,7 @@ class PatrimonioSerializer(serializers.ModelSerializer):
         doc = Documento.objects.filter(patrimonio__id=obj.pk).first()
         if doc != None:
             return '/'+str(doc.url)
-        return 'static/img/imageNotAvailable.jpg'
+        return '/static/img/imageNotAvailable.jpg'
 
     def getCategory(self, obj):
         cat = Categoria.objects.get(pk=obj.categoria_id).nombre
