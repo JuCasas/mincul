@@ -418,7 +418,7 @@
     <!--Requirements of search camps script-->
     <script>
         {% comment %} At least two forms should be selected{% endcomment %}
-        const isAlpha = str => /^[a-zA-Z( )]*$/.test(str);
+        const isAlpha = str => /^[a-zA-ZÁÉÍÓÚáéíóúñÑ( )]*$/.test(str);
         const txtInput = document.getElementById('txtBuscar');
         const categoriaInput = document.getElementById('formSelectCategoria');
         const rowDepartamento = document.getElementById('rowDepartamento');
