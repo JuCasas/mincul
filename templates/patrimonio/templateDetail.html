@@ -28,73 +28,80 @@
     <div class="div p-0">
         <div class="row" style="display: table!important;">
             <div class="col-8" style="display: table-cell!important">
-                    <div class="position-absolute" style="width: calc(100% - 16px); height: 100%; border-radius: 8px!important;">
-                        <img
-                         style="width: 100%!important; height: 100%!important; border-radius: 8px!important"
-                         src="{{ valor.imagen }}"
-                         alt="Card image">
-                    </div>
+                <div class="row justify-content-between align-items-center mb-1 position-absolute z-index-10 " style="padding: 16px!important">
+                    <a class="nav-link py-0 back" href="{% url 'patrimonio_list' %}"><span
+                            class="fas fa-angle-left mr-2"
+                            data-fa-transform="shrink-3"></span>Patrimonios</a>
+                </div>
 
-                    <div class="card-img-overlay d-flex align-items-end text-white">
-                        <p class="col text-left mb-0"
-                           style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ valor.nombreTituloDemoninacion }}
-                        </p>
-                        <div class="col text-right">
-                            {% if puntacion >= 1 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntacion >= 2 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntacion >= 3 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntacion >= 4 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                            {% if puntacion >= 5 %}
-                                <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                        </div>
+                <div class="position-absolute"
+                     style="width: calc(100% - 16px); height: 100%; border-radius: 8px!important;">
+                    <img
+                            style="width: 100%!important; height: 100%!important; border-radius: 8px!important"
+                            src="{{ valor.imagen }}"
+                            alt="Card image">
+                </div>
+
+                <div class="card-img-overlay d-flex align-items-end text-white">
+                    <p class="col text-left mb-0"
+                       style="font-size: 25px;font-weight: bold; text-shadow : 1px 1px black;">{{ valor.nombreTituloDemoninacion }}
+                    </p>
+                    <div class="col text-right">
+                        {% if puntacion >= 1 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntacion >= 2 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntacion >= 3 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntacion >= 4 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% if puntacion >= 5 %}
+                            <span class="fa fa-star" style="color: gold; text-shadow: 1px 1px black;"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
                     </div>
+                </div>
                 <!--Cabecera card imagen fin-->
             </div>
 
             <div class="col-4" style="display: table-cell!important">
                 <div class="card mb-3">
                     <div class="card-body">
-                                <h5 class="card-title text-black">Datos de identificación:</h5>
-                                <h6 class="mb-2 mb-md-0 text-black">Categoría: {{ valor.categoria }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Tipo: {{ valor.tipo.1 }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">
-                                    Título/Denominación: {{ valor.nombreTituloDemoninacion }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Propietario: {{ valor.propietario.nombre }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Responsable: {{ valor.responsable.nombre }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Departamento: {{ valor.departamento }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Provincia: {{ valor.provincia }}</h6>
-                                <p></p>
-                                <h6 class="mb-2 mb-md-0 text-black">Distrito: {{ valor.distrito }}</h6>
-                                <p></p>
-{#                                <h6 class="mb-2 mb-md-0 text-black">Código de inscripción: {{ valor.codigo }}</h6>#}
-{#                                <p></p>#}
-                                <a class="btn btn-primary pt-2" type="button" href="{% url 'ficha' my_id=valor.pk %}">Ver
-                                    ficha</a>
+                        <h5 class="card-title text-black">Datos de identificación:</h5>
+                        <h6 class="mb-2 mb-md-0 text-black">Categoría: {{ valor.categoria }}</h6>
+                        <p></p>
+                        <h6 class="mb-2 mb-md-0 text-black">Tipo: {{ valor.tipo.1 }}</h6>
+                        <p></p>
+                        <h6 class="mb-2 mb-md-0 text-black">
+                            Título/Denominación: {{ valor.nombreTituloDemoninacion }}</h6>
+                        <p></p>
+                        <h6 class="mb-2 mb-md-0 text-black">Propietario: {{ valor.propietario.nombre }}</h6>
+                        <p></p>
+                        <h6 class="mb-2 mb-md-0 text-black">Responsable: {{ valor.responsable.nombre }}</h6>
+                        <p></p>
+                        <h6 class="mb-2 mb-md-0 text-black">Departamento: {{ valor.departamento }}</h6>
+                        <p></p>
+                        <h6 class="mb-2 mb-md-0 text-black">Provincia: {{ valor.provincia }}</h6>
+                        <p></p>
+                        <h6 class="mb-2 mb-md-0 text-black">Distrito: {{ valor.distrito }}</h6>
+                        <p></p>
+                        {#                                <h6 class="mb-2 mb-md-0 text-black">Código de inscripción: {{ valor.codigo }}</h6>#}
+                        {#                                <p></p>#}
+                        <a class="btn btn-primary pt-2" type="button" href="{% url 'ficha' my_id=valor.pk %}">Ver
+                            ficha</a>
                     </div>
                 </div>
                 <!-- Observaciones -->
@@ -114,8 +121,8 @@
         </div>
 
         <div class="row mt-3">
-                <div class="col-12">
-                    <!-- Descripcion -->
+            <div class="col-12">
+                <!-- Descripcion -->
                 <div class="card " style="height: 100%!important">
                     <div class="card-body">
                         <div class="row">
@@ -128,8 +135,8 @@
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
+        </div>
 
         <!-- Info de patrimonio -->
         <div class="row mt-4">
