@@ -888,53 +888,66 @@
       },
       submitHandler: function (form, e) {
         e.preventDefault();
-        $('#cover-spin').show(0)
-        $.ajax({
-          url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/',
-          method: "POST",
-          data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            'nombre': $("#nombre").val(),
-            'descripcion': $("#descripcion").val(),
-            'fechaRegistro': $("#fechaRegistro").val(),
-            'conservador': $("#conservador").val(),
-            'fecha': $("#fecha").val(),
-            'presupuesto': $("#presupuesto").val(),
-            'gasto': $("#gasto").val(),
-            'estado': $("#estado").val(),
-          },
-          success: function (response) {
-            $('#cover-spin').hide()
-            if (response["success"] !== undefined) {
-              $.toast({
-                text: 'No se pudo actualizar la tarea',
-                icon: 'warning',
-                loader: false,        // Change it to false to disable loader
-                bgColor: '#c67a71',
-                textColor: '#000000',
-                position: 'bottom-right',
-                hideAfter: 3000,
-              })
-            } else {
-              $.toast({
-                text: 'Tarea actualizada con éxito',
-                icon: 'success',
-                loader: false,        // Change it to false to disable loader
-                bgColor: '#B7E6CA',  // To change the background
-                textColor: '#000000',
-                position: 'bottom-right',
-                hideAfter: 3000,
-              })
-              //window.location.pathname = "/conservacion/actividades/" + $('#idActivity').val() + "/tareas/";
-            }
+        if ($("#conservador").val() == null) {
+          $.toast({
+            text: 'Debe seleccionar un conservador.',
+            icon: 'warning',
+            loader: false,        // Change it to false to disable loader
+            bgColor: '#c67a71',
+            textColor: '#000000',
+            position: 'bottom-right',
+            hideAfter: 3000,
+          })
+        } else {
+          $('#cover-spin').show(0)
+          $.ajax({
+            url: '/conservacion/tareas/edit/' + $('#idTask').val() + '/',
+            method: "POST",
+            data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+              'nombre': $("#nombre").val(),
+              'descripcion': $("#descripcion").val(),
+              'fechaRegistro': $("#fechaRegistro").val(),
+              'conservador': $("#conservador").val(),
+              'fecha': $("#fecha").val(),
+              'presupuesto': $("#presupuesto").val(),
+              'gasto': $("#gasto").val(),
+              'estado': $("#estado").val(),
+            },
+            success: function (response) {
+              $('#cover-spin').hide()
+              if (response["success"] !== undefined) {
+                $.toast({
+                  text: 'No se pudo actualizar la tarea',
+                  icon: 'warning',
+                  loader: false,        // Change it to false to disable loader
+                  bgColor: '#c67a71',
+                  textColor: '#000000',
+                  position: 'bottom-right',
+                  hideAfter: 3000,
+                })
+              } else {
+                $.toast({
+                  text: 'Tarea actualizada con éxito',
+                  icon: 'success',
+                  loader: false,        // Change it to false to disable loader
+                  bgColor: '#B7E6CA',  // To change the background
+                  textColor: '#000000',
+                  position: 'bottom-right',
+                  hideAfter: 3000,
+                })
+                //window.location.pathname = "/conservacion/actividades/" + $('#idActivity').val() + "/tareas/";
+              }
 
-            listarSecciones();
-          },
-          error: function (error) {
-            $('#cover-spin').hide()
-            console.log(error)
-          }
-        });
+              listarSecciones();
+            },
+            error: function (error) {
+              $('#cover-spin').hide()
+              console.log(error)
+            }
+          });
+        }
+
         return false;
       }
     });
