@@ -10,12 +10,20 @@ def signin(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            print("ESTO!")
-            print(user.groups)
-            return redirect('listProjects')
+            roles = list(user.groups.values_list())
+            if (len(roles)==1):
+                if(roles[0][1] == 'Gestor de Conservación y Traslados' or roles[0][1] =='Conservador'):
+                    return redirect('listProjects')
+                elif(roles[0][1] == 'Gestor de Patrimonios'):
+                    return redirect('patrimonio_list')
+            else:
+                error_message = "ERROR"
+                context = {
+                    'error_message': error_message,
+                }
+                return render(request, 'authentication/signin.html', context)
         else:
-            error_message = "Sus credenciales de inicio de sesión no son correctas. " + \
-                            "Si no cuenta con un usuario, comuníquese con el administrador"
+            error_message = "ERROR"
             context = {
                 'error_message': error_message,
             }
