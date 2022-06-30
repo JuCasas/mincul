@@ -483,10 +483,10 @@ def addActivity(request, pk):
             for idConservador in conservadores:
                 actividad.conservadores.add(User.objects.get(pk=idConservador))
 
-        if request.POST['relacionesLista']:
-            relaciones = list(request.POST['relacionesLista'].split(","))
-            for idRelacion in relaciones:
-                actividad.relaciones.add(Actividad.objects.get(pk=idRelacion))
+        # if request.POST['relacionesLista']:
+        #     relaciones = list(request.POST['relacionesLista'].split(","))
+        #     for idRelacion in relaciones:
+        #         actividad.relaciones.add(Actividad.objects.get(pk=idRelacion))
 
         for f in request.FILES.getlist('file'):
             doc = Documento.objects.create(url=f)
