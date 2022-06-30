@@ -113,13 +113,16 @@ def mapaPatrimonioSimple(request):
             patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
             if len(patrimonios) > 0:
                 instituciones = []
+                insti_pks = []
                 patri = []
                 for p in patrimonios:
                     if int(p.tipoPatrimonio) == 3:
                         try:
                             insti = Institucion.objects.get(pk=p.institucion.pk)
-                            if insti not in instituciones:
+                            insti_pk = insti.pk
+                            if insti_pk not in insti_pks:
                                 #instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                insti_pks.append(insti_pk)
                                 try:
                                     #instiUrl = instiUrl[0].url
                                     #instiUrl = instiUrl.name
@@ -224,12 +227,15 @@ def mapaPatrimonioAvanzado(request):
             if(len(patrimonios)>0):
                 instituciones = []
                 patrimons = []
+                insti_pks = []
                 for p in patrimonios:
                     if int(p.tipoPatrimonio) == 3:
                         try:
                             insti = Institucion.objects.get(pk=p.institucion.pk)
-                            if insti not in instituciones:
+                            insti_pk =insti.pk
+                            if insti_pk not in insti_pks:
                                 #instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                insti_pks.append(insti_pk)
                                 try:
                                     #instiUrl = instiUrl[0].url
                                     #instiUrl = instiUrl.name
