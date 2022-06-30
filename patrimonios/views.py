@@ -723,6 +723,9 @@ def patrimonio_list(request):
                         patrimonio.documentos.add(doc)
                     patrimonio.save()
 
+        return JsonResponse({}, status=200)
+
+
     patrimonios = Patrimonio.objects.filter(estado=1).order_by('nombreTituloDemoninacion')
 
     context = {
