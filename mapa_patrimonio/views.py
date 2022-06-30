@@ -52,7 +52,7 @@ def datos(request):
                     "lat": patri[i].lat,
                     "long": patri[i].long,
                     "nombre": patri[i].nombreTituloDemoninacion,
-                    "url": '/'+patriUrl,
+                    "url": patriUrl,
                     "tipo": 2,
                 })
             except:
@@ -111,7 +111,7 @@ def datos(request):
                     "lat": patriAzar["lat"],
                     "long": patriAzar["long"],
                     "nombre": patriAzar["nombreTituloDemoninacion"],
-                    "url": '/'+ppatriUrl,
+                    "url": ppatriUrl,
                     "tipo": 2,
                 })
             except:
@@ -189,7 +189,7 @@ def patrimonioFueraRuta(request):
                     "lat": patri[i].lat,
                     "long": patri[i].long,
                     "nombre": patri[i].nombreTituloDemoninacion,
-                    "url": '/'+patriUrl,
+                    "url": patriUrl,
                     "tipo": 2,
                 })
             except:
@@ -248,7 +248,7 @@ def patrimonioFueraRuta(request):
                     "lat": patriAzar["lat"],
                     "long": patriAzar["long"],
                     "nombre": patriAzar["nombreTituloDemoninacion"],
-                    "url": '/'+ppatriUrl,
+                    "url": ppatriUrl,
                     "tipo": 2,
                 })
             except:

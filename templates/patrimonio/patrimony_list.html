@@ -1,5 +1,6 @@
 {% extends 'proyectoConservacion/components/base.html' %}
 {% load static %}
+{% load has_group %}
 
 {% block extrastyle %}
   <link href="{% static 'lib/flatpickr/flatpickr.min.css' %}" rel="stylesheet">
@@ -107,13 +108,17 @@
             </select>
           </div>
 
-          <div class="form-group col-sm-2 my-1 p-0 w-100">
-            <button class="btn btn-primary col-sm-auto w-100" type="button" data-toggle="modal"
-                    data-target="#importarModal">
-              <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
-            </button>
-          </div>
-        </div>
+
+          {% if request.user|has_group:"Gestor de Patrimonios"%}
+              <div class="form-group col-sm-2 my-1 p-0 w-100">
+                  <button class="btn btn-primary col-sm-auto w-100" type="button" data-toggle="modal"
+                          data-target="#importarModal">
+                      <span class="fas fa-paperclip mr-1" data-fa-transform="shrink-3"></span>Importar patrimonios
+                  </button>
+              </div>
+          {% endif %}
+
+      </div>
 
     </div>
   </div>

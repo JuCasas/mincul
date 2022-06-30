@@ -15,13 +15,24 @@ def reportes(request):
 def traerData(request):
     p = PuntoGeografico.objects.annotate(num_incidentes=Count('incidente')).order_by('-num_incidentes')[:5]
     result = p.values_list('num_incidentes', 'nombre')
+    print("==========================================")
+    print("RESULT")
+    print(result)
+    print("==========================================")
     numeros = []
     etiquetas = []
-    for i in range(0,result.count()):
-        if (result[i][0]!=0):
-            numeros.append(result[i][0])
-            etiquetas.append(result[i][1])
-
+    for tuple in result:
+        #if (result[i][0]!=0):
+        print(tuple)
+        numeros.append(tuple[0])
+        etiquetas.append(tuple[1])
+        # print("DATO"+str(i))
+        # print(numeros)
+        # print(etiquetas)
+        # print(result[i][0])
+        # print(result[i][1])
+    print("ETIQUETAS")
+    print(etiquetas)
     return JsonResponse({"data": numeros, "labels":etiquetas}, status=200)
 
 def traerData2(request):

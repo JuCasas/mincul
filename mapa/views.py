@@ -75,7 +75,7 @@ def ficha(request,my_id):
                 'tecnicasDecoracion': tecnicasDecoracionString,
                 'tecnicasManufactura': tecnicasManufacturaString,
                 'dataCategoria':dataCategoria,
-                'urlPatrimonio': '/'+urlPatrimonio
+                'urlPatrimonio': urlPatrimonio
             }
         except:
             context = {
@@ -94,7 +94,7 @@ def ficha(request,my_id):
         urlPatrimonio = urlPatrimonio.name
         context = {
             'patrimony': patrimonio,
-            'urlPatrimonio': '/'+urlPatrimonio
+            'urlPatrimonio': urlPatrimonio
         }
     except:
         context={
@@ -113,13 +113,16 @@ def mapaPatrimonioSimple(request):
             patrimonios = Patrimonio.objects.filter(nombreTituloDemoninacion__icontains=patrimonioNombre,estado="1").exclude(tipoPatrimonio="1")
             if len(patrimonios) > 0:
                 instituciones = []
+                insti_pks = []
                 patri = []
                 for p in patrimonios:
                     if int(p.tipoPatrimonio) == 3:
                         try:
                             insti = Institucion.objects.get(pk=p.institucion.pk)
-                            if insti not in instituciones:
+                            insti_pk = insti.pk
+                            if insti_pk not in insti_pks:
                                 #instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                insti_pks.append(insti_pk)
                                 try:
                                     #instiUrl = instiUrl[0].url
                                     #instiUrl = instiUrl.name
@@ -136,7 +139,7 @@ def mapaPatrimonioSimple(request):
                             urlPatrimonio = urlPatrimonio[0].url
                             urlPatrimonio = urlPatrimonio.name
                             patri.append({'patrimonio':p,
-                                          'url':'/'+urlPatrimonio})
+                                          'url': urlPatrimonio})
                         except:
                             patri.append({'patrimonio': p,
                                           'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -224,12 +227,15 @@ def mapaPatrimonioAvanzado(request):
             if(len(patrimonios)>0):
                 instituciones = []
                 patrimons = []
+                insti_pks = []
                 for p in patrimonios:
                     if int(p.tipoPatrimonio) == 3:
                         try:
                             insti = Institucion.objects.get(pk=p.institucion.pk)
-                            if insti not in instituciones:
+                            insti_pk =insti.pk
+                            if insti_pk not in insti_pks:
                                 #instiUrl = Documento.objects.filter(institucion=insti).order_by('id')
+                                insti_pks.append(insti_pk)
                                 try:
                                     #instiUrl = instiUrl[0].url
                                     #instiUrl = instiUrl.name
@@ -246,7 +252,7 @@ def mapaPatrimonioAvanzado(request):
                             urlPatrimonio = urlPatrimonio[0].url
                             urlPatrimonio = urlPatrimonio.name
                             patrimons.append({'patrimonio': p,
-                                            'url': '/'+urlPatrimonio})
+                                            'url': urlPatrimonio})
                         except:
                             patrimons.append({'patrimonio': p,
                                              'url': '/static/img/landmarks/notAvailable.jpg'})
@@ -315,7 +321,7 @@ def patrimonioJson(request,id_patrimonio):
     urlPatrimonio=None
     try:
         urlPatrimonio = (urlPatri[0].url)
-        urlPatrimonio = '/'+urlPatrimonio.name
+        urlPatrimonio = urlPatrimonio.name
     except:
         urlPatrimonio = '/static/img/landmarks/notAvailable.jpg'
     nombre = patrimonio.nombreTituloDemoninacion

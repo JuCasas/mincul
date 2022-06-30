@@ -162,9 +162,9 @@ def patrimonio_list(request):
 
                     i = 0
                     for img in pat['galeria']:
-                        wget.download(img, 'media/' + pat['codigo'] + str(i) + '.jpg')
+                        #wget.download(img, 'media/' + pat['codigo'] + str(i) + '.jpg')
                         doc = Documento()
-                        doc.url = 'media/' + pat['codigo'] + str(i) + '.jpg'
+                        doc.url = img
                         doc.save()
                         patrimonio.documentos.add(doc)
                         i += 1
@@ -254,9 +254,9 @@ def patrimonio_list(request):
 
                     i = 0
                     for img in pat['galeria']:
-                        wget.download(img, 'media/' + pat['codigo'] + str(i) + '.jpg')
+                        #wget.download(img, 'media/' + pat['codigo'] + str(i) + '.jpg')
                         doc = Documento()
-                        doc.url = 'media/' + pat['codigo'] + str(i) + '.jpg'
+                        doc.url = img
                         doc.save()
                         patrimonio.documentos.add(doc)
                         i += 1
@@ -680,45 +680,45 @@ def patrimonio_list(request):
                         indus.save()
 
                     if pat['imagenes']['vistaAnterior'] != '':
-                        wget.download(pat['imagenes']['vistaAnterior'], 'media/' + pat['nroRegistro'] + '_va.jpg')
+                        #wget.download(pat['imagenes']['vistaAnterior'], 'media/' + pat['nroRegistro'] + '_va.jpg')
                         doc = Documento()
-                        doc.url = 'media/' + pat['nroRegistro'] + '_va.jpg'
+                        doc.url = pat['imagenes']['vistaAnterior']
                         doc.save()
                         patrimonio.documentos.add(doc)
                     if pat['imagenes']['vistaPosterior'] != '':
-                        wget.download(pat['imagenes']['vistaPosterior'], 'media/' + pat['nroRegistro'] + '_vp.jpg')
+                        #wget.download(pat['imagenes']['vistaPosterior'], 'media/' + pat['nroRegistro'] + '_vp.jpg')
                         doc = Documento()
-                        doc.url = 'media/' + pat['nroRegistro'] + '_vp.jpg'
+                        doc.url = pat['imagenes']['vistaPosterior']
                         doc.save()
                         patrimonio.documentos.add(doc)
                     if pat['imagenes']['vistaLateralDerecha'] != '':
-                        wget.download(pat['imagenes']['vistaLateralDerecha'], 'media/' + pat['nroRegistro'] + '_vld.jpg')
+                        #wget.download(pat['imagenes']['vistaLateralDerecha'], 'media/' + pat['nroRegistro'] + '_vld.jpg')
                         doc = Documento()
-                        doc.url = 'media/' + pat['nroRegistro'] + '_vld.jpg'
+                        doc.url = pat['imagenes']['vistaLateralDerecha']
                         doc.save()
                         patrimonio.documentos.add(doc)
                     if pat['imagenes']['vistaLateralIzquierda'] != '':
-                        wget.download(pat['imagenes']['vistaLateralIzquierda'], 'media/' + pat['nroRegistro'] + '_vli.jpg')
+                        #wget.download(pat['imagenes']['vistaLateralIzquierda'], 'media/' + pat['nroRegistro'] + '_vli.jpg')
                         doc = Documento()
-                        doc.url = 'media/' + pat['nroRegistro'] + '_vli.jpg'
+                        doc.url = pat['imagenes']['vistaLateralIzquierda']
                         doc.save()
                         patrimonio.documentos.add(doc)
                     if pat['imagenes']['vistaSuperior'] != '':
-                        wget.download(pat['imagenes']['vistaSuperior'], 'media/' + pat['nroRegistro'] + '_vs.jpg')
+                        #wget.download(pat['imagenes']['vistaSuperior'], 'media/' + pat['nroRegistro'] + '_vs.jpg')
                         doc = Documento()
-                        doc.url = 'media/' + pat['nroRegistro'] + '_vs.jpg'
+                        doc.url = pat['imagenes']['vistaSuperior']
                         doc.save()
                         patrimonio.documentos.add(doc)
                     if pat['imagenes']['vistaInferior'] != '':
-                        wget.download(pat['imagenes']['vistaInferior'], 'media/' + pat['nroRegistro'] + '_vi.jpg')
+                        #wget.download(pat['imagenes']['vistaInferior'], 'media/' + pat['nroRegistro'] + '_vi.jpg')
                         doc = Documento()
-                        doc.url = 'media/' + pat['nroRegistro'] + '_vi.jpg'
+                        doc.url = pat['imagenes']['vistaInferior']
                         doc.save()
                         patrimonio.documentos.add(doc)
                     if pat['imagenes']['vistaDetalle'] != '':
-                        wget.download(pat['imagenes']['vistaDetalle'], 'media/' + pat['nroRegistro'] + '_vd.jpg')
+                        #wget.download(pat['imagenes']['vistaDetalle'], 'media/' + pat['nroRegistro'] + '_vd.jpg')
                         doc = Documento()
-                        doc.url = 'media/' + pat['nroRegistro'] + '_vd.jpg'
+                        doc.url = pat['imagenes']['vistaDetalle']
                         doc.save()
                         patrimonio.documentos.add(doc)
                     patrimonio.save()

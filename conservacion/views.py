@@ -438,8 +438,10 @@ def listTasks(request, pk):
 
 
 @login_required(login_url='/auth/login/')
-@api_view(('GET',))
 def addActivityView(request, pk):
+
+    print(request.POST)
+
     proyecto = ProyectoConservacion.objects.get(pk=pk)
     patrimonios = proyecto.patrimonios.all()
     media_path = MEDIA_URL
