@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 # Create your views here.
@@ -50,7 +51,7 @@ def query_incidents_by_args(**kwargs):
     'total': total,
   }
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def patrimonio_incidente_listar(request):
   if request.is_ajax():

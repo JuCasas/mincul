@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from rest_framework import status
@@ -277,7 +278,7 @@ def validarDOI(request):
     else:
         return JsonResponse(True, status=200, safe=False)
 
-
+@login_required(login_url='/auth/login/')
 @api_view(('GET',))
 def listTranfers(request):
     if request.is_ajax():

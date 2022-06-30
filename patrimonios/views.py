@@ -3,6 +3,7 @@ from datetime import datetime
 
 import googlemaps as gm
 import wget
+from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
@@ -68,8 +69,8 @@ def patrimonio_delete(request):
 
     return JsonResponse({'status': 'succes'}, status=200)
 
+@login_required(login_url='/auth/login/')
 def patrimonio_list(request):
-
     if request.POST:
         gmaps = gm.Client(key='AIzaSyDxdNwYXHCCpfoiNtGorfbdwGjtDsXk6MI')
         file = request.FILES['file']
